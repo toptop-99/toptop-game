@@ -78,7 +78,7 @@
         }
 
         .games-grid-layout {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;
+            display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px;
         }
         .game-catalog-card {
             background: linear-gradient(145deg, #27272a, #18181b);
@@ -98,59 +98,12 @@
             border: 1px solid rgba(217, 119, 6, 0.2);
         }
 
-        .arena {
-            background: linear-gradient(to bottom, #1c1917, #0c0a09);
-            border: 2px solid #d97706; border-radius: 14px; height: 220px;
-            position: relative; overflow: hidden; margin-bottom: 8px;
-            box-shadow: 0 0 12px rgba(217, 119, 6, 0.2);
-        }
-
-        #player {
-            width: 30px; height: 30px; position: absolute; bottom: 10px; left: 40px;
-        }
-        #player.shape-circle { border-radius: 50%; background: #38bdf8; box-shadow: 0 0 12px #38bdf8; }
-        #player.shape-square { border-radius: 4px; background: #a855f7; box-shadow: 0 0 12px #a855f7; }
-        #player.shape-triangle {
-            width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent;
-            border-bottom: 30px solid #f97316; background: transparent !important; filter: drop-shadow(0 0 6px #f97316);
-        }
-        #player.shape-star {
-            background: #eab308; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            box-shadow: 0 0 12px #eab308;
-        }
-        #player.shape-diamond { background: #06b6d4; transform: rotate(45deg); box-shadow: 0 0 12px #06b6d4; }
-
-        #obstacle {
-            width: 20px; height: 36px; background: linear-gradient(135deg, #f87171, #b91c1c);
-            border-radius: 6px; position: absolute; bottom: 10px; left: 800px;
-        }
-        #coinItem {
-            width: 18px; height: 18px; background: radial-gradient(circle, #fde047, #ca8a04);
-            border-radius: 50%; position: absolute; bottom: 50px; left: 950px; box-shadow: 0 0 10px #facc15;
-        }
-
-        .game-stats {
-            display: flex; justify-content: space-between; font-size: 11px;
-            font-weight: bold; color: #f59e0b; margin-bottom: 4px;
-        }
-        .jump-control-btn {
-            width: 75px; height: 75px; background: linear-gradient(135deg, #d97706, #b45309);
-            color: #ffffff; border: 3px solid #fcd34d; border-radius: 50%;
-            font-size: 16px; font-weight: bold; cursor: pointer; display: flex;
-            justify-content: center; align-items: center; margin: 0 auto; touch-action: manipulation;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
-        }
         #gameOverBox {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(12, 10, 9, 0.95); display: none;
             flex-direction: column; justify-content: center; align-items: center; padding: 15px; z-index: 100;
         }
         #gameOverBox.show { display: flex; }
-        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .shop-item {
-            background: #27272a; border: 1px solid #d97706; border-radius: 10px;
-            padding: 8px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-        }
         .avatar-preview {
             width: 50px; height: 50px; border-radius: 50%; background: #3f3f46;
             margin: 0 auto 6px auto; display: flex; justify-content: center; align-items: center;
@@ -164,16 +117,6 @@
         .leaderboard-list { max-height: 90px; overflow-y: auto; font-size: 11px; }
         .leaderboard-item { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid rgba(217, 119, 6, 0.2); }
 
-        .flappy-container {
-            flex: 1; width: 100%; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; position: relative;
-        }
-        #flappyCanvas {
-            width: 100%; height: 100%; max-height: calc(100vh - 100px);
-            background: #451a03; border: 2px solid #d97706; border-radius: 14px;
-            box-shadow: 0 0 15px rgba(217, 119, 6, 0.3); touch-action: manipulation;
-        }
-
         .flappy-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(12, 10, 9, 0.9); display: none;
@@ -181,22 +124,6 @@
             padding: 15px; z-index: 50; border-radius: 14px;
         }
         .flappy-overlay.show { display: flex; }
-
-        #snakeCanvas {
-            width: 100%; height: 230px; background: #18181b;
-            border: 2px solid #d97706; border-radius: 14px;
-            box-shadow: 0 0 15px rgba(217, 119, 6, 0.3); touch-action: manipulation;
-        }
-        .snake-controls {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;
-            width: 160px; margin: 8px auto 0 auto;
-        }
-        .snake-btn {
-            background: #27272a; border: 1px solid #d97706; color: #fff;
-            padding: 10px; border-radius: 8px; font-size: 16px; font-weight: bold;
-            cursor: pointer; text-align: center;
-        }
-        .snake-btn:active { background: #d97706; color: #000; }
     </style>
 </head>
 <body>
@@ -278,170 +205,36 @@
             </div>
 
             <div class="games-grid-layout">
+                <!-- Word Rain Game Card (First) -->
                 <div class="game-catalog-card">
-                    <div>
-                        <div class="game-thumbnail">🔵</div>
-                        <h3 style="color: #fbbf24; font-size: 13px; margin: 0 0 2px 0;">بازدان</h3>
-                        <p style="font-size: 9px; color: #d6d3d1; margin: 0;">قەڵغان و کۆین کۆبکەرەوە</p>
-                    </div>
-                    <div>
-                        <div class="game-meta-info" id="hubJumperBest">بەرزترین خاڵ: 0</div>
-                        <button class="btn" style="padding: 6px; font-size: 11px;" onclick="openJumperLanding()">یاریکردن</button>
-                    </div>
-                </div>
-
-                <div class="game-catalog-card">
-                    <div>
-                        <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f);">🐓</div>
-                        <h3 style="color: #fbbf24; font-size: 13px; margin: 0 0 2px 0;">مریشک (HD)</h3>
-                        <p style="font-size: 9px; color: #d6d3d1; margin: 0;">مریشک و قازەکان بفرێنە</p>
-                    </div>
-                    <div>
-                        <div class="game-meta-info" id="hubFlappyBest">بەرزترین خاڵ: 0</div>
-                        <button class="btn" style="padding: 6px; font-size: 11px;" onclick="openFlappyLanding()">یاریکردن</button>
-                    </div>
-                </div>
-
-                <div class="game-catalog-card" style="grid-column: span 2;">
-                    <div>
-                        <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f); width: 45px; height: 45px; font-size: 20px;">🐍</div>
-                        <h3 style="color: #fbbf24; font-size: 13px; margin: 0 0 2px 0;">مارەکە</h3>
-                        <p style="font-size: 9px; color: #d6d3d1; margin: 0;">سێوەکان بخۆ و درێژ ببەرەوە</p>
-                    </div>
-                    <div>
-                        <div class="game-meta-info" id="hubSnakeBest" style="display:inline-block; padding: 4px 12px;">بەرزترین خاڵ: 0</div>
-                        <button class="btn" style="padding: 6px 16px; font-size: 11px; width: auto; display: inline-block; margin-right: 6px;" onclick="openSnakeLanding()">یاریکردن</button>
-                    </div>
-                </div>
-
-                <!-- Word Rain Game Card Added Here -->
-                <div class="game-catalog-card" style="grid-column: span 2;">
                     <div>
                         <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f); width: 45px; height: 45px; font-size: 20px;">🌧️</div>
-                        <h3 style="color: #fbbf24; font-size: 13px; margin: 0 0 2px 0;">وشە باران</h3>
-                        <p style="font-size: 9px; color: #d6d3d1; margin: 0;">وشەی خێرا بنووسە و کێبڕکێ بکە</p>
+                        <h3 style="color: #fbbf24; font-size: 13px; margin: 0 0 2px 0;">وشە باران (یاری سەرەکی)</h3>
+                        <p style="font-size: 9px; color: #d6d3d1; margin: 0;">وشەی خێرا بە پیتە داواکراوەکان بنووسە و کێبڕکێ بکە</p>
                     </div>
                     <div>
-                        <button class="btn" style="padding: 6px 16px; font-size: 11px; width: auto; display: inline-block;" onclick="openWordGameLanding()">یاریکردن</button>
+                        <div class="game-meta-info" id="hubWordBest">بەرزترین خاڵ: 0</div>
+                        <button class="btn" style="padding: 6px 16px; font-size: 11px;" onclick="openWordGameLanding()">یاریکردن</button>
                     </div>
                 </div>
             </div>
 
             <div class="card" style="padding: 10px 12px;">
-                <h3 style="font-size: 13px;">🏆 ڕیزبەندی پێشبڕکێ (Top 1 & Top 2)</h3>
-                <div class="tab-switcher" style="margin-top: 6px;">
-                    <button class="tab-btn active" id="lbBtnJumper" onclick="switchLeaderboard('jumper')">بازدان</button>
-                    <button class="tab-btn" id="lbBtnFlappy" onclick="switchLeaderboard('flappy')">مریشک</button>
-                    <button class="tab-btn" id="lbBtnSnake" onclick="switchLeaderboard('snake')">مارەکە</button>
-                    <button class="tab-btn" id="lbBtnWord" onclick="switchLeaderboard('word')">وشە باران</button>
-                </div>
+                <h3 style="font-size: 13px;">🏆 ڕیزبەندی پێشبڕکێی ئۆنلاین</h3>
                 <div class="leaderboard-list" id="leaderboardList"></div>
             </div>
         </div>
 
-        <!-- Jumper Landing -->
-        <div id="jumperLandingScreen" class="screen">
-            <div class="brand-title">یاری بازدان</div>
-            <div class="game-catalog-card" style="margin-top: 15px; padding: 15px;">
-                <div class="game-thumbnail">🔵</div>
-                <h3 style="font-size: 14px; color: #fbbf24;">پەڕەی تایبەتی یاری بازدان</h3>
-                <p style="font-size: 11px;">خاڵی تایبەتی ئەم یارییە جیاوازە! ئامادەی بۆ خۆشی و ئاڵۆزییەکان؟</p>
-                <div class="game-meta-info" style="margin: 10px 0;">ئاستی ئێستا: <span id="jumperLevelText" style="color:#fbbf24; font-weight:bold;">ئاسایی</span></div>
-                <button class="btn" onclick="startGamePlay()">▶ یاری بکە</button>
-                <button class="btn" style="background: #3f3f46;" onclick="openShopScreen()">🛒 شوپینگ (بازاڕی شێوازەکان)</button>
-                <button class="btn" style="background: #27272a;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
-            </div>
-        </div>
-
-        <!-- Flappy Landing -->
-        <div id="flappyLandingScreen" class="screen">
-            <div class="brand-title">یاری مریشک و باڵندەکان</div>
-            <div class="game-catalog-card" style="margin-top: 10px; padding: 15px;">
-                <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f);">🐓</div>
-                <h3 style="font-size: 14px; color: #fbbf24;">شاشەی یاری مریشک و قازەکان</h3>
-                <p style="font-size: 11px;">دیواری قاوەیی دارین، کۆنترۆڵی خێرا ڕێگری لێکراوە و کوالێتی بەرزە!</p>
-                <div class="game-meta-info" style="margin: 10px 0;">ئاستی سەختی: <span id="flappyLevelText" style="color:#fbbf24; font-weight:bold;">مامناوەند</span></div>
-                <button class="btn" onclick="startFlappyGame()">▶ یاری بکە (فول سکرین)</button>
-                <button class="btn" style="background: #3f3f46;" onclick="openFlappyShop()">🛒 شوپینگ (کڕینی مریشک و دیوار)</button>
-                <button class="btn" style="background: #27272a;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
-            </div>
-        </div>
-
-        <!-- Snake Landing -->
-        <div id="snakeLandingScreen" class="screen">
-            <div class="brand-title">یاری مارەکە 🐍</div>
-            <div class="game-catalog-card" style="margin-top: 15px; padding: 15px;">
-                <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f);">🐍</div>
-                <h3 style="font-size: 14px; color: #fbbf24;">پەڕەی تایبەتی یاری مارەکە</h3>
-                <p style="font-size: 11px;">مارەکە ڕێنمایی بکە بۆ خواردنی سێوەکان. سیستەمی خاڵی تایبەتی خۆی هەەیە!</p>
-                <div class="game-meta-info" style="margin: 10px 0;">ئاستی یاری: <span id="snakeLevelText" style="color:#fbbf24; font-weight:bold;">خێرا</span></div>
-                <button class="btn" onclick="startSnakeGame()">▶ یاری بکە</button>
-                <button class="btn" style="background: #27272a;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
-            </div>
-        </div>
-
-        <!-- Word Game Landing Screen Added Here -->
+        <!-- Word Game Landing Screen -->
         <div id="wordGameLandingScreen" class="screen">
             <div class="brand-title">یاری وشە باران 🌧️</div>
             <div class="game-catalog-card" style="margin-top: 15px; padding: 15px;">
                 <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f);">🌧️</div>
                 <h3 style="font-size: 14px; color: #fbbf24;">پەڕەی تایبەتی یاری وشە باران</h3>
-                <p style="font-size: 11px;">لە کاتی دیاریکراودا وشەی دەستپێک بە پیتی داواکراو بنووسە!</p>
-                <button class="btn" onclick="startWordRainGame()">▶ یاری بکە</button>
-                <button class="btn" style="background: #27272a;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
+                <p style="font-size: 11px;">لە کاتی دیاریکراودا وشەی دروست بە پیتی دەستپێکی داواکراو بنووسە (بۆ نموونە: پيتي ن -> نان، نانەوا)!</p>
+                <button class="btn" onclick="startWordRainGame()">▶ دەستپێکردنی یاری</button>
+                <button class="btn" style="background: #3f3f46;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
             </div>
-        </div>
-
-        <!-- Jumper Shop Screen -->
-        <div id="shopScreen" class="screen">
-            <div class="brand-title">بازاڕی شێوازەکانی بازدان</div>
-            <div style="text-align: center; margin-bottom: 8px; color: #fbbf24; font-size: 12px;">
-                💰 کۆینی بەردەست: <span id="shopTotalCoins">0</span>
-            </div>
-            <div class="shop-grid">
-                <div class="shop-item">
-                    <div style="width:26px; height:26px; background:#38bdf8; border-radius:50%; margin:4px auto;"></div>
-                    <p style="font-size: 10px;">بازنەیی (بنەڕەتی)</p>
-                    <button class="btn" id="btn-skin-circle" style="padding: 4px; font-size: 10px;" onclick="selectShape('circle')">هەڵبژاردن</button>
-                </div>
-                <div class="shop-item">
-                    <div style="width:26px; height:26px; background:#a855f7; border-radius:4px; margin:4px auto;"></div>
-                    <p style="font-size: 10px;">چوارگۆشە</p>
-                    <button class="btn" id="btn-skin-square" style="padding: 4px; font-size: 10px;" onclick="handleShapeAction('square', 60)">کڕین (60💰)</button>
-                </div>
-                <div class="shop-item">
-                    <div style="width:0; height:0; border-left:13px solid transparent; border-right:13px solid transparent; border-bottom:26px solid #f97316; margin:4px auto;"></div>
-                    <p style="font-size: 10px;">سێگۆشە</p>
-                    <button class="btn" id="btn-skin-triangle" style="padding: 4px; font-size: 10px;" onclick="handleShapeAction('triangle', 90)">کڕین (90💰)</button>
-                </div>
-                <div class="shop-item">
-                    <div style="width:26px; height:26px; background:#eab308; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); margin:4px auto;"></div>
-                    <p style="font-size: 10px;">ئەستێرە</p>
-                    <button class="btn" id="btn-skin-star" style="padding: 4px; font-size: 10px;" onclick="handleShapeAction('star', 150)">کڕین (150💰)</button>
-                </div>
-                <div class="shop-item">
-                    <div style="width:22px; height:22px; background:#06b6d4; transform:rotate(45deg); margin:6px auto;"></div>
-                    <p style="font-size: 10px;">ئەڵماس</p>
-                    <button class="btn" id="btn-skin-diamond" style="padding: 4px; font-size: 10px;" onclick="handleShapeAction('diamond', 220)">کڕین (220💰)</button>
-                </div>
-            </div>
-            <button class="btn" style="background: #3f3f46; margin-top: 12px;" onclick="switchScreen('jumperLandingScreen')">گەڕانەوە</button>
-        </div>
-
-        <!-- Flappy Shop Screen -->
-        <div id="flappyShopScreen" class="screen">
-            <div class="brand-title">فرۆشگای مریشک و دیوارەکان 🛒</div>
-            <div style="text-align: center; margin-bottom: 8px; color: #fbbf24; font-size: 12px;">
-                💰 کۆینی بەردەست: <span id="flappyShopCoins">0</span>
-            </div>
-            
-            <div class="section-header"><span>🐔 کارەکتەرەکان</span></div>
-            <div class="shop-grid" id="birdShopGrid"></div>
-
-            <div class="section-header" style="margin-top:12px;"><span>🧱 دیواری پاشبنەما</span></div>
-            <div class="shop-grid" id="bgShopGrid"></div>
-
-            <button class="btn" style="background: #3f3f46; margin-top: 12px;" onclick="switchScreen('flappyLandingScreen')">گەڕانەوە</button>
         </div>
 
         <!-- Settings Screen -->
@@ -492,80 +285,7 @@
             <button class="btn" style="background: #3f3f46; margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
         </div>
 
-        <!-- Jumper Game Screen -->
-        <div id="gameScreen" class="screen">
-            <div class="game-stats">
-                <span>خاڵ: <span id="currentScore">0</span></span>
-                <span>💰: <span id="currentCoins">0</span></span>
-            </div>
-
-            <div class="arena" id="gameArena">
-                <div id="player" class="shape-circle"></div>
-                <div id="obstacle"></div>
-                <div id="coinItem"></div>
-
-                <div id="gameOverBox">
-                    <h2 style="color: #f87171; font-size: 18px;">یاری تەواو بوو!</h2>
-                    <p style="font-size: 12px;">خاڵی ئەمجارە: <span id="finalScore" style="color: #fbbf24;">0</span></p>
-                    <button class="btn" style="padding: 8px; font-size: 12px;" onclick="startGamePlay()">دووبارە</button>
-                    <button class="btn" style="background: #3f3f46; padding: 8px; font-size: 12px;" onclick="switchScreen('jumperLandingScreen')">لاپەڕەی یاری</button>
-                </div>
-            </div>
-
-            <button class="jump-control-btn" onclick="jumpAction()">بازدان</button>
-            <button class="btn" style="background: #3f3f46; margin-top: 8px;" onclick="switchScreen('jumperLandingScreen')">گەڕانەوە</button>
-        </div>
-
-        <!-- Flappy Game Screen -->
-        <div id="flappyScreen" class="screen">
-            <div class="hub-header-panel" style="margin-bottom: 6px;">
-                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitFlappyGame()">⬅️ دەرچوون</button>
-                <span style="font-weight: bold; color: #fbbf24; font-size: 12px;">کۆین: <span id="flappyScore">0</span></span>
-            </div>
-            <div class="flappy-container">
-                <canvas id="flappyCanvas"></canvas>
-
-                <div id="flappyGameOverOverlay" class="flappy-overlay">
-                    <h2 style="color: #f87171; margin-top: 0; font-size: 18px;">یاری تەواو بوو! 🐔</h2>
-                    <p style="font-size: 12px; margin-bottom: 10px;">کۆینی کۆکراوە: <span id="flappyFinalScore" style="color: #fbbf24; font-weight: bold;">0</span></p>
-                    
-                    <button class="btn" style="margin-bottom: 6px; padding: 8px; font-size: 12px;" onclick="resetFlappyGame()">🔄 یاری دەکەیتەوە</button>
-                    <button class="btn" style="background: #8b5cf6; margin-bottom: 6px; padding: 8px; font-size: 12px;" onclick="exitFlappyGameToShop()">🛒 فرۆشگا</button>
-                    <button class="btn" style="background: #3f3f46; padding: 8px; font-size: 12px;" onclick="exitFlappyGame()">🏠 گەڕانەوە بۆ لۆبی</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Snake Game Screen -->
-        <div id="snakeScreen" class="screen">
-            <div class="hub-header-panel" style="margin-bottom: 6px;">
-                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitSnakeGame()">⬅️ دەرچوون</button>
-                <span style="font-weight: bold; color: #fbbf24; font-size: 11px;">خاڵ: <span id="snakeScore">0</span> | 💰: <span id="snakeCoins">0</span></span>
-            </div>
-            
-            <div style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <canvas id="snakeCanvas"></canvas>
-
-                <div class="snake-controls">
-                    <div></div>
-                    <button class="snake-btn" onclick="setSnakeDir('UP')">⬆️</button>
-                    <div></div>
-                    <button class="snake-btn" onclick="setSnakeDir('LEFT')">⬅️</button>
-                    <button class="snake-btn" onclick="setSnakeDir('DOWN')">⬇️</button>
-                    <button class="snake-btn" onclick="setSnakeDir('RIGHT')">➡️</button>
-                </div>
-
-                <div id="snakeGameOverOverlay" class="flappy-overlay">
-                    <h2 style="color: #f87171; margin-top: 0; font-size: 18px;">یاری تەواو بوو! 🐍</h2>
-                    <p style="font-size: 12px; margin-bottom: 10px;">خاڵ: <span id="snakeFinalScore" style="color: #fbbf24; font-weight: bold;">0</span></p>
-                    
-                    <button class="btn" style="margin-bottom: 6px; padding: 8px; font-size: 12px;" onclick="startSnakeGame()">🔄 یاری دەکەیتەوە</button>
-                    <button class="btn" style="background: #3f3f46; padding: 8px; font-size: 12px;" onclick="exitSnakeGame()">🏠 گەڕانەوە</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Word Rain Game Screen Canvas Canvas Render UI -->
+        <!-- Word Rain Game Screen Canvas -->
         <div id="word-game-container" class="screen" style="display: none; flex-direction: column; justify-content: flex-start; padding: 10px;">
             <div class="hub-header-panel" style="margin-bottom: 6px;">
                 <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitWordGame()">⬅️ دەرچوون</button>
@@ -592,7 +312,7 @@
                 </div>
                 
                 <div style="display: flex; gap: 6px;">
-                    <input type="text" id="word-input" placeholder="وشەیەک بنووسە..." style="padding: 8px 10px; font-size: 13px; margin: 0;">
+                    <input type="text" id="word-input" placeholder="وشەیەک بنووسە (بۆ نموونە: نان)..." style="padding: 8px 10px; font-size: 13px; margin: 0;">
                     <button class="btn" onclick="submitWord()" style="width: auto; padding: 8px 16px; margin: 0; background: #10b981; white-space: nowrap;">ناردن ↵</button>
                 </div>
                 <p id="word-message" style="margin: 4px 0 0 0; font-size: 10px; text-align: center; height: 14px;"></p>
@@ -638,33 +358,12 @@
     <script>
         let currentUser = "";
         let totalCoins = 0;
-        let selectedShape = "circle";
-        let ownedShapes = ["circle"];
         let tempAvatarBase64 = "";
         let settingsTempAvatar = "";
-
-        let selectedBird = "goose"; 
-        let ownedBirds = ["goose"];
-        let selectedBg = "brown_wall"; 
-        let ownedBgs = ["brown_wall"];
-
-        let isGameActive = false;
-        let score = 0;
-        let coins = 0;
-
-        let playerY = 10;
-        let playerVelocityY = 0;
-        let isJumping = false;
-        const gravity = 0.6;
-        const jumpStrength = 11;
-
-        let obstacleX = 800;
-        let gameAnimFrame;
 
         let musicEnabled = true;
         let sfxEnabled = true;
         let bgMusicInterval = null;
-        let currentLeaderboardTab = "jumper";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -678,12 +377,7 @@
             gain.connect(audioCtx.destination);
             const now = audioCtx.currentTime;
 
-            if (type === 'jump') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(180, now);
-                osc.frequency.exponentialRampToValueAtTime(450, now + 0.1);
-                gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.start(now); osc.stop(now + 0.1);
-            } else if (type === 'coin') {
+            if (type === 'coin') {
                 osc.type = 'sine'; osc.frequency.setValueAtTime(987.77, now);
                 osc.frequency.setValueAtTime(1318.51, now + 0.08);
                 gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
@@ -708,7 +402,7 @@
             let noteIdx = 0;
 
             bgMusicInterval = setInterval(() => {
-                if (!musicEnabled || (!isGameActive && flappyState !== "PLAYING" && !isSnakeActive && !isWordGameActive)) return;
+                if (!musicEnabled || !isWordGameActive) return;
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
@@ -729,7 +423,7 @@
             musicEnabled = (val === 'on');
             localStorage.setItem("top_top_music", val);
             if (!musicEnabled) stopBackgroundMusic();
-            else if (isGameActive || flappyState === "PLAYING" || isSnakeActive || isWordGameActive) startBackgroundMusic();
+            else if (isWordGameActive) startBackgroundMusic();
         }
 
         function toggleSoundEffects(val) {
@@ -760,9 +454,6 @@
             if (id === 'hubScreen') loadLeaderboard();
         }
 
-        function openJumperLanding() { switchScreen("jumperLandingScreen"); }
-        function openFlappyLanding() { switchScreen("flappyLandingScreen"); }
-        function openSnakeLanding() { switchScreen("snakeLandingScreen"); }
         function openWordGameLanding() { switchScreen("wordGameLandingScreen"); }
 
         function switchAuthMode(mode) {
@@ -826,16 +517,7 @@
                     birthdate: birthdate,
                     avatar: tempAvatarBase64 || "",
                     coins: 0,
-                    highscore: 0,
-                    flappyScore: 0,
-                    snakeScore: 0,
                     wordScore: 0,
-                    shape: "circle",
-                    ownedShapes: ["circle"],
-                    flappyBird: "goose",
-                    ownedBirds: ["goose"],
-                    flappyBg: "brown_wall",
-                    ownedBgs: ["brown_wall"],
                     lastBonus: ""
                 };
 
@@ -846,7 +528,7 @@
                 switchScreen("hubScreen");
             } catch (error) {
                 console.error("Error registering user: ", error);
-                alert("هەڵەیەک ڕوویدا لە پەیوەندی کردن بە سێرڤەرەوە! تکایە ڕێساکانی فايربيست (Firestore Rules) ئەکتۆڤ بکە بۆ allow read, write: if true;");
+                alert("هەڵەیەک ڕوویدا لە پەیوەندی کردن بە سێرڤەرەوە!");
             }
         }
 
@@ -893,24 +575,10 @@
                 if (userSnap.exists()) {
                     let profile = userSnap.data();
                     totalCoins = profile.coins || 0;
-                    selectedShape = profile.shape || "circle";
-                    ownedShapes = profile.ownedShapes || ["circle"];
-                    selectedBird = profile.flappyBird || "goose";
-                    ownedBirds = profile.ownedBirds || ["goose"];
-                    selectedBg = profile.flappyBg || "brown_wall";
-                    ownedBgs = profile.ownedBgs || ["brown_wall"];
 
                     document.getElementById("hubUsernameText").innerText = currentUser;
                     document.getElementById("hubTotalCoins").innerText = totalCoins;
-                    document.getElementById("shopTotalCoins").innerText = totalCoins;
-                    document.getElementById("flappyShopCoins").innerText = totalCoins;
-                    if(document.getElementById("snakeCoins")) document.getElementById("snakeCoins").innerText = totalCoins;
-
-                    document.getElementById("hubJumperBest").innerText = "بەرزترین خاڵ: " + (profile.highscore || 0);
-                    document.getElementById("hubFlappyBest").innerText = "بەرزترین خاڵ: " + (profile.flappyScore || 0);
-                    document.getElementById("hubSnakeBest").innerText = "بەرزترین خاڵ: " + (profile.snakeScore || 0);
-
-                    applyPlayerShapeUI();
+                    document.getElementById("hubWordBest").innerText = "بەرزترین خاڵ: " + (profile.wordScore || 0);
 
                     let avatarEl = document.getElementById("hubUserAvatar");
                     if (profile.avatar) {
@@ -920,7 +588,6 @@
                     }
 
                     document.getElementById("settingsUsernameInput").value = currentUser;
-                    updateShopUI();
                     loadLeaderboard();
                     checkDailyBonusCloud(profile.lastBonus);
                 }
@@ -970,18 +637,11 @@
         }
 
         async function resetUserHighscore() {
-            if (confirm("دڵنیایت لە سڕینەوەی بەرزترین خاڵەکانت لە هەموو یارییەکان؟")) {
-                await saveCloudData({ highscore: 0, flappyScore: 0, snakeScore: 0, wordScore: 0 });
+            if (confirm("دڵنیایت لە سڕینەوەی بەرزترین خاڵەکانت؟")) {
+                await saveCloudData({ wordScore: 0 });
                 alert("خاڵەکانت سڕدرانەوە!");
                 loadUserData();
             }
-        }
-
-        function applyPlayerShapeUI() {
-            let player = document.getElementById("player");
-            if (!player) return;
-            player.className = "";
-            player.classList.add("shape-" + selectedShape);
         }
 
         function checkDailyBonusCloud(lastClaimed) {
@@ -1007,63 +667,8 @@
             loadUserData();
         }
 
-        function openShopScreen() { loadUserData(); switchScreen("shopScreen"); }
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
-        function backToHub() { stopGameSession(); exitFlappyGame(); exitSnakeGame(); exitWordGame(); loadUserData(); switchScreen("hubScreen"); }
-
-        function updateShopUI() {
-            let skins = [
-                { id: "circle", price: 0 },
-                { id: "square", price: 60 },
-                { id: "triangle", price: 90 },
-                { id: "star", price: 150 },
-                { id: "diamond", price: 220 }
-            ];
-
-            skins.forEach(skin => {
-                let btn = document.getElementById("btn-skin-" + skin.id);
-                if (!btn) return;
-                if (ownedShapes.includes(skin.id)) {
-                    btn.innerText = selectedShape === skin.id ? "هەڵبژێردراوە" : "هەڵبژاردن";
-                    btn.onclick = function() { selectShape(skin.id); };
-                    btn.disabled = selectedShape === skin.id;
-                } else {
-                    btn.innerText = `کڕین (${skin.price}💰)`;
-                    btn.onclick = function() { handleShapeAction(skin.id, skin.price); };
-                }
-            });
-        }
-
-        async function selectShape(shape) {
-            selectedShape = shape;
-            await saveCloudData({ shape: selectedShape });
-            playSound('buy');
-            loadUserData();
-        }
-
-        async function handleShapeAction(shapeKey, price) {
-            if (totalCoins >= price) {
-                totalCoins -= price;
-                ownedShapes.push(shapeKey);
-                selectedShape = shapeKey;
-                await saveCloudData({ coins: totalCoins, ownedShapes: ownedShapes, shape: selectedShape });
-                selectShape(shapeKey);
-            } else {
-                alert("کۆینی تەواوت نییە!");
-            }
-        }
-
-        function switchLeaderboard(tab) {
-            currentLeaderboardTab = tab;
-            document.getElementById("lbBtnJumper").classList.remove("active");
-            document.getElementById("lbBtnFlappy").classList.remove("active");
-            document.getElementById("lbBtnSnake").classList.remove("active");
-            if(document.getElementById("lbBtnWord")) document.getElementById("lbBtnWord").classList.remove("active");
-            
-            let btnId = "lbBtn" + tab.charAt(0).toUpperCase() + tab.slice(1);
-            if(document.getElementById(btnId)) document.getElementById(btnId).classList.add("active");
-            loadLeaderboard();
-        }
+        function backToHub() { exitWordGame(); loadUserData(); switchScreen("hubScreen"); }
 
         async function loadLeaderboard() {
             try {
@@ -1071,13 +676,7 @@
                 let users = [];
                 querySnapshot.forEach((doc) => {
                     let uData = doc.data();
-                    let sVal = 0;
-                    if (currentLeaderboardTab === 'jumper') sVal = uData.highscore || 0;
-                    else if (currentLeaderboardTab === 'flappy') sVal = uData.flappyScore || 0;
-                    else if (currentLeaderboardTab === 'snake') sVal = uData.snakeScore || 0;
-                    else if (currentLeaderboardTab === 'word') sVal = uData.wordScore || 0;
-
-                    users.push({ name: uData.username || doc.id, score: sVal });
+                    users.push({ name: uData.username || doc.id, score: uData.wordScore || 0 });
                 });
                 users.sort((a, b) => b.score - a.score);
 
@@ -1096,545 +695,12 @@
             }
         }
 
-        // Jumper Game Engine
-        function startGamePlay() {
-            document.getElementById("gameOverBox").classList.remove("show");
-            switchScreen("gameScreen");
-            applyPlayerShapeUI();
-
-            score = 0; coins = 0; obstacleX = 800;
-            isGameActive = true;
-            cancelAnimationFrame(gameAnimFrame);
-            startBackgroundMusic();
-            gameAnimFrame = requestAnimationFrame(gameLoopUpdate);
-        }
-
-        function stopGameSession() {
-            isGameActive = false;
-            stopBackgroundMusic();
-            cancelAnimationFrame(gameAnimFrame);
-        }
-
-        function jumpAction() {
-            if (!isGameActive || isJumping) return;
-            isJumping = true; playerVelocityY = jumpStrength;
-            playSound('jump');
-        }
-
-        async function gameLoopUpdate() {
-            if (!isGameActive) return;
-            let speed = 4.5;
-            obstacleX -= speed;
-            if (obstacleX < -30) obstacleX = 650 + Math.random() * 300;
-            let obsEl = document.getElementById("obstacle");
-            if(obsEl) obsEl.style.left = obstacleX + "px";
-
-            if (isJumping) {
-                playerVelocityY -= gravity; playerY += playerVelocityY;
-                if (playerY <= 10) { playerY = 10; isJumping = false; playerVelocityY = 0; }
-                let playerEl = document.getElementById("player");
-                if(playerEl) playerEl.style.bottom = playerY + "px";
-            }
-
-            if (obstacleX > 25 && obstacleX < 55 && playerY < 45) {
-                playSound('gameover');
-                isGameActive = false;
-                let finalScoreEl = document.getElementById("finalScore");
-                let currentFinalScoreVal = Math.floor(score/10);
-                if(finalScoreEl) finalScoreEl.innerText = currentFinalScoreVal;
-                
-                const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
-                const userSnap = await window.firestoreFns.getDoc(userRef);
-                if (userSnap.exists()) {
-                    let currentHighScore = userSnap.data().highscore || 0;
-                    if (currentFinalScoreVal > currentHighScore) {
-                        await saveCloudData({ highscore: currentFinalScoreVal });
-                    }
-                }
-
-                document.getElementById("gameOverBox").classList.add("show");
-                return;
-            }
-            score++;
-            let curScoreEl = document.getElementById("currentScore");
-            if(curScoreEl) curScoreEl.innerText = Math.floor(score/10);
-            gameAnimFrame = requestAnimationFrame(gameLoopUpdate);
-        }
-
-        // Flappy Shop Engine
-        const birdCatalog = [
-            { id: "goose", name: "قازی ئاسایی 🪿", price: 0, icon: "🪿", color: "#ffffff" },
-            { id: "chicken", name: "مریشکی کێوی 🐔", price: 150, icon: "🐔", color: "#e65100" },
-            { id: "purple_goose", name: "قازی وەنەوشەیی 🪿", price: 450, icon: "🪿", color: "#a855f7" },
-            { id: "gold_goose", name: "قازی زێڕین 🪿", price: 300, icon: "🪿", color: "#eab308" },
-            { id: "eagle", name: "هەڵۆی بەهێز 🦅", price: 600, icon: "🦅", color: "#78350f" }
-        ];
-
-        const bgCatalog = [
-            { id: "brown_wall", name: "دیواری قاوەیی HD", price: 0, color: "#451a03" },
-            { id: "night", name: "دیواری شەوانە 🌙", price: 100, color: "#0f172a" },
-            { id: "morning", name: "دیواری بەیانی 🌅", price: 150, color: "#fdba74" },
-            { id: "snow", name: "دیواری بەفراوی ❄️", price: 200, color: "#e2e8f0" }
-        ];
-
-        function openFlappyShop() {
-            loadUserData();
-            renderFlappyShop();
-            switchScreen("flappyShopScreen");
-        }
-
-        function renderFlappyShop() {
-            let bContainer = document.getElementById("birdShopGrid");
-            if (!bContainer) return;
-            bContainer.innerHTML = "";
-            birdCatalog.forEach(b => {
-                let isOwned = ownedBirds.includes(b.id);
-                let isSelected = selectedBird === b.id;
-                let card = document.createElement("div");
-                card.className = "shop-item";
-                card.innerHTML = `
-                    <div style="font-size:26px; margin-bottom:2px;">${b.icon}</div>
-                    <p style="font-size:10px; margin:2px 0;">${b.name}</p>
-                    <button class="btn" style="padding:4px; font-size:10px; background:${isSelected ? '#10b981' : ''}" ${isSelected ? 'disabled' : ''}>
-                        ${isSelected ? 'هەڵبژێردراوە' : isOwned ? 'هەڵبژاردن' : 'کڕین (' + b.price + '💰)'}
-                    </button>
-                `;
-                card.querySelector("button").onclick = () => handleBirdBuy(b);
-                bContainer.appendChild(card);
-            });
-
-            let bgContainer = document.getElementById("bgShopGrid");
-            if (!bgContainer) return;
-            bgContainer.innerHTML = "";
-            bgCatalog.forEach(bg => {
-                let isOwned = ownedBgs.includes(bg.id);
-                let isSelected = selectedBg === bg.id;
-                let card = document.createElement("div");
-                card.className = "shop-item";
-                card.innerHTML = `
-                    <div style="width:36px; height:22px; background:${bg.color}; border-radius:4px; margin:4px auto; border:1px solid #fff;"></div>
-                    <p style="font-size:10px; margin:2px 0;">${bg.name}</p>
-                    <button class="btn" style="padding:4px; font-size:10px; background:${isSelected ? '#10b981' : ''}" ${isSelected ? 'disabled' : ''}>
-                        ${isSelected ? 'هەڵبژێردراوە' : isOwned ? 'هەڵبژاردن' : 'کڕین (' + bg.price + '💰)'}
-                    </button>
-                `;
-                card.querySelector("button").onclick = () => handleBgBuy(bg);
-                bgContainer.appendChild(card);
-            });
-        }
-
-        async function handleBirdBuy(bird) {
-            if (ownedBirds.includes(bird.id)) {
-                selectedBird = bird.id;
-                await saveCloudData({ flappyBird: selectedBird });
-                playSound('buy');
-            } else {
-                if (totalCoins >= bird.price) {
-                    totalCoins -= bird.price;
-                    ownedBirds.push(bird.id);
-                    selectedBird = bird.id;
-                    await saveCloudData({ coins: totalCoins, ownedBirds: ownedBirds, flappyBird: selectedBird });
-                    playSound('buy');
-                } else { alert("کۆینی تەواوت نییە!"); }
-            }
-            loadUserData(); renderFlappyShop();
-        }
-
-        async function handleBgBuy(bg) {
-            if (ownedBgs.includes(bg.id)) {
-                selectedBg = bg.id;
-                await saveCloudData({ flappyBg: selectedBg });
-                playSound('buy');
-            } else {
-                if (totalCoins >= bg.price) {
-                    totalCoins -= bg.price;
-                    ownedBgs.push(bg.id);
-                    selectedBg = bg.id;
-                    await saveCloudData({ coins: totalCoins, ownedBgs: ownedBgs, flappyBg: selectedBg });
-                    playSound('buy');
-                } else { alert("کۆینی تەواوت نییە!"); }
-            }
-            loadUserData(); renderFlappyShop();
-        }
-
-        // Flappy Bird Engine
-        const fCanvas = document.getElementById("flappyCanvas");
-        const fCtx = fCanvas ? fCanvas.getContext("2d") : null;
-
-        let flappyScore = 0;
-        let flappyState = "START";
-        let flappyAnim;
-        let lastFlapTime = 0;
-
-        function resizeCanvas() {
-            if(!fCanvas) return;
-            fCanvas.width = fCanvas.parentElement.clientWidth;
-            fCanvas.height = fCanvas.parentElement.clientHeight;
-        }
-
-        const fBird = {
-            x: 50, y: 150, radius: 14, 
-            gravity: 0.22,
-            jump: 5.5,
-            velocity: 0,
-            draw() {
-                if(!fCtx) return;
-                fCtx.save();
-                fCtx.translate(this.x, this.y);
-                let birdObj = birdCatalog.find(b => b.id === selectedBird) || birdCatalog[0];
-                fCtx.font = "24px serif";
-                fCtx.textAlign = "center";
-                fCtx.textBaseline = "middle";
-                fCtx.fillText(birdObj.icon, 0, 0);
-                fCtx.restore();
-            },
-            flap() { 
-                let nowTime = Date.now();
-                if (nowTime - lastFlapTime < 220) return; 
-                lastFlapTime = nowTime;
-                this.velocity = -this.jump; 
-                playSound('jump'); 
-            },
-            update() {
-                this.velocity += this.gravity;
-                this.y += this.velocity;
-                if (this.y + this.radius >= fCanvas.height - 15) { 
-                    this.y = fCanvas.height - 15 - this.radius; 
-                    flappyGameOver(); 
-                }
-                if (this.y - this.radius <= 0) { 
-                    this.y = this.radius; 
-                    this.velocity = 0; 
-                }
-            },
-            reset() { if(fCanvas) this.y = fCanvas.height / 2; this.velocity = 0; }
-        };
-
-        const fPipes = {
-            position: [], 
-            w: 48, 
-            gap: 140,
-            dx: 2.0,
-            draw() {
-                if(!fCtx) return;
-                for (let i = 0; i < this.position.length; i++) {
-                    let p = this.position[i];
-                    let topY = p.y;
-                    let bottomY = p.y + 250 + this.gap;
-
-                    fCtx.fillStyle = "#5c2c06";
-                    fCtx.fillRect(p.x, topY, this.w, 250);
-                    fCtx.strokeStyle = "#b45309";
-                    fCtx.lineWidth = 3;
-                    fCtx.strokeRect(p.x, topY, this.w, 250);
-
-                    fCtx.fillRect(p.x, bottomY, this.w, fCanvas.height);
-                    fCtx.strokeRect(p.x, bottomY, this.w, fCanvas.height);
-                }
-            },
-            async update() {
-                if (flappyState !== "PLAYING") return;
-                
-                if (this.position.length === 0 || this.position[this.position.length - 1].x < fCanvas.width - 200) {
-                    this.position.push({
-                        x: fCanvas.width,
-                        y: -Math.floor(Math.random() * 120) - 90
-                    });
-                }
-                for (let i = 0; i < this.position.length; i++) {
-                    let p = this.position[i];
-                    let bottomY = p.y + 250 + this.gap;
-
-                    if (fBird.x + fBird.radius > p.x && fBird.x - fBird.radius < p.x + this.w) {
-                        if (fBird.y - fBird.radius < p.y + 250 || fBird.y + fBird.radius > bottomY) { 
-                            flappyGameOver(); 
-                        }
-                    }
-                    p.x -= this.dx;
-                    if (p.x + this.w <= 0) {
-                        this.position.shift();
-                        flappyScore++; 
-                        totalCoins++;
-                        playSound('coin');
-                        let fScoreEl = document.getElementById("flappyScore");
-                        if(fScoreEl) fScoreEl.innerText = flappyScore;
-
-                        const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
-                        const userSnap = await window.firestoreFns.getDoc(userRef);
-                        let curBest = userSnap.exists() ? (userSnap.data().flappyScore || 0) : 0;
-                        let newBest = Math.max(curBest, flappyScore);
-
-                        await saveCloudData({ coins: totalCoins, flappyScore: newBest });
-                        i--;
-                    }
-                }
-            },
-            reset() { this.position = []; }
-        };
-
-        function drawBackgroundWall() {
-            if(!fCtx) return;
-            let bgObj = bgCatalog.find(b => b.id === selectedBg) || bgCatalog[0];
-            fCtx.fillStyle = bgObj.color;
-            fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
-
-            fCtx.strokeStyle = "rgba(255,255,255,0.06)";
-            fCtx.lineWidth = 2;
-            for (let y = 0; y < fCanvas.height; y += 35) {
-                fCtx.beginPath(); fCtx.moveTo(0, y); fCtx.lineTo(fCanvas.width, y); fCtx.stroke();
-            }
-        }
-
-        function flappyGameOver() {
-            flappyState = "GAMEOVER";
-            playSound('gameover');
-            stopBackgroundMusic();
-            let fFinalEl = document.getElementById("flappyFinalScore");
-            if(fFinalEl) fFinalEl.innerText = flappyScore;
-            document.getElementById("flappyGameOverOverlay").classList.add("show");
-        }
-
-        function resetFlappyGame() {
-            document.getElementById("flappyGameOverOverlay").classList.remove("show");
-            fBird.reset(); fPipes.reset();
-            flappyScore = 0; 
-            let fScoreEl = document.getElementById("flappyScore");
-            if(fScoreEl) fScoreEl.innerText = 0;
-            flappyState = "PLAYING";
-            startBackgroundMusic();
-        }
-
-        function startFlappyGame() {
-            document.getElementById("flappyGameOverOverlay").classList.remove("show");
-            switchScreen("flappyScreen");
-            resizeCanvas();
-            flappyState = "START";
-            fBird.reset(); fPipes.reset();
-            flappyScore = 0;
-            let fScoreEl = document.getElementById("flappyScore");
-            if(fScoreEl) fScoreEl.innerText = 0;
-            cancelAnimationFrame(flappyAnim);
-            flappyLoop();
-        }
-
-        function exitFlappyGame() {
-            document.getElementById("flappyGameOverOverlay").classList.remove("show");
-            flappyState = "START";
-            cancelAnimationFrame(flappyAnim);
-            stopBackgroundMusic();
-            loadUserData();
-            switchScreen("flappyLandingScreen");
-        }
-
-        function exitFlappyGameToShop() {
-            document.getElementById("flappyGameOverOverlay").classList.remove("show");
-            flappyState = "START";
-            cancelAnimationFrame(flappyAnim);
-            stopBackgroundMusic();
-            openFlappyShop();
-        }
-
-        function handleFlappyAction() {
-            if (flappyState === "START") { 
-                flappyState = "PLAYING"; 
-                startBackgroundMusic(); 
-            } else if (flappyState === "PLAYING") { 
-                fBird.flap(); 
-            }
-        }
-
-        if(fCanvas) {
-            fCanvas.addEventListener("pointerdown", (e) => { e.preventDefault(); handleFlappyAction(); });
-        }
-        window.addEventListener("keydown", (e) => {
-            if (e.code === "Space" && document.getElementById("flappyScreen") && document.getElementById("flappyScreen").classList.contains("active")) {
-                e.preventDefault(); handleFlappyAction();
-            }
-        });
-
-        function flappyLoop() {
-            if (!fCtx) return;
-            fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
-            drawBackgroundWall();
-            fPipes.draw(); fPipes.update();
-            fBird.draw(); 
-            
-            if (flappyState === "PLAYING") {
-                fBird.update();
-            }
-
-            if (flappyState === "START") {
-                fCtx.fillStyle = "rgba(0,0,0,0.4)";
-                fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
-                fCtx.fillStyle = "#fff"; fCtx.font = "bold 18px 'Noto Sans Arabic'"; fCtx.textAlign = "center";
-                fCtx.fillText("داگرە بۆ دەستپێکردن 🐔", fCanvas.width / 2, fCanvas.height / 2);
-            }
-
-            flappyAnim = requestAnimationFrame(flappyLoop);
-        }
-
-        // Snake Game Engine
-        const sCanvas = document.getElementById("snakeCanvas");
-        const sCtx = sCanvas ? sCanvas.getContext("2d") : null;
-        let snake = [], snakeDir = "RIGHT", nextSnakeDir = "RIGHT";
-        let food = { x: 0, y: 0 }, snakeScore = 0;
-        let isSnakeActive = false, snakeTimer = null;
-        const gridBox = 15;
-
-        function resizeSnakeCanvas() {
-            if(!sCanvas) return;
-            sCanvas.width = Math.floor(sCanvas.parentElement.clientWidth / gridBox) * gridBox;
-            sCanvas.height = 230;
-        }
-
-        function startSnakeGame() {
-            let sOverlay = document.getElementById("snakeGameOverOverlay");
-            if(sOverlay) sOverlay.classList.remove("show");
-            switchScreen("snakeScreen");
-            resizeSnakeCanvas();
-
-            snake = [
-                { x: 5 * gridBox, y: 5 * gridBox },
-                { x: 4 * gridBox, y: 5 * gridBox },
-                { x: 3 * gridBox, y: 5 * gridBox }
-            ];
-            snakeDir = "RIGHT";
-            nextSnakeDir = "RIGHT";
-            snakeScore = 0;
-            let sScoreEl = document.getElementById("snakeScore");
-            if(sScoreEl) sScoreEl.innerText = snakeScore;
-            let sCoinsEl = document.getElementById("snakeCoins");
-            if(sCoinsEl) sCoinsEl.innerText = totalCoins;
-
-            spawnSnakeFood();
-            isSnakeActive = true;
-            clearInterval(snakeTimer);
-            startBackgroundMusic();
-            snakeTimer = setInterval(updateSnakeLoop, 110);
-        }
-
-        function setSnakeDir(dir) {
-            if (dir === "LEFT" && snakeDir !== "RIGHT") nextSnakeDir = "LEFT";
-            else if (dir === "UP" && snakeDir !== "DOWN") nextSnakeDir = "UP";
-            else if (dir === "RIGHT" && snakeDir !== "LEFT") nextSnakeDir = "RIGHT";
-            else if (dir === "DOWN" && snakeDir !== "UP") nextSnakeDir = "DOWN";
-        }
-
-        window.addEventListener("keydown", (e) => {
-            if (!isSnakeActive) return;
-            if (e.key === "ArrowLeft" || e.key === "a") setSnakeDir("LEFT");
-            else if (e.key === "ArrowUp" || e.key === "w") setSnakeDir("UP");
-            else if (e.key === "ArrowRight" || e.key === "d") setSnakeDir("RIGHT");
-            else if (e.key === "ArrowDown" || e.key === "s") setSnakeDir("DOWN");
-        });
-
-        function spawnSnakeFood() {
-            if(!sCanvas) return;
-            let cols = Math.floor(sCanvas.width / gridBox);
-            let rows = Math.floor(sCanvas.height / gridBox);
-            food = {
-                x: Math.floor(Math.random() * cols) * gridBox,
-                y: Math.floor(Math.random() * rows) * gridBox
-            };
-        }
-
-        async function updateSnakeLoop() {
-            if (!isSnakeActive) return;
-            snakeDir = nextSnakeDir;
-            let headX = snake[0].x;
-            let headY = snake[0].y;
-
-            if (snakeDir === "LEFT") headX -= gridBox;
-            if (snakeDir === "UP") headY -= gridBox;
-            if (snakeDir === "RIGHT") headX += gridBox;
-            if (snakeDir === "DOWN") headY += gridBox;
-
-            if (headX < 0 || headX >= sCanvas.width || headY < 0 || headY >= sCanvas.height) {
-                return snakeGameOver();
-            }
-
-            for (let i = 0; i < snake.length; i++) {
-                if (headX === snake[i].x && headY === snake[i].y) {
-                    return snakeGameOver();
-                }
-            }
-
-            let newHead = { x: headX, y: headY };
-            if (headX === food.x && headY === food.y) {
-                snakeScore++;
-                totalCoins += 2;
-                playSound('coin');
-                let sScoreEl = document.getElementById("snakeScore");
-                if(sScoreEl) sScoreEl.innerText = snakeScore;
-                let sCoinsEl = document.getElementById("snakeCoins");
-                if(sCoinsEl) sCoinsEl.innerText = totalCoins;
-
-                const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
-                const userSnap = await window.firestoreFns.getDoc(userRef);
-                let curBest = userSnap.exists() ? (userSnap.data().snakeScore || 0) : 0;
-                let newBest = Math.max(curBest, snakeScore);
-
-                await saveCloudData({ coins: totalCoins, snakeScore: newBest });
-                spawnSnakeFood();
-            } else {
-                snake.pop();
-            }
-
-            snake.unshift(newHead);
-            drawSnakeGame();
-        }
-
-        function drawSnakeGame() {
-            if(!sCtx) return;
-            sCtx.fillStyle = "#18181b";
-            sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
-
-            sCtx.strokeStyle = "rgba(255,255,255,0.03)";
-            for (let x = 0; x < sCanvas.width; x += gridBox) {
-                sCtx.beginPath(); sCtx.moveTo(x, 0); sCtx.lineTo(x, sCanvas.height); sCtx.stroke();
-            }
-            for (let y = 0; y < sCanvas.height; y += gridBox) {
-                sCtx.beginPath(); sCtx.moveTo(0, y); sCtx.lineTo(0, sCanvas.width); sCtx.stroke();
-            }
-
-            sCtx.fillStyle = "#ef4444";
-            sCtx.beginPath();
-            sCtx.arc(food.x + gridBox/2, food.y + gridBox/2, gridBox/2 - 1, 0, Math.PI * 2);
-            sCtx.fill();
-
-            for (let i = 0; i < snake.length; i++) {
-                sCtx.fillStyle = i === 0 ? "#f59e0b" : "#d97706";
-                sCtx.fillRect(snake[i].x + 1, snake[i].y + 1, gridBox - 2, gridBox - 2);
-            }
-        }
-
-        function snakeGameOver() {
-            isSnakeActive = false;
-            clearInterval(snakeTimer);
-            playSound('gameover');
-            stopBackgroundMusic();
-            let sFinalEl = document.getElementById("snakeFinalScore");
-            if(sFinalEl) sFinalEl.innerText = snakeScore;
-            let sOverOverlay = document.getElementById("snakeGameOverOverlay");
-            if(sOverOverlay) sOverOverlay.classList.add("show");
-        }
-
-        function exitSnakeGame() {
-            isSnakeActive = false;
-            clearInterval(snakeTimer);
-            stopBackgroundMusic();
-            let sOverOverlay = document.getElementById("snakeGameOverOverlay");
-            if(sOverOverlay) sOverOverlay.classList.remove("show");
-            loadUserData();
-            switchScreen("snakeLandingScreen");
-        }
-
         // --- Interactive Visual Word Rain Engine ---
         const wrCanvas = document.getElementById("wordRainCanvas");
         const wrCtx = wrCanvas ? wrCanvas.getContext("2d") : null;
 
         const alphabetList = ["ا", "ب", "پ", "ت", "ج", "چ", "ح", "خ", "د", "ر", "ز", "ژ", "س", "ش", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "هـ", "ی"];
-        let currentLetter = "س";
+        let currentLetter = "ن";
         let gameTimeLeft = 30;
         let gameInterval;
         let userWordScore = 0;
@@ -1671,7 +737,6 @@
             if (!isWordGameActive || !wrCtx) return;
             wrCtx.clearRect(0, 0, wrCanvas.width, wrCanvas.height);
 
-            // Draw Background Grid/Rain Lines
             wrCtx.strokeStyle = "rgba(217, 119, 6, 0.1)";
             wrCtx.lineWidth = 1;
             for (let x = 0; x < wrCanvas.width; x += 30) {
@@ -1775,15 +840,15 @@
             
             if (word === "") return;
 
-            if (word.startsWith(currentLetter)) {
+            // مەرجی پیتە سەرەکییەکە (بۆ نموونە: دەبێت بە پیتی داواکراو دەست پێبکات و وشەیەکی دروست و تەواو بێت)
+            if (word.startsWith(currentLetter) && word.length > 1) {
                 userWordScore++;
                 totalCoins += 2;
                 playSound('coin');
                 document.getElementById('wordGameScoreText').innerText = userWordScore;
                 document.getElementById('word-message').style.color = "#34d399";
-                document.getElementById('word-message').innerText = "پیرۆزە! وشەیەکی ڕاست بوو (+2 کۆین)";
+                document.getElementById('word-message').innerText = "پیرۆزە! وشەیەکی ڕاستە (+2 کۆین)";
                 
-                // Pop effect for matching falling letter
                 for(let i=0; i<fallingItems.length; i++){
                     if(fallingItems[i].isTarget){
                         fallingItems.splice(i, 1);
@@ -1806,7 +871,7 @@
             } else {
                 playSound('gameover');
                 document.getElementById('word-message').style.color = "#f87171";
-                document.getElementById('word-message').innerText = "تکایە وشەیەک بنووسە بە پیتی (" + currentLetter + ")";
+                document.getElementById('word-message').innerText = "هەڵەیە! دەبێت وشەکە بە پیتی (" + currentLetter + ") دەست پێبکات.";
             }
             
             inputField.value = "";
