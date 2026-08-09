@@ -333,6 +333,7 @@
                     <button class="tab-btn active" id="lbBtnJumper" onclick="switchLeaderboard('jumper')">بازدان</button>
                     <button class="tab-btn" id="lbBtnFlappy" onclick="switchLeaderboard('flappy')">مریشک</button>
                     <button class="tab-btn" id="lbBtnSnake" onclick="switchLeaderboard('snake')">مارەکە</button>
+                    <button class="tab-btn" id="lbBtnWord" onclick="switchLeaderboard('word')">وشە باران</button>
                 </div>
                 <div class="leaderboard-list" id="leaderboardList"></div>
             </div>
@@ -564,24 +565,42 @@
             </div>
         </div>
 
-        <!-- Word Rain Game Screen Added Here -->
-        <div id="word-game-container" class="screen" style="display: none; flex-direction: column; justify-content: flex-start; padding: 15px;">
+        <!-- Word Rain Game Screen Canvas Canvas Render UI -->
+        <div id="word-game-container" class="screen" style="display: none; flex-direction: column; justify-content: flex-start; padding: 10px;">
             <div class="hub-header-panel" style="margin-bottom: 6px;">
                 <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitWordGame()">⬅️ دەرچوون</button>
-                <span style="font-weight: bold; color: #fbbf24; font-size: 12px;">یاری وشە باران</span>
+                <span style="font-weight: bold; color: #fbbf24; font-size: 12px;">خاڵ: <span id="wordGameScoreText">0</span></span>
             </div>
-            <div class="card" style="text-align: center;">
-                <p>پیت: <span id="target-letter" style="font-size: 24px; color: #ff9800; font-weight: bold;">س</span></p>
-                <p>کات: <span id="game-timer">30</span> چرکە</p>
-                <div id="live-scoreboard" style="margin-bottom: 10px; background: #222; padding: 10px; border-radius: 5px;">
-                    <h4 style="margin: 0 0 6px 0; color: #fbbf24; font-size: 12px;">کێبڕکێی ڕاستەوخۆ:</h4>
-                    <ul id="players-score-list" style="list-style: none; padding: 0; margin: 0; text-align: right;"></ul>
+
+            <!-- Visual Game Screen Area -->
+            <div style="position: relative; flex: 1; width: 100%; height: 260px; max-height: 280px; background: #121214; border: 2px solid #d97706; border-radius: 14px; overflow: hidden; margin-bottom: 8px;" id="wordGameCanvasArea">
+                <canvas id="wordRainCanvas" style="width: 100%; height: 100%; display: block;"></canvas>
+
+                <div id="wordGameOverOverlay" class="flappy-overlay">
+                    <h2 style="color: #f87171; margin-top: 0; font-size: 18px;">یاری تەواو بوو! 🌧️</h2>
+                    <p style="font-size: 12px; margin-bottom: 10px;">کۆی خاڵەکانت: <span id="wordGameFinalScore" style="color: #fbbf24; font-weight: bold;">0</span></p>
+                    <button class="btn" style="margin-bottom: 6px; padding: 8px; font-size: 12px;" onclick="startWordRainGame()">🔄 دووبارە یاری بکەوە</button>
+                    <button class="btn" style="background: #3f3f46; padding: 8px; font-size: 12px;" onclick="exitWordGame()">🏠 گەڕانەوە بۆ لۆبی</button>
                 </div>
-                <div class="form-group">
-                    <input type="text" id="word-input" placeholder="وشەیەک بنووسە..." style="padding: 8px; font-size: 16px;">
+            </div>
+
+            <!-- Input Controls Area -->
+            <div class="card" style="margin-bottom: 0; padding: 8px 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 11px; color: #a1a1aa;">پێویستە پیت: <b id="target-letter" style="color: #f59e0b; font-size: 16px;">س</b></span>
+                    <span style="font-size: 11px; color: #a1a1aa;">کاتی ماوە: <b id="game-timer" style="color: #ef4444; font-size: 15px;">30</b> چرکە</span>
                 </div>
-                <button class="btn" onclick="submitWord()" style="padding: 8px 15px; background: #4CAF50; color: white;">ناردن</button>
-                <p id="word-message" style="margin-top: 10px; font-size: 12px;"></p>
+                
+                <div style="display: flex; gap: 6px;">
+                    <input type="text" id="word-input" placeholder="وشەیەک بنووسە..." style="padding: 8px 10px; font-size: 13px; margin: 0;">
+                    <button class="btn" onclick="submitWord()" style="width: auto; padding: 8px 16px; margin: 0; background: #10b981; white-space: nowrap;">ناردن ↵</button>
+                </div>
+                <p id="word-message" style="margin: 4px 0 0 0; font-size: 10px; text-align: center; height: 14px;"></p>
+            </div>
+
+            <div id="live-scoreboard" class="card" style="margin-top: 6px; padding: 6px 10px; max-height: 80px; overflow-y: auto;">
+                <h4 style="margin: 0 0 4px 0; color: #fbbf24; font-size: 11px;">🏆 ڕیزبەندی کێبڕکێی ئۆنلاین:</h4>
+                <ul id="players-score-list" style="list-style: none; padding: 0; margin: 0; font-size: 10px;"></ul>
             </div>
         </div>
     </div>
@@ -810,6 +829,7 @@
                     highscore: 0,
                     flappyScore: 0,
                     snakeScore: 0,
+                    wordScore: 0,
                     shape: "circle",
                     ownedShapes: ["circle"],
                     flappyBird: "goose",
@@ -951,7 +971,7 @@
 
         async function resetUserHighscore() {
             if (confirm("دڵنیایت لە سڕینەوەی بەرزترین خاڵەکانت لە هەموو یارییەکان؟")) {
-                await saveCloudData({ highscore: 0, flappyScore: 0, snakeScore: 0 });
+                await saveCloudData({ highscore: 0, flappyScore: 0, snakeScore: 0, wordScore: 0 });
                 alert("خاڵەکانت سڕدرانەوە!");
                 loadUserData();
             }
@@ -1038,7 +1058,10 @@
             document.getElementById("lbBtnJumper").classList.remove("active");
             document.getElementById("lbBtnFlappy").classList.remove("active");
             document.getElementById("lbBtnSnake").classList.remove("active");
-            document.getElementById("lbBtn" + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add("active");
+            if(document.getElementById("lbBtnWord")) document.getElementById("lbBtnWord").classList.remove("active");
+            
+            let btnId = "lbBtn" + tab.charAt(0).toUpperCase() + tab.slice(1);
+            if(document.getElementById(btnId)) document.getElementById(btnId).classList.add("active");
             loadLeaderboard();
         }
 
@@ -1052,6 +1075,7 @@
                     if (currentLeaderboardTab === 'jumper') sVal = uData.highscore || 0;
                     else if (currentLeaderboardTab === 'flappy') sVal = uData.flappyScore || 0;
                     else if (currentLeaderboardTab === 'snake') sVal = uData.snakeScore || 0;
+                    else if (currentLeaderboardTab === 'word') sVal = uData.wordScore || 0;
 
                     users.push({ name: uData.username || doc.id, score: sVal });
                 });
@@ -1570,7 +1594,7 @@
                 sCtx.beginPath(); sCtx.moveTo(x, 0); sCtx.lineTo(x, sCanvas.height); sCtx.stroke();
             }
             for (let y = 0; y < sCanvas.height; y += gridBox) {
-                sCtx.beginPath(); sCtx.moveTo(0, y); sCtx.lineTo(sCanvas.width, y); sCtx.stroke();
+                sCtx.beginPath(); sCtx.moveTo(0, y); sCtx.lineTo(0, sCanvas.width); sCtx.stroke();
             }
 
             sCtx.fillStyle = "#ef4444";
@@ -1605,18 +1629,93 @@
             switchScreen("snakeLandingScreen");
         }
 
-        // Word Rain Game Integration Added Here
+        // --- Interactive Visual Word Rain Engine ---
+        const wrCanvas = document.getElementById("wordRainCanvas");
+        const wrCtx = wrCanvas ? wrCanvas.getContext("2d") : null;
+
+        const alphabetList = ["ا", "ب", "پ", "ت", "ج", "چ", "ح", "خ", "د", "ر", "ز", "ژ", "س", "ش", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "هـ", "ی"];
         let currentLetter = "س";
         let gameTimeLeft = 30;
         let gameInterval;
         let userWordScore = 0;
         let isWordGameActive = false;
+        let wrAnimFrame = null;
+        let fallingItems = [];
+
+        function getRandomLetter() {
+            return alphabetList[Math.floor(Math.random() * alphabetList.length)];
+        }
+
+        function resizeWordCanvas() {
+            if (!wrCanvas) return;
+            wrCanvas.width = wrCanvas.parentElement.clientWidth;
+            wrCanvas.height = wrCanvas.parentElement.clientHeight;
+        }
+
+        function createFallingItem() {
+            if (!wrCanvas) return;
+            let isTarget = Math.random() < 0.45;
+            let letter = isTarget ? currentLetter : getRandomLetter();
+            fallingItems.push({
+                text: letter,
+                x: Math.random() * (wrCanvas.width - 40) + 20,
+                y: -20,
+                speed: 1.0 + Math.random() * 1.5,
+                size: 20 + Math.floor(Math.random() * 8),
+                isTarget: (letter === currentLetter),
+                color: (letter === currentLetter) ? "#fbbf24" : "#9ca3af"
+            });
+        }
+
+        function updateAndDrawWordCanvas() {
+            if (!isWordGameActive || !wrCtx) return;
+            wrCtx.clearRect(0, 0, wrCanvas.width, wrCanvas.height);
+
+            // Draw Background Grid/Rain Lines
+            wrCtx.strokeStyle = "rgba(217, 119, 6, 0.1)";
+            wrCtx.lineWidth = 1;
+            for (let x = 0; x < wrCanvas.width; x += 30) {
+                wrCtx.beginPath(); wrCtx.moveTo(x, 0); wrCtx.lineTo(x, wrCanvas.height); wrCtx.stroke();
+            }
+
+            if (Math.random() < 0.05 && fallingItems.length < 12) {
+                createFallingItem();
+            }
+
+            for (let i = 0; i < fallingItems.length; i++) {
+                let item = fallingItems[i];
+                item.y += item.speed;
+
+                wrCtx.font = `bold ${item.size}px 'Noto Sans Arabic'`;
+                wrCtx.fillStyle = item.color;
+                wrCtx.textAlign = "center";
+                wrCtx.shadowColor = item.isTarget ? "rgba(251, 191, 36, 0.8)" : "transparent";
+                wrCtx.shadowBlur = item.isTarget ? 10 : 0;
+                wrCtx.fillText(item.text, item.x, item.y);
+                wrCtx.shadowBlur = 0;
+
+                if (item.y > wrCanvas.height + 30) {
+                    fallingItems.splice(i, 1);
+                    i--;
+                }
+            }
+
+            wrAnimFrame = requestAnimationFrame(updateAndDrawWordCanvas);
+        }
 
         function startWordRainGame() {
+            document.getElementById("wordGameOverOverlay").classList.remove("show");
             switchScreen("word-game-container");
+            resizeWordCanvas();
+
             isWordGameActive = true;
             userWordScore = 0;
             gameTimeLeft = 30;
+            fallingItems = [];
+
+            currentLetter = getRandomLetter();
+            document.getElementById('target-letter').innerText = currentLetter;
+            document.getElementById('wordGameScoreText').innerText = "0";
             document.getElementById('game-timer').innerText = gameTimeLeft;
             document.getElementById('word-message').innerText = '';
             document.getElementById('word-input').value = '';
@@ -1624,31 +1723,52 @@
             document.getElementById('word-input').focus();
 
             startBackgroundMusic();
+            cancelAnimationFrame(wrAnimFrame);
+            updateAndDrawWordCanvas();
+
             clearInterval(gameInterval);
             gameInterval = setInterval(() => {
                 gameTimeLeft--;
                 document.getElementById('game-timer').innerText = gameTimeLeft;
                 if (gameTimeLeft <= 0) {
-                    clearInterval(gameInterval);
-                    document.getElementById('word-input').disabled = true;
-                    document.getElementById('word-message').innerText = "کاتەکە تەواو بوو! کۆی خاڵەکانت: " + userWordScore;
-                    playSound('gameover');
+                    endWordGame();
                 }
             }, 1000);
 
             listenToOnlineScores();
         }
 
+        async function endWordGame() {
+            isWordGameActive = false;
+            clearInterval(gameInterval);
+            cancelAnimationFrame(wrAnimFrame);
+            stopBackgroundMusic();
+            playSound('gameover');
+
+            document.getElementById('word-input').disabled = true;
+            document.getElementById('wordGameFinalScore').innerText = userWordScore;
+            document.getElementById("wordGameOverOverlay").classList.add("show");
+
+            const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
+            const userSnap = await window.firestoreFns.getDoc(userRef);
+            let curBest = userSnap.exists() ? (userSnap.data().wordScore || 0) : 0;
+            let newBest = Math.max(curBest, userWordScore);
+
+            await saveCloudData({ coins: totalCoins, wordScore: newBest });
+        }
+
         function exitWordGame() {
             isWordGameActive = false;
             clearInterval(gameInterval);
+            cancelAnimationFrame(wrAnimFrame);
             stopBackgroundMusic();
+            document.getElementById("wordGameOverOverlay").classList.remove("show");
             loadUserData();
-            switchScreen("hubScreen");
+            switchScreen("wordGameLandingScreen");
         }
 
         function submitWord() {
-            if (gameTimeLeft <= 0) return;
+            if (gameTimeLeft <= 0 || !isWordGameActive) return;
             
             let inputField = document.getElementById('word-input');
             let word = inputField.value.trim();
@@ -1657,10 +1777,22 @@
 
             if (word.startsWith(currentLetter)) {
                 userWordScore++;
-                totalCoins += 1;
+                totalCoins += 2;
                 playSound('coin');
-                document.getElementById('word-message').style.color = "lightgreen";
-                document.getElementById('word-message').innerText = "پیرۆزە! وشەیەکی ڕاستە.";
+                document.getElementById('wordGameScoreText').innerText = userWordScore;
+                document.getElementById('word-message').style.color = "#34d399";
+                document.getElementById('word-message').innerText = "پیرۆزە! وشەیەکی ڕاست بوو (+2 کۆین)";
+                
+                // Pop effect for matching falling letter
+                for(let i=0; i<fallingItems.length; i++){
+                    if(fallingItems[i].isTarget){
+                        fallingItems.splice(i, 1);
+                        break;
+                    }
+                }
+
+                currentLetter = getRandomLetter();
+                document.getElementById('target-letter').innerText = currentLetter;
                 
                 let userId = currentUser || "guest_" + Math.floor(Math.random()*1000);
                 let userName = currentUser || "میوان";
@@ -1673,7 +1805,7 @@
 
             } else {
                 playSound('gameover');
-                document.getElementById('word-message').style.color = "red";
+                document.getElementById('word-message').style.color = "#f87171";
                 document.getElementById('word-message').innerText = "تکایە وشەیەک بنووسە بە پیتی (" + currentLetter + ")";
             }
             
@@ -1695,9 +1827,13 @@
 
                 scoresData.sort((a, b) => b.score - a.score);
 
-                scoresData.forEach((player) => {
+                scoresData.slice(0, 5).forEach((player) => {
                     let li = document.createElement('li');
-                    li.innerHTML = `👤 ${player.name}: <b>${player.score}</b> وشە`;
+                    li.style.display = "flex";
+                    li.style.justifyContent = "space-between";
+                    li.style.padding = "2px 0";
+                    li.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+                    li.innerHTML = `<span>👤 ${player.name}</span> <b style="color:#fbbf24;">${player.score} خاڵ</b>`;
                     scoresList.appendChild(li);
                 });
             });
