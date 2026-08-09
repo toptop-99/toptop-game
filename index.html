@@ -840,7 +840,7 @@
             
             if (word === "") return;
 
-            // مەرجی پیتە سەرەکییەکە (بۆ نموونە: دەبێت بە پیتی داواکراو دەست پێبکات و وشەیەکی دروست و تەواو بێت)
+            // مەرجی پیتە سەرەکییەکە (دەبێت بە پیتی داواکراو دەست پێبکات و لە یەک پیت زیاتر بێت)
             if (word.startsWith(currentLetter) && word.length > 1) {
                 userWordScore++;
                 totalCoins += 2;
@@ -871,7 +871,7 @@
             } else {
                 playSound('gameover');
                 document.getElementById('word-message').style.color = "#f87171";
-                document.getElementById('word-message').innerText = "هەڵەیە! دەبێت وشەکە بە پیتی (" + currentLetter + ") دەست پێبکات.";
+                document.getElementById('word-message').innerText = "هەڵەیە! دەبێت وشەکە بە پیتی (" + currentLetter + ") دەست پێبکات و درێژتر بێت.";
             }
             
             inputField.value = "";
