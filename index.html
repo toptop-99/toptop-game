@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تۆپ تۆپ - لۆبی نوێ و ڕێکخراو</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            width: 100vw; height: 100vh; margin: 0; padding: 0;
+            background-color: #0c0a09; color: #f8fafc;
+            font-family: 'Noto Sans Arabic', sans-serif;
+            overflow: hidden; touch-action: manipulation;
+        }
+        .container {
+            width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #1c1917, #0c0a09);
+            display: flex; flex-direction: column; padding: 12px; position: relative; overflow: hidden;
+        }
+        .brand-title {
+            text-align: center; font-size: 24px; font-weight: 900;
+            background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 2px 0 8px 0; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
+        }
+        .screen { display: none; flex: 1; flex-direction: column; height: 100%; overflow-y: auto; padding-bottom: 20px; }
+        .screen.active { display: flex; }
+        .form-group { margin-bottom: 10px; text-align: right; }
+        label { display: block; font-size: 11px; margin-bottom: 4px; color: #fcd34d; }
+        input, select {
+            width: 100%; padding: 10px 12px; background: #27272a;
+            border: 1px solid #d97706; border-radius: 10px; color: #fff;
+            font-size: 13px; outline: none; font-family: 'Noto Sans Arabic', sans-serif;
+        }
+        .btn {
+            width: 100%; background: linear-gradient(135deg, #d97706, #b45309);
+            color: #ffffff; border: none; padding: 11px; font-size: 14px;
+            font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 6px;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+            transition: transform 0.1s ease;
+        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn:active { transform: scale(0.96); }
+        
+        .hub-header-panel {
+            background: rgba(39, 39, 42, 0.95); border: 1px solid #d97706;
+            border-radius: 14px; padding: 10px 14px; display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.2);
+        }
+        .hub-user-info { display: flex; align-items: center; gap: 10px; }
+        .hub-avatar-box {
+            width: 38px; height: 38px; border-radius: 50%; background: #d97706;
+            overflow: hidden; display: flex; justify-content: center; align-items: center;
+            font-size: 14px; border: 2px solid #fcd34d;
+        }
+        .hub-coins-badge {
+            background: rgba(217, 119, 6, 0.2); border: 1px solid #f59e0b;
+            padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: #fbbf24;
+        }
+
+        .card {
+            background: rgba(39, 39, 42, 0.85); border-radius: 12px;
+            padding: 12px; margin-bottom: 10px; text-align: right;
+            border: 1px solid #d97706; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .card h3 { margin: 0 0 4px 0; color: #fbbf24; font-size: 14px; }
+        .card p { margin: 0 0 6px 0; font-size: 11px; color: #d6d3d1; }
+        
+        .section-header {
+            font-size: 15px; font-weight: 900; color: #fbbf24;
+            margin: 6px 0 8px 0; border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+            padding-bottom: 3px; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .games-grid-layout {
+            display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px;
+        }
+        .game-catalog-card {
+            background: linear-gradient(145deg, #27272a, #18181b);
+            border: 1px solid #d97706; border-radius: 14px; padding: 10px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5); text-align: center;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .game-thumbnail {
+            width: 50px; height: 50px; background: radial-gradient(circle, #f59e0b, #78350f);
+            border-radius: 50%; margin: 0 auto 6px auto; display: flex;
+            justify-content: center; align-items: center; font-size: 22px;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); border: 2px solid #fcd34d;
+        }
+        .game-meta-info {
+            font-size: 9px; color: #a1a1aa; background: rgba(24, 24, 27, 0.9);
+            padding: 4px 6px; border-radius: 6px; margin: 6px 0;
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
+
+        #gameOverBox {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(12, 10, 9, 0.95); display: none;
+            flex-direction: column; justify-content: center; align-items: center; padding: 15px; z-index: 100;
+        }
+        #gameOverBox.show { display: flex; }
+        .avatar-preview {
+            width: 50px; height: 50px; border-radius: 50%; background: #3f3f46;
+            margin: 0 auto 6px auto; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; border: 2px solid #d97706; cursor: pointer; position: relative;
+            box-shadow: 0 0 8px rgba(217, 119, 6, 0.3);
+        }
+        .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .tab-switcher { display: flex; gap: 4px; margin-bottom: 8px; }
+        .tab-btn { flex: 1; background: #27272a; border: 1px solid #d97706; color: #fcd34d; padding: 7px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .tab-btn.active { background: #d97706; color: #fff; box-shadow: 0 0 8px rgba(217, 119, 6, 0.4); }
+        .leaderboard-list { max-height: 90px; overflow-y: auto; font-size: 11px; }
+        .leaderboard-item { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid rgba(217, 119, 6, 0.2); }
+
+        .flappy-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(12, 10, 9, 0.9); display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            padding: 15px; z-index: 50; border-radius: 14px;
+        }
+        .flappy-overlay.show { display: flex; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Auth Screen -->
+        <div id="authScreen" class="screen active">
+            <div class="brand-title">تۆپ تۆپ (ئۆنلاین)</div>
+            <div class="card">
+                <div class="tab-switcher">
+                    <button class="tab-btn active" id="loginTabBtn" onclick="switchAuthMode('login')">چوونەژوورەوە</button>
+                    <button class="tab-btn" id="registerTabBtn" onclick="switchAuthMode('register')">حیسابی نوێ</button>
+                </div>
+
+                <div id="registerForm" style="display: none;">
+                    <p>وێنەی پڕۆفایلەکەت هەڵبژێرە و حیساب دروست بکە</p>
+                    <div class="avatar-preview" onclick="document.getElementById('fileInput').click()">
+                        <span id="avatarPlaceholderText" style="font-size: 20px;">📷</span>
+                        <img id="avatarImgTag" style="display:none;" />
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
+
+                    <div class="form-group">
+                        <label>ناوی بەکارهێنەر</label>
+                        <input type="text" id="regUsername" placeholder="ناوی بەکارهێنەر...">
+                    </div>
+                    <div class="form-group">
+                        <label>ڕێکەوتی لەدایکبوون</label>
+                        <input type="date" id="regBirthdate">
+                    </div>
+                    <div class="form-group">
+                        <label>وشەی نهێنی</label>
+                        <input type="password" id="regPassword" placeholder="وشەی نهێنی...">
+                    </div>
+                    <button class="btn" onclick="registerUser()">دروستکردنی حیساب</button>
+                </div>
+
+                <div id="loginForm">
+                    <p>بۆ چوونەژوورەوە، ناوی بەکارهێنەر و وشەی نهێنی بنووسە</p>
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label>ناوی بەکارهێنەر</label>
+                        <input type="text" id="loginUsername" placeholder="ناوی بەکارهێنەر...">
+                    </div>
+                    <div class="form-group">
+                        <label>وشەی نهێنی</label>
+                        <input type="password" id="loginPassword" placeholder="وشەی نهێنی...">
+                    </div>
+                    <button class="btn" onclick="loginUser()">چوونەژوورەوە</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hub Screen -->
+        <div id="hubScreen" class="screen">
+            <div class="brand-title">تۆپ تۆپ</div>
+            
+            <div class="hub-header-panel">
+                <div class="hub-user-info">
+                    <div class="hub-avatar-box" id="hubUserAvatar">👤</div>
+                    <div>
+                        <div style="font-size: 10px; color: #a1a1aa;">بەڕێز</div>
+                        <span id="hubUsernameText" style="font-weight: bold; color: #fbbf24; font-size: 13px;"></span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="hub-coins-badge">💰 <span id="hubTotalCoins">0</span></div>
+                    <button class="btn" onclick="openSettingsScreen()" style="width: auto; padding: 6px 10px; margin: 0; background: #3f3f46; font-size: 12px;">⚙️</button>
+                </div>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, #451a03, #78350f); border-color: #f59e0b; padding: 10px 12px;">
+                <h3 style="color: #fbbf24; font-size: 13px;">🎁 دیاریی ڕۆژانە و بەخت</h3>
+                <p style="font-size: 10px;" id="dailyBonusText">سوپرايزی ئەمڕۆت وەربگرە و کۆینی خۆڕایی ببەرەوە!</p>
+                <button class="btn" id="claimBonusBtn" style="background: linear-gradient(135deg, #d97706, #b45309); padding: 8px; font-size: 12px;" onclick="claimDailyBonus()">وەرگرتنی دیاری 🎲</button>
+            </div>
+
+            <div class="section-header">
+                <span>🎮 بەشی یارییەکان</span>
+            </div>
+
+            <div class="games-grid-layout">
+                <!-- Word Rain Game Card (First) -->
+                <div class="game-catalog-card">
+                    <div>
+                        <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f); width: 45px; height: 45px; font-size: 20px;">🌧️</div>
+                        <h3 style="color: #fbbf24; font-size: 13px; margin: 0 0 2px 0;">وشە باران (یاری سەرەکی)</h3>
+                        <p style="font-size: 9px; color: #d6d3d1; margin: 0;">وشەی خێرا بە پیتە داواکراوەکان بنووسە و کێبڕکێ بکە</p>
+                    </div>
+                    <div>
+                        <div class="game-meta-info" id="hubWordBest">بەرزترین خاڵ: 0</div>
+                        <button class="btn" style="padding: 6px 16px; font-size: 11px;" onclick="openWordGameLanding()">یاریکردن</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 10px 12px;">
+                <h3 style="font-size: 13px;">🏆 ڕیزبەندی پێشبڕکێی ئۆنلاین</h3>
+                <div class="leaderboard-list" id="leaderboardList"></div>
+            </div>
+        </div>
+
+        <!-- Word Game Landing Screen -->
+        <div id="wordGameLandingScreen" class="screen">
+            <div class="brand-title">یاری وشە باران 🌧️</div>
+            <div class="game-catalog-card" style="margin-top: 15px; padding: 15px;">
+                <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f);">🌧️</div>
+                <h3 style="font-size: 14px; color: #fbbf24;">پەڕەی تایبەتی یاری وشە باران</h3>
+                <p style="font-size: 11px;">لە کاتی دیاریکراودا وشەی دروست بە پیتی دەستپێکی داواکراو بنووسە (بۆ نموونە: پيتي ن -> نان، نانەوا)!</p>
+                <button class="btn" onclick="startWordRainGame()">▶ دەستپێکردنی یاری</button>
+                <button class="btn" style="background: #3f3f46;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settingsScreen" class="screen">
+            <div class="brand-title">ڕێکخستنەکان</div>
+            
+            <div class="card" style="padding: 10px 12px;">
+                <h3 style="font-size: 12px;">👤 دەستکاری پڕۆفایل</h3>
+                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin: 6px auto;">
+                    <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
+                    <span id="settingsAvatarPlaceholder" style="font-size: 20px;">📷</span>
+                </div>
+                <input type="file" id="settingsFileInput" accept="image/*" style="display:none;" onchange="handleSettingsImageUpload(event)">
+                
+                <div class="form-group">
+                    <label>ناوی بەکارهێنەر</label>
+                    <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
+                </div>
+                <button class="btn" style="margin-top: 4px; padding: 8px; font-size: 12px;" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
+            </div>
+
+            <div class="card" style="padding: 10px 12px;">
+                <h3 style="font-size: 12px;">🎵 مۆسیقای پاشبنەما</h3>
+                <select id="musicToggleSelect" onchange="toggleBackgroundMusic(this.value)">
+                    <option value="on" selected>هەڵکردن 🎵</option>
+                    <option value="off">کوژاندنەوە 🔇</option>
+                </select>
+            </div>
+
+            <div class="card" style="padding: 10px 12px;">
+                <h3 style="font-size: 12px;">🔊 دەنگەکانی یاری</h3>
+                <select id="sfxToggleSelect" onchange="toggleSoundEffects(this.value)">
+                    <option value="on" selected>هەڵکردن 🔊</option>
+                    <option value="off">کوژاندنەوە 🔇</option>
+                </select>
+            </div>
+
+            <div class="card" style="border-color: #f59e0b; padding: 10px 12px;">
+                <h3 style="color: #f59e0b; font-size: 12px;">🏆 خاڵەکان و داتاکان</h3>
+                <button class="btn" style="background: #b45309; padding: 8px; font-size: 12px;" onclick="resetUserHighscore()">پاكکردنەوەی خاڵەکان</button>
+            </div>
+
+            <div class="card" style="border-color: #f87171; padding: 10px 12px;">
+                <h3 style="color: #f87171; font-size: 12px;">🚪 بەڕێوەبردنی حیساب</h3>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 4px; padding: 8px; font-size: 12px;" onclick="logoutUser()">دەرچوون لە حیساب</button>
+            </div>
+
+            <button class="btn" style="background: #3f3f46; margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
+        </div>
+
+        <!-- Word Rain Game Screen Canvas -->
+        <div id="word-game-container" class="screen" style="display: none; flex-direction: column; justify-content: flex-start; padding: 10px;">
+            <div class="hub-header-panel" style="margin-bottom: 6px;">
+                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitWordGame()">⬅️ دەرچوون</button>
+                <span style="font-weight: bold; color: #fbbf24; font-size: 12px;">خاڵ: <span id="wordGameScoreText">0</span></span>
+            </div>
+
+            <!-- Visual Game Screen Area -->
+            <div style="position: relative; flex: 1; width: 100%; height: 260px; max-height: 280px; background: #121214; border: 2px solid #d97706; border-radius: 14px; overflow: hidden; margin-bottom: 8px;" id="wordGameCanvasArea">
+                <canvas id="wordRainCanvas" style="width: 100%; height: 100%; display: block;"></canvas>
+
+                <div id="wordGameOverOverlay" class="flappy-overlay">
+                    <h2 style="color: #f87171; margin-top: 0; font-size: 18px;">یاری تەواو بوو! 🌧️</h2>
+                    <p style="font-size: 12px; margin-bottom: 10px;">کۆی خاڵەکانت: <span id="wordGameFinalScore" style="color: #fbbf24; font-weight: bold;">0</span></p>
+                    <button class="btn" style="margin-bottom: 6px; padding: 8px; font-size: 12px;" onclick="startWordRainGame()">🔄 دووبارە یاری بکەوە</button>
+                    <button class="btn" style="background: #3f3f46; padding: 8px; font-size: 12px;" onclick="exitWordGame()">🏠 گەڕانەوە بۆ لۆبی</button>
+                </div>
+            </div>
+
+            <!-- Input Controls Area -->
+            <div class="card" style="margin-bottom: 0; padding: 8px 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 11px; color: #a1a1aa;">پێویستە پیت: <b id="target-letter" style="color: #f59e0b; font-size: 16px;">س</b></span>
+                    <span style="font-size: 11px; color: #a1a1aa;">کاتی ماوە: <b id="game-timer" style="color: #ef4444; font-size: 15px;">30</b> چرکە</span>
+                </div>
+                
+                <div style="display: flex; gap: 6px;">
+                    <input type="text" id="word-input" placeholder="وشەیەک بنووسە (بۆ نموونە: نان)..." style="padding: 8px 10px; font-size: 13px; margin: 0;">
+                    <button class="btn" onclick="submitWord()" style="width: auto; padding: 8px 16px; margin: 0; background: #10b981; white-space: nowrap;">ناردن ↵</button>
+                </div>
+                <p id="word-message" style="margin: 4px 0 0 0; font-size: 10px; text-align: center; height: 14px;"></p>
+            </div>
+
+            <div id="live-scoreboard" class="card" style="margin-top: 6px; padding: 6px 10px; max-height: 80px; overflow-y: auto;">
+                <h4 style="margin: 0 0 4px 0; color: #fbbf24; font-size: 11px;">🏆 ڕیزبەندی کێبڕکێی ئۆنلاین:</h4>
+                <ul id="players-score-list" style="list-style: none; padding: 0; margin: 0; font-size: 10px;"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Scripts -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
+      import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+      import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
+        authDomain: "toptop-game-4e89f.firebaseapp.com",
+        projectId: "toptop-game-4e89f",
+        storageBucket: "toptop-game-4e89f.firebasestorage.app",
+        messagingSenderId: "786973684229",
+        appId: "1:786973684229:web:a327a180f44ca18f8fa26c",
+        measurementId: "G-S6ERB47WJ8",
+        databaseURL: "https://toptop-game-4e89f-default-rtdb.firebaseio.com/"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+      const rtdb = getDatabase(app);
+
+      window.db = db;
+      window.rtdb = rtdb;
+      window.firestoreFns = { doc, setDoc, getDoc, updateDoc, collection, getDocs };
+      window.rtdbFns = { ref, set, onValue };
+    </script>
+
+    <!-- Game Core Logic Script with Cloud Database Support -->
+    <script>
+        let currentUser = "";
+        let totalCoins = 0;
+        let tempAvatarBase64 = "";
+        let settingsTempAvatar = "";
+
+        let musicEnabled = true;
+        let sfxEnabled = true;
+        let bgMusicInterval = null;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (!sfxEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'coin') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(987.77, now);
+                osc.frequency.setValueAtTime(1318.51, now + 0.08);
+                gain.gain.setValueAtTime(0.12, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+            } else if (type === 'buy') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+                gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+            } else if (type === 'gameover') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+                gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            }
+        }
+
+        function startBackgroundMusic() {
+            if (!musicEnabled) return;
+            stopBackgroundMusic();
+            const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+            let noteIdx = 0;
+
+            bgMusicInterval = setInterval(() => {
+                if (!musicEnabled || !isWordGameActive) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+                osc.type = 'sine'; osc.frequency.setValueAtTime(notes[noteIdx], now);
+                gain.gain.setValueAtTime(0.02, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+                noteIdx = (noteIdx + 1) % notes.length;
+            }, 350);
+        }
+
+        function stopBackgroundMusic() {
+            if (bgMusicInterval) { clearInterval(bgMusicInterval); bgMusicInterval = null; }
+        }
+
+        function toggleBackgroundMusic(val) {
+            musicEnabled = (val === 'on');
+            localStorage.setItem("top_top_music", val);
+            if (!musicEnabled) stopBackgroundMusic();
+            else if (isWordGameActive) startBackgroundMusic();
+        }
+
+        function toggleSoundEffects(val) {
+            sfxEnabled = (val === 'on');
+            localStorage.setItem("top_top_sfx", val);
+        }
+
+        window.onload = function() {
+            let savedMusic = localStorage.getItem("top_top_music");
+            if (savedMusic) { musicEnabled = (savedMusic === 'on'); document.getElementById("musicToggleSelect").value = savedMusic; }
+
+            let savedSfx = localStorage.getItem("top_top_sfx");
+            if (savedSfx) { sfxEnabled = (savedSfx === 'on'); document.getElementById("sfxToggleSelect").value = savedSfx; }
+
+            let savedUser = localStorage.getItem("top_top_active_user");
+            if (savedUser) {
+                currentUser = savedUser;
+                loadUserData();
+                switchScreen("hubScreen");
+            } else {
+                switchScreen("authScreen");
+            }
+        };
+
+        function switchScreen(id) {
+            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+            document.getElementById(id).classList.add("active");
+            if (id === 'hubScreen') loadLeaderboard();
+        }
+
+        function openWordGameLanding() { switchScreen("wordGameLandingScreen"); }
+
+        function switchAuthMode(mode) {
+            if (mode === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginTabBtn').classList.add('active');
+                document.getElementById('registerTabBtn').classList.remove('active');
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('registerTabBtn').classList.add('active');
+                document.getElementById('loginTabBtn').classList.remove('active');
+            }
+        }
+
+        function handleImageUpload(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    tempAvatarBase64 = e.target.result;
+                    let imgTag = document.getElementById("avatarImgTag");
+                    let textTag = document.getElementById("avatarPlaceholderText");
+                    imgTag.src = tempAvatarBase64; imgTag.style.display = "block"; textTag.style.display = "none";
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleSettingsImageUpload(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    settingsTempAvatar = e.target.result;
+                    let imgTag = document.getElementById("settingsAvatarPreview");
+                    let textTag = document.getElementById("settingsAvatarPlaceholder");
+                    imgTag.src = settingsTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function registerUser() {
+            let name = document.getElementById("regUsername").value.trim();
+            let pass = document.getElementById("regPassword").value.trim();
+            let birthdate = document.getElementById("regBirthdate").value;
+
+            if (!name || !pass) { alert("تکایە ناوی بەکارهێنەر و وشەی نهێنی پڕبکەرەوە!"); return; }
+            
+            try {
+                const userRef = window.firestoreFns.doc(window.db, "users", name);
+                const userSnap = await window.firestoreFns.getDoc(userRef);
+
+                if (userSnap.exists()) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
+
+                let userProfile = {
+                    username: name,
+                    password: pass,
+                    birthdate: birthdate,
+                    avatar: tempAvatarBase64 || "",
+                    coins: 0,
+                    wordScore: 0,
+                    lastBonus: ""
+                };
+
+                await window.firestoreFns.setDoc(userRef, userProfile);
+                localStorage.setItem("top_top_active_user", name);
+                currentUser = name;
+                await loadUserData();
+                switchScreen("hubScreen");
+            } catch (error) {
+                console.error("Error registering user: ", error);
+                alert("هەڵەیەک ڕوویدا لە پەیوەندی کردن بە سێرڤەرەوە!");
+            }
+        }
+
+        async function loginUser() {
+            let name = document.getElementById("loginUsername").value.trim();
+            let pass = document.getElementById("loginPassword").value.trim();
+            if (!name || !pass) { alert("تکایە ناو و وشەی نهێنی بنووسە!"); return; }
+
+            try {
+                const userRef = window.firestoreFns.doc(window.db, "users", name);
+                const userSnap = await window.firestoreFns.getDoc(userRef);
+
+                if (!userSnap.exists()) { alert("ئەم ناوە بوونی نییە!"); return; }
+
+                let profile = userSnap.data();
+                if (profile.password !== pass) { alert("وشەی نهێنی هەڵەیە!"); return; }
+
+                localStorage.setItem("top_top_active_user", name);
+                currentUser = name;
+                await loadUserData();
+                switchScreen("hubScreen");
+            } catch (error) {
+                console.error("Error logging in: ", error);
+                alert("هەڵەیەک ڕوویدا لە چوونەژوورەوە بۆ ناو سێرڤەر!");
+            }
+        }
+
+        async function saveCloudData(updateData) {
+            if (!currentUser) return;
+            try {
+                const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
+                await window.firestoreFns.updateDoc(userRef, updateData);
+            } catch (e) {
+                console.error("Error saving data to cloud: ", e);
+            }
+        }
+
+        async function loadUserData() {
+            if (!currentUser) return;
+            try {
+                const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
+                const userSnap = await window.firestoreFns.getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    let profile = userSnap.data();
+                    totalCoins = profile.coins || 0;
+
+                    document.getElementById("hubUsernameText").innerText = currentUser;
+                    document.getElementById("hubTotalCoins").innerText = totalCoins;
+                    document.getElementById("hubWordBest").innerText = "بەرزترین خاڵ: " + (profile.wordScore || 0);
+
+                    let avatarEl = document.getElementById("hubUserAvatar");
+                    if (profile.avatar) {
+                        avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+                    } else {
+                        avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
+                    }
+
+                    document.getElementById("settingsUsernameInput").value = currentUser;
+                    loadLeaderboard();
+                    checkDailyBonusCloud(profile.lastBonus);
+                }
+            } catch (e) {
+                console.error("Error loading user data:", e);
+            }
+        }
+
+        function logoutUser() {
+            stopBackgroundMusic();
+            localStorage.removeItem("top_top_active_user");
+            currentUser = "";
+            switchScreen("authScreen");
+        }
+
+        async function saveProfileChanges() {
+            let newName = document.getElementById("settingsUsernameInput").value.trim();
+            if (!newName) { alert("تکایە ناوی بەکارهێنەر بە بەتاڵی جێمەهێڵە!"); return; }
+
+            try {
+                const oldUserRef = window.firestoreFns.doc(window.db, "users", currentUser);
+                const oldSnap = await window.firestoreFns.getDoc(oldUserRef);
+                
+                if (newName !== currentUser) {
+                    const newUserRef = window.firestoreFns.doc(window.db, "users", newName);
+                    const newSnap = await window.firestoreFns.getDoc(newUserRef);
+                    if (newSnap.exists()) { alert("ئەم ناوە پێشتر بەکارهێنراوە!"); return; }
+
+                    let data = oldSnap.data();
+                    data.username = newName;
+                    if (settingsTempAvatar) data.avatar = settingsTempAvatar;
+
+                    await window.firestoreFns.setDoc(newUserRef, data);
+                    currentUser = newName;
+                    localStorage.setItem("top_top_active_user", currentUser);
+                } else if (settingsTempAvatar) {
+                    await window.firestoreFns.updateDoc(oldUserRef, { avatar: settingsTempAvatar });
+                }
+
+                playSound('buy');
+                alert("زانیارییەکانت نوێکرانەوە!");
+                loadUserData();
+            } catch(e) {
+                console.error(e);
+                alert("هەڵە ڕوویدا لە گۆڕینی پڕۆفایلدا.");
+            }
+        }
+
+        async function resetUserHighscore() {
+            if (confirm("دڵنیایت لە سڕینەوەی بەرزترین خاڵەکانت؟")) {
+                await saveCloudData({ wordScore: 0 });
+                alert("خاڵەکانت سڕدرانەوە!");
+                loadUserData();
+            }
+        }
+
+        function checkDailyBonusCloud(lastClaimed) {
+            let today = new Date().toISOString().split('T')[0];
+            let bonusBtn = document.getElementById("claimBonusBtn");
+
+            if (lastClaimed === today) {
+                bonusBtn.disabled = true; bonusBtn.innerText = "وەردەگیرا لە بەیانی ⏳";
+            } else {
+                bonusBtn.disabled = false; bonusBtn.innerText = "وەرگرتنی دیاری 🎲";
+            }
+        }
+
+        async function claimDailyBonus() {
+            let today = new Date().toISOString().split('T')[0];
+            let rewards = [100, 150, 200, 250];
+            let randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+
+            totalCoins += randomReward;
+            await saveCloudData({ coins: totalCoins, lastBonus: today });
+            playSound('buy');
+            alert(`پیرۆزە! ${randomReward} کۆینت بەدەستهێنا! 🪙`);
+            loadUserData();
+        }
+
+        function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
+        function backToHub() { exitWordGame(); loadUserData(); switchScreen("hubScreen"); }
+
+        async function loadLeaderboard() {
+            try {
+                const querySnapshot = await window.firestoreFns.getDocs(window.firestoreFns.collection(window.db, "users"));
+                let users = [];
+                querySnapshot.forEach((doc) => {
+                    let uData = doc.data();
+                    users.push({ name: uData.username || doc.id, score: uData.wordScore || 0 });
+                });
+                users.sort((a, b) => b.score - a.score);
+
+                let listEl = document.getElementById("leaderboardList");
+                if (!listEl) return;
+                listEl.innerHTML = "";
+                users.forEach((u, idx) => {
+                    let item = document.createElement("div");
+                    item.className = "leaderboard-item";
+                    let rankBadge = idx === 0 ? "👑 Top 1" : idx === 1 ? "🥈 Top 2" : `${idx + 1}.`;
+                    item.innerHTML = `<span>${rankBadge} ${u.name}</span> <span style="color: #fbbf24; font-weight: bold;">${u.score} خاڵ</span>`;
+                    listEl.appendChild(item);
+                });
+            } catch (e) {
+                console.error("Error loading leaderboard: ", e);
+            }
+        }
+
+        // --- Interactive Visual Word Rain Engine ---
+        const wrCanvas = document.getElementById("wordRainCanvas");
+        const wrCtx = wrCanvas ? wrCanvas.getContext("2d") : null;
+
+        const alphabetList = ["ا", "ب", "پ", "ت", "ج", "چ", "ح", "خ", "د", "ر", "ز", "ژ", "س", "ش", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "هـ", "ی"];
+        let currentLetter = "ن";
+        let gameTimeLeft = 30;
+        let gameInterval;
+        let userWordScore = 0;
+        let isWordGameActive = false;
+        let wrAnimFrame = null;
+        let fallingItems = [];
+
+        function getRandomLetter() {
+            return alphabetList[Math.floor(Math.random() * alphabetList.length)];
+        }
+
+        function resizeWordCanvas() {
+            if (!wrCanvas) return;
+            wrCanvas.width = wrCanvas.parentElement.clientWidth;
+            wrCanvas.height = wrCanvas.parentElement.clientHeight;
+        }
+
+        function createFallingItem() {
+            if (!wrCanvas) return;
+            let isTarget = Math.random() < 0.45;
+            let letter = isTarget ? currentLetter : getRandomLetter();
+            fallingItems.push({
+                text: letter,
+                x: Math.random() * (wrCanvas.width - 40) + 20,
+                y: -20,
+                speed: 1.0 + Math.random() * 1.5,
+                size: 20 + Math.floor(Math.random() * 8),
+                isTarget: (letter === currentLetter),
+                color: (letter === currentLetter) ? "#fbbf24" : "#9ca3af"
+            });
+        }
+
+        function updateAndDrawWordCanvas() {
+            if (!isWordGameActive || !wrCtx) return;
+            wrCtx.clearRect(0, 0, wrCanvas.width, wrCanvas.height);
+
+            wrCtx.strokeStyle = "rgba(217, 119, 6, 0.1)";
+            wrCtx.lineWidth = 1;
+            for (let x = 0; x < wrCanvas.width; x += 30) {
+                wrCtx.beginPath(); wrCtx.moveTo(x, 0); wrCtx.lineTo(x, wrCanvas.height); wrCtx.stroke();
+            }
+
+            if (Math.random() < 0.05 && fallingItems.length < 12) {
+                createFallingItem();
+            }
+
+            for (let i = 0; i < fallingItems.length; i++) {
+                let item = fallingItems[i];
+                item.y += item.speed;
+
+                wrCtx.font = `bold ${item.size}px 'Noto Sans Arabic'`;
+                wrCtx.fillStyle = item.color;
+                wrCtx.textAlign = "center";
+                wrCtx.shadowColor = item.isTarget ? "rgba(251, 191, 36, 0.8)" : "transparent";
+                wrCtx.shadowBlur = item.isTarget ? 10 : 0;
+                wrCtx.fillText(item.text, item.x, item.y);
+                wrCtx.shadowBlur = 0;
+
+                if (item.y > wrCanvas.height + 30) {
+                    fallingItems.splice(i, 1);
+                    i--;
+                }
+            }
+
+            wrAnimFrame = requestAnimationFrame(updateAndDrawWordCanvas);
+        }
+
+        function startWordRainGame() {
+            document.getElementById("wordGameOverOverlay").classList.remove("show");
+            switchScreen("word-game-container");
+            resizeWordCanvas();
+
+            isWordGameActive = true;
+            userWordScore = 0;
+            gameTimeLeft = 30;
+            fallingItems = [];
+
+            currentLetter = getRandomLetter();
+            document.getElementById('target-letter').innerText = currentLetter;
+            document.getElementById('wordGameScoreText').innerText = "0";
+            document.getElementById('game-timer').innerText = gameTimeLeft;
+            document.getElementById('word-message').innerText = '';
+            document.getElementById('word-input').value = '';
+            document.getElementById('word-input').disabled = false;
+            document.getElementById('word-input').focus();
+
+            startBackgroundMusic();
+            cancelAnimationFrame(wrAnimFrame);
+            updateAndDrawWordCanvas();
+
+            clearInterval(gameInterval);
+            gameInterval = setInterval(() => {
+                gameTimeLeft--;
+                document.getElementById('game-timer').innerText = gameTimeLeft;
+                if (gameTimeLeft <= 0) {
+                    endWordGame();
+                }
+            }, 1000);
+
+            listenToOnlineScores();
+        }
+
+        async function endWordGame() {
+            isWordGameActive = false;
+            clearInterval(gameInterval);
+            cancelAnimationFrame(wrAnimFrame);
+            stopBackgroundMusic();
+            playSound('gameover');
+
+            document.getElementById('word-input').disabled = true;
+            document.getElementById('wordGameFinalScore').innerText = userWordScore;
+            document.getElementById("wordGameOverOverlay").classList.add("show");
+
+            const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
+            const userSnap = await window.firestoreFns.getDoc(userRef);
+            let curBest = userSnap.exists() ? (userSnap.data().wordScore || 0) : 0;
+            let newBest = Math.max(curBest, userWordScore);
+
+            await saveCloudData({ coins: totalCoins, wordScore: newBest });
+        }
+
+        function exitWordGame() {
+            isWordGameActive = false;
+            clearInterval(gameInterval);
+            cancelAnimationFrame(wrAnimFrame);
+            stopBackgroundMusic();
+            document.getElementById("wordGameOverOverlay").classList.remove("show");
+            loadUserData();
+            switchScreen("wordGameLandingScreen");
+        }
+
+        function submitWord() {
+            if (gameTimeLeft <= 0 || !isWordGameActive) return;
+            
+            let inputField = document.getElementById('word-input');
+            let word = inputField.value.trim();
+            
+            if (word === "") return;
+
+            // مەرجی پیتە سەرەکییەکە (بۆ نموونە: دەبێت بە پیتی داواکراو دەست پێبکات و وشەیەکی دروست و تەواو بێت)
+            if (word.startsWith(currentLetter) && word.length > 1) {
+                userWordScore++;
+                totalCoins += 2;
+                playSound('coin');
+                document.getElementById('wordGameScoreText').innerText = userWordScore;
+                document.getElementById('word-message').style.color = "#34d399";
+                document.getElementById('word-message').innerText = "پیرۆزە! وشەیەکی ڕاستە (+2 کۆین)";
+                
+                for(let i=0; i<fallingItems.length; i++){
+                    if(fallingItems[i].isTarget){
+                        fallingItems.splice(i, 1);
+                        break;
+                    }
+                }
+
+                currentLetter = getRandomLetter();
+                document.getElementById('target-letter').innerText = currentLetter;
+                
+                let userId = currentUser || "guest_" + Math.floor(Math.random()*1000);
+                let userName = currentUser || "میوان";
+                
+                window.rtdbFns.set(window.rtdbFns.ref(window.rtdb, 'wordGameScores/' + userId), {
+                    name: userName,
+                    score: userWordScore
+                });
+                saveCloudData({ coins: totalCoins });
+
+            } else {
+                playSound('gameover');
+                document.getElementById('word-message').style.color = "#f87171";
+                document.getElementById('word-message').innerText = "هەڵەیە! دەبێت وشەکە بە پیتی (" + currentLetter + ") دەست پێبکات.";
+            }
+            
+            inputField.value = "";
+            inputField.focus();
+        }
+
+        function listenToOnlineScores() {
+            let scoresRef = window.rtdbFns.ref(window.rtdb, 'wordGameScores');
+            window.rtdbFns.onValue(scoresRef, (snapshot) => {
+                let scoresList = document.getElementById('players-score-list');
+                if(!scoresList) return;
+                scoresList.innerHTML = '';
+                let scoresData = [];
+                
+                snapshot.forEach((childSnapshot) => {
+                    scoresData.push(childSnapshot.val());
+                });
+
+                scoresData.sort((a, b) => b.score - a.score);
+
+                scoresData.slice(0, 5).forEach((player) => {
+                    let li = document.createElement('li');
+                    li.style.display = "flex";
+                    li.style.justifyContent = "space-between";
+                    li.style.padding = "2px 0";
+                    li.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+                    li.innerHTML = `<span>👤 ${player.name}</span> <b style="color:#fbbf24;">${player.score} خاڵ</b>`;
+                    scoresList.appendChild(li);
+                });
+            });
+        }
+
+        document.getElementById('word-input').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                submitWord();
+            }
+        });
+    </script>
+</body>
+</html>
