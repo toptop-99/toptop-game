@@ -313,6 +313,18 @@
                         <button class="btn" style="padding: 6px 16px; font-size: 11px; width: auto; display: inline-block; margin-right: 6px;" onclick="openSnakeLanding()">یاریکردن</button>
                     </div>
                 </div>
+
+                <!-- Word Rain Game Card Added Here -->
+                <div class="game-catalog-card" style="grid-column: span 2;">
+                    <div>
+                        <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f); width: 45px; height: 45px; font-size: 20px;">🌧️</div>
+                        <h3 style="color: #fbbf24; font-size: 13px; margin: 0 0 2px 0;">وشە باران</h3>
+                        <p style="font-size: 9px; color: #d6d3d1; margin: 0;">وشەی خێرا بنووسە و کێبڕکێ بکە</p>
+                    </div>
+                    <div>
+                        <button class="btn" style="padding: 6px 16px; font-size: 11px; width: auto; display: inline-block;" onclick="openWordGameLanding()">یاریکردن</button>
+                    </div>
+                </div>
             </div>
 
             <div class="card" style="padding: 10px 12px;">
@@ -363,6 +375,18 @@
                 <p style="font-size: 11px;">مارەکە ڕێنمایی بکە بۆ خواردنی سێوەکان. سیستەمی خاڵی تایبەتی خۆی هەەیە!</p>
                 <div class="game-meta-info" style="margin: 10px 0;">ئاستی یاری: <span id="snakeLevelText" style="color:#fbbf24; font-weight:bold;">خێرا</span></div>
                 <button class="btn" onclick="startSnakeGame()">▶ یاری بکە</button>
+                <button class="btn" style="background: #27272a;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
+            </div>
+        </div>
+
+        <!-- Word Game Landing Screen Added Here -->
+        <div id="wordGameLandingScreen" class="screen">
+            <div class="brand-title">یاری وشە باران 🌧️</div>
+            <div class="game-catalog-card" style="margin-top: 15px; padding: 15px;">
+                <div class="game-thumbnail" style="background: radial-gradient(circle, #f59e0b, #78350f);">🌧️</div>
+                <h3 style="font-size: 14px; color: #fbbf24;">پەڕەی تایبەتی یاری وشە باران</h3>
+                <p style="font-size: 11px;">لە کاتی دیاریکراودا وشەی دەستپێک بە پیتی داواکراو بنووسە!</p>
+                <button class="btn" onclick="startWordRainGame()">▶ یاری بکە</button>
                 <button class="btn" style="background: #27272a;" onclick="backToHub()">گەڕانەوە بۆ لۆبی</button>
             </div>
         </div>
@@ -539,6 +563,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- Word Rain Game Screen Added Here -->
+        <div id="word-game-container" class="screen" style="display: none; flex-direction: column; justify-content: flex-start; padding: 15px;">
+            <div class="hub-header-panel" style="margin-bottom: 6px;">
+                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitWordGame()">⬅️ دەرچوون</button>
+                <span style="font-weight: bold; color: #fbbf24; font-size: 12px;">یاری وشە باران</span>
+            </div>
+            <div class="card" style="text-align: center;">
+                <p>پیت: <span id="target-letter" style="font-size: 24px; color: #ff9800; font-weight: bold;">س</span></p>
+                <p>کات: <span id="game-timer">30</span> چرکە</p>
+                <div id="live-scoreboard" style="margin-bottom: 10px; background: #222; padding: 10px; border-radius: 5px;">
+                    <h4 style="margin: 0 0 6px 0; color: #fbbf24; font-size: 12px;">کێبڕکێی ڕاستەوخۆ:</h4>
+                    <ul id="players-score-list" style="list-style: none; padding: 0; margin: 0; text-align: right;"></ul>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="word-input" placeholder="وشەیەک بنووسە..." style="padding: 8px; font-size: 16px;">
+                </div>
+                <button class="btn" onclick="submitWord()" style="padding: 8px 15px; background: #4CAF50; color: white;">ناردن</button>
+                <p id="word-message" style="margin-top: 10px; font-size: 12px;"></p>
+            </div>
+        </div>
     </div>
 
     <!-- Firebase SDK Scripts -->
@@ -546,6 +591,7 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
       import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+      import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
@@ -554,15 +600,19 @@
         storageBucket: "toptop-game-4e89f.firebasestorage.app",
         messagingSenderId: "786973684229",
         appId: "1:786973684229:web:a327a180f44ca18f8fa26c",
-        measurementId: "G-S6ERB47WJ8"
+        measurementId: "G-S6ERB47WJ8",
+        databaseURL: "https://toptop-game-4e89f-default-rtdb.firebaseio.com/"
       };
 
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
       const db = getFirestore(app);
+      const rtdb = getDatabase(app);
 
       window.db = db;
+      window.rtdb = rtdb;
       window.firestoreFns = { doc, setDoc, getDoc, updateDoc, collection, getDocs };
+      window.rtdbFns = { ref, set, onValue };
     </script>
 
     <!-- Game Core Logic Script with Cloud Database Support -->
@@ -639,7 +689,7 @@
             let noteIdx = 0;
 
             bgMusicInterval = setInterval(() => {
-                if (!musicEnabled || (!isGameActive && flappyState !== "PLAYING" && !isSnakeActive)) return;
+                if (!musicEnabled || (!isGameActive && flappyState !== "PLAYING" && !isSnakeActive && !isWordGameActive)) return;
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
@@ -660,7 +710,7 @@
             musicEnabled = (val === 'on');
             localStorage.setItem("top_top_music", val);
             if (!musicEnabled) stopBackgroundMusic();
-            else if (isGameActive || flappyState === "PLAYING" || isSnakeActive) startBackgroundMusic();
+            else if (isGameActive || flappyState === "PLAYING" || isSnakeActive || isWordGameActive) startBackgroundMusic();
         }
 
         function toggleSoundEffects(val) {
@@ -694,6 +744,7 @@
         function openJumperLanding() { switchScreen("jumperLandingScreen"); }
         function openFlappyLanding() { switchScreen("flappyLandingScreen"); }
         function openSnakeLanding() { switchScreen("snakeLandingScreen"); }
+        function openWordGameLanding() { switchScreen("wordGameLandingScreen"); }
 
         function switchAuthMode(mode) {
             if (mode === 'login') {
@@ -938,7 +989,7 @@
 
         function openShopScreen() { loadUserData(); switchScreen("shopScreen"); }
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
-        function backToHub() { stopGameSession(); exitFlappyGame(); exitSnakeGame(); loadUserData(); switchScreen("hubScreen"); }
+        function backToHub() { stopGameSession(); exitFlappyGame(); exitSnakeGame(); exitWordGame(); loadUserData(); switchScreen("hubScreen"); }
 
         function updateShopUI() {
             let skins = [
@@ -1553,6 +1604,110 @@
             loadUserData();
             switchScreen("snakeLandingScreen");
         }
+
+        // Word Rain Game Integration Added Here
+        let currentLetter = "س";
+        let gameTimeLeft = 30;
+        let gameInterval;
+        let userWordScore = 0;
+        let isWordGameActive = false;
+
+        function startWordRainGame() {
+            switchScreen("word-game-container");
+            isWordGameActive = true;
+            userWordScore = 0;
+            gameTimeLeft = 30;
+            document.getElementById('game-timer').innerText = gameTimeLeft;
+            document.getElementById('word-message').innerText = '';
+            document.getElementById('word-input').value = '';
+            document.getElementById('word-input').disabled = false;
+            document.getElementById('word-input').focus();
+
+            startBackgroundMusic();
+            clearInterval(gameInterval);
+            gameInterval = setInterval(() => {
+                gameTimeLeft--;
+                document.getElementById('game-timer').innerText = gameTimeLeft;
+                if (gameTimeLeft <= 0) {
+                    clearInterval(gameInterval);
+                    document.getElementById('word-input').disabled = true;
+                    document.getElementById('word-message').innerText = "کاتەکە تەواو بوو! کۆی خاڵەکانت: " + userWordScore;
+                    playSound('gameover');
+                }
+            }, 1000);
+
+            listenToOnlineScores();
+        }
+
+        function exitWordGame() {
+            isWordGameActive = false;
+            clearInterval(gameInterval);
+            stopBackgroundMusic();
+            loadUserData();
+            switchScreen("hubScreen");
+        }
+
+        function submitWord() {
+            if (gameTimeLeft <= 0) return;
+            
+            let inputField = document.getElementById('word-input');
+            let word = inputField.value.trim();
+            
+            if (word === "") return;
+
+            if (word.startsWith(currentLetter)) {
+                userWordScore++;
+                totalCoins += 1;
+                playSound('coin');
+                document.getElementById('word-message').style.color = "lightgreen";
+                document.getElementById('word-message').innerText = "پیرۆزە! وشەیەکی ڕاستە.";
+                
+                let userId = currentUser || "guest_" + Math.floor(Math.random()*1000);
+                let userName = currentUser || "میوان";
+                
+                window.rtdbFns.set(window.rtdbFns.ref(window.rtdb, 'wordGameScores/' + userId), {
+                    name: userName,
+                    score: userWordScore
+                });
+                saveCloudData({ coins: totalCoins });
+
+            } else {
+                playSound('gameover');
+                document.getElementById('word-message').style.color = "red";
+                document.getElementById('word-message').innerText = "تکایە وشەیەک بنووسە بە پیتی (" + currentLetter + ")";
+            }
+            
+            inputField.value = "";
+            inputField.focus();
+        }
+
+        function listenToOnlineScores() {
+            let scoresRef = window.rtdbFns.ref(window.rtdb, 'wordGameScores');
+            window.rtdbFns.onValue(scoresRef, (snapshot) => {
+                let scoresList = document.getElementById('players-score-list');
+                if(!scoresList) return;
+                scoresList.innerHTML = '';
+                let scoresData = [];
+                
+                snapshot.forEach((childSnapshot) => {
+                    scoresData.push(childSnapshot.val());
+                });
+
+                scoresData.sort((a, b) => b.score - a.score);
+
+                scoresData.forEach((player) => {
+                    let li = document.createElement('li');
+                    li.innerHTML = `👤 ${player.name}: <b>${player.score}</b> وشە`;
+                    scoresList.appendChild(li);
+                });
+            });
+        }
+
+        document.getElementById('word-input').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                submitWord();
+            }
+        });
     </script>
 </body>
 </html>
