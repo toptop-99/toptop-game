@@ -3,910 +3,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تۆپ تۆپ - TopTop Gaming</title>
+    <title>تۆپ تۆپ - بەشی هەژمار</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            margin: 0;
-            padding: 0;
-        }
-
-        body, html {
-            width: 100vw;
-            height: 100vh;
-            background-color: #0d1117;
-            color: #ffffff;
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            width: 100vw; height: 100vh; margin: 0; padding: 0;
+            background-color: #0f0716; color: #f8fafc;
             font-family: 'Noto Sans Arabic', sans-serif;
-            overflow: hidden;
-            touch-action: manipulation;
+            overflow: hidden; touch-action: manipulation;
         }
-
-        .app-container {
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(180deg, #0d1117 0%, #161b22 60%, #0d1117 100%);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
+        .container {
+            width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #2e1065, #0f0716);
+            display: flex; flex-direction: column; padding: 12px; position: relative; overflow: hidden;
         }
-
-        /* --- Auth Overlay (Sign In / Sign Up) --- */
-        .auth-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(13, 17, 23, 0.98);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
+        .brand-title {
+            text-align: center; font-size: 28px; font-weight: 900;
+            background: linear-gradient(135deg, #c084fc, #a855f7, #7c3aed);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 10px 0 15px 0; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
         }
-
-        .auth-card {
-            width: 100%;
-            max-width: 340px;
-            background: #161b22;
-            border: 2px solid #eab308;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 0 25px rgba(234, 179, 8, 0.25);
-            text-align: center;
+        .screen { display: none; flex: 1; flex-direction: column; height: 100%; overflow-y: auto; }
+        .screen.active { display: flex; }
+        .form-group { margin-bottom: 12px; text-align: right; }
+        label { display: block; font-size: 12px; margin-bottom: 6px; color: #d8b4fe; }
+        input, select {
+            width: 100%; padding: 12px 14px; background: #1e112a;
+            border: 1px solid #7c3aed; border-radius: 12px; color: #fff;
+            font-size: 14px; outline: none; font-family: 'Noto Sans Arabic', sans-serif;
         }
-
-        .auth-logo {
-            font-size: 32px;
-            font-weight: 900;
-            color: #eab308;
-            margin-bottom: 8px;
-            text-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
+        input:focus { border-color: #c084fc; box-shadow: 0 0 8px rgba(192, 132, 252, 0.4); }
+        
+        .btn {
+            width: 100%; background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: #ffffff; border: none; padding: 12px; font-size: 15px;
+            font-weight: bold; border-radius: 12px; cursor: pointer; margin-top: 8px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            transition: transform 0.1s ease;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
         }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn:active { transform: scale(0.96); }
 
-        .auth-input {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 12px;
-            background: #0d1117;
-            border: 1px solid rgba(234, 179, 8, 0.4);
-            color: white;
-            font-family: inherit;
-            font-size: 13px;
-            outline: none;
-            margin-top: 10px;
-            text-align: right;
+        .btn-social {
+            background: #1e112a; border: 1px solid #6d28d9; color: #fff;
+            margin-top: 8px; font-weight: normal; font-size: 13px;
         }
+        .btn-social:hover { background: #2c1a3f; }
 
-        .auth-input:focus {
-            border-color: #eab308;
-            box-shadow: 0 0 8px rgba(234, 179, 8, 0.3);
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; background: rgba(30, 17, 42, 0.9);
+            padding: 10px 16px; border-radius: 14px; border: 1px solid #7c3aed;
         }
-
-        /* --- Header Section --- */
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 14px;
-            background: rgba(13, 17, 23, 0.9);
-            backdrop-filter: blur(12px);
-            z-index: 25;
-            border-bottom: 1px solid rgba(234, 179, 8, 0.25);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        .card {
+            background: rgba(30, 17, 42, 0.8); border-radius: 14px;
+            padding: 16px; margin-bottom: 12px; text-align: right;
+            border: 1px solid #5b21b6; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
+        .card h3 { margin: 0 0 6px 0; color: #c084fc; font-size: 16px; }
+        .card p { margin: 0 0 8px 0; font-size: 12px; color: #e9d5ff; }
 
-        .app-logo {
-            font-size: 24px;
-            font-weight: 900;
-            color: #eab308;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 12px rgba(234, 179, 8, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .avatar-preview {
+            width: 70px; height: 70px; border-radius: 50%; background: #2c1a3f;
+            margin: 0 auto 12px auto; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; border: 2px solid #a855f7; cursor: pointer; position: relative;
         }
+        .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .tab-switcher { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; background: #1e112a; border: 1px solid #7c3aed; color: #d8b4fe; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .tab-btn.active { background: #7c3aed; color: #fff; }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .divider {
+            display: flex; align-items: center; text-align: center; color: #a855f7;
+            font-size: 12px; margin: 12px 0;
         }
-
-        .icon-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #161b22;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 16px;
-            border: 1px solid rgba(234, 179, 8, 0.35);
-            cursor: pointer;
-            color: #eab308;
-            position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-            transition: transform 0.1s;
+        .divider::before, .divider::after {
+            content: ''; flex: 1; border-bottom: 1px solid #4c1d95;
         }
+        .divider:not(:empty)::before { margin-left: .5em; }
+        .divider:not(:empty)::after { margin-right: .5em; }
 
-        .icon-btn:active {
-            transform: scale(0.92);
-        }
-
-        .badge {
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            background: #eab308;
-            color: #0d1117;
-            font-size: 9px;
-            font-weight: 900;
-            border-radius: 10px;
-            padding: 1px 5px;
-            border: 1px solid #0d1117;
-        }
-
-        /* --- Screens --- */
-        .screen {
-            display: none;
-            flex: 1;
-            flex-direction: column;
-            height: 100%;
-            overflow-y: auto;
-            padding: 10px 12px 70px 12px;
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        /* --- Games Hub Grid --- */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding-bottom: 20px;
-        }
-
-        .game-card {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 0.82;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #161b22;
-            border: 1.5px solid rgba(234, 179, 8, 0.25);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.6);
-            cursor: pointer;
-            transition: transform 0.15s ease, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 6px;
-            text-align: center;
-        }
-
-        .game-card:active {
-            transform: scale(0.94);
-            border-color: #eab308;
-        }
-
-        .game-card img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
-            filter: brightness(0.85);
-        }
-
-        .game-card-title {
-            position: relative;
-            z-index: 2;
-            font-weight: 900;
-            font-size: 11px;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-            background: rgba(13, 17, 23, 0.85);
-            padding: 3px 4px;
-            border-radius: 8px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(234, 179, 8, 0.2);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .fav-heart {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            z-index: 3;
-            background: rgba(13, 17, 23, 0.65);
-            backdrop-filter: blur(4px);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: #eab308;
-            border: 1px solid rgba(234, 179, 8, 0.3);
-        }
-
-        /* --- Bottom Navigation --- */
-        .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 62px;
-            background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid rgba(234, 179, 8, 0.2);
-            z-index: 30;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #8b949e;
-            font-size: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            gap: 2px;
-            flex: 1;
-        }
-
-        .nav-item.active {
-            color: #eab308;
-        }
-
-        .nav-icon-box {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 17px;
-        }
-
-        .nav-item.active .nav-icon-box {
-            background: rgba(234, 179, 8, 0.18);
-            color: #eab308;
-            border: 1px solid #eab308;
-            box-shadow: 0 0 12px rgba(234, 179, 8, 0.35);
-        }
-
-        /* --- Fruit Game ("مێوەکان") --- */
-        .fruit-game-screen {
-            background: linear-gradient(180deg, #0d1117 0%, #854d0e 100%);
-            padding: 10px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(13, 17, 23, 0.85);
-            padding: 8px 12px;
-            border-radius: 14px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(234, 179, 8, 0.3);
-        }
-
-        .score-box {
-            font-size: 13px;
-            font-weight: bold;
-            color: #eab308;
-        }
-
-        .fruit-container {
-            flex: 1;
-            background: rgba(13, 17, 23, 0.92);
-            border-radius: 18px;
-            border: 2px solid #eab308;
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(234, 179, 8, 0.2);
-            cursor: pointer;
-        }
-
-        .fruit-item {
-            position: absolute;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 22px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-            transition: transform 0.08s;
-        }
-
-        /* --- Profile Cards --- */
-        .profile-card {
-            background: #161b22;
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid rgba(234, 179, 8, 0.25);
-            margin-bottom: 12px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-        }
-
-        .user-avatar-lg {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 2.5px solid #eab308;
-            margin: 0 auto 8px auto;
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
-            object-fit: cover;
-        }
-
-        .user-code-tag {
-            background: rgba(234, 179, 8, 0.15);
-            color: #eab308;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            display: inline-block;
-            margin-top: 6px;
-            letter-spacing: 1px;
-            border: 1px solid rgba(234, 179, 8, 0.3);
-            font-weight: bold;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .stat-item {
-            background: rgba(13, 17, 23, 0.6);
-            padding: 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(234, 179, 8, 0.15);
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 13px;
-            font-weight: 900;
-            color: #eab308;
-        }
-
-        .stat-label {
-            font-size: 10px;
-            color: #8b949e;
-            margin-top: 2px;
-        }
-
-        /* --- Modals & Overlays --- */
-        .modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(13, 17, 23, 0.88);
-            backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 60;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-card {
-            background: #161b22;
-            border-radius: 20px;
-            padding: 22px;
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-            border: 2px solid #eab308;
-            box-shadow: 0 0 25px rgba(234, 179, 8, 0.35);
-        }
-
-        .modal-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            font-size: 13px;
-            font-weight: bold;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .modal-btn:active {
-            transform: scale(0.96);
-        }
-
-        .btn-primary {
-            background: #eab308;
-            color: #0d1117;
-        }
-
-        .btn-secondary {
-            background: #21262d;
-            color: #ffffff;
-            border: 1px solid rgba(255,255,255,0.1);
+        .verify-box {
+            background: #2e1065; border: 1px dashed #a855f7;
+            border-radius: 12px; padding: 12px; margin-top: 10px; text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="container">
+        <!-- Auth Screen -->
+        <div id="authScreen" class="screen active">
+            <div class="brand-title">تۆپ تۆپ</div>
+            <div class="card">
+                <div class="tab-switcher">
+                    <button class="tab-btn active" id="loginTabBtn" onclick="switchAuthMode('login')">چوونەژوورەوە</button>
+                    <button class="tab-btn" id="registerTabBtn" onclick="switchAuthMode('register')">حیسابی نوێ</button>
+                </div>
 
-        <div id="authScreen" class="auth-screen">
-            <div class="auth-card">
-                <div class="auth-logo">تۆپ تۆپ</div>
-                <p style="font-size: 12px; color: #8b949e; margin-bottom: 12px;" id="authTitle">چوونەژوورەوە یان دروستکردنی هەژمار</p>
+                <!-- Step 1: Registration Form -->
+                <div id="registerForm" style="display: none;">
+                    <p style="font-size: 12px; text-align: center;">وێنەی پڕۆفایلەکەت هەڵبژێرە و حیساب دروست بکە</p>
+                    <div class="avatar-preview" onclick="document.getElementById('fileInput').click()">
+                        <span id="avatarPlaceholderText" style="font-size: 24px;">📷</span>
+                        <img id="avatarImgTag" style="display:none;" />
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
 
-                <input type="text" id="usernameInput" class="auth-input" placeholder="ناوی بەکارهێنەر">
-                <input type="password" id="passwordInput" class="auth-input" placeholder="وشەی نهێنی">
+                    <div class="form-group">
+                        <label>ناوی بەکارهێنەر</label>
+                        <input type="text" id="regUsername" placeholder="ناوی بەکارهێنەر...">
+                    </div>
+                    <div class="form-group">
+                        <label>جۆری چوونەژوورەوە / ئیمەیڵ (Gmail / Google / Apple)</label>
+                        <input type="email" id="regEmail" placeholder="example@gmail.com یان @icloud.com">
+                    </div>
+                    <div class="form-group">
+                        <label>ڕێکەوتی لەدایکبوون</label>
+                        <input type="date" id="regBirthdate">
+                    </div>
+                    <div class="form-group">
+                        <label>وشەی نهێنی</label>
+                        <input type="password" id="regPassword" placeholder="وشەی نهێنی...">
+                    </div>
 
-                <button class="modal-btn btn-primary" onclick="handleAuth()">چوونە ژوورەوە</button>
-                <button class="modal-btn btn-secondary" onclick="toggleAuthMode()" id="toggleAuthBtn">هەژماری نوێت نییە؟ تۆماربە</button>
+                    <!-- Verification Code Section -->
+                    <div id="verificationSection" style="display: none;" class="verify-box">
+                        <p style="font-size: 11px; color: #c084fc; margin-bottom: 5px;">کۆدی پشتڕاستکردنەوە نێردرا بۆ ئیمەیڵەکەت:</p>
+                        <p id="generatedCodeDisplay" style="font-weight: bold; font-size: 18px; color: #f43f5e; letter-spacing: 2px; margin: 4px 0;"></p>
+                        <input type="text" id="enteredCode" placeholder="کۆدە ٦ ڕەقەمییەکە لێرە بنووسە..." style="text-align: center;">
+                        <button class="btn" style="background: #10b981;" onclick="confirmVerification()">پشتڕاستکردنەوە و بەردەوامبوون</button>
+                    </div>
+
+                    <button class="btn" id="sendCodeBtn" onclick="sendVerificationCode()">ناردنی کۆدی پشتڕاستکردنەوە</button>
+
+                    <div class="divider">یاخود بپەڕەوە لەڕێگەی</div>
+                    <button class="btn btn-social" onclick="socialAuth('Google')">🌐 بەردەوامبوون بە Google</button>
+                    <button class="btn btn-social" onclick="socialAuth('Apple ID')">🍎 بەردەوامبوون بە Apple ID</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <p style="font-size: 12px; text-align: center;">بۆ چوونەژوورەوە، ئیمەیڵ یان ناوی بەکارهێنەر و وشەی نهێنی بنووسە</p>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>ئیمەیڵ یان ناوی بەکارهێنەر</label>
+                        <input type="text" id="loginIdentifier" placeholder="ئیمەیڵ یان ناوی بەکارهێنەر...">
+                    </div>
+                    <div class="form-group">
+                        <label>وشەی نهێنی</label>
+                        <input type="password" id="loginPassword" placeholder="وشەی نهێنی...">
+                    </div>
+                    <button class="btn" onclick="loginUser()">چوونەژوورەوە</button>
+
+                    <div class="divider">یاخود بپەڕەوە لەڕێگەی</div>
+                    <button class="btn btn-social" onclick="socialAuth('Google')">🌐 چوونەژوورەوە بە Google</button>
+                    <button class="btn btn-social" onclick="socialAuth('Apple ID')">🍎 چوونەژوورەوە بە Apple ID</button>
+                </div>
             </div>
         </div>
 
-        <div class="app-header">
-            <div class="app-logo">
-                <span>تۆپ تۆپ</span>
+        <!-- Hub Screen -->
+        <div id="hubScreen" class="screen">
+            <div class="brand-title">تۆپ تۆپ</div>
+            <div class="top-bar">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="hubUserAvatar" style="width: 36px; height: 36px; border-radius: 50%; background: #7c3aed; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 14px; border: 2px solid #c084fc;">👤</div>
+                    <div>
+                        <span id="hubUsernameText" style="font-weight: bold; color: #c084fc; display: block;"></span>
+                        <span id="hubUserEmailText" style="font-size: 10px; color: #a855f7;"></span>
+                    </div>
+                </div>
             </div>
-            <div class="header-actions">
-                <div class="icon-btn" onclick="openFriendsModal()">
-                    👥 <span class="badge">1</span>
-                </div>
-                <div class="icon-btn" onclick="switchScreen('shopScreen')">
-                    🛒 <span class="badge">نوێ</span>
-                </div>
-                <div class="icon-btn" onclick="alert('هیچ ئاگادارییەکی نوێ نییە')">
-                    🔔 <span class="badge">5</span>
-                </div>
-                <div class="icon-btn" onclick="switchScreen('profileScreen')">
-                    ⚙️
-                </div>
+            
+            <div class="card">
+                <h3>بەخێربێیت بۆ پڕۆفایلەکەت 🎉</h3>
+                <p>هەژمارەکەت بە سەرکەوتوویی جێگیر کراوه و داتاکانت بە تەواوی پارێزراون لەسەر ئیمەیڵەکەت.</p>
+                <button class="btn" onclick="openSettingsScreen()">⚙️ ڕێکخستنی هەژمار</button>
             </div>
         </div>
 
-        <div id="hubScreen" class="screen active">
-            <div class="games-grid">
+        <!-- Settings Screen -->
+        <div id="settingsScreen" class="screen">
+            <div class="brand-title">ڕێکخستنەکان</div>
+            
+            <div class="card">
+                <h3>👤 دەستکاری زانیارییەکانی پڕۆفایل</h3>
+                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 8px;">
+                    <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
+                    <span id="settingsAvatarPlaceholder" style="font-size: 24px;">📷</span>
+                </div>
+                <input type="file" id="settingsFileInput" accept="image/*" style="display:none;" onchange="handleSettingsImageUpload(event)">
                 
-                <div class="game-card" onclick="startFruitGame()">
-                    <span class="fav-heart">💛</span>
-                    <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400" alt="مێوەکان">
-                    <span class="game-card-title">مێوەکان</span>
+                <div class="form-group">
+                    <label>ناوی بەکارهێنەر</label>
+                    <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
                 </div>
-
-                <div class="game-card" onclick="alert('یاری کارتی پێکەنین!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1541278107931-e006523892df?w=400" alt="کارتی پێکەنین">
-                    <span class="game-card-title">کارتی پێکەنین</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری مار و پێژە!')">
-                    <span class="fav-heart">💛</span>
-                    <img src="https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400" alt="مار و پێژە">
-                    <span class="game-card-title">مار و پێژە</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری پینۆ!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=400" alt="پینۆ">
-                    <span class="game-card-title">پینۆ</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری مافیا!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400" alt="مافیا">
-                    <span class="game-card-title">مافیا</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری بەڕبەست!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="بەڕبەست">
-                    <span class="game-card-title">بەڕبەست</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری نەلار!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400" alt="نەلار">
-                    <span class="game-card-title">نەلار</span>
-                </div>
-
-                <div class="game-card" onclick="alert('سیخوڕەکە بدۆزەوە!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=400" alt="سیخوڕەکە بدۆزەوە">
-                    <span class="game-card-title">سیخوڕەکە بدۆزەوە</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری دامه!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=400" alt="دامه">
-                    <span class="game-card-title">دامه</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری خڕۆ!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="خڕۆ">
-                    <span class="game-card-title">خڕۆ</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری بومبەر!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400" alt="بومبەر">
-                    <span class="game-card-title">بومبەر</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری شەترەنج!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1586165368502-1bad197a6461?w=400" alt="شەترەنج">
-                    <span class="game-card-title">شەترەنج</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری 2048!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="2048">
-                    <span class="game-card-title">2048</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری سودۆکۆ!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=400" alt="سودۆکۆ">
-                    <span class="game-card-title">سودۆکۆ</span>
-                </div>
-
-                <div class="game-card" onclick="alert('یاری هەڵۆ!')">
-                    <span class="fav-heart">🤍</span>
-                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" alt="هەڵۆ">
-                    <span class="game-card-title">هەڵۆ</span>
-                </div>
-
+                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); margin-top: 5px;" onclick="saveProfileChanges()">پاشەکەوتکردنی گۆڕانکارییەکان</button>
             </div>
+
+            <div class="card" style="border-color: #f87171;">
+                <h3 style="color: #f87171;">🚪 بەڕێوەبردنی حیساب</h3>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 5px;" onclick="logoutUser()">دەرچوون لە حیسابی ئێستا</button>
+            </div>
+
+            <button class="btn" style="background: #1e112a; border: 1px solid #7c3aed; margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
-
-        <div id="fruitGameScreen" class="screen fruit-game-screen">
-            <div class="game-top-bar">
-                <button class="icon-btn" onclick="togglePauseModal(true)">⏸️</button>
-                <div class="score-box">خاڵ: <span id="fruitScore">0</span></div>
-                <div class="score-box">باشترین: <span id="fruitBestScore">0</span></div>
-                <button class="icon-btn" onclick="quitFruitGame()">🏠</button>
-            </div>
-
-            <div class="fruit-container" id="fruitContainer" onclick="dropFruit(event)">
-            </div>
-        </div>
-
-        <div id="leaderboardScreen" class="screen">
-            <div class="profile-card">
-                <h3 style="color: #eab308; margin-bottom: 6px;">🏆 ڕیزبەندی گشتی</h3>
-                <p style="font-size: 11px; color: #8b949e;">باشترین یاریزانان</p>
-            </div>
-        </div>
-
-        <div id="chatScreen" class="screen">
-            <div class="profile-card">
-                <h3 style="color: #eab308; margin-bottom: 6px;">💬 چاتی گشتی</h3>
-            </div>
-        </div>
-
-        <div id="shopScreen" class="screen">
-            <div class="profile-card">
-                <h2 style="color: #eab308; margin-top: 0;">🏪 دوکانی تۆپ تۆپ</h2>
-                <button class="modal-btn btn-primary" onclick="alert('کڕینی سکە')">کڕینی 500 سکە</button>
-            </div>
-        </div>
-
-        <div id="profileScreen" class="screen">
-            <div class="profile-card">
-                <img class="user-avatar-lg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="ئەواتار">
-                <h3 style="margin: 2px 0; color: #ffffff;" id="profileDisplayName">بەکارهێنەر</h3>
-                <div class="user-code-tag" id="profileUserCode">کۆد: ------</div>
-
-                <div class="stat-grid">
-                    <div class="stat-item">
-                        <div class="stat-value" id="profileHighScore">0</div>
-                        <div class="stat-label">باشترین خاڵ</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">#1</div>
-                        <div class="stat-label">پلە</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">100</div>
-                        <div class="stat-label">سکە</div>
-                    </div>
-                </div>
-
-                <button class="modal-btn btn-secondary" style="margin-top: 15px;" onclick="logout()">دەرچوون لە هەژمار</button>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="friendsModal">
-            <div class="modal-card">
-                <h3 style="color: #eab308; margin-top: 0;">👥 هاوڕێیان</h3>
-                <button class="modal-btn btn-secondary" onclick="closeFriendsModal()">داخستن</button>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="pauseModal">
-            <div class="modal-card">
-                <h2 style="color: #eab308; margin-top: 0;">یاری وەستێندرا ⏸️</h2>
-                <button class="modal-btn btn-primary" onclick="togglePauseModal(false)">بەردەوامبوون</button>
-                <button class="modal-btn btn-secondary" onclick="quitFruitGame()">گەڕانەوە</button>
-            </div>
-        </div>
-
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="switchScreen('hubScreen', this)">
-                <div class="nav-icon-box">🎮</div>
-                <span>یارییەکان</span>
-            </div>
-            <div class="nav-item" onclick="switchScreen('leaderboardScreen', this)">
-                <div class="nav-icon-box">📊</div>
-                <span>ڕیزبەندی</span>
-            </div>
-            <div class="nav-item" onclick="switchScreen('chatScreen', this)">
-                <div class="nav-icon-box">💬</div>
-                <span>چات</span>
-            </div>
-            <div class="nav-item" onclick="switchScreen('shopScreen', this)">
-                <div class="nav-icon-box">🏪</div>
-                <span>دوکان</span>
-            </div>
-            <div class="nav-item" onclick="switchScreen('profileScreen', this)">
-                <div class="nav-icon-box">👤</div>
-                <span>پرۆفایل</span>
-            </div>
-        </div>
-
     </div>
 
     <script>
-        /* --- AUTH & LOCALSTORAGE SYNC ENGINE --- */
-        let isSignUpMode = false;
-        let currentUser = null;
+        let currentUserKey = "";
+        let tempAvatarBase64 = "";
+        let settingsTempAvatar = "";
+        let generatedCode = "";
 
-        function loadSession() {
-            const savedUser = localStorage.getItem('toptop_active_user');
-            if (savedUser) {
-                currentUser = JSON.parse(localStorage.getItem('toptop_user_' + savedUser));
-                document.getElementById('authScreen').style.display = 'none';
-                updateProfileUI();
+        window.onload = function() {
+            let savedUserKey = localStorage.getItem("top_top_active_user");
+            if (savedUserKey && localStorage.getItem("user_profile_" + savedUserKey)) {
+                currentUserKey = savedUserKey;
+                loadUserData();
+                switchScreen("hubScreen");
             } else {
-                document.getElementById('authScreen').style.display = 'flex';
+                switchScreen("authScreen");
+            }
+        };
+
+        function switchScreen(id) {
+            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+            document.getElementById(id).classList.add("active");
+        }
+
+        function switchAuthMode(mode) {
+            if (mode === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginTabBtn').classList.add('active');
+                document.getElementById('registerTabBtn').classList.remove('active');
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('registerTabBtn').classList.add('active');
+                document.getElementById('loginTabBtn').classList.remove('active');
             }
         }
 
-        function toggleAuthMode() {
-            isSignUpMode = !isSignUpMode;
-            document.getElementById('authTitle').innerText = isSignUpMode ? 'دروستکردنی هەژماری نوێ' : 'چوونەژوورەوە یان دروستکردنی هەژمار';
-            document.getElementById('toggleAuthBtn').innerText = isSignUpMode ? 'هەژمارت هەیە؟ بچۆرە ژوورەوە' : 'هەژماری نوێت نییە؟ تۆماربە';
+        function handleImageUpload(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    tempAvatarBase64 = e.target.result;
+                    let imgTag = document.getElementById("avatarImgTag");
+                    let textTag = document.getElementById("avatarPlaceholderText");
+                    imgTag.src = tempAvatarBase64; imgTag.style.display = "block"; textTag.style.display = "none";
+                }
+                reader.readAsDataURL(file);
+            }
         }
 
-        function handleAuth() {
-            const username = document.getElementById('usernameInput').value.trim();
-            const password = document.getElementById('passwordInput').value.trim();
+        function handleSettingsImageUpload(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    settingsTempAvatar = e.target.result;
+                    let imgTag = document.getElementById("settingsAvatarPreview");
+                    let textTag = document.getElementById("settingsAvatarPlaceholder");
+                    imgTag.src = settingsTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
+                }
+                reader.readAsDataURL(file);
+            }
+        }
 
-            if (!username || !password) {
-                alert('تکایە هەموو خانەکان پڕبکەرەوە!');
+        // Validate Email strict check
+        function isValidEmail(email) {
+            let emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|googlemail\.com|icloud\.com|apple\.com)$/i;
+            return emailRegex.test(email);
+        }
+
+        function sendVerificationCode() {
+            let name = document.getElementById("regUsername").value.trim();
+            let email = document.getElementById("regEmail").value.trim().toLowerCase();
+            let pass = document.getElementById("regPassword").value.trim();
+
+            if (!name || !email || !pass) {
+                alert("تکایە سەرجەم خانەکان پڕبکەرەوە!");
                 return;
             }
 
-            const storageKey = 'toptop_user_' + username;
-            const existingUser = localStorage.getItem(storageKey);
-
-            if (isSignUpMode) {
-                if (existingUser) {
-                    alert('ئەم ناوە پێشتر تۆمارکراوە!');
-                    return;
-                }
-                const newUser = {
-                    username: username,
-                    password: password,
-                    friendCode: 'TT' + Math.floor(100000 + Math.random() * 900000),
-                    highScore: 0
-                };
-                localStorage.setItem(storageKey, JSON.stringify(newUser));
-                localStorage.setItem('toptop_active_user', username);
-                currentUser = newUser;
-            } else {
-                if (!existingUser) {
-                    alert('ئەم هەژمارە بوونی نییە!');
-                    return;
-                }
-                const userData = JSON.parse(existingUser);
-                if (userData.password !== password) {
-                    alert('وشەی نهێنی هەڵەیە!');
-                    return;
-                }
-                localStorage.setItem('toptop_active_user', username);
-                currentUser = userData;
+            if (!isValidEmail(email)) {
+                alert("تکایە ئیمەیڵێکی دروست بنووسە! تەنها Gmail یان Google یان Apple ID قبوڵ دەکرێت.\nنموونە: example@gmail.com");
+                return;
             }
 
-            document.getElementById('authScreen').style.display = 'none';
-            updateProfileUI();
-        }
-
-        function logout() {
-            localStorage.removeItem('toptop_active_user');
-            currentUser = null;
-            document.getElementById('authScreen').style.display = 'flex';
-        }
-
-        function updateProfileUI() {
-            if (!currentUser) return;
-            document.getElementById('profileDisplayName').innerText = currentUser.username;
-            document.getElementById('profileUserCode').innerText = 'کۆد: ' + currentUser.friendCode;
-            document.getElementById('profileHighScore').innerText = currentUser.highScore;
-            document.getElementById('fruitBestScore').innerText = currentUser.highScore;
-        }
-
-        function saveGameScore(score) {
-            if (currentUser && score > currentUser.highScore) {
-                currentUser.highScore = score;
-                localStorage.setItem('toptop_user_' + currentUser.username, JSON.stringify(currentUser));
-                updateProfileUI();
+            if (localStorage.getItem("user_profile_" + email)) {
+                alert("ئەم ئیمەیڵە پێشتر تۆمار کراوە!");
+                return;
             }
+
+            // Generate 6-digit random code
+            generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById("generatedCodeDisplay").innerText = generatedCode;
+            document.getElementById("verificationSection").style.display = "block";
+            document.getElementById("sendCodeBtn").style.display = "none";
+            alert("کۆدی پشتڕاستکردنەوە دروستکرا و نێردرا بۆ ئیمەیڵەکەت!");
         }
 
-        /* --- SCREEN SWITCHING --- */
-        function switchScreen(id, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(id);
-            if (target) target.classList.add('active');
-            
-            if (el) {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                el.classList.add('active');
+        function confirmVerification() {
+            let entered = document.getElementById("enteredCode").value.trim();
+            if (entered !== generatedCode) {
+                alert("کۆدەکە هەڵەیە! تکایە دووبارە تاقیبکەرەوە.");
+                return;
             }
-        }
 
-        function openFriendsModal() { document.getElementById('friendsModal').classList.add('active'); }
-        function closeFriendsModal() { document.getElementById('friendsModal').classList.remove('active'); }
+            let name = document.getElementById("regUsername").value.trim();
+            let email = document.getElementById("regEmail").value.trim().toLowerCase();
+            let pass = document.getElementById("regPassword").value.trim();
+            let birthdate = document.getElementById("regBirthdate").value;
 
-        /* --- FRUIT GAME ENGINE --- */
-        const fruitTypes = [
-            { name: '🍒', size: 30, score: 2, bg: '#ef4444' },
-            { name: '🍇', size: 42, score: 4, bg: '#8b5cf6' },
-            { name: '🍊', size: 55, score: 8, bg: '#f97316' },
-            { name: '🍎', size: 70, score: 16, bg: '#dc2626' },
-            { name: '🍉', size: 90, score: 32, bg: '#10b981' }
-        ];
-
-        let currentScore = 0;
-        let activeFruits = [];
-        let isGameRunning = false;
-
-        function startFruitGame() {
-            togglePauseModal(false);
-            switchScreen('fruitGameScreen');
-            
-            let container = document.getElementById('fruitContainer');
-            container.querySelectorAll('.fruit-item').forEach(f => f.remove());
-            
-            currentScore = 0;
-            activeFruits = [];
-            document.getElementById('fruitScore').innerText = currentScore;
-            isGameRunning = true;
-        }
-
-        function dropFruit(e) {
-            if (!isGameRunning) return;
-
-            let container = document.getElementById('fruitContainer');
-            let rect = container.getBoundingClientRect();
-            let clickX = e.clientX - rect.left;
-
-            let typeIndex = Math.floor(Math.random() * 2);
-            let fruitData = fruitTypes[typeIndex];
-
-            let fruitEl = document.createElement('div');
-            fruitEl.className = 'fruit-item';
-            fruitEl.innerText = fruitData.name;
-            fruitEl.style.width = fruitData.size + 'px';
-            fruitEl.style.height = fruitData.size + 'px';
-            fruitEl.style.backgroundColor = fruitData.bg;
-            fruitEl.style.left = Math.min(Math.max(clickX - fruitData.size/2, 0), rect.width - fruitData.size) + 'px';
-            fruitEl.style.top = '10px';
-
-            container.appendChild(fruitEl);
-
-            let fruitObj = {
-                el: fruitEl,
-                type: typeIndex,
-                x: parseFloat(fruitEl.style.left),
-                y: 10,
-                size: fruitData.size,
-                vy: 2
+            let userProfile = { 
+                username: name, 
+                email: email, 
+                password: pass, 
+                birthdate: birthdate, 
+                avatar: tempAvatarBase64 || "" 
             };
 
-            activeFruits.push(fruitObj);
-            animateFruitDrop(fruitObj, rect.height - fruitData.size);
+            // Save isolated profile data
+            localStorage.setItem("user_profile_" + email, JSON.stringify(userProfile));
+            localStorage.setItem("top_top_active_user", email);
+            currentUserKey = email;
+
+            alert("پیرۆزە! هەژمارەکەت بە سەرکەوتوویی دروستکرا.");
+            loadUserData();
+            switchScreen("hubScreen");
         }
 
-        function animateFruitDrop(fruit, floorY) {
-            let timer = setInterval(() => {
-                if (!isGameRunning) { clearInterval(timer); return; }
+        function socialAuth(provider) {
+            let mockEmail = prompt(`تکایە ئیمەیڵی ${provider} بنووسە:`);
+            if (!mockEmail) return;
 
-                fruit.vy += 0.4;
-                fruit.y += fruit.vy;
+            mockEmail = mockEmail.trim().toLowerCase();
+            if (!isValidEmail(mockEmail)) {
+                alert(`ئیمەیڵەکە گونجاو نییە لەگەڵ ${provider}!`);
+                return;
+            }
 
-                if (fruit.y >= floorY) {
-                    fruit.y = floorY;
-                    fruit.vy = 0;
-                    clearInterval(timer);
-                    checkFruitMerges();
-                }
+            let existing = localStorage.getItem("user_profile_" + mockEmail);
+            if (!existing) {
+                let defaultName = mockEmail.split("@")[0];
+                let userProfile = { 
+                    username: defaultName, 
+                    email: mockEmail, 
+                    password: "social_login_pass", 
+                    birthdate: "", 
+                    avatar: "" 
+                };
+                localStorage.setItem("user_profile_" + mockEmail, JSON.stringify(userProfile));
+            }
 
-                fruit.el.style.top = fruit.y + 'px';
-            }, 16);
+            localStorage.setItem("top_top_active_user", mockEmail);
+            currentUserKey = mockEmail;
+            loadUserData();
+            switchScreen("hubScreen");
         }
 
-        function checkFruitMerges() {
-            for (let i = 0; i < activeFruits.length; i++) {
-                for (let j = i + 1; j < activeFruits.length; j++) {
-                    let f1 = activeFruits[i];
-                    let f2 = activeFruits[j];
+        function loginUser() {
+            let identifier = document.getElementById("loginIdentifier").value.trim().toLowerCase();
+            let pass = document.getElementById("loginPassword").value.trim();
 
-                    if (f1.type === f2.type && Math.abs(f1.x - f2.x) < f1.size && Math.abs(f1.y - f2.y) < f1.size) {
-                        if (f1.type < fruitTypes.length - 1) {
-                            f1.el.remove();
-                            f2.el.remove();
-                            activeFruits.splice(j, 1);
-                            activeFruits.splice(i, 1);
+            if (!identifier || !pass) { alert("تکایە ئیمەیڵ/ناو و وشەی نهێنی بنووسە!"); return; }
 
-                            currentScore += fruitTypes[f1.type + 1].score;
-                            document.getElementById('fruitScore').innerText = currentScore;
-                            saveGameScore(currentScore);
-                            return;
-                        }
+            let targetKey = "";
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key.startsWith("user_profile_")) {
+                    let data = JSON.parse(localStorage.getItem(key));
+                    if (data.email === identifier || data.username.toLowerCase() === identifier) {
+                        targetKey = key;
+                        break;
                     }
                 }
             }
+
+            if (!targetKey) { alert("ئەم هەژمارە بوونی نییە!"); return; }
+
+            let profile = JSON.parse(localStorage.getItem(targetKey));
+            if (profile.password !== pass) { alert("وشەی نهێنی هەڵەیە!"); return; }
+
+            localStorage.setItem("top_top_active_user", profile.email);
+            currentUserKey = profile.email;
+            loadUserData();
+            switchScreen("hubScreen");
         }
 
-        function togglePauseModal(show) {
-            document.getElementById('pauseModal').classList.toggle('active', show);
-            isGameRunning = !show;
+        function logoutUser() {
+            localStorage.removeItem("top_top_active_user");
+            currentUserKey = "";
+            switchScreen("authScreen");
         }
 
-        function quitFruitGame() {
-            togglePauseModal(false);
-            switchScreen('hubScreen');
+        function loadUserData() {
+            let profileData = localStorage.getItem("user_profile_" + currentUserKey);
+            let profile = profileData ? JSON.parse(profileData) : {};
+
+            document.getElementById("hubUsernameText").innerText = profile.username || "بەکارهێنەر";
+            document.getElementById("hubUserEmailText").innerText = profile.email || "";
+
+            let avatarEl = document.getElementById("hubUserAvatar");
+            if (profile.avatar) {
+                avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+            } else {
+                avatarEl.innerHTML = (profile.username || "U").charAt(0).toUpperCase();
+            }
+
+            document.getElementById("settingsUsernameInput").value = profile.username || "";
         }
 
-        // AUTO-INIT SESSION ON LOAD
-        window.onload = loadSession;
+        function saveProfileChanges() {
+            let newName = document.getElementById("settingsUsernameInput").value.trim();
+            if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
+
+            let oldProfileData = localStorage.getItem("user_profile_" + currentUserKey);
+            let profile = oldProfileData ? JSON.parse(oldProfileData) : {};
+
+            profile.username = newName;
+            if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
+
+            localStorage.setItem("user_profile_" + currentUserKey, JSON.stringify(profile));
+            alert("زانیارییەکانت نوێکرانەوە!");
+            loadUserData();
+        }
+
+        function openSettingsScreen() { switchScreen("settingsScreen"); }
+        function backToHub() { loadUserData(); switchScreen("hubScreen"); }
     </script>
 </body>
 </html>
