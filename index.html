@@ -327,10 +327,10 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // پشکنینی دەرئەنجامی گەڕانەوەی گوگڵ (Redirect Result) بۆ چارەسەری شاشە سپی
+        // پشکنینی گەڕانەوەی گوگڵ کاتێک پەڕەکە لۆد دەبێتەوە
         getRedirectResult(auth)
             .then((result) => {
-                if (result && result.user) {
+                if (result) {
                     const user = result.user;
                     let username = user.displayName || user.email.split('@')[0];
                     let avatar = user.photoURL || "";
@@ -353,7 +353,8 @@
                     if (window.loadLeaderboard) window.loadLeaderboard();
                 }
             }).catch((error) => {
-                console.error("هەڵە لە گوگڵ ڕیدایریکت:", error);
+                console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
+                alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
             });
 
         window.loginWithGoogle = function() {
@@ -823,7 +824,7 @@
                 }
 
                 window.xoTurn = "X";
-                    document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
+                document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
             }
         }
 
