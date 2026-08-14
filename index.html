@@ -12,7 +12,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function(){
-            // Public Key تایبەت بە EmailJS خۆت
             emailjs.init("P3DqvBZw2V6ukgCYl");
         })();
     </script>
@@ -129,6 +128,12 @@
                         <input type="text" id="verifyCodeInput" placeholder="کۆدی 6 ژمارەیی...">
                     </div>
                     <button class="btn" onclick="confirmRegister()">تەواوکردنی تۆمارکردن</button>
+
+                    <!-- دوگمەی دووبارە ناردنەوەی کۆد -->
+                    <div style="margin-top: 15px; text-align: center;">
+                        <p id="timerText" style="color: #cbd5e1; font-size: 12px;">دەتوانیت کۆدێکی نوێ بنێریتەوە دوای <span id="countdown" style="color: #c084fc; font-weight: bold;">60</span> چرکە</p>
+                        <button id="resendBtn" style="display: none; background: none; border: none; color: #c084fc; cursor: pointer; font-weight: bold; text-decoration: underline; font-size: 13px;" onclick="sendEmailCode()">دووبارە ناردنەوەی کۆد</button>
+                    </div>
                 </div>
 
                 <div id="loginForm">
@@ -203,7 +208,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // زانیارییە سەرەکییەکانی Firebase پڕۆژەکەت
         const firebaseConfig = {
             apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
             authDomain: "toptop-game-4e89f.firebaseapp.com",
@@ -238,6 +242,7 @@
         let settingsTempAvatar = "";
         let generatedCode = "";
         let pendingUser = {};
+        let timerInterval = null;
 
         window.onload = function() {
             let savedUser = localStorage.getItem("top_top_active_user");
@@ -299,6 +304,24 @@
             }
         }
 
+        function startTimer() {
+            let timeLeft = 60;
+            if(timerInterval) clearInterval(timerInterval);
+            document.getElementById("resendBtn").style.display = "none";
+            document.getElementById("timerText").style.display = "block";
+            document.getElementById("countdown").innerText = timeLeft;
+            
+            timerInterval = setInterval(function() {
+                timeLeft--;
+                document.getElementById("countdown").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById("timerText").style.display = "none";
+                    document.getElementById("resendBtn").style.display = "inline-block";
+                }
+            }, 1000);
+        }
+
         function sendEmailCode() {
             let name = document.getElementById("regUsername").value.trim();
             let email = document.getElementById("regEmail").value.trim();
@@ -306,9 +329,8 @@
             let birthdate = document.getElementById("regBirthdate").value;
 
             if (!name || !email || !pass) { alert("تکایە هەموو خانەکان پڕبکەرەوە!"); return; }
-            if (localStorage.getItem("user_profile_" + name)) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
+            if (localStorage.getItem("user_profile_" + name) && !pendingUser.username) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
 
-            // دروستکردنی کۆدی ٦ ژمارەیی
             generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
             pendingUser = { username: name, email: email, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "" };
 
@@ -321,7 +343,6 @@
             sendBtn.innerText = "تکایە چاوەڕێ بکە...";
             sendBtn.disabled = true;
 
-            // ناردنی ئیمەیڵ لەڕێگەی EmailJS
             emailjs.send('service_6pa2jvk', 'template_m3jme7l', templateParams)
                 .then(function() {
                     alert("کۆدی پشتڕاستکردنەوە بە سەرکەوتوویی نێردرا بۆ ئیمەیڵەکەت!");
@@ -329,6 +350,7 @@
                     document.getElementById('verifyStep').style.display = 'block';
                     sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە";
                     sendBtn.disabled = false;
+                    startTimer(); // کاتژمێرەکە لێرەوە دەستپێدەکات
                 }, function(error) {
                     alert("کێشەیەک لە ناردنی ئیمەیڵ ڕوویدا. تکایە دووبارە هەوڵبدەرەوە.");
                     console.error("EmailJS Error:", error);
