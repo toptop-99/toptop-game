@@ -44,6 +44,11 @@
         }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn:active { transform: scale(0.96); }
+        .btn-secondary {
+            background: linear-gradient(135deg, #3f3f46, #27272a);
+            border: 1px solid #71717a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
         
         .hub-header-panel {
             background: rgba(39, 39, 42, 0.95); border: 1px solid #d97706;
@@ -82,21 +87,28 @@
             min-height: 60px; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 5px;
         }
         .table-center {
-            flex: 1; display: flex; justify-content: center; align-items: center;
-            gap: 8px; overflow-x: auto; padding: 10px 0;
+            flex: 1; display: flex; justify-content: flex-start; align-items: center;
+            gap: 8px; overflow-x: auto; padding: 10px; white-space: nowrap;
         }
         .domino-tile {
-            width: 34px; height: 60px; background: #f8fafc; border: 2px solid #000;
-            border-radius: 6px; display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center; padding: 3px 0;
+            width: 36px; height: 64px; background: #f8fafc; border: 2px solid #000;
+            border-radius: 6px; display: inline-flex; flex-direction: column;
+            justify-content: space-between; align-items: center; padding: 4px 0;
             box-shadow: 2px 4px 8px rgba(0,0,0,0.5); cursor: pointer; color: #000; font-weight: bold; font-size: 14px;
+            flex-shrink: 0; transition: transform 0.15s ease, border-color 0.15s ease;
         }
+        .domino-tile:active { transform: scale(0.95); }
+        .domino-tile.playable { border: 2px solid #f59e0b; box-shadow: 0 0 10px #f59e0b; }
         .domino-tile.horizontal {
-            width: 60px; height: 34px; flex-direction: row; padding: 0 3px;
+            width: 64px; height: 36px; flex-direction: row; padding: 0 4px;
         }
         .tile-divider { width: 80%; height: 2px; background: #000; }
         .tile-divider.vert { width: 2px; height: 80%; }
         .my-hand { display: flex; gap: 6px; overflow-x: auto; padding: 6px 0; }
+        .pass-btn {
+            background: #dc2626; color: white; border: none; padding: 6px 12px;
+            border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -152,9 +164,10 @@
             </div>
 
             <div class="card" style="text-align: center; padding: 20px;">
-                <h2 style="color: #fbbf24; margin-top: 0;">🀏 دۆمینەی ئۆنلاین (ئەزنیف)</h2>
-                <p style="font-size: 12px; color: #d6d3d1;">ڕاستەوخۆ لەگەڵ یاریزانانی ئۆنلاین یاری بکە و کۆین ببەرەوە!</p>
-                <button class="btn" style="font-size: 16px; padding: 14px;" onclick="joinOnlineDominoGame()">🎮 چوونە ناو یاری ئۆنلاین</button>
+                <h2 style="color: #fbbf24; margin-top: 0;">🀏 دۆمینەی ئەزنیف</h2>
+                <p style="font-size: 12px; color: #d6d3d1;">شێوازی یاری نیشان بده و بەردەکان ڕێکبخە!</p>
+                <button class="btn" style="font-size: 15px; padding: 12px; margin-bottom: 8px;" onclick="joinOnlineDominoGame()">🌐 یاری ئۆنلاین (لەگەڵ خەڵک)</button>
+                <button class="btn btn-secondary" style="font-size: 15px; padding: 12px;" onclick="startVsBotGame()">🤖 یاری لەگەڵ کۆمپیوتەر (Bot)</button>
             </div>
         </div>
 
@@ -163,12 +176,13 @@
             <div class="hub-header-panel" style="margin-bottom: 6px;">
                 <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitDominoGame()">⬅️ دەرچوون</button>
                 <span id="gameStatusText" style="font-size: 12px; color: #fbbf24; font-weight: bold;">چاوەڕێی یاریزانی دووەم...</span>
+                <button id="passBtn" class="pass-btn" style="display:none;" onclick="handlePassTurn()">تێپەڕاندن (Pass)</button>
             </div>
 
             <div class="domino-board">
                 <!-- Opponent Hand -->
                 <div class="player-zone" id="opponentZone">
-                    <span style="font-size: 12px; color: #a1a1aa;">ڕکابەر (🀏 7 بەرد)</span>
+                    <span id="opponentLabel" style="font-size: 12px; color: #a1a1aa;">ڕکابەر (🀏 7 بەرد)</span>
                 </div>
 
                 <!-- Table Center -->
@@ -213,7 +227,21 @@
         let currentUser = "";
         let totalCoins = 0;
         let currentGameRoom = "room_1";
-        let myHand = [];
+        let isVsBotMode = false;
+
+        // Local state for Offline / Vs Bot
+        let botGameState = {
+            myHand: [],
+            botHand: [],
+            table: [],
+            leftValue: null,
+            rightValue: null,
+            turn: 'player'
+        };
+
+        // Online state
+        let myOnlineHand = [];
+        let currentOnlineData = null;
 
         window.onload = function() {
             let savedUser = localStorage.getItem("top_top_active_user");
@@ -274,7 +302,7 @@
             }
         }
 
-        // --- Domino Online Multiplayer Logic ---
+        // --- Domino Logic Tools ---
         function generateDominoSet() {
             let tiles = [];
             for (let i = 0; i <= 6; i++) {
@@ -285,12 +313,163 @@
             return tiles.sort(() => Math.random() - 0.5);
         }
 
-        function joinOnlineDominoGame() {
+        function canPlayTile(tile, leftVal, rightVal) {
+            if (leftVal === null && rightVal === null) return true; // First tile on table
+            return tile[0] === leftVal || tile[1] === leftVal || tile[0] === rightVal || tile[1] === rightVal;
+        }
+
+        function createDominoUI(top, bottom, isHorizontal, isPlayable) {
+            let tile = document.createElement("div");
+            tile.className = "domino-tile" + (isHorizontal ? " horizontal" : "") + (isPlayable ? " playable" : "");
+            tile.innerHTML = `<span>${top}</span><div class="tile-divider ${isHorizontal ? 'vert' : ''}"></div><span>${bottom}</span>`;
+            return tile;
+        }
+
+        // ================= VS BOT MODE =================
+        function startVsBotGame() {
+            isVsBotMode = true;
             switchScreen("dominoGameScreen");
+            document.getElementById("opponentLabel").innerText = "کۆمپیوتەر (Bot) - 7 بەرد";
+
+            let tiles = generateDominoSet();
+            botGameState.myHand = tiles.splice(0, 7);
+            botGameState.botHand = tiles.splice(0, 7);
+            botGameState.table = [];
+            botGameState.leftValue = null;
+            botGameState.rightValue = null;
+            botGameState.turn = 'player';
+
+            renderBotBoard();
+        }
+
+        function renderBotBoard() {
+            let statusText = document.getElementById("gameStatusText");
+            let passBtn = document.getElementById("passBtn");
+
+            document.getElementById("opponentLabel").innerText = `کۆمپیوتەر (Bot) - ${botGameState.botHand.length} بەرد`;
+
+            // Check if player has valid moves
+            let playerHasMove = botGameState.myHand.some(t => canPlayTile(t, botGameState.leftValue, botGameState.rightValue));
+
+            if (botGameState.turn === 'player') {
+                statusText.innerText = "نۆرەی تۆیە! 🎯";
+                passBtn.style.display = (!playerHasMove && botGameState.table.length > 0) ? "block" : "none";
+            } else {
+                statusText.innerText = "نۆرەی کۆمپیوتەرە... ⏳";
+                passBtn.style.display = "none";
+            }
+
+            // Render Table
+            let tableEl = document.getElementById("dominoTable");
+            tableEl.innerHTML = "";
+            if (botGameState.table.length > 0) {
+                botGameState.table.forEach(tile => {
+                    tableEl.appendChild(createDominoUI(tile[0], tile[1], true, false));
+                });
+            } else {
+                tableEl.innerHTML = `<span style="color: rgba(255,255,255,0.4); font-size: 12px;">مێزی یاری بەتاڵە</span>`;
+            }
+
+            // Render Player Hand
+            let myHandEl = document.getElementById("myHandZone");
+            myHandEl.innerHTML = "";
+            botGameState.myHand.forEach((tile, index) => {
+                let playable = (botGameState.turn === 'player') && canPlayTile(tile, botGameState.leftValue, botGameState.rightValue);
+                let tileUI = createDominoUI(tile[0], tile[1], false, playable);
+                if (playable) {
+                    tileUI.onclick = () => playBotTile(tile, index);
+                }
+                myHandEl.appendChild(tileUI);
+            });
+
+            // Check end game
+            if (botGameState.myHand.length === 0) {
+                setTimeout(() => alert("پیرۆزە! تۆ کۆمپیوتەرەکەت بەزاند 🎉"), 200);
+                return;
+            }
+            if (botGameState.botHand.length === 0) {
+                setTimeout(() => alert("دۆڕایت! کۆمپیوتەر بڕییەوە 🤖"), 200);
+                return;
+            }
+
+            // Trigger Bot play if it's bot turn
+            if (botGameState.turn === 'bot') {
+                setTimeout(makeBotMove, 1000);
+            }
+        }
+
+        function playBotTile(tile, index) {
+            if (botGameState.turn !== 'player') return;
+
+            placeTileOnTable(tile, botGameState);
+            botGameState.myHand.splice(index, 1);
+            botGameState.turn = 'bot';
+
+            renderBotBoard();
+        }
+
+        function makeBotMove() {
+            let possibleIndices = [];
+            botGameState.botHand.forEach((t, i) => {
+                if (canPlayTile(t, botGameState.leftValue, botGameState.rightValue)) {
+                    possibleIndices.push(i);
+                }
+            });
+
+            if (possibleIndices.length > 0) {
+                let chosenIndex = possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
+                let chosenTile = botGameState.botHand[chosenIndex];
+                
+                placeTileOnTable(chosenTile, botGameState);
+                botGameState.botHand.splice(chosenIndex, 1);
+            }
+
+            botGameState.turn = 'player';
+            renderBotBoard();
+        }
+
+        function placeTileOnTable(tile, state) {
+            if (state.leftValue === null && state.rightValue === null) {
+                state.leftValue = tile[0];
+                state.rightValue = tile[1];
+                state.table.push(tile);
+            } else if (tile[0] === state.rightValue) {
+                state.rightValue = tile[1];
+                state.table.push(tile);
+            } else if (tile[1] === state.rightValue) {
+                state.rightValue = tile[0];
+                state.table.push([tile[1], tile[0]]);
+            } else if (tile[1] === state.leftValue) {
+                state.leftValue = tile[0];
+                state.table.unshift(tile);
+            } else if (tile[0] === state.leftValue) {
+                state.leftValue = tile[1];
+                state.table.unshift([tile[1], tile[0]]);
+            }
+        }
+
+        function handlePassTurn() {
+            if (isVsBotMode) {
+                botGameState.turn = 'bot';
+                renderBotBoard();
+            } else if (currentOnlineData) {
+                let nextTurn = (currentOnlineData.p1 === currentUser) ? currentOnlineData.p2 : currentOnlineData.p1;
+                window.rtdbFns.update(window.rtdbFns.ref(window.rtdb, 'dominoRooms/' + currentGameRoom), { turn: nextTurn });
+            }
+        }
+
+        // ================= ONLINE MULTIPLAYER MODE =================
+        function joinOnlineDominoGame() {
+            isVsBotMode = false;
+            switchScreen("dominoGameScreen");
+            document.getElementById("opponentLabel").innerText = "ڕکابەر (🀏 7 بەرد)";
+
             let roomRef = window.rtdbFns.ref(window.rtdb, 'dominoRooms/' + currentGameRoom);
 
             window.rtdbFns.onValue(roomRef, (snapshot) => {
                 let data = snapshot.val();
+                currentOnlineData = data;
+
                 if (!data) {
                     let tiles = generateDominoSet();
                     let p1Hand = tiles.splice(0, 7);
@@ -302,34 +481,47 @@
                         p1Hand: p1Hand,
                         p2Hand: p2Hand,
                         table: [],
+                        leftValue: null,
+                        rightValue: null,
                         turn: currentUser
                     });
-                    myHand = p1Hand;
+                    myOnlineHand = p1Hand;
                 } else if (data.p1 !== currentUser && !data.p2) {
                     window.rtdbFns.update(roomRef, { p2: currentUser });
-                    myHand = data.p2Hand;
+                    myOnlineHand = data.p2Hand;
                 } else {
-                    myHand = (data.p1 === currentUser) ? data.p1Hand : data.p2Hand;
+                    myOnlineHand = (data.p1 === currentUser) ? data.p1Hand : data.p2Hand;
                 }
-                renderBoard(data);
+                renderOnlineBoard(data);
             });
         }
 
-        function renderBoard(data) {
-            if (!data) return;
+        function renderOnlineBoard(data) {
+            if (!data || isVsBotMode) return;
+
             let statusText = document.getElementById("gameStatusText");
+            let passBtn = document.getElementById("passBtn");
+
+            let opponentHandCount = (data.p1 === currentUser) ? (data.p2Hand ? data.p2Hand.length : 7) : (data.p1Hand ? data.p1Hand.length : 7);
+            document.getElementById("opponentLabel").innerText = `ڕکابەر (${data.p2 ? (data.p1 === currentUser ? data.p2 : data.p1) : 'چاوەڕوانکردن...'}) - ${opponentHandCount} بەرد`;
+
+            let isMyTurn = (data.turn === currentUser);
+            let hasMove = myOnlineHand && myOnlineHand.some(t => canPlayTile(t, data.leftValue ?? null, data.rightValue ?? null));
+
             if (!data.p2) {
                 statusText.innerText = "چاوەڕێی یاریزانی دووەم...";
+                passBtn.style.display = "none";
             } else {
-                statusText.innerText = (data.turn === currentUser) ? "نۆرەی تۆیە! 🎯" : "نۆرەی ڕکابەرەکەتە ⏳";
+                statusText.innerText = isMyTurn ? "نۆرەی تۆیە! 🎯" : "نۆرەی ڕکابەرەکەتە ⏳";
+                passBtn.style.display = (isMyTurn && !hasMove && data.table && data.table.length > 0) ? "block" : "none";
             }
 
-            // Render Table Tiles
+            // Render Table
             let tableEl = document.getElementById("dominoTable");
             tableEl.innerHTML = "";
             if (data.table && data.table.length > 0) {
                 data.table.forEach(tile => {
-                    tableEl.appendChild(createDominoUI(tile[0], tile[1], true));
+                    tableEl.appendChild(createDominoUI(tile[0], tile[1], true, false));
                 });
             } else {
                 tableEl.innerHTML = `<span style="color: rgba(255,255,255,0.4); font-size: 12px;">مێزی یاری بەتاڵە</span>`;
@@ -338,34 +530,55 @@
             // Render My Hand
             let myHandEl = document.getElementById("myHandZone");
             myHandEl.innerHTML = "";
-            if (myHand) {
-                myHand.forEach((tile, index) => {
-                    let tileUI = createDominoUI(tile[0], tile[1], false);
-                    tileUI.onclick = () => playTile(tile, index, data);
+            if (myOnlineHand) {
+                myOnlineHand.forEach((tile, index) => {
+                    let playable = isMyTurn && canPlayTile(tile, data.leftValue ?? null, data.rightValue ?? null);
+                    let tileUI = createDominoUI(tile[0], tile[1], false, playable);
+                    if (playable) {
+                        tileUI.onclick = () => playOnlineTile(tile, index, data);
+                    }
                     myHandEl.appendChild(tileUI);
                 });
             }
         }
 
-        function createDominoUI(top, bottom, isHorizontal) {
-            let tile = document.createElement("div");
-            tile.className = "domino-tile" + (isHorizontal ? " horizontal" : "");
-            tile.innerHTML = `<span>${top}</span><div class="tile-divider ${isHorizontal ? 'vert' : ''}"></div><span>${bottom}</span>`;
-            return tile;
-        }
+        function playOnlineTile(tile, index, data) {
+            if (data.turn !== currentUser) return;
 
-        function playTile(tile, index, data) {
-            if (data.turn !== currentUser) return alert("نۆرەی تۆ نیست!");
-            
             let table = data.table || [];
-            table.push(tile);
-            myHand.splice(index, 1);
+            let leftVal = data.leftValue ?? null;
+            let rightVal = data.rightValue ?? null;
 
+            if (leftVal === null && rightVal === null) {
+                leftVal = tile[0];
+                rightVal = tile[1];
+                table.push(tile);
+            } else if (tile[0] === rightVal) {
+                rightVal = tile[1];
+                table.push(tile);
+            } else if (tile[1] === rightVal) {
+                rightVal = tile[0];
+                table.push([tile[1], tile[0]]);
+            } else if (tile[1] === leftVal) {
+                leftVal = tile[0];
+                table.unshift(tile);
+            } else if (tile[0] === leftVal) {
+                leftVal = tile[1];
+                table.unshift([tile[1], tile[0]]);
+            }
+
+            myOnlineHand.splice(index, 1);
             let nextTurn = (data.p1 === currentUser) ? data.p2 : data.p1;
-            let updateData = { table: table, turn: nextTurn };
-            
-            if (data.p1 === currentUser) updateData.p1Hand = myHand;
-            else updateData.p2Hand = myHand;
+
+            let updateData = {
+                table: table,
+                leftValue: leftVal,
+                rightValue: rightVal,
+                turn: nextTurn
+            };
+
+            if (data.p1 === currentUser) updateData.p1Hand = myOnlineHand;
+            else updateData.p2Hand = myOnlineHand;
 
             window.rtdbFns.update(window.rtdbFns.ref(window.rtdb, 'dominoRooms/' + currentGameRoom), updateData);
         }
