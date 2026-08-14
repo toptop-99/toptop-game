@@ -9,21 +9,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --bg-gradient-1: #1e0f33;
+            --bg-gradient-2: #0d0714;
+            --primary-color: #9333ea;
+            --primary-hover: #7e22ce;
+            --card-bg: rgba(31, 19, 46, 0.8);
+            --border-color: #581c87;
+            --text-glow: #c084fc;
+        }
+
+        [data-theme="blue"] {
+            --bg-gradient-1: #0f172a;
+            --bg-gradient-2: #020617;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --border-color: #1e40af;
+            --text-glow: #60a5fa;
+        }
+
+        [data-theme="emerald"] {
+            --bg-gradient-1: #064e3b;
+            --bg-gradient-2: #022c22;
+            --primary-color: #059669;
+            --primary-hover: #047857;
+            --card-bg: rgba(6, 78, 59, 0.8);
+            --border-color: #065f46;
+            --text-glow: #34d399;
+        }
+
         * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
         html, body {
             width: 100vw; height: 100vh; margin: 0; padding: 0;
-            background-color: #0d0714; color: #f8fafc;
+            background-color: var(--bg-gradient-2); color: #f8fafc;
             font-family: 'Noto Sans Arabic', sans-serif;
             overflow: hidden; touch-action: manipulation;
         }
         .container {
             width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, #1e0f33, #0d0714);
+            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
             display: flex; flex-direction: column; padding: 12px; position: relative; overflow: hidden;
+            transition: background 0.3s ease;
         }
         .brand-title {
             text-align: center; font-size: 26px; font-weight: 900;
-            background: linear-gradient(135deg, #c084fc, #9333ea, #6b21a8);
+            background: linear-gradient(135deg, var(--text-glow), var(--primary-color), #6b21a8);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin: 4px 0 10px 0; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
         }
@@ -32,8 +63,8 @@
         .form-group { margin-bottom: 12px; text-align: right; }
         label { display: block; font-size: 12px; margin-bottom: 6px; color: #e9d5ff; }
         input, select {
-            width: 100%; padding: 12px 14px; background: #1f132e;
-            border: 1px solid #9333ea; border-radius: 12px; color: #fff;
+            width: 100%; padding: 12px 14px; background: var(--card-bg);
+            border: 1px solid var(--primary-color); border-radius: 12px; color: #fff;
             font-size: 14px; outline: none; font-family: 'Noto Sans Arabic', sans-serif;
         }
         .password-container { position: relative; }
@@ -43,46 +74,78 @@
             background: none; border: none; cursor: pointer; font-size: 16px; color: #cbd5e1;
         }
         .btn {
-            width: 100%; background: linear-gradient(135deg, #9333ea, #6b21a8);
+            width: 100%; background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
             color: #ffffff; border: none; padding: 12px; font-size: 15px;
             font-weight: bold; border-radius: 12px; cursor: pointer; margin-top: 8px;
-            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
-            transition: transform 0.1s ease;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+            transition: transform 0.1s ease, background 0.3s ease;
         }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn:active { transform: scale(0.96); }
         .google-btn {
             background: #ffffff; color: #1f132e; font-weight: bold;
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            border: 1px solid #9333ea; box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            border: 1px solid var(--primary-color); box-shadow: 0 4px 15px rgba(255,255,255,0.2);
             margin-top: 10px;
         }
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; background: rgba(31, 19, 46, 0.9);
-            padding: 10px 16px; border-radius: 14px; border: 1px solid #9333ea;
+            margin-bottom: 12px; background: var(--card-bg);
+            padding: 10px 16px; border-radius: 14px; border: 1px solid var(--primary-color);
         }
         .card {
-            background: rgba(31, 19, 46, 0.8); border-radius: 14px;
+            background: var(--card-bg); border-radius: 14px;
             padding: 14px; margin-bottom: 12px; text-align: right;
-            border: 1px solid #581c87; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .card h3 { margin: 0 0 6px 0; color: #c084fc; font-size: 15px; }
+        .card h3 { margin: 0 0 6px 0; color: var(--text-glow); font-size: 15px; }
         .card p { margin: 0 0 8px 0; font-size: 12px; color: #e9d5ff; }
         
         .avatar-preview {
             width: 60px; height: 60px; border-radius: 50%; background: #2e1065;
             margin: 0 auto 8px auto; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; border: 2px solid #a855f7; cursor: pointer; position: relative;
+            overflow: hidden; border: 2px solid var(--text-glow); cursor: pointer; position: relative;
         }
         .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
         .tab-switcher { display: flex; gap: 5px; margin-bottom: 10px; }
-        .tab-btn { flex: 1; background: #1f132e; border: 1px solid #9333ea; color: #e9d5ff; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
-        .tab-btn.active { background: #9333ea; color: #fff; }
+        .tab-btn { flex: 1; background: var(--card-bg); border: 1px solid var(--primary-color); color: #e9d5ff; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .tab-btn.active { background: var(--primary-color); color: #fff; }
         .online-badge {
             display: inline-block; width: 10px; height: 10px; background-color: #22c55e;
             border-radius: 50%; margin-right: 5px; box-shadow: 0 0 8px #22c55e;
         }
+
+        /* Switch Toggle Styles */
+        .setting-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .setting-row:last-child { border-bottom: none; }
+        .switch {
+            position: relative; display: inline-block; width: 46px; height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #334155; transition: .3s; border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background-color: white; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Theme Selector Buttons */
+        .theme-options { display: flex; gap: 8px; margin-top: 6px; }
+        .theme-btn {
+            flex: 1; padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer; font-size: 12px; font-weight: bold; color: #fff; text-align: center;
+        }
+        .theme-purple { background: #9333ea; }
+        .theme-blue { background: #2563eb; }
+        .theme-emerald { background: #059669; }
 
         /* ----- XO Game Styles ----- */
         .xo-board {
@@ -90,7 +153,7 @@
             width: 100%; max-width: 320px; margin: 15px auto; aspect-ratio: 1;
         }
         .xo-cell {
-            background: #1f132e; border: 2px solid #a855f7; border-radius: 16px;
+            background: var(--card-bg); border: 2px solid var(--text-glow); border-radius: 16px;
             display: flex; justify-content: center; align-items: center;
             font-size: 40px; font-weight: 900; cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease;
@@ -100,23 +163,23 @@
         .xo-cell.o { color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.6); }
 
         .score-board {
-            display: flex; justify-content: space-around; background: rgba(46, 16, 101, 0.6);
-            padding: 10px; border-radius: 12px; border: 1px solid #9333ea; margin-bottom: 10px;
+            display: flex; justify-content: space-around; background: var(--card-bg);
+            padding: 10px; border-radius: 12px; border: 1px solid var(--primary-color); margin-bottom: 10px;
         }
         .score-box { text-align: center; }
-        .score-box span { font-size: 11px; color: #c084fc; display: block; }
+        .score-box span { font-size: 11px; color: var(--text-glow); display: block; }
         .score-box bold { font-size: 16px; font-weight: bold; color: #fff; }
 
         .leaderboard-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 12px; background: rgba(31, 19, 46, 0.6); border-radius: 10px;
-            margin-bottom: 6px; border: 1px solid #581c87;
+            padding: 8px 12px; background: var(--card-bg); border-radius: 10px;
+            margin-bottom: 6px; border: 1px solid var(--border-color);
         }
 
         .spinner {
             width: 50px; height: 50px;
             border: 5px solid rgba(192, 132, 252, 0.2);
-            border-top: 5px solid #a855f7;
+            border-top: 5px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -127,7 +190,7 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="purple">
 
     <div class="container">
         <!-- Auth Screen -->
@@ -201,7 +264,7 @@
             <div class="top-bar">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <div id="hubUserAvatar" style="width: 32px; height: 32px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 12px; border: 1px solid #c084fc;">👤</div>
-                    <span id="hubUsernameText" style="font-weight: bold; color: #c084fc;"></span>
+                    <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow);"></span>
                 </div>
                 <div style="display: flex; align-items: center;">
                     <span class="online-badge"></span>
@@ -223,7 +286,7 @@
             </div>
             
             <div style="display: flex; gap: 8px; margin-top: auto;">
-                <button class="btn" onclick="openSettingsScreen()" style="background: #3b0764; margin-top:0;">⚙️ ڕێکخستن</button>
+                <button class="btn" onclick="openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
         </div>
 
@@ -238,7 +301,7 @@
             </div>
 
             <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 20px;">
-                <h3 style="color: #c084fc; font-size: 18px;">گەڕان بۆ یاریزان...</h3>
+                <h3 style="color: var(--text-glow); font-size: 18px;">گەڕان بۆ یاریزان...</h3>
                 <div class="spinner"></div>
                 <p style="font-size: 13px; color: #cbd5e1;">تکایە چاوەڕێ بکە تا یاریزانی دووەم بەشدار دەبێت...</p>
                 <button class="btn" onclick="cancelMatchmaking()" style="background: #ef4444; margin-top: 15px;">پەشیمانبوونەوە</button>
@@ -252,7 +315,7 @@
                     </div>
                     <div class="score-box">
                         <span>دۆخ</span>
-                        <bold id="xoStatusText" style="color:#c084fc;">دەستپێک</bold>
+                        <bold id="xoStatusText" style="color:var(--text-glow);">دەستپێک</bold>
                     </div>
                     <div class="score-box">
                         <span id="playerOTitle">یاریزانی O</span>
@@ -272,15 +335,16 @@
                     <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
                 </div>
 
-                <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="background: #3b0764; margin-top: 10px;">🔄 دەستپێکردنەوە</button>
+                <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="margin-top: 10px;">🔄 دەستپێکردنەوە</button>
             </div>
 
-            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Settings Screen -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
+            
             <div class="card">
                 <h3>👤 دەستکاری زانیارییەکان</h3>
                 <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 8px;">
@@ -293,7 +357,37 @@
                     <label>ناوی بەکارهێنەر</label>
                     <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
                 </div>
-                <button class="btn" style="background: linear-gradient(135deg, #9333ea, #6b21a8); margin-top: 5px;" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
+                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
+            </div>
+
+            <!-- New Settings: Audio & Theme -->
+            <div class="card">
+                <h3>🎵 دەنگ و مۆسیقا و ڕوکار</h3>
+                
+                <div class="setting-row">
+                    <span>بڕینی دەنگی یاری (Sound Effects)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="soundToggle" onchange="toggleSoundSetting()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row" style="margin-top: 10px;">
+                    <span>بڕینی مۆسیقای پاشبنە (Background Music)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="musicToggle" onchange="toggleMusicSetting()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div style="margin-top: 12px;">
+                    <label>گۆڕینی ڕەنگی سەرەکی (Theme)</label>
+                    <div class="theme-options">
+                        <div class="theme-btn theme-purple" onclick="setAppTheme('purple')">مۆر</div>
+                        <div class="theme-btn theme-blue" onclick="setAppTheme('blue')">شین</div>
+                        <div class="theme-btn theme-emerald" onclick="setAppTheme('emerald')">سەوز</div>
+                    </div>
+                </div>
             </div>
 
             <div class="card" style="border-color: #f87171;">
@@ -301,7 +395,7 @@
                 <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 5px;" onclick="logoutUser()">دەرچوون</button>
             </div>
 
-            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
+            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
         </div>
     </div>
 
@@ -558,6 +652,7 @@
         window.xoGameActive = true;
 
         window.onload = function() {
+            loadSavedSettings();
             let savedUser = localStorage.getItem("top_top_active_user");
             if (savedUser && localStorage.getItem("user_profile_" + savedUser)) {
                 currentUser = savedUser;
@@ -738,6 +833,32 @@
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
             alert("نوێکرایەوە!");
             loadUserData();
+        }
+
+        /* Settings Actions: Sound, Music, Theme */
+        function toggleSoundSetting() {
+            let isMuted = document.getElementById("soundToggle").checked;
+            localStorage.setItem("toptop_sound_muted", isMuted);
+        }
+
+        function toggleMusicSetting() {
+            let isMuted = document.getElementById("musicToggle").checked;
+            localStorage.setItem("toptop_music_muted", isMuted);
+        }
+
+        function setAppTheme(themeName) {
+            document.body.setAttribute("data-theme", themeName);
+            localStorage.setItem("toptop_theme", themeName);
+        }
+
+        function loadSavedSettings() {
+            let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
+            let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
+            let savedTheme = localStorage.getItem("toptop_theme") || "purple";
+
+            document.getElementById("soundToggle").checked = soundMuted;
+            document.getElementById("musicToggle").checked = musicMuted;
+            document.body.setAttribute("data-theme", savedTheme);
         }
 
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
