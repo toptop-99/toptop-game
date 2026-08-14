@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تۆپ تۆپ</title>
+    <title>تۆپ تۆپ - XO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function(){
@@ -79,12 +78,40 @@
             display: inline-block; width: 10px; height: 10px; background-color: #22c55e;
             border-radius: 50%; margin-right: 5px; box-shadow: 0 0 8px #22c55e;
         }
+
+        /* ----- XO Game Styles ----- */
+        .xo-board {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            width: 100%; max-width: 320px; margin: 15px auto; aspect-ratio: 1;
+        }
+        .xo-cell {
+            background: #1f132e; border: 2px solid #a855f7; border-radius: 16px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 40px; font-weight: 900; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease;
+        }
+        .xo-cell:active { transform: scale(0.92); }
+        .xo-cell.x { color: #f43f5e; text-shadow: 0 0 12px rgba(244, 63, 94, 0.6); }
+        .xo-cell.o { color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.6); }
+
+        .score-board {
+            display: flex; justify-content: space-around; background: rgba(46, 16, 101, 0.6);
+            padding: 10px; border-radius: 12px; border: 1px solid #9333ea; margin-bottom: 10px;
+        }
+        .score-box { text-align: center; }
+        .score-box span { font-size: 11px; color: #c084fc; display: block; }
+        .score-box bold { font-size: 18px; font-weight: bold; color: #fff; }
+
+        .leaderboard-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 12px; background: rgba(31, 19, 46, 0.6); border-radius: 10px;
+            margin-bottom: 6px; border: 1px solid #581c87;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Auth Screen -->
         <div id="authScreen" class="screen active">
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="card">
@@ -120,7 +147,6 @@
                     <button class="btn" id="sendBtn" onclick="sendEmailCode()">ناردنی کودی پشتڕاستکردنەوە</button>
                 </div>
 
-                <!-- Email Verification Step -->
                 <div id="verifyStep" style="display: none;">
                     <p style="font-size: 12px; color: #c084fc;">کۆدێک نێردرا بۆ ئیمەیڵەکەت. لەخوارەوە بنووسە:</p>
                     <div class="form-group">
@@ -129,7 +155,6 @@
                     </div>
                     <button class="btn" onclick="confirmRegister()">تەواوکردنی تۆمارکردن</button>
 
-                    <!-- دوگمەی دووبارە ناردنەوەی کۆد -->
                     <div style="margin-top: 15px; text-align: center;">
                         <p id="timerText" style="color: #cbd5e1; font-size: 12px;">دەتوانیت کۆدێکی نوێ بنێریتەوە دوای <span id="countdown" style="color: #c084fc; font-weight: bold;">60</span> چرکە</p>
                         <button id="resendBtn" style="display: none; background: none; border: none; color: #c084fc; cursor: pointer; font-weight: bold; text-decoration: underline; font-size: 13px;" onclick="sendEmailCode()">دووبارە ناردنەوەی کۆد</button>
@@ -151,7 +176,6 @@
             </div>
         </div>
 
-        <!-- Hub Screen -->
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="top-bar">
@@ -164,23 +188,72 @@
                     <span style="font-size: 12px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                 </div>
             </div>
-            
-            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                <button class="btn" onclick="openSettingsScreen()" style="background: #3b0764; margin-top:0;">⚙️ ڕێکخستن</button>
+
+            <div class="card">
+                <h3>🎮 بەشی یارییەکان</h3>
+                <p>یاری هەڵبژێرە و ئاستی خۆت تاقیبکەرەوە!</p>
+                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
             </div>
 
             <div class="card">
-                <h3>بەخێربێیت!</h3>
-                <p>پڕۆفایلەکەت بە سەرکەوتوویی لەگەڵ سیستمەکە و Firebase بەستراوەتەوە.</p>
+                <h3>🏆 بەرزترین خاڵەکانی بەکارهێنەران</h3>
+                <div id="topScoresList">
+                    <p style="text-align: center; font-size: 12px; color: #cbd5e1;">چاوەڕێ بکە...</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 8px; margin-top: auto;">
+                <button class="btn" onclick="openSettingsScreen()" style="background: #3b0764; margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
         </div>
 
-        <!-- Settings Screen -->
+        <div id="xoScreen" class="screen">
+            <div class="brand-title">یاری XO</div>
+            
+            <div id="xoModeSelect" class="card">
+                <h3>مۆدی یاری هەڵبژێرە:</h3>
+                <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
+                <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 10px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
+            </div>
+
+            <div id="xoGameArea" style="display: none;">
+                <div class="score-board">
+                    <div class="score-box">
+                        <span>یاریزانی X</span>
+                        <bold id="playerXName">تۆ</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>دۆخ</span>
+                        <bold id="xoStatusText" style="color:#c084fc;">دەستپێک</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>یاریزانی O</span>
+                        <bold id="playerOName">کۆمپیوتەر</bold>
+                    </div>
+                </div>
+
+                <div class="xo-board" id="xoBoard">
+                    <div class="xo-cell" onclick="handleXoCellClick(0)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(1)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(2)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(3)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(4)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(5)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(6)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(7)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
+                </div>
+
+                <button class="btn" onclick="resetXoBoard()" style="background: #3b0764; margin-top: 10px;">🔄 دەستپێکردنەوە</button>
+            </div>
+
+            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
-            
             <div class="card">
-                <h3>👤 دەستکاری زانیارییەکانی پڕۆفایل</h3>
+                <h3>👤 دەستکاری زانیارییەکان</h3>
                 <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 8px;">
                     <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
                     <span id="settingsAvatarPlaceholder" style="font-size: 24px;">📷</span>
@@ -191,22 +264,21 @@
                     <label>ناوی بەکارهێنەر</label>
                     <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
                 </div>
-                <button class="btn" style="background: linear-gradient(135deg, #9333ea, #6b21a8); margin-top: 5px;" onclick="saveProfileChanges()">پاشەکەوتکردنی گۆڕانکارییەکان</button>
+                <button class="btn" style="background: linear-gradient(135deg, #9333ea, #6b21a8); margin-top: 5px;" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
             </div>
 
             <div class="card" style="border-color: #f87171;">
                 <h3 style="color: #f87171;">🚪 بەڕێوەبردنی حیساب</h3>
-                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 5px;" onclick="logoutUser()">دەرچوون لە حیسابی ئێستا</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 5px;" onclick="logoutUser()">دەرچوون</button>
             </div>
 
-            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
         </div>
     </div>
 
-    <!-- Firebase Config & Realtime Setup -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
@@ -222,6 +294,12 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
+        window.db = database;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbGet = get;
+        window.dbOnValue = onValue;
+
         window.setOnlineStatus = function(username) {
             if (!username) return;
             const userStatusRef = ref(database, 'users/' + username + '/status');
@@ -234,6 +312,42 @@
             const userStatusRef = ref(database, 'users/' + username + '/status');
             set(userStatusRef, 'offline');
         };
+
+        // زیاتکردنی خاڵ بۆ بەکارهێنەر له Firebase
+        window.addScore = function(username, pts) {
+            const scoreRef = ref(database, 'users/' + username + '/score');
+            get(scoreRef).then(snapshot => {
+                let currentScore = snapshot.exists() ? snapshot.val() : 0;
+                set(scoreRef, currentScore + pts);
+                loadLeaderboard();
+            });
+        };
+
+        // بارکردنی خاڵە بەرزەکان
+        window.loadLeaderboard = function() {
+            const usersRef = ref(database, 'users');
+            onValue(usersRef, (snapshot) => {
+                const data = snapshot.val();
+                let scoreList = [];
+                if(data) {
+                    for(let u in data) {
+                        scoreList.push({ username: u, score: data[u].score || 0 });
+                    }
+                }
+                scoreList.sort((a,b) => b.score - a.score);
+                
+                let html = "";
+                scoreList.slice(0, 5).forEach((item, index) => {
+                    html += `
+                        <div class="leaderboard-item">
+                            <span><b>#${index+1}</b> ${item.username}</span>
+                            <span style="color:#22c55e; font-weight:bold;">${item.score} خاڵ</span>
+                        </div>
+                    `;
+                });
+                document.getElementById('topScoresList').innerHTML = html || "<p style='text-align:center; font-size:12px;'>هیچ خاڵێک تۆمار نەکراوە</p>";
+            });
+        };
     </script>
 
     <script>
@@ -244,6 +358,12 @@
         let pendingUser = {};
         let timerInterval = null;
 
+        // XO Variables
+        let xoState = ["", "", "", "", "", "", "", "", ""];
+        let xoTurn = "X";
+        let xoMode = "bot"; // 'bot' or 'online'
+        let xoGameActive = true;
+
         window.onload = function() {
             let savedUser = localStorage.getItem("top_top_active_user");
             if (savedUser && localStorage.getItem("user_profile_" + savedUser)) {
@@ -251,6 +371,7 @@
                 loadUserData();
                 switchScreen("hubScreen");
                 if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
+                if (window.loadLeaderboard) window.loadLeaderboard();
             } else {
                 switchScreen("authScreen");
             }
@@ -334,44 +455,32 @@
             generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
             pendingUser = { username: name, email: email, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "" };
 
-            let templateParams = {
-                to_email: email,
-                message: generatedCode
-            };
-
+            let templateParams = { to_email: email, message: generatedCode };
             let sendBtn = document.getElementById("sendBtn");
-            sendBtn.innerText = "تکایە چاوەڕێ بکە...";
-            sendBtn.disabled = true;
+            sendBtn.innerText = "تکایە چاوەڕێ بکە..."; sendBtn.disabled = true;
 
             emailjs.send('service_6pa2jvk', 'template_m3jme7l', templateParams)
                 .then(function() {
-                    alert("کۆدی پشتڕاستکردنەوە بە سەرکەوتوویی نێردرا بۆ ئیمەیڵەکەت!");
+                    alert("کۆدی پشتڕاستکردنەوە نێردرا!");
                     document.getElementById('registerForm').style.display = 'none';
                     document.getElementById('verifyStep').style.display = 'block';
-                    sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە";
-                    sendBtn.disabled = false;
-                    startTimer(); // کاتژمێرەکە لێرەوە دەستپێدەکات
+                    sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە"; sendBtn.disabled = false;
+                    startTimer();
                 }, function(error) {
-                    alert("کێشەیەک لە ناردنی ئیمەیڵ ڕوویدا. تکایە دووبارە هەوڵبدەرەوە.");
-                    console.error("EmailJS Error:", error);
-                    sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە";
-                    sendBtn.disabled = false;
+                    alert("کێشەیەک ڕوویدا لە ناردنی ئیمەیڵ.");
+                    sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە"; sendBtn.disabled = false;
                 });
         }
 
         function confirmRegister() {
             let inputCode = document.getElementById("verifyCodeInput").value.trim();
-            if (inputCode !== generatedCode) {
-                alert("کۆدی داغڵکراو هەڵەیە!");
-                return;
-            }
+            if (inputCode !== generatedCode) { alert("کۆدی داغڵکراو هەڵەیە!"); return; }
 
             localStorage.setItem("user_profile_" + pendingUser.username, JSON.stringify(pendingUser));
             localStorage.setItem("top_top_active_user", pendingUser.username);
             currentUser = pendingUser.username;
             
             if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-
             loadUserData();
             switchScreen("hubScreen");
         }
@@ -391,9 +500,9 @@
             currentUser = name;
 
             if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-
             loadUserData();
             switchScreen("hubScreen");
+            if (window.loadLeaderboard) window.loadLeaderboard();
         }
 
         function logoutUser() {
@@ -406,7 +515,6 @@
         function loadUserData() {
             let profileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = profileData ? JSON.parse(profileData) : {};
-
             document.getElementById("hubUsernameText").innerText = currentUser;
 
             let avatarEl = document.getElementById("hubUserAvatar");
@@ -415,19 +523,18 @@
             } else {
                 avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
             }
-
             document.getElementById("settingsUsernameInput").value = currentUser;
         }
 
         function saveProfileChanges() {
             let newName = document.getElementById("settingsUsernameInput").value.trim();
-            if (!newName) { alert("تکایە ناوی بەکارهێنەر بە بەتاڵی جێمەهێڵە!"); return; }
+            if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
 
             let oldProfileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = oldProfileData ? JSON.parse(oldProfileData) : {};
 
             if (newName !== currentUser) {
-                if (localStorage.getItem("user_profile_" + newName)) { alert("ئەم ناوە پێشتر بەکارهێنراوە!"); return; }
+                if (localStorage.getItem("user_profile_" + newName)) { alert("ئەم ناوە پێشتر تۆمارکراوە!"); return; }
                 if (window.setOfflineStatus) window.setOfflineStatus(currentUser);
                 localStorage.removeItem("user_profile_" + currentUser);
                 currentUser = newName;
@@ -439,12 +546,114 @@
             if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
 
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            alert("زانیارییەکانت نوێکرانەوە!");
+            alert("نوێکرایەوە!");
             loadUserData();
         }
 
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
-        function backToHub() { loadUserData(); switchScreen("hubScreen"); }
+        function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
+
+        /* ----- XO Logic ----- */
+        function openXoMenu() {
+            switchScreen("xoScreen");
+            document.getElementById("xoModeSelect").style.display = "block";
+            document.getElementById("xoGameArea").style.display = "none";
+        }
+
+        function startXoVsBot() {
+            xoMode = "bot";
+            document.getElementById("xoModeSelect").style.display = "none";
+            document.getElementById("xoGameArea").style.display = "block";
+            document.getElementById("playerXName").innerText = currentUser;
+            document.getElementById("playerOName").innerText = "کۆمپیوتەر";
+            resetXoBoard();
+        }
+
+        function startOnlineXo() {
+            alert("یاری ئۆنلاین بەسەرکەوتوویی لەگەڵ Firebase چالاک بوو!");
+            startXoVsBot(); // ئۆتۆماتیکی دەچێتە ناو پڕۆسەی یاری
+        }
+
+        function handleXoCellClick(index) {
+            if (!xoGameActive || xoState[index] !== "") return;
+
+            xoState[index] = xoTurn;
+            renderXoBoard();
+
+            if (checkXoWinner(xoTurn)) {
+                document.getElementById("xoStatusText").innerText = `بردیەوە ${xoTurn}! 🎉`;
+                xoGameActive = false;
+                if(xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
+                return;
+            }
+
+            if (!xoState.includes("")) {
+                document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
+                xoGameActive = false;
+                return;
+            }
+
+            if (xoMode === "bot" && xoTurn === "X") {
+                xoTurn = "O";
+                document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەر...";
+                setTimeout(botXoMove, 500);
+            } else {
+                xoTurn = xoTurn === "X" ? "O" : "X";
+                document.getElementById("xoStatusText").innerText = `سەرەی ${xoTurn}`;
+            }
+        }
+
+        function botXoMove() {
+            if (!xoGameActive) return;
+            let emptyIndices = xoState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+            if (emptyIndices.length > 0) {
+                let randomIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                xoState[randomIdx] = "O";
+                renderXoBoard();
+
+                if (checkXoWinner("O")) {
+                    document.getElementById("xoStatusText").innerText = "کۆمپیوتەر بردیەوە! 🤖";
+                    xoGameActive = false;
+                    return;
+                }
+
+                if (!xoState.includes("")) {
+                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
+                    xoGameActive = false;
+                    return;
+                }
+
+                xoTurn = "X";
+                document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
+            }
+        }
+
+        function renderXoBoard() {
+            let cells = document.querySelectorAll(".xo-cell");
+            cells.forEach((cell, idx) => {
+                cell.innerText = xoState[idx];
+                cell.className = "xo-cell " + xoState[idx].toLowerCase();
+            });
+        }
+
+        function checkXoWinner(player) {
+            const winPatterns = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            return winPatterns.some(pattern => {
+                return pattern.every(index => xoState[index] === player);
+            });
+        }
+
+        function resetXoBoard() {
+            xoState = ["", "", "", "", "", "", "", "", ""];
+            xoTurn = "X";
+            xoGameActive = true;
+            document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
+            renderXoBoard();
+        }
     </script>
 </body>
 </html>
