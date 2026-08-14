@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
     
+    <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function(){
@@ -100,18 +101,33 @@
         }
         .score-box { text-align: center; }
         .score-box span { font-size: 11px; color: #c084fc; display: block; }
-        .score-box bold { font-size: 18px; font-weight: bold; color: #fff; }
+        .score-box bold { font-size: 16px; font-weight: bold; color: #fff; }
 
         .leaderboard-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 8px 12px; background: rgba(31, 19, 46, 0.6); border-radius: 10px;
             margin-bottom: 6px; border: 1px solid #581c87;
         }
+
+        /* ----- Loading Spinner for Matchmaking ----- */
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid rgba(192, 132, 252, 0.2);
+            border-top: 5px solid #a855f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- Auth Screen -->
         <div id="authScreen" class="screen active">
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="card">
@@ -176,6 +192,7 @@
             </div>
         </div>
 
+        <!-- Hub Screen -->
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="top-bar">
@@ -207,19 +224,30 @@
             </div>
         </div>
 
+        <!-- XO Menu & Game Screen -->
         <div id="xoScreen" class="screen">
             <div class="brand-title">یاری XO</div>
             
+            <!-- Mode Selection -->
             <div id="xoModeSelect" class="card">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
                 <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
                 <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 10px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
             </div>
 
+            <!-- Waiting Room / Matchmaking Spinner -->
+            <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 20px;">
+                <h3 style="color: #c084fc; font-size: 18px;">گەڕان بۆ یاریزان...</h3>
+                <div class="spinner"></div>
+                <p style="font-size: 13px; color: #cbd5e1;">تکایە چاوەڕێ بکە تا یاریزانی دووەم بەشدار دەبێت...</p>
+                <button class="btn" onclick="cancelMatchmaking()" style="background: #ef4444; margin-top: 15px;">پەشیمانبوونەوە</button>
+            </div>
+
+            <!-- XO Game Area -->
             <div id="xoGameArea" style="display: none;">
                 <div class="score-board">
                     <div class="score-box">
-                        <span>یاریزانی X</span>
+                        <span id="playerXTitle">یاریزانی X</span>
                         <bold id="playerXName">تۆ</bold>
                     </div>
                     <div class="score-box">
@@ -227,7 +255,7 @@
                         <bold id="xoStatusText" style="color:#c084fc;">دەستپێک</bold>
                     </div>
                     <div class="score-box">
-                        <span>یاریزانی O</span>
+                        <span id="playerOTitle">یاریزانی O</span>
                         <bold id="playerOName">کۆمپیوتەر</bold>
                     </div>
                 </div>
@@ -244,12 +272,13 @@
                     <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
                 </div>
 
-                <button class="btn" onclick="resetXoBoard()" style="background: #3b0764; margin-top: 10px;">🔄 دەستپێکردنەوە</button>
+                <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="background: #3b0764; margin-top: 10px;">🔄 دەستپێکردنەوە</button>
             </div>
 
-            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
+        <!-- Settings Screen -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
             <div class="card">
@@ -276,9 +305,10 @@
         </div>
     </div>
 
+    <!-- Firebase Config & Realtime Online Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
@@ -299,6 +329,8 @@
         window.dbSet = set;
         window.dbGet = get;
         window.dbOnValue = onValue;
+        window.dbRemove = remove;
+        window.dbUpdate = update;
 
         window.setOnlineStatus = function(username) {
             if (!username) return;
@@ -313,7 +345,6 @@
             set(userStatusRef, 'offline');
         };
 
-        // زیاتکردنی خاڵ بۆ بەکارهێنەر له Firebase
         window.addScore = function(username, pts) {
             const scoreRef = ref(database, 'users/' + username + '/score');
             get(scoreRef).then(snapshot => {
@@ -323,7 +354,6 @@
             });
         };
 
-        // بارکردنی خاڵە بەرزەکان
         window.loadLeaderboard = function() {
             const usersRef = ref(database, 'users');
             onValue(usersRef, (snapshot) => {
@@ -348,6 +378,144 @@
                 document.getElementById('topScoresList').innerHTML = html || "<p style='text-align:center; font-size:12px;'>هیچ خاڵێک تۆمار نەکراوە</p>";
             });
         };
+
+        /* ----- REALTIME ONLINE MATCHMAKING LOGIC ----- */
+        let currentRoomId = null;
+        let myRole = ""; // 'X' or 'O'
+        let roomUnsubscribe = null;
+
+        window.startOnlineMatchmaking = function(username) {
+            const lobbyRef = ref(database, 'xo_lobby');
+            get(lobbyRef).then((snapshot) => {
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
+                if (lobbyData) {
+                    for (let id in lobbyData) {
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].playerX !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
+                    }
+                }
+
+                if (waitingRoomId) {
+                    // بەشداربوون لە ژوورێکی ئامادەکراو
+                    currentRoomId = waitingRoomId;
+                    myRole = "O";
+                    update(ref(database, 'xo_lobby/' + currentRoomId), {
+                        playerO: username,
+                        status: 'playing'
+                    }).then(() => {
+                        listenToRoom(currentRoomId, username);
+                    });
+                } else {
+                    // دروستکردنی ژوورێکی نوێ
+                    currentRoomId = "room_" + Date.now();
+                    myRole = "X";
+                    const newRoomRef = ref(database, 'xo_lobby/' + currentRoomId);
+                    set(newRoomRef, {
+                        playerX: username,
+                        playerO: "",
+                        status: 'waiting',
+                        turn: 'X',
+                        board: ["", "", "", "", "", "", "", "", ""],
+                        winner: ""
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        listenToRoom(currentRoomId, username);
+                    });
+                }
+            });
+        };
+
+        function listenToRoom(roomId, username) {
+            const roomRef = ref(database, 'xo_lobby/' + roomId);
+            roomUnsubscribe = onValue(roomRef, (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                if (room.status === 'waiting') {
+                    document.getElementById("xoModeSelect").style.display = "none";
+                    document.getElementById("xoLobbyArea").style.display = "block";
+                    document.getElementById("xoGameArea").style.display = "none";
+                } else if (room.status === 'playing') {
+                    document.getElementById("xoModeSelect").style.display = "none";
+                    document.getElementById("xoLobbyArea").style.display = "none";
+                    document.getElementById("xoGameArea").style.display = "block";
+
+                    document.getElementById("playerXName").innerText = room.playerX;
+                    document.getElementById("playerOName").innerText = room.playerO;
+                    document.getElementById("xoResetBtn").style.display = "none"; // لە ژووری ئۆنلاین تەنها کاتێک تەواو بوو نوێ دەبێتەوە
+
+                    window.xoState = room.board || ["", "", "", "", "", "", "", "", ""];
+                    window.xoTurn = room.turn;
+                    window.renderXoBoard();
+
+                    if (room.winner) {
+                        if (room.winner === 'draw') {
+                            document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
+                        } else {
+                            let winnerName = room.winner === 'X' ? room.playerX : room.playerO;
+                            document.getElementById("xoStatusText").innerText = `بردیەوە ${winnerName}! 🎉`;
+                            if (room.winner === myRole) {
+                                window.addScore(username, 10);
+                            }
+                        }
+                        window.xoGameActive = false;
+                    } else {
+                        window.xoGameActive = true;
+                        if (room.turn === myRole) {
+                            document.getElementById("xoStatusText").innerText = "سەرەی تۆیە! 🎯";
+                        } else {
+                            let turnName = room.turn === 'X' ? room.playerX : room.playerO;
+                            document.getElementById("xoStatusText").innerText = `سەرەی ${turnName}`;
+                        }
+                    }
+                }
+            });
+        }
+
+        window.sendOnlineMove = function(index) {
+            if (!currentRoomId) return;
+            if (window.xoTurn !== myRole) {
+                alert("چاوەڕێ بکە، هێشتا سەرەی تۆ نییە!");
+                return;
+            }
+
+            let newBoard = [...window.xoState];
+            newBoard[index] = myRole;
+            let nextTurn = myRole === 'X' ? 'O' : 'X';
+            let winner = "";
+
+            if (window.checkXoWinnerLocal(newBoard, myRole)) {
+                winner = myRole;
+            } else if (!newBoard.includes("")) {
+                winner = "draw";
+            }
+
+            update(ref(database, 'xo_lobby/' + currentRoomId), {
+                board: newBoard,
+                turn: nextTurn,
+                winner: winner
+            });
+        };
+
+        window.cancelMatchmaking = function() {
+            if (currentRoomId) {
+                remove(ref(database, 'xo_lobby/' + currentRoomId));
+                currentRoomId = null;
+            }
+            document.getElementById("xoLobbyArea").style.display = "none";
+            document.getElementById("xoModeSelect").style.display = "block";
+        };
+
+        window.leaveOnlineRoom = function() {
+            if (currentRoomId) {
+                remove(ref(database, 'xo_lobby/' + currentRoomId));
+                currentRoomId = null;
+            }
+        };
     </script>
 
     <script>
@@ -359,10 +527,10 @@
         let timerInterval = null;
 
         // XO Variables
-        let xoState = ["", "", "", "", "", "", "", "", ""];
-        let xoTurn = "X";
+        window.xoState = ["", "", "", "", "", "", "", "", ""];
+        window.xoTurn = "X";
         let xoMode = "bot"; // 'bot' or 'online'
-        let xoGameActive = true;
+        window.xoGameActive = true;
 
         window.onload = function() {
             let savedUser = localStorage.getItem("top_top_active_user");
@@ -553,106 +721,119 @@
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
-        /* ----- XO Logic ----- */
+        /* ----- XO Game Logic ----- */
         function openXoMenu() {
             switchScreen("xoScreen");
             document.getElementById("xoModeSelect").style.display = "block";
+            document.getElementById("xoLobbyArea").style.display = "none";
             document.getElementById("xoGameArea").style.display = "none";
         }
 
         function startXoVsBot() {
             xoMode = "bot";
             document.getElementById("xoModeSelect").style.display = "none";
+            document.getElementById("xoLobbyArea").style.display = "none";
             document.getElementById("xoGameArea").style.display = "block";
+            document.getElementById("xoResetBtn").style.display = "block";
             document.getElementById("playerXName").innerText = currentUser;
             document.getElementById("playerOName").innerText = "کۆمپیوتەر";
             resetXoBoard();
         }
 
         function startOnlineXo() {
-            alert("یاری ئۆنلاین بەسەرکەوتوویی لەگەڵ Firebase چالاک بوو!");
-            startXoVsBot(); // ئۆتۆماتیکی دەچێتە ناو پڕۆسەی یاری
+            xoMode = "online";
+            if (window.startOnlineMatchmaking) {
+                window.startOnlineMatchmaking(currentUser);
+            }
         }
 
         function handleXoCellClick(index) {
-            if (!xoGameActive || xoState[index] !== "") return;
+            if (!window.xoGameActive || window.xoState[index] !== "") return;
 
-            xoState[index] = xoTurn;
-            renderXoBoard();
-
-            if (checkXoWinner(xoTurn)) {
-                document.getElementById("xoStatusText").innerText = `بردیەوە ${xoTurn}! 🎉`;
-                xoGameActive = false;
-                if(xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
-                return;
-            }
-
-            if (!xoState.includes("")) {
-                document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
-                xoGameActive = false;
-                return;
-            }
-
-            if (xoMode === "bot" && xoTurn === "X") {
-                xoTurn = "O";
-                document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەر...";
-                setTimeout(botXoMove, 500);
+            if (xoMode === "online") {
+                window.sendOnlineMove(index);
             } else {
-                xoTurn = xoTurn === "X" ? "O" : "X";
-                document.getElementById("xoStatusText").innerText = `سەرەی ${xoTurn}`;
+                window.xoState[index] = window.xoTurn;
+                window.renderXoBoard();
+
+                if (window.checkXoWinnerLocal(window.xoState, window.xoTurn)) {
+                    document.getElementById("xoStatusText").innerText = `بردیەوە ${window.xoTurn}! 🎉`;
+                    window.xoGameActive = false;
+                    if(window.xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
+                    return;
+                }
+
+                if (!window.xoState.includes("")) {
+                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
+                    window.xoGameActive = false;
+                    return;
+                }
+
+                if (window.xoTurn === "X") {
+                    window.xoTurn = "O";
+                    document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەر...";
+                    setTimeout(botXoMove, 500);
+                }
             }
         }
 
         function botXoMove() {
-            if (!xoGameActive) return;
-            let emptyIndices = xoState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+            if (!window.xoGameActive) return;
+            let emptyIndices = window.xoState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
             if (emptyIndices.length > 0) {
                 let randomIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-                xoState[randomIdx] = "O";
-                renderXoBoard();
+                window.xoState[randomIdx] = "O";
+                window.renderXoBoard();
 
-                if (checkXoWinner("O")) {
+                if (window.checkXoWinnerLocal(window.xoState, "O")) {
                     document.getElementById("xoStatusText").innerText = "کۆمپیوتەر بردیەوە! 🤖";
-                    xoGameActive = false;
+                    window.xoGameActive = false;
                     return;
                 }
 
-                if (!xoState.includes("")) {
+                if (!window.xoState.includes("")) {
                     document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
-                    xoGameActive = false;
+                    window.xoGameActive = false;
                     return;
                 }
 
-                xoTurn = "X";
+                window.xoTurn = "X";
                 document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
             }
         }
 
-        function renderXoBoard() {
+        window.renderXoBoard = function() {
             let cells = document.querySelectorAll(".xo-cell");
             cells.forEach((cell, idx) => {
-                cell.innerText = xoState[idx];
-                cell.className = "xo-cell " + xoState[idx].toLowerCase();
+                cell.innerText = window.xoState[idx];
+                cell.className = "xo-cell " + window.xoState[idx].toLowerCase();
             });
-        }
+        };
 
-        function checkXoWinner(player) {
+        window.checkXoWinnerLocal = function(board, player) {
             const winPatterns = [
                 [0,1,2], [3,4,5], [6,7,8],
                 [0,3,6], [1,4,7], [2,5,8],
                 [0,4,8], [2,4,6]
             ];
             return winPatterns.some(pattern => {
-                return pattern.every(index => xoState[index] === player);
+                return pattern.every(index => board[index] === player);
             });
-        }
+        };
 
         function resetXoBoard() {
-            xoState = ["", "", "", "", "", "", "", "", ""];
-            xoTurn = "X";
-            xoGameActive = true;
+            window.xoState = ["", "", "", "", "", "", "", "", ""];
+            window.xoTurn = "X";
+            window.xoGameActive = true;
             document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
-            renderXoBoard();
+            window.renderXoBoard();
+        }
+
+        function leaveXoGame() {
+            if (xoMode === "online" && window.leaveOnlineRoom) {
+                window.leaveOnlineRoom();
+            }
+            backToHub();
         }
     </script>
 </body>
