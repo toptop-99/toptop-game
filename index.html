@@ -400,7 +400,6 @@
                 }
 
                 if (waitingRoomId) {
-                    // بەشداربوون لە ژوورێکی ئامادەکراو
                     currentRoomId = waitingRoomId;
                     myRole = "O";
                     update(ref(database, 'xo_lobby/' + currentRoomId), {
@@ -410,7 +409,6 @@
                         listenToRoom(currentRoomId, username);
                     });
                 } else {
-                    // دروستکردنی ژوورێکی نوێ
                     currentRoomId = "room_" + Date.now();
                     myRole = "X";
                     const newRoomRef = ref(database, 'xo_lobby/' + currentRoomId);
@@ -446,7 +444,7 @@
 
                     document.getElementById("playerXName").innerText = room.playerX;
                     document.getElementById("playerOName").innerText = room.playerO;
-                    document.getElementById("xoResetBtn").style.display = "none"; // لە ژووری ئۆنلاین تەنها کاتێک تەواو بوو نوێ دەبێتەوە
+                    document.getElementById("xoResetBtn").style.display = "none";
 
                     window.xoState = room.board || ["", "", "", "", "", "", "", "", ""];
                     window.xoTurn = room.turn;
@@ -529,7 +527,7 @@
         // XO Variables
         window.xoState = ["", "", "", "", "", "", "", "", ""];
         window.xoTurn = "X";
-        let xoMode = "bot"; // 'bot' or 'online'
+        let xoMode = "bot";
         window.xoGameActive = true;
 
         window.onload = function() {
@@ -611,6 +609,7 @@
             }, 1000);
         }
 
+        /* 🔴 ئەمەش بەشە چاککراوەکەیە بۆ ناردنی ئیمەیڵ 🔴 */
         function sendEmailCode() {
             let name = document.getElementById("regUsername").value.trim();
             let email = document.getElementById("regEmail").value.trim();
@@ -623,19 +622,26 @@
             generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
             pendingUser = { username: name, email: email, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "" };
 
-            let templateParams = { to_email: email, message: generatedCode };
+            // ڕێکخستنی ناوی کلیلی زانیارییەکان ڕێک وەک وەڵامی EmailJS
+            let templateParams = { 
+                to_email: email, 
+                user_name: name,
+                message: generatedCode 
+            };
+
             let sendBtn = document.getElementById("sendBtn");
             sendBtn.innerText = "تکایە چاوەڕێ بکە..."; sendBtn.disabled = true;
 
             emailjs.send('service_6pa2jvk', 'template_m3jme7l', templateParams)
-                .then(function() {
+                .then(function(response) {
                     alert("کۆدی پشتڕاستکردنەوە نێردرا!");
                     document.getElementById('registerForm').style.display = 'none';
                     document.getElementById('verifyStep').style.display = 'block';
                     sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە"; sendBtn.disabled = false;
                     startTimer();
                 }, function(error) {
-                    alert("کێشەیەک ڕوویدا لە ناردنی ئیمەیڵ.");
+                    console.error("کێشەی EmailJS:", error);
+                    alert("کێشەیەک ڕوویدا لە ناردنی ئیمەیڵ: " + JSON.stringify(error));
                     sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە"; sendBtn.disabled = false;
                 });
         }
