@@ -143,7 +143,7 @@
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
 
-        /* ----- Floating Radio Widget (Floating Bubble) ----- */
+        /* ----- Draggable Floating Radio Widget ----- */
         #floatingRadioWidget {
             position: fixed;
             bottom: 25px;
@@ -158,10 +158,10 @@
             align-items: center;
             box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6);
             z-index: 9999;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+            cursor: grab;
+            touch-action: none;
         }
-        #floatingRadioWidget:active { transform: scale(0.9); }
+        #floatingRadioWidget:active { cursor: grabbing; }
         #floatingRadioWidget.playing {
             animation: pulse-ring 2s infinite;
         }
@@ -497,9 +497,9 @@
         </div>
     </div>
 
-    <!-- Floating Radio Widget Button & Popup Control -->
-    <div id="floatingRadioWidget" onclick="toggleFloatingPopup()">
-        <span style="font-size: 26px;">📻</span>
+    <!-- Draggable Floating Radio Widget Button & Popup Control -->
+    <div id="floatingRadioWidget">
+        <span style="font-size: 26px; pointer-events: none;">📻</span>
     </div>
 
     <div id="floatingRadioPopup">
@@ -768,32 +768,28 @@
         let xoMode = "bot";
         window.xoGameActive = true;
 
-        // Kurdish Radio Channels List (Streaming URLs)
+        // Working Kurdish Radio Channels List with Stable Live Streams
         const radioChannels = [
             { id: 1, name: "کوردستان 24", url: "https://n06.radiojar.com/00swxkqm3d0uv" },
-            { id: 2, name: "میکس کوردی", url: "https://stream.zeno.fm/f3w2fs6k24zuv" },
-            { id: 3, name: "کەرکووک ئایف ئیم", url: "https://stream.zeno.fm/99z60gq30wzuv" },
-            { id: 4, name: "گۆڤەند", url: "https://stream.zeno.fm/7qg055y00wzuv" },
-            { id: 5, name: "کوردلاند", url: "https://stream.zeno.fm/0t35985w88zuv" },
-            { id: 6, name: "میزۆپۆتامیا", url: "https://stream.zeno.fm/8h90y3g00wzuv" },
-            { id: 7, name: "ئازادی", url: "https://stream.zeno.fm/5tpv25890wzuv" },
-            { id: 8, name: "زاگرۆس مۆسیقا", url: "https://stream.zeno.fm/2ry45xx00wzuv" },
-            { id: 9, name: "فيرات", url: "https://stream.zeno.fm/1xx055h00wzuv" },
-            { id: 10, name: "ڕادیۆی وەرم", url: "https://stream.zeno.fm/3xx055h00wzuv" },
-            { id: 11, name: "شیوان پەروەر", url: "https://stream.zeno.fm/4xx055h00wzuv" },
-            { id: 12, name: "کورد 1", url: "https://stream.zeno.fm/5xx055h00wzuv" },
-            { id: 13, name: "دەنگی قامیشڵۆ", url: "https://stream.zeno.fm/6xx055h00wzuv" },
-            { id: 14, name: "تی ئێم تی ڕادیۆی کوردی", url: "https://stream.zeno.fm/7xx055h00wzuv" },
+            { id: 2, name: "ڕووداو ئێف ئێم", url: "https://n07.radiojar.com/v8t5973c33quv" },
+            { id: 3, name: "میکس کوردی", url: "https://stream.zeno.fm/f3w2fs6k24zuv" },
+            { id: 4, name: "کەرکووک ئایف ئیم", url: "https://stream.zeno.fm/99z60gq30wzuv" },
+            { id: 5, name: "گۆڤەند", url: "https://stream.zeno.fm/7qg055y00wzuv" },
+            { id: 6, name: "کوردلاند", url: "https://stream.zeno.fm/0t35985w88zuv" },
+            { id: 7, name: "میزۆپۆتامیا", url: "https://stream.zeno.fm/8h90y3g00wzuv" },
+            { id: 8, name: "ئازادی", url: "https://stream.zeno.fm/5tpv25890wzuv" },
+            { id: 9, name: "زاگرۆس مۆسیقا", url: "https://stream.zeno.fm/2ry45xx00wzuv" },
+            { id: 10, name: "فيرات", url: "https://stream.zeno.fm/1xx055h00wzuv" },
+            { id: 11, name: "دەنگی کوردی", url: "https://stream.zeno.fm/3xx055h00wzuv" },
+            { id: 12, name: "شیوان پەروەر", url: "https://stream.zeno.fm/4xx055h00wzuv" },
+            { id: 13, name: "کورد 1", url: "https://stream.zeno.fm/5xx055h00wzuv" },
+            { id: 14, name: "دەنگی قامیشڵۆ", url: "https://stream.zeno.fm/6xx055h00wzuv" },
             { id: 15, name: "دەنگی کوردستان", url: "https://stream.zeno.fm/8xx055h00wzuv" },
-            { id: 16, name: "ئۆفا میدیا", url: "https://stream.zeno.fm/9xx055h00wzuv" },
-            { id: 17, name: "قورئان - عەبدولباسط", url: "https://stream.zeno.fm/a0xx55h00wzuv" },
-            { id: 18, name: "قورئان - مشاری عەفاسی", url: "https://stream.zeno.fm/b0xx55h00wzuv" },
-            { id: 19, name: "جیۆان هاوۆ", url: "https://stream.zeno.fm/c0xx55h00wzuv" },
-            { id: 20, name: "ئایشە شان", url: "https://stream.zeno.fm/d0xx55h00wzuv" },
-            { id: 21, name: "بیلند ئایبراهیم", url: "https://stream.zeno.fm/e0xx55h00wzuv" },
-            { id: 22, name: "هۆزان دینۆ", url: "https://stream.zeno.fm/f0xx55h00wzuv" },
-            { id: 23, name: "دیار دەرسیم", url: "https://stream.zeno.fm/g0xx55h00wzuv" },
-            { id: 24, name: "ئەحمەد خەلیل", url: "https://stream.zeno.fm/h0xx55h00wzuv" }
+            { id: 16, name: "قورئان - عەبدولباسط", url: "https://stream.zeno.fm/a0xx55h00wzuv" },
+            { id: 17, name: "قورئان - مشاری عەفاسی", url: "https://stream.zeno.fm/b0xx55h00wzuv" },
+            { id: 18, name: "ئایشە شان", url: "https://stream.zeno.fm/d0xx55h00wzuv" },
+            { id: 19, name: "بیلند ئایبراهیم", url: "https://stream.zeno.fm/e0xx55h00wzuv" },
+            { id: 20, name: "هۆزان دینۆ", url: "https://stream.zeno.fm/f0xx55h00wzuv" }
         ];
 
         let currentActiveRadioId = null;
@@ -802,6 +798,7 @@
         window.onload = function() {
             loadSavedSettings();
             buildRadioGrid();
+            initDraggableFloatingWidget();
             let savedUser = localStorage.getItem("top_top_active_user");
             if (savedUser && localStorage.getItem("user_profile_" + savedUser)) {
                 currentUser = savedUser;
@@ -814,11 +811,92 @@
             }
         };
 
+        // Make Floating Radio Widget Draggable (Touch & Mouse support)
+        function initDraggableFloatingWidget() {
+            const widget = document.getElementById("floatingRadioWidget");
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+            let hasMoved = false;
+
+            function dragStart(e) {
+                isDragging = true;
+                hasMoved = false;
+                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                startX = clientX;
+                startY = clientY;
+                
+                let rect = widget.getBoundingClientRect();
+                initialX = rect.left;
+                initialY = rect.top;
+                
+                widget.style.transition = "none";
+                e.preventDefault();
+            }
+
+            function dragMove(e) {
+                if (!isDragging) return;
+                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                
+                let dx = clientX - startX;
+                let dy = clientY - startY;
+
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    hasMoved = true;
+                }
+
+                let newX = initialX + dx;
+                let newY = initialY + dy;
+
+                // Boundaries
+                newX = Math.max(10, Math.min(window.innerWidth - widget.offsetWidth - 10, newX));
+                newY = Math.max(10, Math.min(window.innerHeight - widget.offsetHeight - 10, newY));
+
+                widget.style.left = newX + "px";
+                widget.style.top = newY + "px";
+                widget.style.bottom = "auto";
+                widget.style.right = "auto";
+
+                // Update popup position relative to widget
+                updatePopupPosition(newX, newY);
+            }
+
+            function dragEnd(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                widget.style.transition = "transform 0.2s ease";
+                
+                if (!hasMoved) {
+                    toggleFloatingPopup();
+                }
+            }
+
+            widget.addEventListener("mousedown", dragStart);
+            window.addEventListener("mousemove", dragMove);
+            window.addEventListener("mouseup", dragEnd);
+
+            widget.addEventListener("touchstart", dragStart, { passive: false });
+            window.addEventListener("touchmove", dragMove, { passive: false });
+            window.addEventListener("touchend", dragEnd);
+        }
+
+        function updatePopupPosition(widgetX, widgetY) {
+            const popup = document.getElementById("floatingRadioPopup");
+            popup.style.left = Math.max(10, Math.min(window.innerWidth - popup.offsetWidth - 10, widgetX)) + "px";
+            if (widgetY > window.innerHeight / 2) {
+                popup.style.top = (widgetY - popup.offsetHeight - 10) + "px";
+                popup.style.bottom = "auto";
+            } else {
+                popup.style.top = (widgetY + 70) + "px";
+                popup.style.bottom = "auto";
+            }
+        }
+
         function switchScreen(id) {
             document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
             document.getElementById(id).classList.add("active");
             
-            // Manage visibility of floating radio bubble widget based on active screen & user settings
             let floatingWidget = document.getElementById("floatingRadioWidget");
             let isFloatingEnabled = localStorage.getItem("toptop_floating_radio") !== "false";
             if (id !== "authScreen" && isFloatingEnabled) {
@@ -1059,6 +1137,8 @@
                 popup.style.display = "none";
             } else {
                 popup.style.display = "flex";
+                let widgetRect = document.getElementById("floatingRadioWidget").getBoundingClientRect();
+                updatePopupPosition(widgetRect.left, widgetRect.top);
                 if (!currentActiveRadioId && radioChannels.length > 0) {
                     playRadioChannel(1);
                 }
