@@ -12,8 +12,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function(){
-            // تکایە PUBLIC_KEY ی تایبەت بە EmailJS خۆت لێرە دابنێ
-            emailjs.init("YOUR_PUBLIC_KEY");
+            // Public Key تایبەت بە EmailJS خۆت
+            emailjs.init("P3DqvBZw2V6ukgCYl");
         })();
     </script>
 
@@ -118,7 +118,7 @@
                         <label>وشەی نهێنی</label>
                         <input type="password" id="regPassword" placeholder="وشەی نهێنی...">
                     </div>
-                    <button class="btn" onclick="sendEmailCode()">ناردنی کودی پشتڕاستکردنەوە</button>
+                    <button class="btn" id="sendBtn" onclick="sendEmailCode()">ناردنی کودی پشتڕاستکردنەوە</button>
                 </div>
 
                 <!-- Email Verification Step -->
@@ -198,20 +198,21 @@
         </div>
     </div>
 
-    <!-- Firebase Imports -->
+    <!-- Firebase Config & Realtime Setup -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Firebase Configuration (داتاکانی خۆت بەکاربهێنە کە لە Firebase ڕێکخستووە)
+        // زانیارییە سەرەکییەکانی Firebase پڕۆژەکەت
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
+            authDomain: "toptop-game-4e89f.firebaseapp.com",
+            databaseURL: "https://toptop-game-4e89f-default-rtdb.firebaseio.com",
+            projectId: "toptop-game-4e89f",
+            storageBucket: "toptop-game-4e89f.firebasestorage.app",
+            messagingSenderId: "786973684229",
+            appId: "1:786973684229:web:d538d04675995a018fa26c",
+            measurementId: "G-D8ZC6KD54S"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -307,29 +308,32 @@
             if (!name || !email || !pass) { alert("تکایە هەموو خانەکان پڕبکەرەوە!"); return; }
             if (localStorage.getItem("user_profile_" + name)) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
 
+            // دروستکردنی کۆدی ٦ ژمارەیی
             generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
             pendingUser = { username: name, email: email, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "" };
 
-            // ناردنی کۆد لەڕێگەی EmailJS
             let templateParams = {
                 to_email: email,
-                to_name: name,
-                message: "کۆدی پشتڕاستکردنەوەی تۆپ تۆپ: " + generatedCode
+                message: generatedCode
             };
 
-            /*
-               تێبینی: بۆ چالاککردنی ناردنی ئیمەیڵ، پێویستە سرویس و تەمپڵێت لە EmailJS دروست بکەیت
-               و زانیارییەکان لە شوێنی 'YOUR_SERVICE_ID' و 'YOUR_TEMPLATE_ID' دابنێیت.
-            */
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+            let sendBtn = document.getElementById("sendBtn");
+            sendBtn.innerText = "تکایە چاوەڕێ بکە...";
+            sendBtn.disabled = true;
+
+            // ناردنی ئیمەیڵ لەڕێگەی EmailJS
+            emailjs.send('service_6pa2jvk', 'template_m3jme7l', templateParams)
                 .then(function() {
-                    alert("کۆدی پشتڕاستکردنەوە نێردرا بۆ ئیمەیڵەکەت!");
+                    alert("کۆدی پشتڕاستکردنەوە بە سەرکەوتوویی نێردرا بۆ ئیمەیڵەکەت!");
                     document.getElementById('registerForm').style.display = 'none';
                     document.getElementById('verifyStep').style.display = 'block';
+                    sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە";
+                    sendBtn.disabled = false;
                 }, function(error) {
-                    alert("ناردنی ئیمەیڵ سەرکەوتوو نەبوو (کۆدی تاقیکردنەوە: " + generatedCode + ")");
-                    document.getElementById('registerForm').style.display = 'none';
-                    document.getElementById('verifyStep').style.display = 'block';
+                    alert("کێشەیەک لە ناردنی ئیمەیڵ ڕوویدا. تکایە دووبارە هەوڵبدەرەوە.");
+                    console.error("EmailJS Error:", error);
+                    sendBtn.innerText = "ناردنی کودی پشتڕاستکردنەوە";
+                    sendBtn.disabled = false;
                 });
         }
 
