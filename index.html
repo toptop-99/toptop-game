@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تۆپ تۆپ - دۆمینەی ئۆنلاین (ئەزنیف)</title>
+    <title>تۆپ تۆپ - گەمینگ هوب</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
@@ -12,102 +12,138 @@
         * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
         html, body {
             width: 100vw; height: 100vh; margin: 0; padding: 0;
-            background-color: #0c0a09; color: #f8fafc;
+            background-color: #e62020; color: #f8fafc;
             font-family: 'Noto Sans Arabic', sans-serif;
             overflow: hidden; touch-action: manipulation;
         }
         .container {
             width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, #1c1917, #0c0a09);
+            background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
             display: flex; flex-direction: column; padding: 12px; position: relative; overflow: hidden;
         }
+        
+        /* Nav Header */
+        .app-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 12px; background: rgba(0,0,0,0.25); border-radius: 16px;
+            backdrop-filter: blur(10px); margin-bottom: 12px;
+        }
         .brand-title {
-            text-align: center; font-size: 24px; font-weight: 900;
-            background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin: 2px 0 8px 0; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
-        }
-        .screen { display: none; flex: 1; flex-direction: column; height: 100%; overflow-y: auto; padding-bottom: 20px; }
-        .screen.active { display: flex; }
-        .form-group { margin-bottom: 10px; text-align: right; }
-        label { display: block; font-size: 11px; margin-bottom: 4px; color: #fcd34d; }
-        input, select {
-            width: 100%; padding: 10px 12px; background: #27272a;
-            border: 1px solid #d97706; border-radius: 10px; color: #fff;
-            font-size: 13px; outline: none; font-family: 'Noto Sans Arabic', sans-serif;
-        }
-        .btn {
-            width: 100%; background: linear-gradient(135deg, #d97706, #b45309);
-            color: #ffffff; border: none; padding: 11px; font-size: 14px;
-            font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 6px;
-            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); transition: transform 0.1s ease;
-        }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn:active { transform: scale(0.96); }
-        .btn-secondary {
-            background: linear-gradient(135deg, #3f3f46, #27272a);
-            border: 1px solid #71717a;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            margin: 0;
         }
         
+        .screen { display: none; flex: 1; flex-direction: column; height: 100%; overflow-y: auto; padding-bottom: 20px; }
+        .screen.active { display: flex; }
+
+        /* Form Controls */
+        .card {
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px);
+            border-radius: 20px; padding: 16px; margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        .form-group { margin-bottom: 12px; text-align: right; }
+        label { display: block; font-size: 12px; margin-bottom: 4px; color: #fef08a; font-weight: bold; }
+        input {
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; color: #fff;
+            font-size: 14px; outline: none; font-family: 'Noto Sans Arabic', sans-serif;
+        }
+        .btn {
+            width: 100%; background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #78350f; border: none; padding: 12px; font-size: 15px;
+            font-weight: 900; border-radius: 12px; cursor: pointer; margin-top: 6px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.96); }
+        .btn-secondary { background: rgba(0, 0, 0, 0.4); color: #fff; box-shadow: none; }
+        .nav-back-btn {
+            background: rgba(255,255,255,0.2); border: none; color: white;
+            padding: 6px 12px; border-radius: 10px; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; gap: 4px; font-size: 12px;
+        }
+
+        /* Top User Profile Panel */
         .hub-header-panel {
-            background: rgba(39, 39, 42, 0.95); border: 1px solid #d97706;
-            border-radius: 14px; padding: 10px 14px; display: flex;
-            justify-content: space-between; align-items: center; margin-bottom: 10px;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.2);
+            background: rgba(0, 0, 0, 0.3); border-radius: 16px; padding: 10px 14px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
         }
         .hub-user-info { display: flex; align-items: center; gap: 10px; }
         .hub-avatar-box {
-            width: 38px; height: 38px; border-radius: 50%; background: #d97706;
-            overflow: hidden; display: flex; justify-content: center; align-items: center;
-            font-size: 14px; border: 2px solid #fcd34d;
+            width: 42px; height: 42px; border-radius: 50%; background: #f59e0b;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; border: 2px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
         .hub-coins-badge {
-            background: rgba(217, 119, 6, 0.2); border: 1px solid #f59e0b;
-            padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: #fbbf24;
+            background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255,255,255,0.4);
+            padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; color: #fef08a;
+            display: flex; align-items: center; gap: 4px;
         }
 
-        .card {
-            background: rgba(39, 39, 42, 0.85); border-radius: 12px;
-            padding: 12px; margin-bottom: 10px; text-align: right;
-            border: 1px solid #d97706; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        /* --- PITO Style Games Grid --- */
+        .games-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            padding: 4px 0;
         }
-        .tab-switcher { display: flex; gap: 4px; margin-bottom: 8px; }
-        .tab-btn { flex: 1; background: #27272a; border: 1px solid #d97706; color: #fcd34d; padding: 7px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
-        .tab-btn.active { background: #d97706; color: #fff; box-shadow: 0 0 8px rgba(217, 119, 6, 0.4); }
+        .game-card {
+            position: relative; width: 100%; aspect-ratio: 3 / 4;
+            border-radius: 18px; overflow: hidden;
+            background: #1e293b; border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3); cursor: pointer;
+            transition: transform 0.2s ease; display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 8px; text-align: center;
+        }
+        .game-card:active { transform: scale(0.95); }
+        .game-card-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1; filter: brightness(0.85);
+        }
+        .game-card-title {
+            position: relative; z-index: 2; font-weight: 900; font-size: 13px;
+            color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+        }
+        .fav-heart {
+            position: absolute; top: 6px; right: 6px; z-index: 3;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+            width: 24px; height: 24px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 11px;
+        }
 
-        /* --- Domino Board Styles --- */
-        .domino-board {
-            flex: 1; background: #064e3b; border: 3px solid #059669; border-radius: 16px;
-            position: relative; display: flex; flex-direction: column; justify-content: space-between;
-            padding: 10px; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        /* --- Shop Styling --- */
+        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        .shop-item {
+            background: rgba(0,0,0,0.3); border-radius: 14px; padding: 12px;
+            text-align: center; border: 1px solid rgba(255,255,255,0.15);
         }
-        .player-zone {
-            display: flex; justify-content: center; align-items: center; gap: 6px;
-            min-height: 60px; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 5px;
+        .shop-item-icon { font-size: 36px; margin-bottom: 6px; }
+
+        /* --- Snakes & Ladders Board Styles --- */
+        .snake-board {
+            display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);
+            gap: 2px; background: #1e293b; border: 4px solid #f59e0b; border-radius: 12px;
+            width: 100%; aspect-ratio: 1; padding: 4px; box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            position: relative;
         }
-        .table-center {
-            flex: 1; display: flex; justify-content: flex-start; align-items: center;
-            gap: 8px; overflow-x: auto; padding: 10px; white-space: nowrap;
+        .board-cell {
+            background: rgba(255,255,255,0.9); border-radius: 4px; font-size: 8px;
+            font-weight: bold; color: #334155; display: flex; justify-content: flex-start;
+            align-items: flex-start; padding: 2px; position: relative;
         }
-        .domino-tile {
-            width: 36px; height: 64px; background: #f8fafc; border: 2px solid #000;
-            border-radius: 6px; display: inline-flex; flex-direction: column;
-            justify-content: space-between; align-items: center; padding: 4px 0;
-            box-shadow: 2px 4px 8px rgba(0,0,0,0.5); cursor: pointer; color: #000; font-weight: bold; font-size: 14px;
-            flex-shrink: 0; transition: transform 0.15s ease, border-color 0.15s ease;
+        .board-cell:nth-child(even) { background: #e2e8f0; }
+        .player-token {
+            width: 14px; height: 14px; border-radius: 50%; position: absolute;
+            bottom: 2px; right: 2px; box-shadow: 0 0 4px rgba(0,0,0,0.5); z-index: 10;
         }
-        .domino-tile:active { transform: scale(0.95); }
-        .domino-tile.playable { border: 2px solid #f59e0b; box-shadow: 0 0 10px #f59e0b; }
-        .domino-tile.horizontal {
-            width: 64px; height: 36px; flex-direction: row; padding: 0 4px;
+        .token-p1 { background: #ef4444; border: 1px solid #fff; }
+        .token-p2 { background: #3b82f6; border: 1px solid #fff; }
+        .dice-box {
+            display: flex; justify-content: space-around; align-items: center;
+            background: rgba(0,0,0,0.3); padding: 10px; border-radius: 14px; margin-top: 10px;
         }
-        .tile-divider { width: 80%; height: 2px; background: #000; }
-        .tile-divider.vert { width: 2px; height: 80%; }
-        .my-hand { display: flex; gap: 6px; overflow-x: auto; padding: 6px 0; }
-        .pass-btn {
-            background: #dc2626; color: white; border: none; padding: 6px 12px;
-            border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;
+        .dice-visual {
+            width: 46px; height: 46px; background: #fff; border-radius: 10px;
+            display: flex; justify-content: center; align-items: center; font-size: 24px;
+            color: #0f172a; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -116,11 +152,13 @@
     <div class="container">
         <!-- Auth Screen -->
         <div id="authScreen" class="screen active">
-            <div class="brand-title">تۆپ تۆپ (دۆمینە)</div>
+            <div class="app-header">
+                <h1 class="brand-title">🎮 تۆپ تۆپ</h1>
+            </div>
             <div class="card">
-                <div class="tab-switcher">
-                    <button class="tab-btn active" id="loginTabBtn" onclick="switchAuthMode('login')">چوونەژوورەوە</button>
-                    <button class="tab-btn" id="registerTabBtn" onclick="switchAuthMode('register')">حیسابی نوێ</button>
+                <div style="display:flex; gap:6px; margin-bottom:12px;">
+                    <button class="btn" style="flex:1" onclick="switchAuthMode('login')">چوونەژوورەوە</button>
+                    <button class="btn btn-secondary" style="flex:1" onclick="switchAuthMode('register')">حیسابی نوێ</button>
                 </div>
 
                 <div id="registerForm" style="display: none;">
@@ -151,50 +189,123 @@
 
         <!-- Hub Screen -->
         <div id="hubScreen" class="screen">
-            <div class="brand-title">تۆپ تۆپ</div>
+            <div class="app-header">
+                <h1 class="brand-title">تۆپ تۆپ</h1>
+                <button class="nav-back-btn" onclick="openShopScreen()">🛒 دوکان</button>
+            </div>
             
             <div class="hub-header-panel">
                 <div class="hub-user-info">
                     <div class="hub-avatar-box" id="hubUserAvatar">👤</div>
                     <div>
-                        <span id="hubUsernameText" style="font-weight: bold; color: #fbbf24; font-size: 14px;"></span>
+                        <span id="hubUsernameText" style="font-weight: bold; color: #fff; font-size: 14px;"></span>
                     </div>
                 </div>
                 <div class="hub-coins-badge">💰 <span id="hubTotalCoins">0</span></div>
             </div>
 
-            <div class="card" style="text-align: center; padding: 20px;">
-                <h2 style="color: #fbbf24; margin-top: 0;">🀏 دۆمینەی ئەزنیف</h2>
-                <p style="font-size: 12px; color: #d6d3d1;">شێوازی یاری نیشان بده و بەردەکان ڕێکبخە!</p>
-                <button class="btn" style="font-size: 15px; padding: 12px; margin-bottom: 8px;" onclick="joinOnlineDominoGame()">🌐 یاری ئۆنلاین (لەگەڵ خەڵک)</button>
-                <button class="btn btn-secondary" style="font-size: 15px; padding: 12px;" onclick="startVsBotGame()">🤖 یاری لەگەڵ کۆمپیوتەر (Bot)</button>
+            <div style="margin-bottom: 8px; font-weight: bold; font-size: 13px;">🕹️ هەموو یارییەکان</div>
+
+            <!-- PITO Style 3-Column Grid -->
+            <div class="games-grid">
+                
+                <!-- Game 1: Snakes & Ladders -->
+                <div class="game-card" onclick="openSnakeGameOption()">
+                    <span class="fav-heart">❤️</span>
+                    <img class="game-card-bg" src="https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=400" alt="مار و پێژە">
+                    <span class="game-card-title">مار و پێژە</span>
+                </div>
+
+                <!-- Game 2: Chess -->
+                <div class="game-card" onclick="alert('یاری شەتڕەنج لە بەشی نوێکردنەوەدایە!')">
+                    <span class="fav-heart">🤍</span>
+                    <img class="game-card-bg" src="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=400" alt="شەتڕەنج">
+                    <span class="game-card-title">شەتڕەنج</span>
+                </div>
+
+                <!-- Game 3: Fruits -->
+                <div class="game-card" onclick="alert('یاری مێوەکان بەزوانە بەردەست دەبێت!')">
+                    <span class="fav-heart">🤍</span>
+                    <img class="game-card-bg" src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400" alt="مێوەکان">
+                    <span class="game-card-title">مێوەکان</span>
+                </div>
+
+                <!-- Game 4: Ludo -->
+                <div class="game-card" onclick="alert('لودۆ بەزوانە بەردەست دەبێت!')">
+                    <span class="fav-heart">🤍</span>
+                    <img class="game-card-bg" src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400" alt="لودۆ">
+                    <span class="game-card-title">لودۆ</span>
+                </div>
+
+                <!-- Game 5: Mafia -->
+                <div class="game-card" onclick="alert('یاری مافیا بەزوانە بەردەست دەبێت!')">
+                    <span class="fav-heart">🤍</span>
+                    <img class="game-card-bg" src="https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=400" alt="مافیا">
+                    <span class="game-card-title">مافیا</span>
+                </div>
+
+                <!-- Game 6: Cards -->
+                <div class="game-card" onclick="alert('کارتەکان بەزوانە بەردەست دەبێت!')">
+                    <span class="fav-heart">🤍</span>
+                    <img class="game-card-bg" src="https://images.unsplash.com/photo-1541278107931-e006523892df?w=400" alt="کارت">
+                    <span class="game-card-title">پاسۆر</span>
+                </div>
+
             </div>
         </div>
 
-        <!-- Domino Game Screen -->
-        <div id="dominoGameScreen" class="screen">
-            <div class="hub-header-panel" style="margin-bottom: 6px;">
-                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; background: #3f3f46; font-size: 11px;" onclick="exitDominoGame()">⬅️ دەرچوون</button>
-                <span id="gameStatusText" style="font-size: 12px; color: #fbbf24; font-weight: bold;">چاوەڕێی یاریزانی دووەم...</span>
-                <button id="passBtn" class="pass-btn" style="display:none;" onclick="handlePassTurn()">تێپەڕاندن (Pass)</button>
+        <!-- Shop Screen -->
+        <div id="shopScreen" class="screen">
+            <div class="app-header">
+                <button class="nav-back-btn" onclick="switchScreen('hubScreen')">🏠 سەرەتا</button>
+                <h1 class="brand-title">🛒 دوکانی تۆپ تۆپ</h1>
             </div>
 
-            <div class="domino-board">
-                <!-- Opponent Hand -->
-                <div class="player-zone" id="opponentZone">
-                    <span id="opponentLabel" style="font-size: 12px; color: #a1a1aa;">ڕکابەر (🀏 7 بەرد)</span>
+            <div class="card">
+                <div style="font-weight: bold; font-size: 14px; text-align: center;">کڕینی ئاڤاتاری بەهێز</div>
+                <div class="shop-grid">
+                    <div class="shop-item">
+                        <div class="shop-item-icon">🦁</div>
+                        <div style="font-weight: bold; font-size: 12px;">شێر (Lion)</div>
+                        <button class="btn" style="font-size: 11px; padding: 6px;" onclick="buyAvatar('🦁', 50)">💰 50</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-item-icon">👑</div>
+                        <div style="font-weight: bold; font-size: 12px;">تاج (King)</div>
+                        <button class="btn" style="font-size: 11px; padding: 6px;" onclick="buyAvatar('👑', 100)">💰 100</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-item-icon">🥷</div>
+                        <div style="font-weight: bold; font-size: 12px;">نینجا (Ninja)</div>
+                        <button class="btn" style="font-size: 11px; padding: 6px;" onclick="buyAvatar('🥷', 150)">💰 150</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="shop-item-icon">🚀</div>
+                        <div style="font-weight: bold; font-size: 12px;">مەکۆ (Rocket)</div>
+                        <button class="btn" style="font-size: 11px; padding: 6px;" onclick="buyAvatar('🚀', 200)">💰 200</button>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Table Center -->
-                <div class="table-center" id="dominoTable">
-                    <span style="color: rgba(255,255,255,0.4); font-size: 12px;">مێزی یاری بەتاڵە</span>
-                </div>
+        <!-- Snake & Ladders Screen -->
+        <div id="snakeGameScreen" class="screen">
+            <div class="app-header">
+                <button class="nav-back-btn" onclick="switchScreen('hubScreen')">🏠 سەرەتا</button>
+                <span id="snakeTurnText" style="font-size: 12px; font-weight: bold; color: #fef08a;">نۆرەی تۆیە!</span>
+            </div>
 
-                <!-- My Hand -->
+            <div class="card" style="padding: 8px;">
+                <div class="snake-board" id="snakeBoard"></div>
+            </div>
+
+            <div class="dice-box">
                 <div>
-                    <div style="font-size: 11px; color: #fcd34d; margin-bottom: 4px; text-align: right;">بەردەکانی تۆ:</div>
-                    <div class="my-hand" id="myHandZone"></div>
+                    <div style="font-size: 12px; color: #fef08a;">تۆ: خانەی <span id="p1PosText">1</span></div>
+                    <div style="font-size: 12px; color: #60a5fa;">ڕکابەر: خانەی <span id="p2PosText">1</span></div>
                 </div>
+                <div class="dice-visual" id="diceDisplay">🎲</div>
+                <button class="btn" style="width: auto; padding: 10px 20px;" id="rollDiceBtn" onclick="rollSnakeDice()">هاوێشتنی زار</button>
             </div>
         </div>
     </div>
@@ -202,8 +313,7 @@
     <!-- Firebase Scripts -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-      import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-      import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+      import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
@@ -218,30 +328,21 @@
 
       const app = initializeApp(firebaseConfig);
       window.db = getFirestore(app);
-      window.rtdb = getDatabase(app);
-      window.firestoreFns = { doc, setDoc, getDoc };
-      window.rtdbFns = { ref, set, onValue, update };
+      window.firestoreFns = { doc, setDoc, getDoc, updateDoc };
     </script>
 
     <script>
         let currentUser = "";
         let totalCoins = 0;
-        let currentGameRoom = "room_1";
-        let isVsBotMode = false;
+        let p1Pos = 1;
+        let p2Pos = 1;
+        let isP1Turn = true;
 
-        // Local state for Offline / Vs Bot
-        let botGameState = {
-            myHand: [],
-            botHand: [],
-            table: [],
-            leftValue: null,
-            rightValue: null,
-            turn: 'player'
+        // Snakes and Ladders shortcuts map
+        const snakesAndLadders = {
+            3: 22, 5: 8, 11: 26, 20: 29, 17: 4, 19: 7, 27: 1, 21: 9, // Ladders & Snakes
+            34: 54, 42: 63, 50: 19, 62: 18, 71: 92, 80: 99, 87: 24, 98: 78
         };
-
-        // Online state
-        let myOnlineHand = [];
-        let currentOnlineData = null;
 
         window.onload = function() {
             let savedUser = localStorage.getItem("top_top_active_user");
@@ -252,6 +353,7 @@
             } else {
                 switchScreen("authScreen");
             }
+            createSnakeBoardUI();
         };
 
         function switchScreen(id) {
@@ -270,7 +372,7 @@
             if (!name || !pass) return alert("تکایە هەموو خانەکان پڕبکەرەوە!");
             
             const userRef = window.firestoreFns.doc(window.db, "users", name);
-            await window.firestoreFns.setDoc(userRef, { username: name, password: pass, coins: 100 });
+            await window.firestoreFns.setDoc(userRef, { username: name, password: pass, coins: 100, avatar: '👤' });
             localStorage.setItem("top_top_active_user", name);
             currentUser = name;
             loadUserData();
@@ -296,295 +398,107 @@
             if (!currentUser) return;
             const snap = await window.firestoreFns.getDoc(window.firestoreFns.doc(window.db, "users", currentUser));
             if (snap.exists()) {
-                totalCoins = snap.data().coins || 0;
+                let data = snap.data();
+                totalCoins = data.coins || 0;
                 document.getElementById("hubUsernameText").innerText = currentUser;
                 document.getElementById("hubTotalCoins").innerText = totalCoins;
+                document.getElementById("hubUserAvatar").innerText = data.avatar || '👤';
             }
         }
 
-        // --- Domino Logic Tools ---
-        function generateDominoSet() {
-            let tiles = [];
-            for (let i = 0; i <= 6; i++) {
-                for (let j = i; j <= 6; j++) {
-                    tiles.push([i, j]);
-                }
-            }
-            return tiles.sort(() => Math.random() - 0.5);
+        function openShopScreen() {
+            switchScreen("shopScreen");
         }
 
-        function canPlayTile(tile, leftVal, rightVal) {
-            if (leftVal === null && rightVal === null) return true; // First tile on table
-            return tile[0] === leftVal || tile[1] === leftVal || tile[0] === rightVal || tile[1] === rightVal;
+        async function buyAvatar(emoji, cost) {
+            if (totalCoins < cost) return alert("دراوی پێویستت نییە!");
+            totalCoins -= cost;
+            const userRef = window.firestoreFns.doc(window.db, "users", currentUser);
+            await window.firestoreFns.updateDoc(userRef, { coins: totalCoins, avatar: emoji });
+            loadUserData();
+            alert("پێرۆزە! ئاڤاتارە نوێیەکەت چالاککرا 🥳");
         }
 
-        function createDominoUI(top, bottom, isHorizontal, isPlayable) {
-            let tile = document.createElement("div");
-            tile.className = "domino-tile" + (isHorizontal ? " horizontal" : "") + (isPlayable ? " playable" : "");
-            tile.innerHTML = `<span>${top}</span><div class="tile-divider ${isHorizontal ? 'vert' : ''}"></div><span>${bottom}</span>`;
-            return tile;
+        /* --- Snakes and Ladders Game Logic --- */
+        function createSnakeBoardUI() {
+            let board = document.getElementById("snakeBoard");
+            board.innerHTML = "";
+            for (let i = 100; i >= 1; i--) {
+                let cell = document.createElement("div");
+                cell.className = "board-cell";
+                cell.id = "cell-" + i;
+                cell.innerText = i;
+                board.appendChild(cell);
+            }
+            updateBoardTokens();
         }
 
-        // ================= VS BOT MODE =================
-        function startVsBotGame() {
-            isVsBotMode = true;
-            switchScreen("dominoGameScreen");
-            document.getElementById("opponentLabel").innerText = "کۆمپیوتەر (Bot) - 7 بەرد";
-
-            let tiles = generateDominoSet();
-            botGameState.myHand = tiles.splice(0, 7);
-            botGameState.botHand = tiles.splice(0, 7);
-            botGameState.table = [];
-            botGameState.leftValue = null;
-            botGameState.rightValue = null;
-            botGameState.turn = 'player';
-
-            renderBotBoard();
+        function openSnakeGameOption() {
+            p1Pos = 1; p2Pos = 1; isP1Turn = true;
+            updateBoardTokens();
+            switchScreen("snakeGameScreen");
         }
 
-        function renderBotBoard() {
-            let statusText = document.getElementById("gameStatusText");
-            let passBtn = document.getElementById("passBtn");
+        function rollSnakeDice() {
+            if (!isP1Turn) return;
+            
+            let dice = Math.floor(Math.random() * 6) + 1;
+            document.getElementById("diceDisplay").innerText = dice;
 
-            document.getElementById("opponentLabel").innerText = `کۆمپیوتەر (Bot) - ${botGameState.botHand.length} بەرد`;
+            if (p1Pos + dice <= 100) p1Pos += dice;
+            if (snakesAndLadders[p1Pos]) p1Pos = snakesAndLadders[p1Pos];
 
-            // Check if player has valid moves
-            let playerHasMove = botGameState.myHand.some(t => canPlayTile(t, botGameState.leftValue, botGameState.rightValue));
+            updateBoardTokens();
 
-            if (botGameState.turn === 'player') {
-                statusText.innerText = "نۆرەی تۆیە! 🎯";
-                passBtn.style.display = (!playerHasMove && botGameState.table.length > 0) ? "block" : "none";
-            } else {
-                statusText.innerText = "نۆرەی کۆمپیوتەرە... ⏳";
-                passBtn.style.display = "none";
-            }
-
-            // Render Table
-            let tableEl = document.getElementById("dominoTable");
-            tableEl.innerHTML = "";
-            if (botGameState.table.length > 0) {
-                botGameState.table.forEach(tile => {
-                    tableEl.appendChild(createDominoUI(tile[0], tile[1], true, false));
-                });
-            } else {
-                tableEl.innerHTML = `<span style="color: rgba(255,255,255,0.4); font-size: 12px;">مێزی یاری بەتاڵە</span>`;
-            }
-
-            // Render Player Hand
-            let myHandEl = document.getElementById("myHandZone");
-            myHandEl.innerHTML = "";
-            botGameState.myHand.forEach((tile, index) => {
-                let playable = (botGameState.turn === 'player') && canPlayTile(tile, botGameState.leftValue, botGameState.rightValue);
-                let tileUI = createDominoUI(tile[0], tile[1], false, playable);
-                if (playable) {
-                    tileUI.onclick = () => playBotTile(tile, index);
-                }
-                myHandEl.appendChild(tileUI);
-            });
-
-            // Check end game
-            if (botGameState.myHand.length === 0) {
-                setTimeout(() => alert("پیرۆزە! تۆ کۆمپیوتەرەکەت بەزاند 🎉"), 200);
-                return;
-            }
-            if (botGameState.botHand.length === 0) {
-                setTimeout(() => alert("دۆڕایت! کۆمپیوتەر بڕییەوە 🤖"), 200);
+            if (p1Pos === 100) {
+                setTimeout(() => alert("پیرۆزە! تۆ بڕیتەوە 🎉"), 300);
                 return;
             }
 
-            // Trigger Bot play if it's bot turn
-            if (botGameState.turn === 'bot') {
-                setTimeout(makeBotMove, 1000);
-            }
+            // Bot Turn Trigger
+            isP1Turn = false;
+            document.getElementById("snakeTurnText").innerText = "نۆرەی کۆمپیوتەرە... ⏳";
+            setTimeout(botSnakeMove, 1200);
         }
 
-        function playBotTile(tile, index) {
-            if (botGameState.turn !== 'player') return;
+        function botSnakeMove() {
+            let dice = Math.floor(Math.random() * 6) + 1;
+            document.getElementById("diceDisplay").innerText = dice;
 
-            placeTileOnTable(tile, botGameState);
-            botGameState.myHand.splice(index, 1);
-            botGameState.turn = 'bot';
+            if (p2Pos + dice <= 100) p2Pos += dice;
+            if (snakesAndLadders[p2Pos]) p2Pos = snakesAndLadders[p2Pos];
 
-            renderBotBoard();
-        }
+            updateBoardTokens();
 
-        function makeBotMove() {
-            let possibleIndices = [];
-            botGameState.botHand.forEach((t, i) => {
-                if (canPlayTile(t, botGameState.leftValue, botGameState.rightValue)) {
-                    possibleIndices.push(i);
-                }
-            });
-
-            if (possibleIndices.length > 0) {
-                let chosenIndex = possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
-                let chosenTile = botGameState.botHand[chosenIndex];
-                
-                placeTileOnTable(chosenTile, botGameState);
-                botGameState.botHand.splice(chosenIndex, 1);
+            if (p2Pos === 100) {
+                setTimeout(() => alert("دۆڕایت! کۆمپیوتەر بڕییەوە 🤖"), 300);
+                return;
             }
 
-            botGameState.turn = 'player';
-            renderBotBoard();
+            isP1Turn = true;
+            document.getElementById("snakeTurnText").innerText = "نۆرەی تۆیە! 🎯";
         }
 
-        function placeTileOnTable(tile, state) {
-            if (state.leftValue === null && state.rightValue === null) {
-                state.leftValue = tile[0];
-                state.rightValue = tile[1];
-                state.table.push(tile);
-            } else if (tile[0] === state.rightValue) {
-                state.rightValue = tile[1];
-                state.table.push(tile);
-            } else if (tile[1] === state.rightValue) {
-                state.rightValue = tile[0];
-                state.table.push([tile[1], tile[0]]);
-            } else if (tile[1] === state.leftValue) {
-                state.leftValue = tile[0];
-                state.table.unshift(tile);
-            } else if (tile[0] === state.leftValue) {
-                state.leftValue = tile[1];
-                state.table.unshift([tile[1], tile[0]]);
-            }
-        }
+        function updateBoardTokens() {
+            document.querySelectorAll(".player-token").forEach(t => t.remove());
 
-        function handlePassTurn() {
-            if (isVsBotMode) {
-                botGameState.turn = 'bot';
-                renderBotBoard();
-            } else if (currentOnlineData) {
-                let nextTurn = (currentOnlineData.p1 === currentUser) ? currentOnlineData.p2 : currentOnlineData.p1;
-                window.rtdbFns.update(window.rtdbFns.ref(window.rtdb, 'dominoRooms/' + currentGameRoom), { turn: nextTurn });
-            }
-        }
+            let c1 = document.getElementById("cell-" + p1Pos);
+            let c2 = document.getElementById("cell-" + p2Pos);
 
-        // ================= ONLINE MULTIPLAYER MODE =================
-        function joinOnlineDominoGame() {
-            isVsBotMode = false;
-            switchScreen("dominoGameScreen");
-            document.getElementById("opponentLabel").innerText = "ڕکابەر (🀏 7 بەرد)";
-
-            let roomRef = window.rtdbFns.ref(window.rtdb, 'dominoRooms/' + currentGameRoom);
-
-            window.rtdbFns.onValue(roomRef, (snapshot) => {
-                let data = snapshot.val();
-                currentOnlineData = data;
-
-                if (!data) {
-                    let tiles = generateDominoSet();
-                    let p1Hand = tiles.splice(0, 7);
-                    let p2Hand = tiles.splice(0, 7);
-                    
-                    window.rtdbFns.set(roomRef, {
-                        p1: currentUser,
-                        p2: "",
-                        p1Hand: p1Hand,
-                        p2Hand: p2Hand,
-                        table: [],
-                        leftValue: null,
-                        rightValue: null,
-                        turn: currentUser
-                    });
-                    myOnlineHand = p1Hand;
-                } else if (data.p1 !== currentUser && !data.p2) {
-                    window.rtdbFns.update(roomRef, { p2: currentUser });
-                    myOnlineHand = data.p2Hand;
-                } else {
-                    myOnlineHand = (data.p1 === currentUser) ? data.p1Hand : data.p2Hand;
-                }
-                renderOnlineBoard(data);
-            });
-        }
-
-        function renderOnlineBoard(data) {
-            if (!data || isVsBotMode) return;
-
-            let statusText = document.getElementById("gameStatusText");
-            let passBtn = document.getElementById("passBtn");
-
-            let opponentHandCount = (data.p1 === currentUser) ? (data.p2Hand ? data.p2Hand.length : 7) : (data.p1Hand ? data.p1Hand.length : 7);
-            document.getElementById("opponentLabel").innerText = `ڕکابەر (${data.p2 ? (data.p1 === currentUser ? data.p2 : data.p1) : 'چاوەڕوانکردن...'}) - ${opponentHandCount} بەرد`;
-
-            let isMyTurn = (data.turn === currentUser);
-            let hasMove = myOnlineHand && myOnlineHand.some(t => canPlayTile(t, data.leftValue ?? null, data.rightValue ?? null));
-
-            if (!data.p2) {
-                statusText.innerText = "چاوەڕێی یاریزانی دووەم...";
-                passBtn.style.display = "none";
-            } else {
-                statusText.innerText = isMyTurn ? "نۆرەی تۆیە! 🎯" : "نۆرەی ڕکابەرەکەتە ⏳";
-                passBtn.style.display = (isMyTurn && !hasMove && data.table && data.table.length > 0) ? "block" : "none";
+            if (c1) {
+                let t1 = document.createElement("div");
+                t1.className = "player-token token-p1";
+                c1.appendChild(t1);
             }
 
-            // Render Table
-            let tableEl = document.getElementById("dominoTable");
-            tableEl.innerHTML = "";
-            if (data.table && data.table.length > 0) {
-                data.table.forEach(tile => {
-                    tableEl.appendChild(createDominoUI(tile[0], tile[1], true, false));
-                });
-            } else {
-                tableEl.innerHTML = `<span style="color: rgba(255,255,255,0.4); font-size: 12px;">مێزی یاری بەتاڵە</span>`;
+            if (c2) {
+                let t2 = document.createElement("div");
+                t2.className = "player-token token-p2";
+                c2.appendChild(t2);
             }
 
-            // Render My Hand
-            let myHandEl = document.getElementById("myHandZone");
-            myHandEl.innerHTML = "";
-            if (myOnlineHand) {
-                myOnlineHand.forEach((tile, index) => {
-                    let playable = isMyTurn && canPlayTile(tile, data.leftValue ?? null, data.rightValue ?? null);
-                    let tileUI = createDominoUI(tile[0], tile[1], false, playable);
-                    if (playable) {
-                        tileUI.onclick = () => playOnlineTile(tile, index, data);
-                    }
-                    myHandEl.appendChild(tileUI);
-                });
-            }
-        }
-
-        function playOnlineTile(tile, index, data) {
-            if (data.turn !== currentUser) return;
-
-            let table = data.table || [];
-            let leftVal = data.leftValue ?? null;
-            let rightVal = data.rightValue ?? null;
-
-            if (leftVal === null && rightVal === null) {
-                leftVal = tile[0];
-                rightVal = tile[1];
-                table.push(tile);
-            } else if (tile[0] === rightVal) {
-                rightVal = tile[1];
-                table.push(tile);
-            } else if (tile[1] === rightVal) {
-                rightVal = tile[0];
-                table.push([tile[1], tile[0]]);
-            } else if (tile[1] === leftVal) {
-                leftVal = tile[0];
-                table.unshift(tile);
-            } else if (tile[0] === leftVal) {
-                leftVal = tile[1];
-                table.unshift([tile[1], tile[0]]);
-            }
-
-            myOnlineHand.splice(index, 1);
-            let nextTurn = (data.p1 === currentUser) ? data.p2 : data.p1;
-
-            let updateData = {
-                table: table,
-                leftValue: leftVal,
-                rightValue: rightVal,
-                turn: nextTurn
-            };
-
-            if (data.p1 === currentUser) updateData.p1Hand = myOnlineHand;
-            else updateData.p2Hand = myOnlineHand;
-
-            window.rtdbFns.update(window.rtdbFns.ref(window.rtdb, 'dominoRooms/' + currentGameRoom), updateData);
-        }
-
-        function exitDominoGame() {
-            switchScreen("hubScreen");
+            document.getElementById("p1PosText").innerText = p1Pos;
+            document.getElementById("p2PosText").innerText = p2Pos;
         }
     </script>
 </body>
