@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تۆپ تۆپ - XO & Radio</title>
+    <title>تۆپ تۆپ - XO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
@@ -143,70 +143,6 @@
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
 
-        /* ----- Draggable Floating Radio Widget ----- */
-        #floatingRadioWidget {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6);
-            z-index: 9999;
-            cursor: grab;
-            touch-action: none;
-        }
-        #floatingRadioWidget:active { cursor: grabbing; }
-        #floatingRadioWidget.playing {
-            animation: pulse-ring 2s infinite;
-        }
-        @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        #floatingRadioPopup {
-            position: fixed;
-            bottom: 95px;
-            left: 20px;
-            width: 280px;
-            background: rgba(15, 23, 42, 0.95);
-            border: 2px solid #ef4444;
-            border-radius: 16px;
-            padding: 14px;
-            display: none;
-            z-index: 10000;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-        }
-
-        .radio-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-            margin-top: 10px; max-height: 40vh; overflow-y: auto; padding: 4px;
-        }
-        .radio-card {
-            background: var(--card-bg); border: 2px solid var(--border-color);
-            border-radius: 12px; padding: 12px 10px; text-align: center; cursor: pointer;
-            position: relative; transition: all 0.2s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 60px;
-        }
-        .radio-card:active { transform: scale(0.94); }
-        .radio-card.active-radio {
-            border-color: #ef4444; background: rgba(239, 68, 68, 0.15);
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-        }
-        .radio-name { font-size: 13px; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-        
-        .radio-player-bar {
-            background: rgba(15, 23, 42, 0.9); border: 1px solid var(--primary-color);
-            border-radius: 14px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
-        }
-
         /* ----- XO Game Styles ----- */
         .xo-board {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
@@ -332,10 +268,9 @@
             </div>
 
             <div class="card">
-                <h3>🎮 بەشی یارییەکان و مۆسیقا</h3>
-                <p>یاری هەڵبژێرە یان گوێ لە گۆرانی کوردی بگرە!</p>
+                <h3>🎮 بەشی یارییەکان</h3>
+                <p>یاری هەڵبژێرە!</p>
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-top: 8px;" onclick="openRadioScreen()">🎵 گۆرانی کوردی</button>
             </div>
 
             <div class="card">
@@ -348,34 +283,6 @@
             <div style="display: flex; gap: 8px; margin-top: auto;">
                 <button class="btn" onclick="openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
-        </div>
-
-        <!-- Radio & Local Audio Screen -->
-        <div id="radioScreen" class="screen">
-            <div class="brand-title" style="color: #ef4444;">🎵 گۆرانی کوردی</div>
-
-            <div class="radio-player-bar">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <button id="radioPlayPauseBtn" onclick="toggleRadioPlay()" style="background: #ef4444; border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center;">▶</button>
-                    <div>
-                        <div id="currentRadioTitle" style="font-size: 13px; font-weight: bold; color: #fff;">گۆرانییەک هەڵبژێرە</div>
-                        <div style="font-size: 10px; color: #cbd5e1;">پلەیەری دەنگی</div>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <span style="font-size: 14px;">🔊</span>
-                    <input type="range" id="radioVolume" min="0" max="1" step="0.1" value="1" oninput="changeRadioVolume(this.value)" style="width: 80px; accent-color: #ef4444;">
-                </div>
-            </div>
-
-            <div class="card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 8px;">
-                <h3 style="color: #ef4444; margin-bottom: 4px;">لیستی گۆرانییە کوردییەکان</h3>
-                <div class="radio-grid" id="radioGridContainer">
-                    <!-- JS will populate songs -->
-                </div>
-            </div>
-
-            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="backToHubFromRadio()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- XO Menu & Game Screen -->
@@ -467,14 +374,6 @@
                     </label>
                 </div>
 
-                <div class="setting-row" style="margin-top: 10px;">
-                    <span>پیشاندانی پلەیەری دەنگی لەسەر شاشە</span>
-                    <label class="switch">
-                        <input type="checkbox" id="floatingRadioToggle" checked onchange="toggleFloatingRadioSetting()">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
                 <div style="margin-top: 12px;">
                     <label>گۆڕینی ڕەنگی سەرەکی (Theme)</label>
                     <div class="theme-options">
@@ -493,25 +392,6 @@
             <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
         </div>
     </div>
-
-    <!-- Draggable Floating Player Widget Button & Popup Control -->
-    <div id="floatingRadioWidget">
-        <span style="font-size: 26px; pointer-events: none;">🎵</span>
-    </div>
-
-    <div id="floatingRadioPopup">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span id="floatingWidgetTitle" style="font-size: 12px; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">گۆرانییەک هەڵبژێرە</span>
-            <button onclick="toggleFloatingPopup()" style="background: none; border: none; color: #cbd5e1; font-size: 14px; cursor: pointer;">✕</button>
-        </div>
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-            <button id="floatingPlayPauseBtn" onclick="toggleRadioPlay()" style="background: #ef4444; border: none; width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center;">▶</button>
-            <input type="range" id="floatingVolume" min="0" max="1" step="0.1" value="1" oninput="changeRadioVolume(this.value)" style="flex: 1; accent-color: #ef4444;">
-        </div>
-    </div>
-
-    <!-- Hidden Audio Player -->
-    <audio id="globalRadioAudio" style="display:none;"></audio>
 
     <!-- Firebase & Auth Logic -->
     <script type="module">
@@ -559,7 +439,7 @@
                     loadUserData();
                     if (window.loadLeaderboard) window.loadLeaderboard();
                 }).catch((error) => {
-                    console.error("هەڵە:", error);
+                    console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
                     alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
                 });
         };
@@ -765,20 +645,8 @@
         let xoMode = "bot";
         window.xoGameActive = true;
 
-        // لیستی گۆرانییە کوردییەکان (لێرەدا لینکی نوێ زیادکراوە)
-        let radioSongs = [
-            { id: 1, name: "گۆرانی کوردی ۱", url: "music/Aram Shaida 2019 (Chana Jwani Dada ....mp3" },
-            { id: 2, name: "گۆرانی کوردی ۲", url: "https://stream.zeno.fm/f3w2fs6k24zuv" },
-            { id: 3, name: "گۆرانی کوردی ۳ (نوێ)", url: "https://radio.nawa.pk/stream" }
-        ];
-
-        let currentActiveRadioId = null;
-        let isRadioPlaying = false;
-
         window.onload = function() {
             loadSavedSettings();
-            buildRadioGrid();
-            initDraggableFloatingWidget();
             let savedUser = localStorage.getItem("top_top_active_user");
             if (savedUser && localStorage.getItem("user_profile_" + savedUser)) {
                 currentUser = savedUser;
@@ -791,97 +659,9 @@
             }
         };
 
-        function initDraggableFloatingWidget() {
-            const widget = document.getElementById("floatingRadioWidget");
-            let isDragging = false;
-            let startX, startY, initialX, initialY;
-            let hasMoved = false;
-
-            function dragStart(e) {
-                isDragging = true;
-                hasMoved = false;
-                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                startX = clientX;
-                startY = clientY;
-                
-                let rect = widget.getBoundingClientRect();
-                initialX = rect.left;
-                initialY = rect.top;
-                
-                widget.style.transition = "none";
-                e.preventDefault();
-            }
-
-            function dragMove(e) {
-                if (!isDragging) return;
-                let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                
-                let dx = clientX - startX;
-                let dy = clientY - startY;
-
-                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-                    hasMoved = true;
-                }
-
-                let newX = initialX + dx;
-                let newY = initialY + dy;
-
-                newX = Math.max(10, Math.min(window.innerWidth - widget.offsetWidth - 10, newX));
-                newY = Math.max(10, Math.min(window.innerHeight - widget.offsetHeight - 10, newY));
-
-                widget.style.left = newX + "px";
-                widget.style.top = newY + "px";
-                widget.style.bottom = "auto";
-                widget.style.right = "auto";
-
-                updatePopupPosition(newX, newY);
-            }
-
-            function dragEnd(e) {
-                if (!isDragging) return;
-                isDragging = false;
-                widget.style.transition = "transform 0.2s ease";
-                
-                if (!hasMoved) {
-                    toggleFloatingPopup();
-                }
-            }
-
-            widget.addEventListener("mousedown", dragStart);
-            window.addEventListener("mousemove", dragMove);
-            window.addEventListener("mouseup", dragEnd);
-
-            widget.addEventListener("touchstart", dragStart, { passive: false });
-            window.addEventListener("touchmove", dragMove, { passive: false });
-            window.addEventListener("touchend", dragEnd);
-        }
-
-        function updatePopupPosition(widgetX, widgetY) {
-            const popup = document.getElementById("floatingRadioPopup");
-            popup.style.left = Math.max(10, Math.min(window.innerWidth - popup.offsetWidth - 10, widgetX)) + "px";
-            if (widgetY > window.innerHeight / 2) {
-                popup.style.top = (widgetY - popup.offsetHeight - 10) + "px";
-                popup.style.bottom = "auto";
-            } else {
-                popup.style.top = (widgetY + 70) + "px";
-                popup.style.bottom = "auto";
-            }
-        }
-
         function switchScreen(id) {
             document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
             document.getElementById(id).classList.add("active");
-            
-            let floatingWidget = document.getElementById("floatingRadioWidget");
-            let isFloatingEnabled = localStorage.getItem("toptop_floating_radio") !== "false";
-            if (id !== "authScreen" && isFloatingEnabled) {
-                floatingWidget.style.display = "flex";
-            } else {
-                floatingWidget.style.display = "none";
-                document.getElementById("floatingRadioPopup").style.display = "none";
-            }
         }
 
         function switchAuthMode(mode) {
@@ -1031,94 +811,7 @@
             loadUserData();
         }
 
-        /* Song & Audio Player */
-        function buildRadioGrid() {
-            let gridHtml = "";
-            radioSongs.forEach(ch => {
-                gridHtml += `
-                    <div class="radio-card" id="radioCard_${ch.id}" onclick="playRadioChannel(${ch.id})">
-                        <div class="radio-name">${ch.name}</div>
-                    </div>
-                `;
-            });
-            document.getElementById("radioGridContainer").innerHTML = gridHtml;
-        }
-
-        function openRadioScreen() {
-            switchScreen("radioScreen");
-        }
-
-        function playRadioChannel(id) {
-            let channel = radioSongs.find(c => c.id === id);
-            if (!channel) return;
-
-            document.querySelectorAll(".radio-card").forEach(c => c.classList.remove("active-radio"));
-            let cardEl = document.getElementById("radioCard_" + id);
-            if (cardEl) cardEl.classList.add("active-radio");
-
-            currentActiveRadioId = id;
-            document.getElementById("currentRadioTitle").innerText = channel.name;
-            document.getElementById("floatingWidgetTitle").innerText = channel.name;
-
-            let audio = document.getElementById("globalRadioAudio");
-            audio.src = channel.url;
-            audio.play().then(() => {
-                isRadioPlaying = true;
-                document.getElementById("radioPlayPauseBtn").innerText = "❚❚";
-                document.getElementById("floatingPlayPauseBtn").innerText = "❚❚";
-                document.getElementById("floatingRadioWidget").classList.add("playing");
-            }).catch(err => {
-                console.log("هەڵە لە لێدان:", err);
-                isRadioPlaying = false;
-                document.getElementById("radioPlayPauseBtn").innerText = "▶";
-                document.getElementById("floatingPlayPauseBtn").innerText = "▶";
-                document.getElementById("floatingRadioWidget").classList.remove("playing");
-            });
-        }
-
-        function toggleRadioPlay() {
-            let audio = document.getElementById("globalRadioAudio");
-            if (!audio.src) {
-                if(radioSongs.length > 0) playRadioChannel(radioSongs[0].id);
-                return;
-            }
-            if (isRadioPlaying) {
-                audio.pause();
-                isRadioPlaying = false;
-                document.getElementById("radioPlayPauseBtn").innerText = "▶";
-                document.getElementById("floatingPlayPauseBtn").innerText = "▶";
-                document.getElementById("floatingRadioWidget").classList.remove("playing");
-            } else {
-                audio.play();
-                isRadioPlaying = true;
-                document.getElementById("radioPlayPauseBtn").innerText = "❚❚";
-                document.getElementById("floatingPlayPauseBtn").innerText = "❚❚";
-                document.getElementById("floatingRadioWidget").classList.add("playing");
-            }
-        }
-
-        function changeRadioVolume(val) {
-            let audio = document.getElementById("globalRadioAudio");
-            audio.volume = val;
-            document.getElementById("radioVolume").value = val;
-            document.getElementById("floatingVolume").value = val;
-        }
-
-        function toggleFloatingPopup() {
-            let popup = document.getElementById("floatingRadioPopup");
-            if (popup.style.display === "flex") {
-                popup.style.display = "none";
-            } else {
-                popup.style.display = "flex";
-                let widgetRect = document.getElementById("floatingRadioWidget").getBoundingClientRect();
-                updatePopupPosition(widgetRect.left, widgetRect.top);
-            }
-        }
-
-        function backToHubFromRadio() {
-            switchScreen("hubScreen");
-        }
-
+        /* Settings Actions */
         function toggleSoundSetting() {
             let isMuted = document.getElementById("soundToggle").checked;
             localStorage.setItem("toptop_sound_muted", isMuted);
@@ -1129,19 +822,6 @@
             localStorage.setItem("toptop_music_muted", isMuted);
         }
 
-        function toggleFloatingRadioSetting() {
-            let isEnabled = document.getElementById("floatingRadioToggle").checked;
-            localStorage.setItem("toptop_floating_radio", isEnabled);
-            let floatingWidget = document.getElementById("floatingRadioWidget");
-            let activeScreen = document.querySelector(".screen.active");
-            if (isEnabled && activeScreen && activeScreen.id !== "authScreen") {
-                floatingWidget.style.display = "flex";
-            } else {
-                floatingWidget.style.display = "none";
-                document.getElementById("floatingRadioPopup").style.display = "none";
-            }
-        }
-
         function setAppTheme(themeName) {
             document.body.setAttribute("data-theme", themeName);
             localStorage.setItem("toptop_theme", themeName);
@@ -1150,12 +830,10 @@
         function loadSavedSettings() {
             let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
             let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
-            let floatingEnabled = localStorage.getItem("toptop_floating_radio") !== "false";
             let savedTheme = localStorage.getItem("toptop_theme") || "purple";
 
             document.getElementById("soundToggle").checked = soundMuted;
             document.getElementById("musicToggle").checked = musicMuted;
-            document.getElementById("floatingRadioToggle").checked = floatingEnabled;
             document.body.setAttribute("data-theme", savedTheme);
         }
 
