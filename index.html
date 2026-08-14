@@ -171,7 +171,6 @@
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        /* ----- Floating Radio Expanded Control Modal/Box ----- */
         #floatingRadioPopup {
             position: fixed;
             bottom: 95px;
@@ -187,10 +186,9 @@
             backdrop-filter: blur(10px);
         }
 
-        /* ----- Radio Screen Styles ----- */
         .radio-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            margin-top: 10px; max-height: 50vh; overflow-y: auto; padding: 4px;
+            margin-top: 10px; max-height: 40vh; overflow-y: auto; padding: 4px;
         }
         .radio-card {
             background: var(--card-bg); border: 2px solid var(--border-color);
@@ -337,7 +335,7 @@
                 <h3>🎮 بەشی یارییەکان و مۆسیقا</h3>
                 <p>یاری هەڵبژێرە یان گوێ لە ڕادیۆی کوردی ڕەسەن بگرە!</p>
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-top: 8px;" onclick="openRadioScreen()">📻 ڕادیۆی کوردی</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-top: 8px;" onclick="openRadioScreen()">📻 ڕادیۆ و فایلی دەنگی</button>
             </div>
 
             <div class="card">
@@ -352,16 +350,22 @@
             </div>
         </div>
 
-        <!-- Radio Screen -->
+        <!-- Radio & Local Audio Screen -->
         <div id="radioScreen" class="screen">
-            <div class="brand-title" style="color: #ef4444;">📻 ڕادیۆی کوردی</div>
+            <div class="brand-title" style="color: #ef4444;">📻 ڕادیۆ و فایلی دەنگی</div>
+
+            <!-- بەشی زیادکردنی فایلی دەنگی لە مۆبایلەوە بێ لینک -->
+            <div class="card" style="border-color: #ef4444; padding: 10px 14px;">
+                <h3 style="color: #ef4444; font-size: 13px; margin-bottom: 6px;">📂 لێدانی فایلی دەنگی ناوخۆیی (MP3)</h3>
+                <input type="file" id="localAudioUpload" accept="audio/*" onchange="playLocalAudioFile(event)" style="font-size: 12px; padding: 8px;">
+            </div>
 
             <div class="radio-player-bar">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <button id="radioPlayPauseBtn" onclick="toggleRadioPlay()" style="background: #ef4444; border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center;">▶</button>
                     <div>
-                        <div id="currentRadioTitle" style="font-size: 13px; font-weight: bold; color: #fff;">کەناڵێک هەڵبژێرە</div>
-                        <div style="font-size: 10px; color: #cbd5e1;">ڕادیۆی ئۆنلاین کوردی</div>
+                        <div id="currentRadioTitle" style="font-size: 13px; font-weight: bold; color: #fff;">کەناڵێک هەڵبژێرە یان فایل باربکە</div>
+                        <div style="font-size: 10px; color: #cbd5e1;">پلەیەری دەنگی</div>
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 6px;">
@@ -469,7 +473,6 @@
                     </label>
                 </div>
 
-                <!-- Floating Radio Toggle Setting -->
                 <div class="setting-row" style="margin-top: 10px;">
                     <span>پیشاندانی ڕادیۆ لەسەر شاشە</span>
                     <label class="switch">
@@ -513,7 +516,7 @@
         </div>
     </div>
 
-    <!-- Hidden Audio Player for Radio -->
+    <!-- Hidden Audio Player for Radio & Local Files -->
     <audio id="globalRadioAudio" style="display:none;"></audio>
 
     <!-- Firebase & Auth Logic -->
@@ -562,7 +565,7 @@
                     loadUserData();
                     if (window.loadLeaderboard) window.loadLeaderboard();
                 }).catch((error) => {
-                    console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
+                    console.error("هەڵە:", error);
                     alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
                 });
         };
@@ -768,7 +771,6 @@
         let xoMode = "bot";
         window.xoGameActive = true;
 
-        // Working Kurdish Radio Channels List with Stable Live Streams
         const radioChannels = [
             { id: 1, name: "کوردستان 24", url: "https://n06.radiojar.com/00swxkqm3d0uv" },
             { id: 2, name: "ڕووداو ئێف ئێم", url: "https://n07.radiojar.com/v8t5973c33quv" },
@@ -801,7 +803,6 @@
             }
         };
 
-        // Make Floating Radio Widget Draggable (Touch & Mouse support)
         function initDraggableFloatingWidget() {
             const widget = document.getElementById("floatingRadioWidget");
             let isDragging = false;
@@ -839,7 +840,6 @@
                 let newX = initialX + dx;
                 let newY = initialY + dy;
 
-                // Boundaries
                 newX = Math.max(10, Math.min(window.innerWidth - widget.offsetWidth - 10, newX));
                 newY = Math.max(10, Math.min(window.innerHeight - widget.offsetHeight - 10, newY));
 
@@ -848,7 +848,6 @@
                 widget.style.bottom = "auto";
                 widget.style.right = "auto";
 
-                // Update popup position relative to widget
                 updatePopupPosition(newX, newY);
             }
 
@@ -1044,7 +1043,7 @@
             loadUserData();
         }
 
-        /* Radio & Floating Widget Functions */
+        /* Radio & Local File Playback */
         function buildRadioGrid() {
             let gridHtml = "";
             radioChannels.forEach(ch => {
@@ -1060,9 +1059,6 @@
 
         function openRadioScreen() {
             switchScreen("radioScreen");
-            if (!currentActiveRadioId && radioChannels.length > 0) {
-                playRadioChannel(1);
-            }
         }
 
         function playRadioChannel(id) {
@@ -1085,12 +1081,35 @@
                 document.getElementById("floatingPlayPauseBtn").innerText = "❚❚";
                 document.getElementById("floatingRadioWidget").classList.add("playing");
             }).catch(err => {
-                console.log("Audio play error:", err);
+                console.log("هەڵە لە لێدان:", err);
                 isRadioPlaying = false;
                 document.getElementById("radioPlayPauseBtn").innerText = "▶";
                 document.getElementById("floatingPlayPauseBtn").innerText = "▶";
                 document.getElementById("floatingRadioWidget").classList.remove("playing");
             });
+        }
+
+        // فەنکشنی نوێ بۆ لێدانی فایلی ناوخۆیی بێ لینک
+        function playLocalAudioFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                let audio = document.getElementById("globalRadioAudio");
+                audio.src = fileURL;
+                
+                document.querySelectorAll(".radio-card").forEach(c => c.classList.remove("active-radio"));
+                document.getElementById("currentRadioTitle").innerText = "📁 " + file.name;
+                document.getElementById("floatingWidgetTitle").innerText = file.name;
+
+                audio.play().then(() => {
+                    isRadioPlaying = true;
+                    document.getElementById("radioPlayPauseBtn").innerText = "❚❚";
+                    document.getElementById("floatingPlayPauseBtn").innerText = "❚❚";
+                    document.getElementById("floatingRadioWidget").classList.add("playing");
+                }).catch(err => {
+                    console.log("هەڵە لە فایلی دەنگی:", err);
+                });
+            }
         }
 
         function toggleRadioPlay() {
@@ -1129,9 +1148,6 @@
                 popup.style.display = "flex";
                 let widgetRect = document.getElementById("floatingRadioWidget").getBoundingClientRect();
                 updatePopupPosition(widgetRect.left, widgetRect.top);
-                if (!currentActiveRadioId && radioChannels.length > 0) {
-                    playRadioChannel(1);
-                }
             }
         }
 
@@ -1139,7 +1155,6 @@
             switchScreen("hubScreen");
         }
 
-        /* Settings Actions */
         function toggleSoundSetting() {
             let isMuted = document.getElementById("soundToggle").checked;
             localStorage.setItem("toptop_sound_muted", isMuted);
