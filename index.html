@@ -354,12 +354,6 @@
         <div id="radioScreen" class="screen">
             <div class="brand-title" style="color: #ef4444;">🎵 گۆرانی کوردی</div>
 
-            <!-- بەشی زیادکردنی چەند فایلی دەنگی لە مۆبایلەوە -->
-            <div class="card" style="border-color: #ef4444; padding: 10px 14px;">
-                <h3 style="color: #ef4444; font-size: 13px; margin-bottom: 6px;">📂 زیادکردنی فایلی دەنگی نوێ (MP3)</h3>
-                <input type="file" id="localAudioUpload" accept="audio/*" multiple onchange="addLocalAudioFiles(event)" style="font-size: 12px; padding: 8px;">
-            </div>
-
             <div class="radio-player-bar">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <button id="radioPlayPauseBtn" onclick="toggleRadioPlay()" style="background: #ef4444; border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center;">▶</button>
@@ -771,10 +765,11 @@
         let xoMode = "bot";
         window.xoGameActive = true;
 
-        // لیستی گۆرانییە کوردییەکان (دەتوانیت فایلی تریش لە مۆبایلەکەتەوە زیاد بکەیت)
+        // لیستی گۆرانییە کوردییەکان (لێرەدا لینکی نوێ زیادکراوە)
         let radioSongs = [
             { id: 1, name: "گۆرانی کوردی ۱", url: "music/Aram Shaida 2019 (Chana Jwani Dada ....mp3" },
-            { id: 2, name: "گۆرانی کوردی ۲", url: "https://stream.zeno.fm/f3w2fs6k24zuv" }
+            { id: 2, name: "گۆرانی کوردی ۲", url: "https://stream.zeno.fm/f3w2fs6k24zuv" },
+            { id: 3, name: "گۆرانی کوردی ۳ (نوێ)", url: "https://radio.nawa.pk/stream" }
         ];
 
         let currentActiveRadioId = null;
@@ -1079,26 +1074,6 @@
                 document.getElementById("floatingPlayPauseBtn").innerText = "▶";
                 document.getElementById("floatingRadioWidget").classList.remove("playing");
             });
-        }
-
-        // زیادکردنی چەند فایلی دەنگی لە مۆبایلەوە
-        function addLocalAudioFiles(event) {
-            const files = event.target.files;
-            if (files && files.length > 0) {
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const fileURL = URL.createObjectURL(file);
-                    const newId = radioSongs.length + 1;
-                    radioSongs.push({
-                        id: newId,
-                        name: file.name.replace(/\.[^/.]+$/, ""),
-                        url: fileURL
-                    });
-                }
-                buildRadioGrid();
-                // لێدانی یەکەم فایلی زیادکراو بە شێوەیەکی خۆکار
-                playRadioChannel(radioSongs[radioSongs.length - files.length].id);
-            }
         }
 
         function toggleRadioPlay() {
