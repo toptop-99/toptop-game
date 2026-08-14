@@ -309,7 +309,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
@@ -327,10 +327,9 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // پشکنینی گەڕانەوەی گوگڵ کاتێک پەڕەکە لۆد دەبێتەوە
-        getRedirectResult(auth)
-            .then((result) => {
-                if (result) {
+        window.loginWithGoogle = function() {
+            signInWithPopup(auth, provider)
+                .then((result) => {
                     const user = result.user;
                     let username = user.displayName || user.email.split('@')[0];
                     let avatar = user.photoURL || "";
@@ -351,14 +350,10 @@
                     switchScreen("hubScreen");
                     loadUserData();
                     if (window.loadLeaderboard) window.loadLeaderboard();
-                }
-            }).catch((error) => {
-                console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
-                alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
-            });
-
-        window.loginWithGoogle = function() {
-            signInWithRedirect(auth, provider);
+                }).catch((error) => {
+                    console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
+                    alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
+                });
         };
 
         window.db = database;
