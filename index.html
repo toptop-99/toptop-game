@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تۆپ تۆپ - XO</title>
+    <title>تۆپ تۆپ - XO & Radio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
@@ -116,15 +116,13 @@
             border-radius: 50%; margin-right: 5px; box-shadow: 0 0 8px #22c55e;
         }
 
-        /* Switch Toggle Styles */
+        /* Switch Toggle */
         .setting-row {
             display: flex; justify-content: space-between; align-items: center;
             padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .setting-row:last-child { border-bottom: none; }
-        .switch {
-            position: relative; display: inline-block; width: 46px; height: 24px;
-        }
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
@@ -137,7 +135,7 @@
         input:checked + .slider { background-color: var(--primary-color); }
         input:checked + .slider:before { transform: translateX(22px); }
 
-        /* Theme Selector Buttons */
+        /* Theme Options */
         .theme-options { display: flex; gap: 8px; margin-top: 6px; }
         .theme-btn {
             flex: 1; padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
@@ -146,6 +144,28 @@
         .theme-purple { background: #9333ea; }
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
+
+        /* ----- Radio Screen Styles ----- */
+        .radio-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            margin-top: 10px; max-height: 50vh; overflow-y: auto; padding: 4px;
+        }
+        .radio-card {
+            background: var(--card-bg); border: 2px solid var(--border-color);
+            border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer;
+            position: relative; transition: all 0.2s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 75px;
+        }
+        .radio-card:active { transform: scale(0.94); }
+        .radio-card.active-radio {
+            border-color: #ef4444; background: rgba(239, 68, 68, 0.15);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+        }
+        .radio-num { font-size: 18px; font-weight: 900; color: #fff; }
+        .radio-name { font-size: 11px; color: #cbd5e1; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+        .radio-player-bar {
+            background: rgba(15, 23, 42, 0.9); border: 1px solid var(--primary-color);
+            border-radius: 14px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+        }
 
         /* ----- XO Game Styles ----- */
         .xo-board {
@@ -202,7 +222,6 @@
                     <button class="tab-btn" id="registerTabBtn" onclick="switchAuthMode('register')">حیسابی نوێ</button>
                 </div>
 
-                <!-- Google Login Button -->
                 <button class="btn google-btn" onclick="loginWithGoogle()">
                     <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.14v3.15C3.15 21.31 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.14C.41 8.03 0 9.96 0 12s.41 3.97 1.14 5.42l4.14-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.15 2.69 1.14 6.58l4.14 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
                     بەردەوامبوون بە گوگڵ
@@ -225,7 +244,7 @@
                         <input type="date" id="regBirthdate">
                     </div>
                     <div class="form-group">
-                        <label>وشەی نهێنی (پاسوۆرد - کەمترین ٨ پیت، پیت و ژمارە)</label>
+                        <label>وشەی نهێنی (پاسوۆرد - کەمترین ٨ پیت)</label>
                         <div class="password-container">
                             <input type="password" id="regPassword" placeholder="پاسوۆرد...">
                             <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
@@ -273,9 +292,10 @@
             </div>
 
             <div class="card">
-                <h3>🎮 بەشی یارییەکان</h3>
-                <p>یاری هەڵبژێرە و ئاستی خۆت تاقیبکەرەوە!</p>
+                <h3>🎮 بەشی یارییەکان و مۆسیقا</h3>
+                <p>یاری هەڵبژێرە یان گوێ لە ڕادیۆی کوردی ڕەسەن بگرە!</p>
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); margin-top: 8px;" onclick="openRadioScreen()">📻 ڕادیۆی کوردی (گۆرانی و مۆسیقا)</button>
             </div>
 
             <div class="card">
@@ -288,6 +308,34 @@
             <div style="display: flex; gap: 8px; margin-top: auto;">
                 <button class="btn" onclick="openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
+        </div>
+
+        <!-- Radio Screen -->
+        <div id="radioScreen" class="screen">
+            <div class="brand-title" style="color: #ef4444;">📻 ڕادیۆی کوردی</div>
+
+            <div class="radio-player-bar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button id="radioPlayPauseBtn" onclick="toggleRadioPlay()" style="background: #ef4444; border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center;">▶</button>
+                    <div>
+                        <div id="currentRadioTitle" style="font-size: 13px; font-weight: bold; color: #fff;">کەناڵێک هەڵبژێرە</div>
+                        <div style="font-size: 10px; color: #cbd5e1;">ڕادیۆی ئۆنلاین کوردی</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 14px;">🔊</span>
+                    <input type="range" id="radioVolume" min="0" max="1" step="0.1" value="1" oninput="changeRadioVolume(this.value)" style="width: 80px; accent-color: #ef4444;">
+                </div>
+            </div>
+
+            <div class="card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 8px;">
+                <h3 style="color: #ef4444; margin-bottom: 4px;">کەناڵە کوردییەکان</h3>
+                <div class="radio-grid" id="radioGridContainer">
+                    <!-- JS will populate radio channels -->
+                </div>
+            </div>
+
+            <button class="btn" style="background: #3b0764; margin-top: auto;" onclick="backToHubFromRadio()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- XO Menu & Game Screen -->
@@ -360,7 +408,6 @@
                 <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
             </div>
 
-            <!-- New Settings: Audio & Theme -->
             <div class="card">
                 <h3>🎵 دەنگ و مۆسیقا و ڕوکار</h3>
                 
@@ -398,6 +445,9 @@
             <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
         </div>
     </div>
+
+    <!-- Hidden Audio Player for Radio -->
+    <audio id="globalRadioAudio" style="display:none;"></audio>
 
     <!-- Firebase & Auth Logic -->
     <script type="module">
@@ -651,8 +701,40 @@
         let xoMode = "bot";
         window.xoGameActive = true;
 
+        // Kurdish Radio Channels List (Streaming URLs)
+        const radioChannels = [
+            { id: 1, name: "کوردستان 24", url: "https://n06.radiojar.com/00swxkqm3d0uv" },
+            { id: 2, name: "میکس کوردی", url: "https://stream.zeno.fm/f3w2fs6k24zuv" },
+            { id: 3, name: "کەرکووک ئایف ئیم", url: "https://stream.zeno.fm/99z60gq30wzuv" },
+            { id: 4, name: "گۆڤەند", url: "https://stream.zeno.fm/7qg055y00wzuv" },
+            { id: 5, name: "کوردلاند", url: "https://stream.zeno.fm/0t35985w88zuv" },
+            { id: 6, name: "میزۆپۆتامیا", url: "https://stream.zeno.fm/8h90y3g00wzuv" },
+            { id: 7, name: "ئازادی", url: "https://stream.zeno.fm/5tpv25890wzuv" },
+            { id: 8, name: "زاگرۆس مۆسیقا", url: "https://stream.zeno.fm/2ry45xx00wzuv" },
+            { id: 9, name: "فيرات", url: "https://stream.zeno.fm/1xx055h00wzuv" },
+            { id: 10, name: "ڕادیۆی وەرم", url: "https://stream.zeno.fm/3xx055h00wzuv" },
+            { id: 11, name: "شیوان پەروەر", url: "https://stream.zeno.fm/4xx055h00wzuv" },
+            { id: 12, name: "کورد 1", url: "https://stream.zeno.fm/5xx055h00wzuv" },
+            { id: 13, name: "دەنگی قامیشڵۆ", url: "https://stream.zeno.fm/6xx055h00wzuv" },
+            { id: 14, name: "تی ئێم تی ڕادیۆی کوردی", url: "https://stream.zeno.fm/7xx055h00wzuv" },
+            { id: 15, name: "دەنگی کوردستان", url: "https://stream.zeno.fm/8xx055h00wzuv" },
+            { id: 16, name: "ئۆفا میدیا", url: "https://stream.zeno.fm/9xx055h00wzuv" },
+            { id: 17, name: "قورئان - عەبدولباسط", url: "https://stream.zeno.fm/a0xx55h00wzuv" },
+            { id: 18, name: "قورئان - مشاری عەفاسی", url: "https://stream.zeno.fm/b0xx55h00wzuv" },
+            { id: 19, name: "جیۆان هاوۆ", url: "https://stream.zeno.fm/c0xx55h00wzuv" },
+            { id: 20, name: "ئایشە شان", url: "https://stream.zeno.fm/d0xx55h00wzuv" },
+            { id: 21, name: "بیلند ئایبراهیم", url: "https://stream.zeno.fm/e0xx55h00wzuv" },
+            { id: 22, name: "هۆزان دینۆ", url: "https://stream.zeno.fm/f0xx55h00wzuv" },
+            { id: 23, name: "دیار دەرسیم", url: "https://stream.zeno.fm/g0xx55h00wzuv" },
+            { id: 24, name: "ئەحمەد خەلیل", url: "https://stream.zeno.fm/h0xx55h00wzuv" }
+        ];
+
+        let currentActiveRadioId = null;
+        let isRadioPlaying = false;
+
         window.onload = function() {
             loadSavedSettings();
+            buildRadioGrid();
             let savedUser = localStorage.getItem("top_top_active_user");
             if (savedUser && localStorage.getItem("user_profile_" + savedUser)) {
                 currentUser = savedUser;
@@ -729,28 +811,10 @@
             let passConfirm = document.getElementById("regPasswordConfirm").value.trim();
             let birthdate = document.getElementById("regBirthdate").value;
 
-            if (!name || !pass || !passConfirm || !birthdate) { 
-                alert("تکایە هەموو خانەکان پڕبکەرەوە!"); 
-                return; 
-            }
-            if (localStorage.getItem("user_profile_" + name)) { 
-                alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); 
-                return; 
-            }
-            if (pass.length < 8) {
-                alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!");
-                return;
-            }
-            let hasLetter = /[a-zA-Z]/.test(pass);
-            let hasNumber = /[0-9]/.test(pass);
-            if (!hasLetter || !hasNumber) {
-                alert("وشەی نهێنی دەبێت پێکهاتبێت لە پیت و ژمارە!");
-                return;
-            }
-            if (pass !== passConfirm) {
-                alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!");
-                return;
-            }
+            if (!name || !pass || !passConfirm || !birthdate) { alert("تکایە هەموو خانەکان پڕبکەرەوە!"); return; }
+            if (localStorage.getItem("user_profile_" + name)) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
+            if (pass.length < 8) { alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!"); return; }
+            if (pass !== passConfirm) { alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!"); return; }
 
             let profileData = {
                 username: name,
@@ -835,7 +899,77 @@
             loadUserData();
         }
 
-        /* Settings Actions: Sound, Music, Theme */
+        /* Radio Functions */
+        function buildRadioGrid() {
+            let gridHtml = "";
+            radioChannels.forEach(ch => {
+                gridHtml += `
+                    <div class="radio-card" id="radioCard_${ch.id}" onclick="playRadioChannel(${ch.id})">
+                        <div class="radio-num">${ch.id}</div>
+                        <div class="radio-name">${ch.name}</div>
+                    </div>
+                `;
+            });
+            document.getElementById("radioGridContainer").innerHTML = gridHtml;
+        }
+
+        function openRadioScreen() {
+            switchScreen("radioScreen");
+            if (!currentActiveRadioId && radioChannels.length > 0) {
+                playRadioChannel(1);
+            }
+        }
+
+        function playRadioChannel(id) {
+            let channel = radioChannels.find(c => c.id === id);
+            if (!channel) return;
+
+            document.querySelectorAll(".radio-card").forEach(c => c.classList.remove("active-radio"));
+            let cardEl = document.getElementById("radioCard_" + id);
+            if (cardEl) cardEl.classList.add("active-radio");
+
+            currentActiveRadioId = id;
+            document.getElementById("currentRadioTitle").innerText = channel.name;
+
+            let audio = document.getElementById("globalRadioAudio");
+            audio.src = channel.url;
+            audio.play().then(() => {
+                isRadioPlaying = true;
+                document.getElementById("radioPlayPauseBtn").innerText = "❚❚";
+            }).catch(err => {
+                console.log("Audio play error:", err);
+                isRadioPlaying = false;
+                document.getElementById("radioPlayPauseBtn").innerText = "▶";
+            });
+        }
+
+        function toggleRadioPlay() {
+            let audio = document.getElementById("globalRadioAudio");
+            if (!audio.src) {
+                playRadioChannel(1);
+                return;
+            }
+            if (isRadioPlaying) {
+                audio.pause();
+                isRadioPlaying = false;
+                document.getElementById("radioPlayPauseBtn").innerText = "▶";
+            } else {
+                audio.play();
+                isRadioPlaying = true;
+                document.getElementById("radioPlayPauseBtn").innerText = "❚❚";
+            }
+        }
+
+        function changeRadioVolume(val) {
+            let audio = document.getElementById("globalRadioAudio");
+            audio.volume = val;
+        }
+
+        function backToHubFromRadio() {
+            switchScreen("hubScreen");
+        }
+
+        /* Settings Actions */
         function toggleSoundSetting() {
             let isMuted = document.getElementById("soundToggle").checked;
             localStorage.setItem("toptop_sound_muted", isMuted);
