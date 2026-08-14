@@ -615,9 +615,11 @@
             generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
             pendingUser = { username: name, email: email, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "" };
 
+            // سازگارکراو لەگەڵ Templateـەکەی EmailJS (name و time و message)
             let templateParams = { 
                 to_email: email, 
-                user_name: name,
+                name: name,
+                time: new Date().toLocaleTimeString(),
                 message: generatedCode 
             };
 
