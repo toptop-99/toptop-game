@@ -109,7 +109,6 @@
             margin-bottom: 6px; border: 1px solid #581c87;
         }
 
-        /* ----- Loading Spinner for Matchmaking ----- */
         .spinner {
             width: 50px; height: 50px;
             border: 5px solid rgba(192, 132, 252, 0.2);
@@ -228,14 +227,12 @@
         <div id="xoScreen" class="screen">
             <div class="brand-title">یاری XO</div>
             
-            <!-- Mode Selection -->
             <div id="xoModeSelect" class="card">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
                 <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
                 <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 10px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
             </div>
 
-            <!-- Waiting Room / Matchmaking Spinner -->
             <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 20px;">
                 <h3 style="color: #c084fc; font-size: 18px;">گەڕان بۆ یاریزان...</h3>
                 <div class="spinner"></div>
@@ -243,7 +240,6 @@
                 <button class="btn" onclick="cancelMatchmaking()" style="background: #ef4444; margin-top: 15px;">پەشیمانبوونەوە</button>
             </div>
 
-            <!-- XO Game Area -->
             <div id="xoGameArea" style="display: none;">
                 <div class="score-board">
                     <div class="score-box">
@@ -305,7 +301,7 @@
         </div>
     </div>
 
-    <!-- Firebase Config & Realtime Online Logic -->
+    <!-- Firebase & Matchmaking Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -379,9 +375,8 @@
             });
         };
 
-        /* ----- REALTIME ONLINE MATCHMAKING LOGIC ----- */
         let currentRoomId = null;
-        let myRole = ""; // 'X' or 'O'
+        let myRole = ""; 
         let roomUnsubscribe = null;
 
         window.startOnlineMatchmaking = function(username) {
@@ -524,7 +519,6 @@
         let pendingUser = {};
         let timerInterval = null;
 
-        // XO Variables
         window.xoState = ["", "", "", "", "", "", "", "", ""];
         window.xoTurn = "X";
         let xoMode = "bot";
@@ -609,7 +603,6 @@
             }, 1000);
         }
 
-        /* 🔴 ئەمەش بەشە چاککراوەکەیە بۆ ناردنی ئیمەیڵ 🔴 */
         function sendEmailCode() {
             let name = document.getElementById("regUsername").value.trim();
             let email = document.getElementById("regEmail").value.trim();
@@ -622,7 +615,6 @@
             generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
             pendingUser = { username: name, email: email, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "" };
 
-            // ڕێکخستنی ناوی کلیلی زانیارییەکان ڕێک وەک وەڵامی EmailJS
             let templateParams = { 
                 to_email: email, 
                 user_name: name,
@@ -727,7 +719,6 @@
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
-        /* ----- XO Game Logic ----- */
         function openXoMenu() {
             switchScreen("xoScreen");
             document.getElementById("xoModeSelect").style.display = "block";
