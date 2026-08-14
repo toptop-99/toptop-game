@@ -143,6 +143,50 @@
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
 
+        /* ----- Floating Radio Widget (Floating Bubble) ----- */
+        #floatingRadioWidget {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6);
+            z-index: 9999;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        #floatingRadioWidget:active { transform: scale(0.9); }
+        #floatingRadioWidget.playing {
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* ----- Floating Radio Expanded Control Modal/Box ----- */
+        #floatingRadioPopup {
+            position: fixed;
+            bottom: 95px;
+            left: 20px;
+            width: 280px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #ef4444;
+            border-radius: 16px;
+            padding: 14px;
+            display: none;
+            z-index: 10000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
         /* ----- Radio Screen Styles ----- */
         .radio-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
@@ -425,6 +469,15 @@
                     </label>
                 </div>
 
+                <!-- Floating Radio Toggle Setting -->
+                <div class="setting-row" style="margin-top: 10px;">
+                    <span>پیشاندانی تۆپی مەلەنگی ڕادیۆ لەسەر شاشە</span>
+                    <label class="switch">
+                        <input type="checkbox" id="floatingRadioToggle" checked onchange="toggleFloatingRadioSetting()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
                 <div style="margin-top: 12px;">
                     <label>گۆڕینی ڕەنگی سەرەکی (Theme)</label>
                     <div class="theme-options">
@@ -441,6 +494,22 @@
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
+        </div>
+    </div>
+
+    <!-- Floating Radio Widget Button & Popup Control -->
+    <div id="floatingRadioWidget" onclick="toggleFloatingPopup()">
+        <span style="font-size: 26px;">📻</span>
+    </div>
+
+    <div id="floatingRadioPopup">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span id="floatingWidgetTitle" style="font-size: 12px; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">ڕادیۆ هەڵبژێرە</span>
+            <button onclick="toggleFloatingPopup()" style="background: none; border: none; color: #cbd5e1; font-size: 14px; cursor: pointer;">✕</button>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <button id="floatingPlayPauseBtn" onclick="toggleRadioPlay()" style="background: #ef4444; border: none; width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center;">▶</button>
+            <input type="range" id="floatingVolume" min="0" max="1" step="0.1" value="1" oninput="changeRadioVolume(this.value)" style="flex: 1; accent-color: #ef4444;">
         </div>
     </div>
 
@@ -748,6 +817,16 @@
         function switchScreen(id) {
             document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
             document.getElementById(id).classList.add("active");
+            
+            // Manage visibility of floating radio bubble widget based on active screen & user settings
+            let floatingWidget = document.getElementById("floatingRadioWidget");
+            let isFloatingEnabled = localStorage.getItem("toptop_floating_radio") !== "false";
+            if (id !== "authScreen" && isFloatingEnabled) {
+                floatingWidget.style.display = "flex";
+            } else {
+                floatingWidget.style.display = "none";
+                document.getElementById("floatingRadioPopup").style.display = "none";
+            }
         }
 
         function switchAuthMode(mode) {
@@ -897,7 +976,7 @@
             loadUserData();
         }
 
-        /* Radio Functions */
+        /* Radio & Floating Widget Functions */
         function buildRadioGrid() {
             let gridHtml = "";
             radioChannels.forEach(ch => {
@@ -928,16 +1007,21 @@
 
             currentActiveRadioId = id;
             document.getElementById("currentRadioTitle").innerText = channel.name;
+            document.getElementById("floatingWidgetTitle").innerText = channel.name;
 
             let audio = document.getElementById("globalRadioAudio");
             audio.src = channel.url;
             audio.play().then(() => {
                 isRadioPlaying = true;
                 document.getElementById("radioPlayPauseBtn").innerText = "❚❚";
+                document.getElementById("floatingPlayPauseBtn").innerText = "❚❚";
+                document.getElementById("floatingRadioWidget").classList.add("playing");
             }).catch(err => {
                 console.log("Audio play error:", err);
                 isRadioPlaying = false;
                 document.getElementById("radioPlayPauseBtn").innerText = "▶";
+                document.getElementById("floatingPlayPauseBtn").innerText = "▶";
+                document.getElementById("floatingRadioWidget").classList.remove("playing");
             });
         }
 
@@ -951,16 +1035,34 @@
                 audio.pause();
                 isRadioPlaying = false;
                 document.getElementById("radioPlayPauseBtn").innerText = "▶";
+                document.getElementById("floatingPlayPauseBtn").innerText = "▶";
+                document.getElementById("floatingRadioWidget").classList.remove("playing");
             } else {
                 audio.play();
                 isRadioPlaying = true;
                 document.getElementById("radioPlayPauseBtn").innerText = "❚❚";
+                document.getElementById("floatingPlayPauseBtn").innerText = "❚❚";
+                document.getElementById("floatingRadioWidget").classList.add("playing");
             }
         }
 
         function changeRadioVolume(val) {
             let audio = document.getElementById("globalRadioAudio");
             audio.volume = val;
+            document.getElementById("radioVolume").value = val;
+            document.getElementById("floatingVolume").value = val;
+        }
+
+        function toggleFloatingPopup() {
+            let popup = document.getElementById("floatingRadioPopup");
+            if (popup.style.display === "flex") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "flex";
+                if (!currentActiveRadioId && radioChannels.length > 0) {
+                    playRadioChannel(1);
+                }
+            }
         }
 
         function backToHubFromRadio() {
@@ -978,6 +1080,19 @@
             localStorage.setItem("toptop_music_muted", isMuted);
         }
 
+        function toggleFloatingRadioSetting() {
+            let isEnabled = document.getElementById("floatingRadioToggle").checked;
+            localStorage.setItem("toptop_floating_radio", isEnabled);
+            let floatingWidget = document.getElementById("floatingRadioWidget");
+            let activeScreen = document.querySelector(".screen.active");
+            if (isEnabled && activeScreen && activeScreen.id !== "authScreen") {
+                floatingWidget.style.display = "flex";
+            } else {
+                floatingWidget.style.display = "none";
+                document.getElementById("floatingRadioPopup").style.display = "none";
+            }
+        }
+
         function setAppTheme(themeName) {
             document.body.setAttribute("data-theme", themeName);
             localStorage.setItem("toptop_theme", themeName);
@@ -986,10 +1101,12 @@
         function loadSavedSettings() {
             let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
             let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
+            let floatingEnabled = localStorage.getItem("toptop_floating_radio") !== "false";
             let savedTheme = localStorage.getItem("toptop_theme") || "purple";
 
             document.getElementById("soundToggle").checked = soundMuted;
             document.getElementById("musicToggle").checked = musicMuted;
+            document.getElementById("floatingRadioToggle").checked = floatingEnabled;
             document.body.setAttribute("data-theme", savedTheme);
         }
 
