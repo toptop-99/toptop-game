@@ -94,7 +94,6 @@
             padding: 8px 14px; border-radius: 12px; border: 1px solid var(--primary-color);
         }
         
-        /* Circular Profile & Setting Button styles */
         .circle-profile-btn {
             width: 48px; height: 48px; border-radius: 50%; background: #2e1065;
             border: 2px solid var(--text-glow); display: flex; justify-content: center; align-items: center;
@@ -160,7 +159,6 @@
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
 
-        /* XO Game Styles */
         .xo-board {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
             width: 100%; max-width: 280px; margin: 10px auto; aspect-ratio: 1;
@@ -189,7 +187,6 @@
             margin-bottom: 4px; border: 1px solid var(--border-color); font-size: 12px;
         }
 
-        /* Word Game Styles */
         .word-game-board { text-align: center; padding: 10px; }
         .target-letter-box {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
@@ -242,7 +239,6 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Shopping Store Styles */
         .shop-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -285,6 +281,15 @@
             color: #fde047;
             font-weight: bold;
             margin-bottom: 8px;
+        }
+        .user-balance-badge {
+            background: rgba(253, 224, 71, 0.2);
+            border: 1px solid #fde047;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #fde047;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -359,20 +364,18 @@
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
             
-            <!-- Top Bar: Profile on the Right, Setting on the Left -->
             <div class="top-bar">
-                <!-- Profile Button on the Right -->
                 <button class="circle-profile-btn" onclick="openProfileScreen()" title="پڕۆفایل">
                     <img id="hubAvatarImg" src="" alt="Profile" style="display:none;" />
                     <span id="hubAvatarPlaceholder" style="font-size: 16px; color: #fff;">👤</span>
                 </button>
 
                 <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="user-balance-badge" id="hubUserScoreDisplay">💰 ٠ خاڵ</div>
                     <span class="online-badge"></span>
                     <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                 </div>
 
-                <!-- Setting Button on the Left -->
                 <button class="circle-setting-btn" onclick="openSettingsScreen()" title="ڕێکخستنەکان">
                     ⚙️
                 </button>
@@ -394,7 +397,7 @@
             </div>
         </div>
 
-        <!-- XO Menu & Game Screen -->
+        <!-- XO Screen -->
         <div id="xoScreen" class="screen">
             <div class="brand-title">یاری XO</div>
             
@@ -445,7 +448,7 @@
             <button class="btn" style="margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Word Game Menu & Screen -->
+        <!-- Word Screen -->
         <div id="wordScreen" class="screen">
             <div class="brand-title">وشە باران</div>
 
@@ -521,10 +524,10 @@
 
             <div class="card" style="text-align: center; margin-bottom: 8px;">
                 <p style="font-size: 12px; color: var(--text-glow); font-weight: bold;">💎 گرانترین و جوانترین مێزەڵانی زێر و الماس ڕێزلێنراو بۆ سەرکردەکان!</p>
+                <p style="font-size: 11px; color: #fde047; margin-top: 4px;" id="shopUserBalanceText">باڵانسی تۆ: ٠ خاڵ</p>
             </div>
 
             <div class="shop-grid">
-                <!-- Item 1 -->
                 <div class="shop-item-card">
                     <div>
                         <div class="shop-item-icon">🌟</div>
@@ -537,7 +540,6 @@
                     </div>
                 </div>
 
-                <!-- Item 2 -->
                 <div class="shop-item-card">
                     <div>
                         <div class="shop-item-icon">💎</div>
@@ -550,7 +552,6 @@
                     </div>
                 </div>
 
-                <!-- Item 3 -->
                 <div class="shop-item-card">
                     <div>
                         <div class="shop-item-icon">👑</div>
@@ -563,7 +564,6 @@
                     </div>
                 </div>
 
-                <!-- Item 4 -->
                 <div class="shop-item-card">
                     <div>
                         <div class="shop-item-icon">🏆</div>
@@ -580,7 +580,7 @@
             <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Dedicated Profile Screen (Expanded for Future Features) -->
+        <!-- Profile Screen -->
         <div id="profileScreen" class="screen">
             <div class="brand-title">پڕۆفایلی من</div>
             
@@ -598,16 +598,15 @@
                 <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردنی گۆڕانکاری</button>
             </div>
 
-            <!-- Future features placeholder card -->
             <div class="card">
                 <h3>⭐ زانیاری و ئاماری یاریزان</h3>
-                <p>لێرە دەتوانیت لە داهاتوودا تایبەتمەندی و ئاماری زیاتر زیاد بکەیت.</p>
+                <p id="profileUserStatsText">کۆی خاڵەکانت: ٠</p>
             </div>
 
             <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Settings Screen (Only Settings and Logout) -->
+        <!-- Settings Screen -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
 
@@ -640,13 +639,11 @@
                 </div>
             </div>
 
-            <!-- Logout Button inside Settings -->
             <button class="btn" onclick="logoutUser()" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-bottom: 6px;">🚪 دەرچوون لە حیساب</button>
             <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
     </div>
 
-    <!-- Firebase & Core Game Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -679,7 +676,7 @@
                         username: username,
                         email: user.email,
                         avatar: avatar,
-                        score: 0
+                        score: 1000 // دیاریکردنی سەرەتایی خاڵ بۆ بەکارهێنەر
                     };
 
                     localStorage.setItem("user_profile_" + username, JSON.stringify(profileData));
@@ -692,7 +689,7 @@
                     loadUserData();
                     if (window.loadLeaderboard) window.loadLeaderboard();
                 }).catch((error) => {
-                    console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
+                    console.error("هەڵە:", error);
                     alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
                 });
         };
@@ -710,6 +707,16 @@
             const userStatusRef = ref(database, 'users/' + username + '/status');
             set(userStatusRef, 'online');
             onDisconnect(userStatusRef).set('offline');
+            
+            // دڵنیابوونەوە لەوەی کاتێک دەچێتە ژوورەوە خاڵەکانیشی لە فایەربەیس סינק ببن
+            const scoreRef = ref(database, 'users/' + username + '/score');
+            get(scoreRef).then(snap => {
+                if(!snap.exists()) {
+                    let localProf = JSON.parse(localStorage.getItem("user_profile_" + username) || "{}");
+                    let currentScr = localProf.score || 1000;
+                    set(scoreRef, currentScr);
+                }
+            });
         };
 
         window.setOfflineStatus = function(username) {
@@ -722,7 +729,15 @@
             const scoreRef = ref(database, 'users/' + username + '/score');
             get(scoreRef).then(snapshot => {
                 let currentScore = snapshot.exists() ? snapshot.val() : 0;
-                set(scoreRef, currentScore + pts);
+                let newScore = currentScore + pts;
+                set(scoreRef, newScore);
+                
+                // نوێکردنەوە لە لۆکاڵستۆرجیشدا
+                let prof = JSON.parse(localStorage.getItem("user_profile_" + username) || "{}");
+                prof.score = newScore;
+                localStorage.setItem("user_profile_" + username, JSON.stringify(prof));
+                
+                loadUserData();
                 loadLeaderboard();
             });
         };
@@ -1138,6 +1153,13 @@
                         document.getElementById("wordGameStatusText").innerText = room.winnerName;
                         document.getElementById("wordInputText").disabled = true;
                         document.getElementById("wordSendBtn").disabled = true;
+                        
+                        // زیادکردنی خاڵەکان بۆ براوە
+                        if (!room.rewardAdded && wordMyRole === 'player1') {
+                            if (p1Score > p2Score) window.addScore(room.player1, 50);
+                            else if (p2Score > p1Score && room.player2) window.addScore(room.player2, 50);
+                            update(roomRef, { rewardAdded: true });
+                        }
                     } else {
                         document.getElementById("wordGameStatusText").innerText = "یاری بەڕێوەیە...";
                     }
@@ -1188,6 +1210,9 @@
                 wordsObj[newWordKey] = { word: trimmed, user: username };
 
                 room.scores[wordMyRole] = (room.scores[wordMyRole] || 0) + 10;
+                
+                // زیادکردنی 10 خاڵ بە شێوەیەکی راستەوخۆ بۆ هەموو وشەیەکی ڕاست
+                window.addScore(username, 10);
 
                 let updates = {
                     words: wordsObj,
@@ -1340,7 +1365,7 @@
             if (pass.length < 8) { alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!"); return; }
             if (pass !== passConfirm) { alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!"); return; }
 
-            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 0 };
+            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 1000 };
             localStorage.setItem("user_profile_" + name, JSON.stringify(profileData));
             localStorage.setItem("top_top_active_user", name);
             currentUser = name;
@@ -1381,6 +1406,7 @@
         function loadUserData() {
             let profileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = profileData ? JSON.parse(profileData) : {};
+            let currentScore = profile.score || 0;
 
             let avatarEl = document.getElementById("profileAvatarPreview");
             let placeholderEl = document.getElementById("profileAvatarPlaceholder");
@@ -1405,6 +1431,11 @@
                 hubPlaceholder.style.display = "block";
             }
             document.getElementById("profileUsernameInput").value = currentUser;
+            document.getElementById("hubUserScoreDisplay").innerText = "💰 " + currentScore + " خاڵ";
+            document.getElementById("profileUserStatsText").innerText = "کۆی خاڵەکانت: " + currentScore;
+            
+            let shopBalanceText = document.getElementById("shopUserBalanceText");
+            if(shopBalanceText) shopBalanceText.innerText = "باڵانسی تۆ: " + currentScore + " خاڵ";
         }
 
         function saveProfileChanges() {
@@ -1460,13 +1491,35 @@
         function openSettingsScreen() { switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
-        /* Shopping Screen Navigation */
+        /* Shopping Screen Navigation & Purchasing Logic */
         function openShopScreen() {
+            loadUserData();
             switchScreen("shopScreen");
         }
 
         function buyShopItem(itemName, itemPrice) {
-            alert("پیرۆزە! تۆ بە سەرکەوتوویی '" + itemName + "' ات کڕی بە بڕی " + itemPrice + " خاڵ!");
+            let profileData = localStorage.getItem("user_profile_" + currentUser);
+            let profile = profileData ? JSON.parse(profileData) : {};
+            let currentScore = profile.score || 0;
+
+            if (currentScore < itemPrice) {
+                alert("⚠️ خاڵەکانت بەس نییە! پێویستت بە " + itemPrice + " خاڵ هەیە بۆ کڕینی ئەم مێزەڵانە.");
+                return;
+            }
+
+            // کەمکردنەوەی خاڵەکان لە پاشەکەوت و فایەربەیس
+            let newScore = currentScore - itemPrice;
+            profile.score = newScore;
+            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
+
+            if (window.db && window.dbRef && window.dbSet) {
+                const scoreRef = window.dbRef(window.db, 'users/' + currentUser + '/score');
+                window.dbSet(scoreRef, newScore);
+            }
+
+            alert("🎉 پیرۆزە! تۆ بە سەرکەوتوویی '" + itemName + "' ات کڕی بە بڕی " + itemPrice + " خاڵ!");
+            loadUserData();
+            if (window.loadLeaderboard) window.loadLeaderboard();
         }
 
         /* XO Navigation */
@@ -1505,7 +1558,9 @@
                     document.getElementById("xoStatusText").innerText = `بردیەوە ${window.xoTurn}! 🎉`;
                     window.xoGameActive = false;
                     document.getElementById("xoResetBtn").style.display = "block";
-                    if(window.xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
+                    if(window.xoTurn === "X" && window.addScore) {
+                        window.addScore(currentUser, 20); // زیادکردنی 20 خاڵ بۆ بردنەوەی XO بەرامبەر بۆت
+                    }
                     return;
                 }
 
