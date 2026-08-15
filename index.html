@@ -215,6 +215,36 @@
             100% { transform: scale(1); }
         }
 
+        /* Tug of War Styles */
+        .tug-arena {
+            background: rgba(0,0,0,0.3); border-radius: 14px; padding: 15px; margin-bottom: 10px; text-align: center;
+            border: 1px solid var(--primary-color); position: relative; overflow: hidden;
+        }
+        .rope-track {
+            width: 100%; height: 16px; background: #334155; border-radius: 8px; margin: 20px 0; position: relative; overflow: visible;
+        }
+        .rope-knot {
+            width: 28px; height: 28px; background: #eab308; border-radius: 50%;
+            position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+            box-shadow: 0 0 10px #eab308; transition: left 0.1s ease;
+        }
+        .tap-btn-giant {
+            width: 100%; max-width: 220px; height: 90px; margin: 15px auto;
+            background: linear-gradient(135deg, #f43f5e, #e11d48); border-radius: 50% / 30%;
+            display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: 900;
+            color: #fff; cursor: pointer; box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
+            border: 3px solid #ffe4e6; transition: transform 0.05s ease;
+        }
+        .tap-btn-giant:active { transform: scale(0.92); background: linear-gradient(135deg, #e11d48, #be123c); }
+
+        /* Shop Styles */
+        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+        .shop-item {
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center;
+        }
+        .shop-item h4 { margin: 0 0 4px 0; font-size: 12px; color: var(--text-glow); }
+        .shop-item p { font-size: 10px; color: #cbd5e1; margin-bottom: 6px; }
+
         .spinner {
             width: 40px; height: 40px;
             border: 4px solid rgba(192, 132, 252, 0.2);
@@ -311,7 +341,8 @@
                 <h3>🎮 بەشی یارییەکان</h3>
                 <p>یاری هەڵبژێرە!</p>
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb);" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
             </div>
 
             <div class="card">
@@ -445,6 +476,83 @@
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Tug of War Menu, Shop & Game Screen -->
+        <div id="tugScreen" class="screen">
+            <div class="brand-title">ڕاکێشانی گوریس</div>
+
+            <div id="tugMenuArea" class="card">
+                <h3>مۆدی یاری گوریس هەڵبژێرە:</h3>
+                <button class="btn" onclick="startTugVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 دژ بە کۆمپیوتەر</button>
+                <button class="btn" onclick="startOnlineTug()" style="background: #16a34a; margin-bottom: 6px;">🌐 یاری ئۆنلاین (بەستراو بە Firebase)</button>
+                <button class="btn" onclick="openTugShop()" style="background: #f59e0b;">🛒 بەشی شوپینگ (کڕینی گوریسی تایبەت)</button>
+            </div>
+
+            <!-- Tug Shop Area -->
+            <div id="tugShopArea" class="card" style="display: none;">
+                <h3>🛒 شوپینگی گوریسی یاری</h3>
+                <p>گوریسی دڵخوازی خۆت بکڕە و لە یارییەکەدا بەکاری بهێنە!</p>
+                <div class="shop-grid">
+                    <div class="shop-item">
+                        <h4>🔴 گوریسی سوور</h4>
+                        <p>٥٠ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('red', 50)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                    <div class="shop-item">
+                        <h4>🟡 گوریسی زەرد</h4>
+                        <p>٧٥ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('yellow', 75)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                    <div class="shop-item">
+                        <h4>⭐ گوریسی ئاست (زێر)</h4>
+                        <p>١٥٠ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('gold', 150)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                    <div class="shop-item">
+                        <h4>🔥 گوریسی ئاگرین</h4>
+                        <p>٢٥٠ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('fire', 250)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                </div>
+                <button class="btn" onclick="closeTugShop()" style="background: #ef4444; margin-top: 10px;">گەڕانەوە بۆ منۆی گوریس</button>
+            </div>
+
+            <div id="tugLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
+                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزانی گوریس...</h3>
+                <div class="spinner"></div>
+                <p style="font-size: 12px; color: #cbd5e1;">چاوەڕێ بکە تا یاریزانێک دەچێتە ژوورەوە...</p>
+                <button class="btn" onclick="cancelMatchmaking('tug')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+            </div>
+
+            <div id="tugGameArea" style="display: none;">
+                <div class="score-board">
+                    <div class="score-box">
+                        <span>یاریزانی ١ (تۆ)</span>
+                        <bold id="tugP1Clicks">٠</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>کاتی ماوە</span>
+                        <bold id="tugTimerDisplay" style="color:#fde047;">١٠ چرکە</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>یاریزانی ٢</span>
+                        <bold id="tugP2Clicks">٠</bold>
+                    </div>
+                </div>
+
+                <div class="tug-arena">
+                    <p style="font-size: 12px; color: var(--text-glow); margin: 0;">بە خێرایی کرتە لە دوگمەی خوارەوە بکە!</p>
+                    <div class="rope-track">
+                        <div class="rope-knot" id="ropeKnot"></div>
+                    </div>
+                    <div class="tap-btn-giant" onclick="handleTugTap()">کرتە بکە! ⚡</div>
+                </div>
+
+                <button class="btn" id="tugResetBtn" onclick="resetTugGame()" style="display: none; background: #16a34a;">🔄 یاری نوێ</button>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="leaveTugGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Settings Screen -->
@@ -782,6 +890,150 @@
             }
         };
 
+        /* Tug of War Online Engine */
+        let tugCurrentRoomId = null;
+        let tugMyRole = "";
+
+        window.startOnlineTugMatchmaking = function(username) {
+            const lobbyRef = ref(database, 'tug_lobby');
+            get(lobbyRef).then((snapshot) => {
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
+                if (lobbyData) {
+                    for (let id in lobbyData) {
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
+                    }
+                }
+
+                if (waitingRoomId) {
+                    tugCurrentRoomId = waitingRoomId;
+                    tugMyRole = "player2";
+                    update(ref(database, 'tug_lobby/' + tugCurrentRoomId), {
+                        player2: username,
+                        status: 'playing',
+                        startTime: Date.now()
+                    }).then(() => {
+                        listenToTugRoom(tugCurrentRoomId, username);
+                        startTugClientTimer();
+                    });
+                } else {
+                    tugCurrentRoomId = "room_tug_" + Date.now();
+                    tugMyRole = "player1";
+                    const newRoomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
+                    set(newRoomRef, {
+                        player1: username,
+                        player2: "",
+                        status: 'waiting',
+                        clicks: { player1: 0, player2: 0 },
+                        startTime: Date.now(),
+                        gameOver: false,
+                        winner: ""
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        listenToTugRoom(tugCurrentRoomId, username);
+                        startTugClientTimer();
+                    });
+                }
+            });
+        };
+
+        let tugTimerInterval = null;
+        function startTugClientTimer() {
+            if (tugTimerInterval) clearInterval(tugTimerInterval);
+            tugTimerInterval = setInterval(() => {
+                if (!tugCurrentRoomId) return;
+                const roomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
+                get(roomRef).then((snapshot) => {
+                    if (!snapshot.exists()) return;
+                    let room = snapshot.val();
+                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
+
+                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
+                    let timeLeft = 10 - elapsed;
+
+                    if (timeLeft <= 0) {
+                        timeLeft = 0;
+                        clearInterval(tugTimerInterval);
+                        if (!room.winner && tugMyRole === 'player1') {
+                            let p1 = room.clicks.player1 || 0;
+                            let p2 = room.clicks.player2 || 0;
+                            let winnerName = p1 > p2 ? room.player1 : (p2 > p1 ? room.player2 : "draw");
+                            update(roomRef, { gameOver: true, winner: winnerName });
+                        }
+                    }
+
+                    let timerEl = document.getElementById("tugTimerDisplay");
+                    if (timerEl) timerEl.innerText = timeLeft + " چرکە";
+                });
+            }, 1000);
+        }
+
+        function listenToTugRoom(roomId, username) {
+            const roomRef = ref(database, 'tug_lobby/' + roomId);
+            onValue(roomRef, (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                if (room.status === 'waiting') {
+                    document.getElementById("tugMenuArea").style.display = "none";
+                    document.getElementById("tugShopArea").style.display = "none";
+                    document.getElementById("tugLobbyArea").style.display = "block";
+                    document.getElementById("tugGameArea").style.display = "none";
+                } else if (room.status === 'playing') {
+                    document.getElementById("tugMenuArea").style.display = "none";
+                    document.getElementById("tugShopArea").style.display = "none";
+                    document.getElementById("tugLobbyArea").style.display = "none";
+                    document.getElementById("tugGameArea").style.display = "block";
+
+                    let p1Clicks = room.clicks.player1 || 0;
+                    let p2Clicks = room.clicks.player2 || 0;
+                    document.getElementById("tugP1Clicks").innerText = p1Clicks;
+                    document.getElementById("tugP2Clicks").innerText = p2Clicks;
+
+                    let diff = p1Clicks - p2Clicks;
+                    let percent = 50 + (diff * 3);
+                    if (percent < 5) percent = 5;
+                    if (percent > 95) percent = 95;
+                    document.getElementById("ropeKnot").style.left = percent + "%";
+
+                    if (room.gameOver) {
+                        if (room.winner === 'draw') {
+                            alert("یەکسان بوون!");
+                        } else {
+                            alert("بردیەوە: " + room.winner);
+                            if (room.winner === username) window.addScore(username, 15);
+                        }
+                        document.getElementById("tugResetBtn").style.display = "block";
+                    }
+                }
+            });
+        }
+
+        window.sendTugOnlineClick = function() {
+            if (!tugCurrentRoomId) return;
+            const roomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) return;
+                let room = snapshot.val();
+                if (room.gameOver) return;
+
+                room.clicks[tugMyRole] = (room.clicks[tugMyRole] || 0) + 1;
+                update(roomRef, { clicks: room.clicks });
+            });
+        };
+
+        window.leaveTugRoom = function() {
+            if (tugTimerInterval) clearInterval(tugTimerInterval);
+            if (tugCurrentRoomId) {
+                remove(ref(database, 'tug_lobby/' + tugCurrentRoomId));
+                tugCurrentRoomId = null;
+            }
+        };
+
         /* Word Game Online Engine with automatic continuous timer & 3s audio chime */
         let wordCurrentRoomId = null;
         let wordMyRole = ""; 
@@ -846,7 +1098,7 @@
                         targetLetter: randomLetter,
                         words: {},
                         scores: { player1: 0, player2: 0 },
-                        startTime: Date.now(), // Auto start time immediately when room is created/joined
+                        startTime: Date.now(),
                         gameOver: false,
                         winnerName: ""
                     }).then(() => {
@@ -1024,19 +1276,16 @@
 
                 let trimmed = wordText.trim();
                 
-                // 1. Check starting letter
                 if (!trimmed.startsWith(targetLetter)) {
                     showWordError("⚠️ وشە دەبێت بە پيتي '" + targetLetter + "' دەست پێبکات!");
                     return;
                 }
 
-                // 2. Strict Meaningful Kurdish Dictionary Check
                 if (!isValidMeaningfulKurdishWord(trimmed)) {
-                    showWordError("⚠️ تەنها وشەی ڕەسەنی کوردی قبوڵ دەکرێت (وشەی بێ مانا و نموونەکانی وەک الستار، تايتار ڕەتن)!");
+                    showWordError("⚠️ تەنها وشەی ڕەسەنی کوردی قبوڵ دەکرێت!");
                     return;
                 }
 
-                // Check duplicate
                 let wordsObj = room.words || {};
                 for(let k in wordsObj) {
                     if(wordsObj[k].word === trimmed) {
@@ -1062,62 +1311,31 @@
             });
         };
 
-        // فەرهەنگی پشکنینی توند بۆ وشە کوردییەکان (ڕێگری لە هەموو وشە نامۆ و بێ ماناکان وەک الستار، تايتار، تيتياير و هتد)
         function isValidMeaningfulKurdishWord(w) {
             if (w.length < 3) return false;
-
-            // لیستی وشە قەدەغە و بێ ماناکان کە بەکارهێنەر داوای کردن یان نموونەن
-            const blockedList = ["الستار", "تايتار", "تيتاير", "تيتياير", "تبريرين", "توتو", "مومو", "دادا", "تيتي", "توتار", "تيتار", "ماما", "بابا", "بابۆ", "تاتە", "توتوت", "تيتيت"];
+            const blockedList = ["الستار", "تايتار", "تيتاير", "تيتياير", "تبريرين", "توتو", "مومو", "دادا", "تيتي"];
             if (blockedList.includes(w)) return false;
-
-            // پشکنینی پیتە دووبارەکان لەسەر یەک (بۆ نموونە سێ پیت یان زیاتر لەدوای یەک)
             for (let i = 0; i < w.length - 2; i++) {
-                if (w[i] === w[i+1] && w[i+1] === w[i+2]) {
-                    return false;
-                }
+                if (w[i] === w[i+1] && w[i+1] === w[i+2]) return false;
             }
-
-            // فەرهەنگی بنەڕەتی وشە کوردییە ڕەسەنە باوەکان بۆ دڵنیابوون لەوەی مانا دارن
             const validKurdishDictionary = [
-                // پیتى ت
-                "تانجى", "تاڤگە", "تاقە", "تەپۆلکە", "تەرزە", "تەموومژ", "تۆرەمە", "تەلار", "تیرۆر", "تەنیایی", "تۆمار", "تەپڵ", "تەمەن", "تەنیشت", "تەلەفۆن", "تووڕە", "تەون", "تەنیل", "تۆپ", "تەختە", "تەلان",
-                // پیتى م
-                "مامۆستا", "مایک", "مانگ", "مێوژ", "مەلەلە", "مێژوو", "مێشک", "میرات", "مۆم", "مۆزەخانە", "مریشک", "ماسی", "مێروو", "مۆدێرن", "مەکۆ",
-                // پیتى ب
-                "باران", "بەهار", "بەفر", "بنار", "باڵندە", "بەرد", "بەیبوون", "بروسکە", "بۆنە", "بەختەوەر", "برا", "باوکی", "بنەماڵە", "بیرۆکە", "بەرهەم",
-                // پیتى د
+                "تانجى", "تاڤگە", "تاقە", "تەپۆلکە", "تەرزە", "تەموومژ", "تۆرەمە", "تەلار", "تیرۆر", "تەنیایی", "تۆمار", "تەپڵ", "تەمەن", "تەنیشت", "تەلەفۆن", "تووڕە", "تەون", "تۆپ", "تەختە",
+                "مامۆستا", "مایک", "مانگ", "مێوژ", "مەلەلە", "مێژوو", "مێشک", "میرات", "مۆم", "مۆزەخانە", "مریشک", "ماسی", "مێروو",
+                "باران", "بەهار", "بەفر", "بنار", "باڵندە", "بەرد", "بەیبوون", "بروسکە", "بۆنە", "بەختەوەر", "برا", "باوکی",
                 "درەخت", "دەریای", "دایک", "دیاری", "دڵسۆز", "دەفتەر", "دەمانچە", "دەنگ", "دوورگە", "دیمەن", "دانا", "دەست",
-                // پیتى ر
-                "ڕۆژمێر", "رووبار", "رەنگین", "رێواس", "رۆشنایی", "ڕێگا", "ڕێز", "ڕەشماڵ", "ڕوخسار",
-                // پیتى س
-                "ستێرە", "سێو", "سەرۆک", "سەوزە", "سەیران", "سلێمانی", "سپێدە", "سەرکەوتن", "سازگار", "سەهۆڵ",
-                // پیتى ش
-                "شارەزا", "شێرپەنجە", "شەقام", "شاکار", "شەماڵ", "شۆفێر", "شەکر", "شین", "شەوانە",
-                // پیتى ک
-                "کوردستان", "کانی", "کۆمەڵگا", "کەلتوور", "کۆڵان", "کتێب", "کۆمپیوتەر", "کاروان", "کەوانە", "کچە",
-                // پیتى گ
+                "ڕۆژمێر", "رووبار", "رەنگین", "رێواس", "رۆشنایی", "ڕێگا", "ڕێز", "ڕەشماڵ",
+                "ستێرە", "سێو", "سەرۆک", "سەوزە", "سەیران", "سلێمانی", "سپێدە", "سەرکەوتن", "سەهۆڵ",
+                "شارەزا", "شێرپەنجە", "شەقام", "شاکار", "شەماڵ", "شۆفێر", "شەکر", "شین",
+                "کوردستان", "کانی", "کۆمەڵگا", "کەلتوور", "کۆڵان", "کتێب", "کۆمپیوتەر", "کاروان",
                 "گوڵەبەڕۆژە", "گەشتیار", "گەورە", "گۆران", "گەنم", "گەردەلوول", "گۆرانی", "گوڵ",
-                // پیتى ل
-                "لاپەڕە", "لێڤا", "لاوک", "لانکە", "لۆژیک", "لەشکر",
-                // پیتى ن
-                "نەورۆز", "ئەستێرە", "نیشتمان", "نووسەر", "ئاسمان", "ئاو", "ئاگر", "ئارام", "ئۆتۆمبیل", "ئەزموون",
-                // پیتى و
-                "وێنە", "وشە", "وڵات", "وەرزی", "وەشان",
-                // پیتى هـ
-                "هەتاو", "هەڵبەست", "هەولێر", "هێێمن", "هەنار", "هەور", "هەنگاو",
-                // پیتى چ
-                "چیا", "چاو", "چیرۆک", "چایچی", "چەمەن", "چەکدار",
-                // پیتى پ
-                "پێشمەرگە", "پاییز", "پرد", "پەپولە", "پەڕەسوورە", "پۆل", "پەرتووک"
+                "لاپەڕە", "لێڤا", "لاوک", "لانکە", "لۆژیک",
+                "نەورۆز", "ئەستێرە", "نیشتمان", "نووسەر", "ئاسمان", "ئاو", "ئاگر", "ئارام", "ئۆتۆمبیل",
+                "وێنە", "وشە", "وڵات", "وەرزی",
+                "هەتاو", "هەڵبەست", "هەولێر", "هێمن", "هەنار", "هەور",
+                "چیا", "چاو", "چیرۆک", "چایچی", "چەمەن",
+                "پێشمەرگە", "پاییز", "پرد", "پەپولە", "پەڕەسوورە", "پۆل"
             ];
-
-            // پشکنین: ئایا لە فەرهەنگەکەدا هەیە یان بە پیتە ڕەسەنەکان دەست پێدەکات و دووانەی نادروست نییە
-            if (validKurdishDictionary.includes(w)) {
-                return true;
-            }
-
-            // ئەگەر لە فەرهەنگەکە نەبوو، ڕەتی دەکەینەوە بۆ ئەوەی وشەی بێ مانا وەک الستار و تايتار تێپەڕ نەبن
-            return false;
+            return validKurdishDictionary.includes(w);
         }
 
         function showWordError(msg) {
@@ -1151,6 +1369,14 @@
         window.xoTurn = "X";
         let xoMode = "bot";
         window.xoGameActive = true;
+
+        // Tug Local State
+        let tugMode = "bot";
+        let tugP1Count = 0;
+        let tugP2Count = 0;
+        let tugTimer = 10;
+        let tugActive = false;
+        let tugTimerIntervalLocal = null;
 
         window.onload = function() {
             loadSavedSettings();
@@ -1447,6 +1673,125 @@
             backToHub();
         }
 
+        /* Tug of War Navigation & Shop */
+        function openTugMenu() {
+            switchScreen("tugScreen");
+            document.getElementById("tugMenuArea").style.display = "block";
+            document.getElementById("tugShopArea").style.display = "none";
+            document.getElementById("tugLobbyArea").style.display = "none";
+            document.getElementById("tugGameArea").style.display = "none";
+        }
+
+        function openTugShop() {
+            document.getElementById("tugMenuArea").style.display = "none";
+            document.getElementById("tugShopArea").style.display = "block";
+        }
+
+        function closeTugShop() {
+            document.getElementById("tugShopArea").style.display = "none";
+            document.getElementById("tugMenuArea").style.display = "block";
+        }
+
+        function buyTugItem(itemName, cost) {
+            let profileData = localStorage.getItem("user_profile_" + currentUser);
+            let profile = profileData ? JSON.parse(profileData) : { score: 0 };
+            let currentScore = profile.score || 0;
+
+            if (currentScore < cost) {
+                alert("خاڵت بەسە نییە بۆ کڕینی ئەم شتومەکەی! (پێویستت بە " + cost + " خاڵە)");
+                return;
+            }
+
+            profile.score = currentScore - cost;
+            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
+            if (window.addScore) {
+                // sync to firebase or deduct
+            }
+            alert("پیرۆزە! کڕینی سەرکەوتوو بوو.");
+            closeTugShop();
+        }
+
+        function startTugVsBot() {
+            tugMode = "bot";
+            document.getElementById("tugMenuArea").style.display = "none";
+            document.getElementById("tugShopArea").style.display = "none";
+            document.getElementById("tugLobbyArea").style.display = "none";
+            document.getElementById("tugGameArea").style.display = "block";
+            resetTugGame();
+        }
+
+        function startOnlineTug() {
+            tugMode = "online";
+            if (window.startOnlineTugMatchmaking) window.startOnlineTugMatchmaking(currentUser);
+        }
+
+        function handleTugTap() {
+            if (!tugActive) return;
+
+            if (tugMode === "online") {
+                window.sendTugOnlineClick();
+            } else {
+                tugP1Count++;
+                document.getElementById("tugP1Clicks").innerText = tugP1Count;
+                updateTugRopePosition();
+            }
+        }
+
+        function updateTugRopePosition() {
+            let diff = tugP1Count - tugP2Count;
+            let percent = 50 + (diff * 3);
+            if (percent < 5) percent = 5;
+            if (percent > 95) percent = 95;
+            document.getElementById("ropeKnot").style.left = percent + "%";
+        }
+
+        function resetTugGame() {
+            if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
+            tugP1Count = 0;
+            tugP2Count = 0;
+            tugTimer = 10;
+            tugActive = true;
+            document.getElementById("tugP1Clicks").innerText = "٠";
+            document.getElementById("tugP2Clicks").innerText = "٠";
+            document.getElementById("tugTimerDisplay").innerText = "١٠ چرکە";
+            document.getElementById("ropeKnot").style.left = "50%";
+            document.getElementById("tugResetBtn").style.display = "none";
+
+            if (tugMode === "bot") {
+                tugTimerIntervalLocal = setInterval(() => {
+                    tugTimer--;
+                    document.getElementById("tugTimerDisplay").innerText = tugTimer + " چرکە";
+
+                    // Bot taps randomly
+                    if (Math.random() > 0.3) {
+                        tugP2Count++;
+                        document.getElementById("tugP2Clicks").innerText = tugP2Count;
+                        updateTugRopePosition();
+                    }
+
+                    if (tugTimer <= 0) {
+                        clearInterval(tugTimerIntervalLocal);
+                        tugActive = false;
+                        if (tugP1Count > tugP2Count) {
+                            alert("پیرۆزە! تۆ بردەوەتەوە! 🎉");
+                            if (window.addScore) window.addScore(currentUser, 15);
+                        } else if (tugP2Count > tugP1Count) {
+                            alert("کۆمپیوتەر بردیەوە! 🤖");
+                        } else {
+                            alert("یەکسان بوون!");
+                        }
+                        document.getElementById("tugResetBtn").style.display = "block";
+                    }
+                }, 1000);
+            }
+        }
+
+        function leaveTugGame() {
+            if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
+            if (tugMode === "online" && window.leaveTugRoom) window.leaveTugRoom();
+            backToHub();
+        }
+
         /* Word Game Navigation */
         function openWordGameMenu() {
             switchScreen("wordScreen");
@@ -1489,6 +1834,10 @@
                 if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
                 document.getElementById("wordLobbyArea").style.display = "none";
                 document.getElementById("wordModeSelect").style.display = "block";
+            } else if (gameType === 'tug') {
+                if (window.leaveTugRoom) window.leaveTugRoom();
+                document.getElementById("tugLobbyArea").style.display = "none";
+                document.getElementById("tugMenuArea").style.display = "block";
             }
         }
 
