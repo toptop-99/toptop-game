@@ -184,6 +184,11 @@
 
         /* Puzzle Game Styles */
         .puzzle-board { text-align: center; padding: 5px; }
+        .puzzle-banner-img {
+            width: 100%; max-height: 160px; object-fit: cover; border-radius: 12px;
+            border: 2px solid var(--text-glow); margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+        }
         .scrambled-letters { display: flex; justify-content: center; gap: 6px; margin: 15px 0; flex-wrap: wrap; }
         .letter-chip {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
@@ -484,6 +489,7 @@
             <div class="brand-title">پازڵی کوردی</div>
 
             <div id="puzzleModeSelect" class="card">
+                <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="پازڵی کوردی" class="puzzle-banner-img">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
                 <button class="btn" onclick="playSound('click'); startPuzzleVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
                 <button class="btn" onclick="playSound('click'); startPuzzleQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
@@ -507,6 +513,7 @@
             </div>
 
             <div id="puzzleGameArea" style="display: none;" class="puzzle-board">
+                <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="پازڵی کوردی" class="puzzle-banner-img">
                 <div class="score-board">
                     <div class="score-box">
                         <span id="puzzleP1Title">یاریزانی ١</span>
@@ -1083,7 +1090,7 @@
             { word: "بەهار", scrambled: "ر هـ ب ا ە" },
             { word: "کوردستان", scrambled: "ن ا ت س د ر و ک" },
             { word: "ئەستێرە", scrambled: "ە ر ێ ت س ئـ ە" },
-            { word: "گۆرانی", scrambled: "ی ن ا ر گ و" },
+            { word: "گۆرانی", scrambled: "ی ن ا r گ و" },
             { word: "ئازادی", scrambled: "ی د ا ز ئـ ى" }
         ];
 
@@ -2371,145 +2378,6 @@
             }
         }
 
-        /* Quiz Game Engine */
-        function openQuizMenu() {
-            switchScreen("quizScreen");
-            document.getElementById("quizModeSelect").style.display = "block";
-            document.getElementById("quizLobbyArea").style.display = "none";
-            document.getElementById("quizGameArea").style.display = "none";
-        }
-
-        function startQuizGame(mode) {
-            quizMode = mode;
-            if (mode === 'bot') {
-                document.getElementById("quizModeSelect").style.display = "none";
-                document.getElementById("quizLobbyArea").style.display = "none";
-                document.getElementById("quizGameArea").style.display = "block";
-                document.getElementById("quizP1Name").innerText = currentUser + " (تۆ)";
-                document.getElementById("quizP2Name").innerText = "کۆمپیوتەر";
-                document.getElementById("quizRestartBtn").style.display = "none";
-                
-                quizLocalScoreP1 = 0;
-                quizLocalScoreP2 = 0;
-                quizBotIndex = 0;
-                quizLocalTimer = 60;
-                
-                document.getElementById("quizP1Score").innerText = "0";
-                document.getElementById("quizP2Score").innerText = "0";
-                document.getElementById("quizGameStatus").innerText = "یاری بەڕێوەیە...";
-                
-                renderBotQuestion();
-                startQuizLocalTimer();
-            } else {
-                if (window.startOnlineQuizMatchmaking) window.startOnlineQuizMatchmaking(currentUser);
-            }
-        }
-
-        function startQuizLocalTimer() {
-            if (quizLocalTimerInterval) clearInterval(quizLocalTimerInterval);
-            
-            quizLocalTimerInterval = setInterval(() => {
-                quizLocalTimer--;
-                
-                let mins = Math.floor(quizLocalTimer / 60);
-                let secs = quizLocalTimer % 60;
-                document.getElementById("quizTimerDisplay").innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
-
-                if (Math.random() > 0.65) {
-                    quizLocalScoreP2 += 10;
-                    document.getElementById("quizP2Score").innerText = quizLocalScoreP2;
-                }
-
-                if (quizLocalTimer <= 0) {
-                    clearInterval(quizLocalTimerInterval);
-                    document.getElementById("quizGameStatus").innerText = "کۆتایی هات!";
-                    
-                    let resultMsg = "";
-                    if (quizLocalScoreP1 > quizLocalScoreP2) {
-                        resultMsg = "پیرۆزە! تۆ زۆرترین وەڵامت زانی و بردتبووەوە! 🎉";
-                        playSound('victory');
-                        if (window.addScore) window.addScore(20);
-                    } else if (quizLocalScoreP2 > quizLocalScoreP1) {
-                        resultMsg = "کۆمپیوتەر زۆرترین وەڵامی زانی و بردیەوە! 🤖";
-                    } else {
-                        resultMsg = "یەکسان بوون لە زانینی وەڵامەکاندا! 🤝";
-                    }
-                    
-                    document.getElementById("quizQuestionText").innerText = resultMsg;
-                    document.getElementById("quizOptionsContainer").innerHTML = "";
-                    document.getElementById("quizRestartBtn").style.display = "block";
-                }
-            }, 1000);
-        }
-
-        function renderBotQuestion() {
-            let q = quizQuestions[quizBotIndex % quizQuestions.length];
-            document.getElementById("quizQuestionText").innerText = q.q;
-            
-            let optsContainer = document.getElementById("quizOptionsContainer");
-            optsContainer.innerHTML = "";
-            q.opts.forEach((opt, idx) => {
-                optsContainer.innerHTML += `
-                    <button class="quiz-opt-btn" onclick="playSound('click'); submitBotQuizAnswer(${idx})">${opt}</button>
-                `;
-            });
-        }
-
-        function submitBotQuizAnswer(selectedIdx) {
-            if (quizLocalTimer <= 0) return;
-            let q = quizQuestions[quizBotIndex % quizQuestions.length];
-            if (selectedIdx === q.a) {
-                quizLocalScoreP1 += 10;
-                document.getElementById("quizP1Score").innerText = quizLocalScoreP1;
-            }
-            quizBotIndex++;
-            renderBotQuestion();
-        }
-
-        function leaveQuizGame() {
-            if (quizLocalTimerInterval) clearInterval(quizLocalTimerInterval);
-            if (quizMode === 'online' && window.leaveQuizRoom) window.leaveQuizRoom();
-            backToHub();
-        }
-
-        function openFriendsScreen() {
-            switchScreen("friendsScreen");
-            if(window.loadFriendsList) window.loadFriendsList();
-        }
-
-        function openChatScreen() {
-            switchScreen("chatScreen");
-            if(window.listenToChat) window.listenToChat();
-        }
-
-        function toggleSoundSetting() {
-            let isMuted = document.getElementById("soundToggle").checked;
-            localStorage.setItem("toptop_sound_muted", isMuted);
-        }
-
-        function toggleMusicSetting() {
-            let isMuted = document.getElementById("musicToggle").checked;
-            localStorage.setItem("toptop_music_muted", isMuted);
-        }
-
-        function setAppTheme(themeName) {
-            document.body.setAttribute("data-theme", themeName);
-            localStorage.setItem("toptop_theme", themeName);
-        }
-
-        function loadSavedSettings() {
-            let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
-            let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
-            let savedTheme = localStorage.getItem("toptop_theme") || "purple";
-
-            document.getElementById("soundToggle").checked = soundMuted;
-            document.getElementById("musicToggle").checked = musicMuted;
-            document.body.setAttribute("data-theme", savedTheme);
-        }
-
-        function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
-        function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
-
         /* Puzzle Game Navigation & Logic */
         const kurdishPuzzleWordsList = [
             { word: "باران", scrambled: "ر ا ب ا ن" },
@@ -2518,7 +2386,7 @@
             { word: "بەهار", scrambled: "ر هـ ب ا ە" },
             { word: "کوردستان", scrambled: "ن ا ت س د ر و ک" },
             { word: "ئەستێرە", scrambled: "ە ر ێ ت س ئـ ە" },
-            { word: "گۆرانی", scrambled: "ی ن ا ر گ و" },
+            { word: "گۆرانی", scrambled: "ی ن ا r گ و" },
             { word: "ئازادی", scrambled: "ی د ا ز ئـ ى" }
         ];
 
