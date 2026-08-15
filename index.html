@@ -107,10 +107,7 @@
             margin: 0 auto 6px auto; display: flex; justify-content: center; align-items: center;
             overflow: hidden; border: 2px solid var(--text-glow); cursor: pointer; position: relative;
         }
-        .avatar-preview.gold-frame { border: 3px solid #facc15; box-shadow: 0 0 10px #facc15; }
-        .avatar-preview.fire-frame { border: 3px solid #ef4444; box-shadow: 0 0 10px #ef4444; }
         .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
-        
         .tab-switcher { display: flex; gap: 4px; margin-bottom: 8px; }
         .tab-btn { flex: 1; background: var(--card-bg); border: 1px solid var(--primary-color); color: #e9d5ff; padding: 6px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
         .tab-btn.active { background: var(--primary-color); color: #fff; }
@@ -145,11 +142,6 @@
         .theme-purple { background: #9333ea; }
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
-
-        /* Quick Chat Bar */
-        .quick-chat-bar { display: flex; gap: 4px; margin-top: 6px; overflow-x: auto; padding-bottom: 4px; }
-        .chat-chip { background: rgba(255,255,255,0.1); border: 1px solid var(--primary-color); padding: 4px 8px; border-radius: 12px; font-size: 11px; cursor: pointer; white-space: nowrap; }
-        .chat-bubble { background: var(--primary-color); color: #fff; border-radius: 8px; padding: 4px 8px; font-size: 11px; margin-top: 4px; text-align: center; }
 
         /* XO Game Styles */
         .xo-board {
@@ -217,8 +209,13 @@
             color: #f87171; font-weight: 900; font-size: 12px;
             text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
         }
+        @keyframes pulseError {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
 
-        /* Tug Styles */
+        /* Tug of War Styles */
         .tug-arena {
             background: rgba(0,0,0,0.3); border-radius: 14px; padding: 15px; margin-bottom: 10px; text-align: center;
             border: 1px solid var(--primary-color); position: relative; overflow: hidden;
@@ -278,7 +275,7 @@
                 <div style="text-align: center; margin: 8px 0; font-size: 10px; color: #94a3b8;">یان بە یۆزەر و پاسوۆرد</div>
 
                 <div id="registerForm" style="display: none;">
-                    <div class="avatar-preview" id="regAvatarBox" onclick="document.getElementById('fileInput').click()">
+                    <div class="avatar-preview" onclick="document.getElementById('fileInput').click()">
                         <span id="avatarPlaceholderText" style="font-size: 20px;">📷</span>
                         <img id="avatarImgTag" style="display:none;" />
                     </div>
@@ -293,7 +290,7 @@
                         <input type="date" id="regBirthdate">
                     </div>
                     <div class="form-group">
-                        <label>وشەی نهێنی (پاسوۆرد)</label>
+                        <label>وشەی نهێنی (پاسوۆرد - کەمترین ٨ پیت)</label>
                         <div class="password-container">
                             <input type="password" id="regPassword" placeholder="پاسوۆرد...">
                             <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
@@ -331,23 +328,12 @@
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="top-bar">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                    <div id="hubUserAvatar" class="avatar-preview" style="width: 32px; height: 32px; margin:0; font-size:11px;">👤</div>
+                    <div id="hubUserAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
                     <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px;"></span>
                 </div>
-                <div style="display: flex; align-items: center; gap:10px;">
-                    <span style="font-size:12px; color:#fde047; font-weight:bold;" id="hubScoreDisplay">⭐ ٠ خاڵ</span>
+                <div style="display: flex; align-items: center;">
                     <span class="online-badge"></span>
-                </div>
-            </div>
-
-            <!-- Daily Claim Card -->
-            <div class="card" id="dailyRewardCard" style="background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), var(--card-bg)); border-color: #facc15;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h3 style="color:#fde047; margin:0;">🎁 خەڵاتی ڕۆژانە</h3>
-                        <p style="margin:0; font-size:11px;">ڕۆژانە بە چوونەژوورەوە ۲٥ خاڵ وەربگرە!</p>
-                    </div>
-                    <button class="btn" id="claimDailyBtn" onclick="claimDailyReward()" style="width:auto; padding:6px 12px; background:#eab308; color:#000;">وەرمگرت</button>
+                    <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                 </div>
             </div>
 
@@ -356,8 +342,7 @@
                 <p>یاری هەڵبژێرە!</p>
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
                 <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); margin-bottom: 6px;" onclick="openTugMenu()">🪢 یاری ڕاکێشانی گوریس</button>
-                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="openGlobalShop()">🛒 شوپینگی گشتی (چوارچێوە + بەرهەمەکان)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
             </div>
 
             <div class="card">
@@ -372,66 +357,13 @@
             </div>
         </div>
 
-        <!-- Global Shop Screen -->
-        <div id="shopScreen" class="screen">
-            <div class="brand-title">🛒 شوپینگی گشتی</div>
-            <div class="card">
-                <h3>⭐ خاڵەکانت: <span id="shopUserPoints" style="color:#fde047;">٠</span></h3>
-                <p>بە خاڵەکانت چوارچێوەی پرۆفایل و بەرهەم بکڕە!</p>
-            </div>
-
-            <div class="card">
-                <h3>🖼️ چوارچێوەی پرۆفایل</h3>
-                <div class="shop-grid">
-                    <div class="shop-item">
-                        <h4>🌟 چوارچێوەی زێڕین</h4>
-                        <p>١٠٠ خاڵ</p>
-                        <button class="btn" onclick="buyShopItem('gold_frame', 100)" style="font-size:11px; padding:4px;">کڕین</button>
-                    </div>
-                    <div class="shop-item">
-                        <h4>🔥 چوارچێوەی ئاگرین</h4>
-                        <p>٢٠٠ خاڵ</p>
-                        <button class="btn" onclick="buyShopItem('fire_frame', 200)" style="font-size:11px; padding:4px;">کڕین</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" style="margin-top: 10px;">
-                <h3>🌌 پاشبنە (Themes)</h3>
-                <div class="shop-grid">
-                    <div class="shop-item">
-                        <h4>💙 پاشبنەی شین</h4>
-                        <p>١٥٠ خاڵ</p>
-                        <button class="btn" onclick="buyShopItem('theme_blue', 150)" style="font-size:11px; padding:4px;">کڕین</button>
-                    </div>
-                    <div class="shop-item">
-                        <h4>💚 پاشبنەی سەوز</h4>
-                        <p>١٥٠ خاڵ</p>
-                        <button class="btn" onclick="buyShopItem('theme_emerald', 150)" style="font-size:11px; padding:4px;">کڕین</button>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
-        </div>
-
-        <!-- XO Screen -->
+        <!-- XO Menu & Game Screen -->
         <div id="xoScreen" class="screen">
             <div class="brand-title">یاری XO</div>
             
             <div id="xoModeSelect" class="card">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
-                
-                <div style="margin-bottom:8px;">
-                    <label>ئاستی ژیری کۆمپیوتەر / AI:</label>
-                    <select id="xoDifficultySelect">
-                        <option value="easy">ئاسان (Easy)</option>
-                        <option value="medium" selected>ناوەند (Medium)</option>
-                        <option value="hard">زۆر قورس (Hard - Unbeatable AI)</option>
-                    </select>
-                </div>
-
-                <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر (AI)</button>
+                <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
                 <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 8px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
             </div>
 
@@ -470,23 +402,13 @@
                     <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
                 </div>
 
-                <div id="xoChatContainer" style="display:none;">
-                    <div class="quick-chat-bar">
-                        <span class="chat-chip" onclick="sendQuickChat('xo', 'سڵاو! 👋')">سڵاو! 👋</span>
-                        <span class="chat-chip" onclick="sendQuickChat('xo', 'یارییەکی باشە! 😎')">یارییەکی باشە! 😎</span>
-                        <span class="chat-chip" onclick="sendQuickChat('xo', 'خێرا بە! ⏱️')">خێرا بە! ⏱️</span>
-                        <span class="chat-chip" onclick="sendQuickChat('xo', 'پیرۆزە! 🎉')">پیرۆزە! 🎉</span>
-                    </div>
-                    <div id="xoChatBox" class="chat-bubble" style="display:none;"></div>
-                </div>
-
                 <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="margin-top: 8px; display: none; background: #16a34a;">🔄 دەستپێکردنەوە</button>
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Word Game Screen -->
+        <!-- Word Game Menu & Screen -->
         <div id="wordScreen" class="screen">
             <div class="brand-title">وشە باران</div>
 
@@ -541,8 +463,7 @@
 
                 <div class="word-input-container">
                     <input type="text" id="wordInputText" placeholder="وشەی مانا دار بنووسە..." style="flex: 1;" onkeypress="if(event.key==='Enter') submitWordMove()">
-                    <button class="btn" id="wordSendBtn" onclick="submitWordMove()" style="margin-top: 0; width: 70px;">ناردن</button>
-                    <button class="btn" id="wordHintBtn" onclick="useWordHint()" style="margin-top: 0; width: 70px; background: #eab308; color:#000;">💡 یاریدەدەر / AI (5خاڵ)</button>
+                    <button class="btn" id="wordSendBtn" onclick="submitWordMove()" style="margin-top: 0; width: 80px;">ناردن</button>
                 </div>
 
                 <div class="words-list-container" id="wordsListContainer">
@@ -557,14 +478,44 @@
             <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Tug Screen -->
+        <!-- Tug of War Menu, Shop & Game Screen -->
         <div id="tugScreen" class="screen">
             <div class="brand-title">ڕاکێشانی گوریس</div>
 
             <div id="tugMenuArea" class="card">
                 <h3>مۆدی یاری گوریس هەڵبژێرە:</h3>
-                <button class="btn" onclick="startTugVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 دژ بە کۆمپیوتەر (AI)</button>
+                <button class="btn" onclick="startTugVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 دژ بە کۆمپیوتەر</button>
                 <button class="btn" onclick="startOnlineTug()" style="background: #16a34a; margin-bottom: 6px;">🌐 یاری ئۆنلاین (بەستراو بە Firebase)</button>
+                <button class="btn" onclick="openTugShop()" style="background: #f59e0b;">🛒 بەشی شوپینگ (کڕینی گوریسی تایبەت)</button>
+            </div>
+
+            <!-- Tug Shop Area -->
+            <div id="tugShopArea" class="card" style="display: none;">
+                <h3>🛒 شوپینگی گوریسی یاری</h3>
+                <p>گوریسی دڵخوازی خۆت بکڕە و لە یارییەکەدا بەکاری بهێنە!</p>
+                <div class="shop-grid">
+                    <div class="shop-item">
+                        <h4>🔴 گوریسی سوور</h4>
+                        <p>٥٠ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('red', 50)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                    <div class="shop-item">
+                        <h4>🟡 گوریسی زەرد</h4>
+                        <p>٧٥ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('yellow', 75)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                    <div class="shop-item">
+                        <h4>⭐ گوریسی ئاست (زێر)</h4>
+                        <p>١٥٠ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('gold', 150)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                    <div class="shop-item">
+                        <h4>🔥 گوریسی ئاگرین</h4>
+                        <p>٢٥٠ خاڵ</p>
+                        <button class="btn" onclick="buyTugItem('fire', 250)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                    </div>
+                </div>
+                <button class="btn" onclick="closeTugShop()" style="background: #ef4444; margin-top: 10px;">گەڕانەوە بۆ منۆی گوریس</button>
             </div>
 
             <div id="tugLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
@@ -627,9 +578,17 @@
                 <h3>🎵 دەنگ و مۆسیقا و ڕوکار</h3>
                 
                 <div class="setting-row">
-                    <span>دەنگی بەکارهێنەر (Sound Effects)</span>
+                    <span>بڕینی دەنگی یاری</span>
                     <label class="switch">
-                        <input type="checkbox" id="soundToggle" onchange="toggleSoundSetting()" checked>
+                        <input type="checkbox" id="soundToggle" onchange="toggleSoundSetting()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row" style="margin-top: 8px;">
+                    <span>بڕینی مۆسیقای پاشبنە</span>
+                    <label class="switch">
+                        <input type="checkbox" id="musicToggle" onchange="toggleMusicSetting()">
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -653,60 +612,11 @@
         </div>
     </div>
 
-    <!-- Web Audio Synthesizer (Sound Effects System) -->
-    <script>
-        const AudioSys = {
-            ctx: null,
-            init() {
-                if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            },
-            playClick() {
-                if (localStorage.getItem("toptop_sound_muted") === "true") return;
-                this.init();
-                let osc = this.ctx.createOscillator();
-                let gain = this.ctx.createGain();
-                osc.type = "sine";
-                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
-                osc.connect(gain); gain.connect(this.ctx.destination);
-                osc.start(); osc.stop(this.ctx.currentTime + 0.05);
-            },
-            playWin() {
-                if (localStorage.getItem("toptop_sound_muted") === "true") return;
-                this.init();
-                let now = this.ctx.currentTime;
-                [440, 554, 659, 880].forEach((freq, idx) => {
-                    let osc = this.ctx.createOscillator();
-                    let gain = this.ctx.createGain();
-                    osc.frequency.setValueAtTime(freq, now + (idx * 0.12));
-                    gain.gain.setValueAtTime(0.2, now + (idx * 0.12));
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.12) + 0.3);
-                    osc.connect(gain); gain.connect(this.ctx.destination);
-                    osc.start(now + (idx * 0.12)); osc.stop(now + (idx * 0.12) + 0.35);
-                });
-            },
-            playError() {
-                if (localStorage.getItem("toptop_sound_muted") === "true") return;
-                this.init();
-                let osc = this.ctx.createOscillator();
-                let gain = this.ctx.createGain();
-                osc.type = "sawtooth";
-                osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
-                osc.connect(gain); gain.connect(this.ctx.destination);
-                osc.start(); osc.stop(this.ctx.currentTime + 0.2);
-            }
-        };
-    </script>
-
-    <!-- Firebase System & Firebase Storage Integration -->
+    <!-- Firebase & Core Game Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
@@ -722,35 +632,44 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const auth = getAuth(app);
-        const storage = getStorage(app);
         const provider = new GoogleAuthProvider();
 
         window.loginWithGoogle = function() {
-            signInWithPopup(auth, provider).then((result) => {
-                const user = result.user;
-                let username = user.displayName || user.email.split('@')[0];
-                let avatar = user.photoURL || "";
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    let username = user.displayName || user.email.split('@')[0];
+                    let avatar = user.photoURL || "";
 
-                let profileData = { username: username, email: user.email, avatar: avatar, score: 0 };
-                localStorage.setItem("user_profile_" + username, JSON.stringify(profileData));
-                localStorage.setItem("top_top_active_user", username);
-                
-                window.currentUser = username;
-                if (window.setOnlineStatus) window.setOnlineStatus(username);
-                
-                switchScreen("hubScreen");
-                loadUserData();
-                if (window.loadLeaderboard) window.loadLeaderboard();
-            }).catch((err) => { alert("هەڵە لە چوونەژوورەوە: " + err.message); });
+                    let profileData = {
+                        username: username,
+                        email: user.email,
+                        avatar: avatar,
+                        score: 0
+                    };
+
+                    localStorage.setItem("user_profile_" + username, JSON.stringify(profileData));
+                    localStorage.setItem("top_top_active_user", username);
+                    
+                    window.currentUser = username;
+                    if (window.setOnlineStatus) window.setOnlineStatus(username);
+                    
+                    switchScreen("hubScreen");
+                    loadUserData();
+                    if (window.loadLeaderboard) window.loadLeaderboard();
+                }).catch((error) => {
+                    console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
+                    alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
+                });
         };
 
-        window.db = database; window.dbRef = ref; window.dbSet = set; window.dbGet = get; window.dbOnValue = onValue; window.dbRemove = remove; window.dbUpdate = update;
-        window.firebaseStorage = storage;
-        window.uploadImageToStorage = async function(file, path) {
-            const fileRef = storageRef(storage, path);
-            await uploadBytes(fileRef, file);
-            return await getDownloadURL(fileRef);
-        };
+        window.db = database;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbGet = get;
+        window.dbOnValue = onValue;
+        window.dbRemove = remove;
+        window.dbUpdate = update;
 
         window.setOnlineStatus = function(username) {
             if (!username) return;
@@ -759,20 +678,17 @@
             onDisconnect(userStatusRef).set('offline');
         };
 
+        window.setOfflineStatus = function(username) {
+            if (!username) return;
+            const userStatusRef = ref(database, 'users/' + username + '/status');
+            set(userStatusRef, 'offline');
+        };
+
         window.addScore = function(username, pts) {
             const scoreRef = ref(database, 'users/' + username + '/score');
             get(scoreRef).then(snapshot => {
                 let currentScore = snapshot.exists() ? snapshot.val() : 0;
-                let newScore = currentScore + pts;
-                set(scoreRef, newScore);
-                
-                let profileData = localStorage.getItem("user_profile_" + username);
-                if(profileData) {
-                    let p = JSON.parse(profileData);
-                    p.score = newScore;
-                    localStorage.setItem("user_profile_" + username, JSON.stringify(p));
-                }
-                loadUserData();
+                set(scoreRef, currentScore + pts);
                 loadLeaderboard();
             });
         };
@@ -783,7 +699,9 @@
                 const data = snapshot.val();
                 let scoreList = [];
                 if(data) {
-                    for(let u in data) { scoreList.push({ username: u, score: data[u].score || 0 }); }
+                    for(let u in data) {
+                        scoreList.push({ username: u, score: data[u].score || 0 });
+                    }
                 }
                 scoreList.sort((a,b) => b.score - a.score);
                 
@@ -800,32 +718,47 @@
             });
         };
 
-        /* XO Online System */
-        let xoCurrentRoomId = null; let xoMyRole = "";
+        /* XO Online Engine */
+        let xoCurrentRoomId = null;
+        let xoMyRole = ""; 
 
         window.startOnlineMatchmaking = function(username) {
             const lobbyRef = ref(database, 'xo_lobby');
             get(lobbyRef).then((snapshot) => {
-                let lobbyData = snapshot.val(); let waitingRoomId = null;
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
                 if (lobbyData) {
                     for (let id in lobbyData) {
                         if (lobbyData[id].status === 'waiting' && lobbyData[id].playerX !== username) {
-                            waitingRoomId = id; break;
+                            waitingRoomId = id;
+                            break;
                         }
                     }
                 }
 
                 if (waitingRoomId) {
-                    xoCurrentRoomId = waitingRoomId; xoMyRole = "O";
-                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { playerO: username, status: 'playing' }).then(() => {
+                    xoCurrentRoomId = waitingRoomId;
+                    xoMyRole = "O";
+                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
+                        playerO: username,
+                        status: 'playing'
+                    }).then(() => {
                         listenToXoRoom(xoCurrentRoomId, username);
                     });
                 } else {
-                    xoCurrentRoomId = "room_xo_" + Date.now(); xoMyRole = "X";
+                    xoCurrentRoomId = "room_xo_" + Date.now();
+                    xoMyRole = "X";
                     const newRoomRef = ref(database, 'xo_lobby/' + xoCurrentRoomId);
                     set(newRoomRef, {
-                        playerX: username, playerO: "", status: 'waiting', turn: 'X',
-                        board: ["", "", "", "", "", "", "", "", ""], winner: "", restartX: false, restartO: false, chatMsg: ""
+                        playerX: username,
+                        playerO: "",
+                        status: 'waiting',
+                        turn: 'X',
+                        board: ["", "", "", "", "", "", "", "", ""],
+                        winner: "",
+                        restartX: false,
+                        restartO: false
                     }).then(() => {
                         onDisconnect(newRoomRef).remove();
                         listenToXoRoom(xoCurrentRoomId, username);
@@ -837,7 +770,9 @@
         function listenToXoRoom(roomId, username) {
             const roomRef = ref(database, 'xo_lobby/' + roomId);
             onValue(roomRef, (snapshot) => {
-                const room = snapshot.val(); if (!room) return;
+                const room = snapshot.val();
+                if (!room) return;
+
                 if (room.status === 'waiting') {
                     document.getElementById("xoModeSelect").style.display = "none";
                     document.getElementById("xoLobbyArea").style.display = "block";
@@ -846,22 +781,21 @@
                     document.getElementById("xoModeSelect").style.display = "none";
                     document.getElementById("xoLobbyArea").style.display = "none";
                     document.getElementById("xoGameArea").style.display = "block";
-                    document.getElementById("xoChatContainer").style.display = "block";
 
                     let xLabel = room.playerX + (xoMyRole === 'X' ? " (تۆ)" : "");
                     let oLabel = (room.playerO || "بەرامبەر") + (xoMyRole === 'O' ? " (تۆ)" : "");
-                    document.getElementById("playerXName").innerHTML = xoMyRole === 'X' ? `<span style="color:#facc15">${xLabel}</span>` : xLabel;
-                    document.getElementById("playerOName").innerHTML = xoMyRole === 'O' ? `<span style="color:#facc15">${oLabel}</span>` : oLabel;
+                    
+                    if (xoMyRole === 'X') {
+                        document.getElementById("playerXName").innerHTML = `<span style="color:#facc15">${xLabel}</span>`;
+                        document.getElementById("playerOName").innerText = oLabel;
+                    } else {
+                        document.getElementById("playerXName").innerText = xLabel;
+                        document.getElementById("playerOName").innerHTML = `<span style="color:#facc15">${oLabel}</span>`;
+                    }
 
                     window.xoState = room.board || ["", "", "", "", "", "", "", "", ""];
                     window.xoTurn = room.turn;
                     window.renderXoBoard();
-
-                    if(room.chatMsg) {
-                        let cBox = document.getElementById("xoChatBox");
-                        cBox.innerText = room.chatMsg; cBox.style.display = "block";
-                        setTimeout(() => { cBox.style.display = "none"; }, 3000);
-                    }
 
                     if (room.winner) {
                         if (room.winner === 'draw') {
@@ -870,116 +804,579 @@
                             let winnerName = room.winner === 'X' ? room.playerX : room.playerO;
                             document.getElementById("xoStatusText").innerText = `بردیەوە ${winnerName}! 🎉`;
                             if (room.winner === xoMyRole && !room.scoreAdded) {
-                                AudioSys.playWin();
                                 window.addScore(username, 10);
-                                if (xoMyRole === 'X') update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { scoreAdded: true });
+                                if (xoMyRole === 'X') {
+                                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { scoreAdded: true });
+                                }
                             }
                         }
                         window.xoGameActive = false;
-                        document.getElementById("xoResetBtn").style.display = "block";
+                        
+                        let resetBtn = document.getElementById("xoResetBtn");
+                        resetBtn.style.display = "block";
+                        
+                        let myRestartClicked = (xoMyRole === 'X' ? room.restartX : room.restartO);
+                        if (myRestartClicked) {
+                            resetBtn.innerText = "⏳ چاوەڕوانی یاریزانی بەرامبەر...";
+                            resetBtn.disabled = true;
+                        } else {
+                            resetBtn.innerText = "🔄 دەستپێکردنەوە";
+                            resetBtn.disabled = false;
+                        }
+
+                        if (room.restartX && room.restartO) {
+                            if (xoMyRole === 'X') {
+                                update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
+                                    board: ["", "", "", "", "", "", "", "", ""],
+                                    turn: 'X',
+                                    winner: "",
+                                    restartX: false,
+                                    restartO: false,
+                                    scoreAdded: false
+                                });
+                            }
+                        }
                     } else {
                         window.xoGameActive = true;
                         document.getElementById("xoResetBtn").style.display = "none";
-                        document.getElementById("xoStatusText").innerText = room.turn === xoMyRole ? "سەرەی تۆیە! 🎯" : "سەرەی یاریزانی بەرامبەر";
+                        if (room.turn === xoMyRole) {
+                            document.getElementById("xoStatusText").innerText = "سەرەی تۆیە! 🎯";
+                        } else {
+                            let turnName = room.turn === 'X' ? room.playerX : room.playerO;
+                            document.getElementById("xoStatusText").innerText = `سەرەی ${turnName}`;
+                        }
                     }
                 }
             });
         }
 
         window.sendOnlineXoMove = function(index) {
-            if (!xoCurrentRoomId || window.xoTurn !== xoMyRole) return;
-            AudioSys.playClick();
+            if (!xoCurrentRoomId) return;
+            if (window.xoTurn !== xoMyRole) {
+                alert("چاوەڕێ بکە، هێشتا سەرەی تۆ نییە!");
+                return;
+            }
+
             let newBoard = [...window.xoState];
             newBoard[index] = xoMyRole;
             let nextTurn = xoMyRole === 'X' ? 'O' : 'X';
-            let winner = window.checkXoWinnerLocal(newBoard, xoMyRole) ? xoMyRole : (!newBoard.includes("") ? "draw" : "");
+            let winner = "";
 
-            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { board: newBoard, turn: nextTurn, winner: winner });
+            if (window.checkXoWinnerLocal(newBoard, xoMyRole)) {
+                winner = xoMyRole;
+            } else if (!newBoard.includes("")) {
+                winner = "draw";
+            }
+
+            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
+                board: newBoard,
+                turn: nextTurn,
+                winner: winner
+            });
         };
 
-        window.sendQuickChat = function(gameType, msg) {
-            if (gameType === 'xo' && xoCurrentRoomId) {
-                update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { chatMsg: window.currentUser + ": " + msg });
-            }
+        window.sendOnlineXoRestart = function() {
+            if (!xoCurrentRoomId) return;
+            let updates = {};
+            if (xoMyRole === 'X') updates.restartX = true;
+            else updates.restartO = true;
+            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), updates);
         };
 
         window.leaveXoRoom = function() {
-            if (xoCurrentRoomId) { remove(ref(database, 'xo_lobby/' + xoCurrentRoomId)); xoCurrentRoomId = null; }
+            if (xoCurrentRoomId) {
+                remove(ref(database, 'xo_lobby/' + xoCurrentRoomId));
+                xoCurrentRoomId = null;
+            }
         };
 
-        /* Tug & Word Online Systems Included */
-        let tugCurrentRoomId = null; let tugMyRole = "";
+        /* Tug of War Online Engine */
+        let tugCurrentRoomId = null;
+        let tugMyRole = "";
+
         window.startOnlineTugMatchmaking = function(username) {
             const lobbyRef = ref(database, 'tug_lobby');
             get(lobbyRef).then((snapshot) => {
-                let lobbyData = snapshot.val(); let waitingRoomId = null;
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
                 if (lobbyData) {
                     for (let id in lobbyData) {
-                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) { waitingRoomId = id; break; }
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
                     }
                 }
+
                 if (waitingRoomId) {
-                    tugCurrentRoomId = waitingRoomId; tugMyRole = "player2";
-                    update(ref(database, 'tug_lobby/' + tugCurrentRoomId), { player2: username, status: 'playing', startTime: Date.now() }).then(() => {
+                    tugCurrentRoomId = waitingRoomId;
+                    tugMyRole = "player2";
+                    update(ref(database, 'tug_lobby/' + tugCurrentRoomId), {
+                        player2: username,
+                        status: 'playing',
+                        startTime: Date.now()
+                    }).then(() => {
                         listenToTugRoom(tugCurrentRoomId, username);
+                        startTugClientTimer();
                     });
                 } else {
-                    tugCurrentRoomId = "room_tug_" + Date.now(); tugMyRole = "player1";
+                    tugCurrentRoomId = "room_tug_" + Date.now();
+                    tugMyRole = "player1";
                     const newRoomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
-                    set(newRoomRef, { player1: username, player2: "", status: 'waiting', clicks: { player1: 0, player2: 0 }, startTime: Date.now(), gameOver: false, winner: "" }).then(() => {
-                        onDisconnect(newRoomRef).remove(); listenToTugRoom(tugCurrentRoomId, username);
+                    set(newRoomRef, {
+                        player1: username,
+                        player2: "",
+                        status: 'waiting',
+                        clicks: { player1: 0, player2: 0 },
+                        startTime: Date.now(),
+                        gameOver: false,
+                        winner: ""
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        listenToTugRoom(tugCurrentRoomId, username);
+                        startTugClientTimer();
                     });
                 }
             });
         };
 
+        let tugTimerInterval = null;
+        function startTugClientTimer() {
+            if (tugTimerInterval) clearInterval(tugTimerInterval);
+            tugTimerInterval = setInterval(() => {
+                if (!tugCurrentRoomId) return;
+                const roomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
+                get(roomRef).then((snapshot) => {
+                    if (!snapshot.exists()) return;
+                    let room = snapshot.val();
+                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
+
+                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
+                    let timeLeft = 10 - elapsed;
+
+                    if (timeLeft <= 0) {
+                        timeLeft = 0;
+                        clearInterval(tugTimerInterval);
+                        if (!room.winner && tugMyRole === 'player1') {
+                            let p1 = room.clicks.player1 || 0;
+                            let p2 = room.clicks.player2 || 0;
+                            let winnerName = p1 > p2 ? room.player1 : (p2 > p1 ? room.player2 : "draw");
+                            update(roomRef, { gameOver: true, winner: winnerName });
+                        }
+                    }
+
+                    let timerEl = document.getElementById("tugTimerDisplay");
+                    if (timerEl) timerEl.innerText = timeLeft + " چرکە";
+                });
+            }, 1000);
+        }
+
         function listenToTugRoom(roomId, username) {
             const roomRef = ref(database, 'tug_lobby/' + roomId);
             onValue(roomRef, (snapshot) => {
-                const room = snapshot.val(); if (!room) return;
+                const room = snapshot.val();
+                if (!room) return;
+
                 if (room.status === 'waiting') {
-                    document.getElementById("tugMenuArea").style.display = "none"; document.getElementById("tugLobbyArea").style.display = "block"; document.getElementById("tugGameArea").style.display = "none";
+                    document.getElementById("tugMenuArea").style.display = "none";
+                    document.getElementById("tugShopArea").style.display = "none";
+                    document.getElementById("tugLobbyArea").style.display = "block";
+                    document.getElementById("tugGameArea").style.display = "none";
                 } else if (room.status === 'playing') {
-                    document.getElementById("tugMenuArea").style.display = "none"; document.getElementById("tugLobbyArea").style.display = "none"; document.getElementById("tugGameArea").style.display = "block";
-                    let p1 = room.clicks.player1 || 0; let p2 = room.clicks.player2 || 0;
-                    document.getElementById("tugP1Clicks").innerText = p1; document.getElementById("tugP2Clicks").innerText = p2;
-                    let percent = Math.min(Math.max(50 + ((p1 - p2) * 3), 5), 95);
+                    document.getElementById("tugMenuArea").style.display = "none";
+                    document.getElementById("tugShopArea").style.display = "none";
+                    document.getElementById("tugLobbyArea").style.display = "none";
+                    document.getElementById("tugGameArea").style.display = "block";
+
+                    let p1Clicks = room.clicks.player1 || 0;
+                    let p2Clicks = room.clicks.player2 || 0;
+                    document.getElementById("tugP1Clicks").innerText = p1Clicks;
+                    document.getElementById("tugP2Clicks").innerText = p2Clicks;
+
+                    let diff = p1Clicks - p2Clicks;
+                    let percent = 50 + (diff * 3);
+                    if (percent < 5) percent = 5;
+                    if (percent > 95) percent = 95;
                     document.getElementById("ropeKnot").style.left = percent + "%";
+
+                    if (room.gameOver) {
+                        if (room.winner === 'draw') {
+                            alert("یەکسان بوون!");
+                        } else {
+                            alert("بردیەوە: " + room.winner);
+                            if (room.winner === username) window.addScore(username, 15);
+                        }
+                        document.getElementById("tugResetBtn").style.display = "block";
+                    }
                 }
             });
         }
 
         window.sendTugOnlineClick = function() {
             if (!tugCurrentRoomId) return;
-            AudioSys.playClick();
             const roomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
             get(roomRef).then((snapshot) => {
                 if(!snapshot.exists()) return;
                 let room = snapshot.val();
+                if (room.gameOver) return;
+
                 room.clicks[tugMyRole] = (room.clicks[tugMyRole] || 0) + 1;
                 update(roomRef, { clicks: room.clicks });
             });
         };
 
         window.leaveTugRoom = function() {
-            if (tugCurrentRoomId) { remove(ref(database, 'tug_lobby/' + tugCurrentRoomId)); tugCurrentRoomId = null; }
+            if (tugTimerInterval) clearInterval(tugTimerInterval);
+            if (tugCurrentRoomId) {
+                remove(ref(database, 'tug_lobby/' + tugCurrentRoomId));
+                tugCurrentRoomId = null;
+            }
+        };
+
+        /* Word Game Online Engine with automatic continuous timer & 3s audio chime */
+        let wordCurrentRoomId = null;
+        let wordMyRole = ""; 
+        const kurdishLetters = ["ت", "م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ"];
+        let clientTimerInterval = null;
+
+        function playVictorySound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                let now = ctx.currentTime;
+                let notes = [440, 554, 659, 880];
+                notes.forEach((freq, idx) => {
+                    let osc = ctx.createOscillator();
+                    let gain = ctx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(freq, now + (idx * 0.2));
+                    gain.gain.setValueAtTime(0.2, now + (idx * 0.2));
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.2) + 0.5);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + (idx * 0.2));
+                    osc.stop(now + (idx * 0.2) + 0.6);
+                });
+            } catch(e) {}
+        }
+
+        window.startWordQuickRoomMatch = function(username) {
+            const lobbyRef = ref(database, 'word_lobby');
+            get(lobbyRef).then((snapshot) => {
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
+                if (lobbyData) {
+                    for (let id in lobbyData) {
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
+                    }
+                }
+
+                if (waitingRoomId) {
+                    wordCurrentRoomId = waitingRoomId;
+                    wordMyRole = "player2";
+                    update(ref(database, 'word_lobby/' + wordCurrentRoomId), {
+                        player2: username,
+                        status: 'playing',
+                        startTime: Date.now()
+                    }).then(() => {
+                        startClientTimerLoop();
+                        listenToWordRoom(wordCurrentRoomId, username);
+                    });
+                } else {
+                    wordCurrentRoomId = "room_word_" + Date.now();
+                    wordMyRole = "player1";
+                    let randomLetter = kurdishLetters[Math.floor(Math.random() * kurdishLetters.length)];
+                    const newRoomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+                    set(newRoomRef, {
+                        player1: username,
+                        player2: "",
+                        status: 'waiting',
+                        targetLetter: randomLetter,
+                        words: {},
+                        scores: { player1: 0, player2: 0 },
+                        startTime: Date.now(),
+                        gameOver: false,
+                        winnerName: ""
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                        startClientTimerLoop();
+                        listenToWordRoom(wordCurrentRoomId, username);
+                    });
+                }
+            });
+        };
+
+        window.createCustomWordRoomFirebase = function(username, customCode) {
+            wordCurrentRoomId = customCode;
+            wordMyRole = "player1";
+            let randomLetter = kurdishLetters[Math.floor(Math.random() * kurdishLetters.length)];
+            const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+            
+            get(roomRef).then((snapshot) => {
+                if(snapshot.exists()) {
+                    alert("ئەم کۆدی ژوورە پێشتر هەیە، تکایە کۆدێکی تر بنووسە!");
+                    return;
+                }
+                set(roomRef, {
+                    player1: username,
+                    player2: "",
+                    status: 'waiting',
+                    targetLetter: randomLetter,
+                    words: {},
+                    scores: { player1: 0, player2: 0 },
+                    startTime: Date.now(),
+                    gameOver: false,
+                    winnerName: ""
+                }).then(() => {
+                    onDisconnect(roomRef).remove();
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "block";
+                    document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                    startClientTimerLoop();
+                    listenToWordRoom(wordCurrentRoomId, username);
+                });
+            });
+        };
+
+        window.joinCustomWordRoomFirebase = function(username, customCode) {
+            const roomRef = ref(database, 'word_lobby/' + customCode);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) {
+                    alert("هیچ ژوورێک بەم کۆدە بوونی نییە!");
+                    return;
+                }
+                let roomData = snapshot.val();
+                if(roomData.status !== 'waiting') {
+                    alert("ئەم ژوورە پڕ بووە یان دەستپێکردووە!");
+                    return;
+                }
+                wordCurrentRoomId = customCode;
+                wordMyRole = "player2";
+                update(roomRef, {
+                    player2: username,
+                    status: 'playing',
+                    startTime: Date.now()
+                }).then(() => {
+                    startClientTimerLoop();
+                    listenToWordRoom(wordCurrentRoomId, username);
+                });
+            });
+        };
+
+        function startClientTimerLoop() {
+            if (clientTimerInterval) clearInterval(clientTimerInterval);
+            
+            clientTimerInterval = setInterval(() => {
+                if (!wordCurrentRoomId) return;
+                const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+                get(roomRef).then((snapshot) => {
+                    if (!snapshot.exists()) return;
+                    let room = snapshot.val();
+                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
+
+                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
+                    let timeLeft = 120 - elapsed;
+
+                    if (timeLeft <= 0) {
+                        timeLeft = 0;
+                        clearInterval(clientTimerInterval);
+
+                        if (!room.winnerName) {
+                            let p1Score = room.scores.player1 || 0;
+                            let p2Score = room.scores.player2 || 0;
+                            let wName = "یەکسان بوون! 🤝";
+                            if (p1Score > p2Score) wName = room.player1 + " بردیەوە! 🎉";
+                            else if (p2Score > p1Score) wName = (room.player2 || "یاریزانی ٢") + " بردیەوە! 🎉";
+                            
+                            playVictorySound();
+
+                            if (wordMyRole === 'player1') {
+                                update(roomRef, { gameOver: true, winnerName: wName });
+                            }
+                        }
+                    }
+
+                    let mins = Math.floor(timeLeft / 60);
+                    let secs = timeLeft % 60;
+                    let timerEl = document.getElementById("wordTimerDisplay");
+                    if (timerEl) {
+                        timerEl.innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
+                    }
+                });
+            }, 1000);
+        }
+
+        function listenToWordRoom(roomId, username) {
+            const roomRef = ref(database, 'word_lobby/' + roomId);
+            onValue(roomRef, (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                if (room.status === 'waiting') {
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "block";
+                    document.getElementById("wordGameArea").style.display = "none";
+                } else if (room.status === 'playing') {
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "none";
+                    document.getElementById("wordGameArea").style.display = "block";
+
+                    let p1Text = room.player1 + (wordMyRole === 'player1' ? " (تۆ)" : "");
+                    let p2Text = (room.player2 || "بەرامبەر") + (wordMyRole === 'player2' ? " (تۆ)" : "");
+
+                    if (wordMyRole === 'player1') {
+                        document.getElementById("wordP1Title").innerHTML = `<span style="color:#facc15">${p1Text}</span>`;
+                        document.getElementById("wordP2Title").innerText = p2Text;
+                    } else {
+                        document.getElementById("wordP1Title").innerText = p1Text;
+                        document.getElementById("wordP2Title").innerHTML = `<span style="color:#facc15">${p2Text}</span>`;
+                    }
+
+                    document.getElementById("targetLetterDisplay").innerText = room.targetLetter;
+
+                    let p1Score = room.scores.player1 || 0;
+                    let p2Score = room.scores.player2 || 0;
+                    document.getElementById("wordP1Score").innerText = p1Score;
+                    document.getElementById("wordP2Score").innerText = p2Score;
+
+                    if (room.winnerName) {
+                        document.getElementById("wordGameStatusText").innerText = room.winnerName;
+                        document.getElementById("wordInputText").disabled = true;
+                        document.getElementById("wordSendBtn").disabled = true;
+                    } else {
+                        document.getElementById("wordGameStatusText").innerText = "یاری بەڕێوەیە...";
+                    }
+
+                    let wordsObj = room.words || {};
+                    let wordsHtml = "";
+                    for(let key in wordsObj) {
+                        let wItem = wordsObj[key];
+                        let isMyW = (wItem.user === username);
+                        let badgeClass = isMyW ? "word-badge my-word" : "word-badge";
+                        wordsHtml += `<span class="${badgeClass}">${wItem.word} (${wItem.user})</span>`;
+                    }
+                    document.getElementById("wordsListContainer").innerHTML = wordsHtml || "<span style='font-size: 11px; color: #94a3b8;'>هێشتا هیچ وشەیەک نەنووسراوە...</span>";
+                }
+            });
+        };
+
+        window.submitWordFirebaseMove = function(wordText, targetLetter, username) {
+            if (!wordCurrentRoomId) return;
+
+            const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) return;
+                let room = snapshot.val();
+                if (room.gameOver) return;
+
+                let trimmed = wordText.trim();
+                
+                if (!trimmed.startsWith(targetLetter)) {
+                    showWordError("⚠️ وشە دەبێت بە پيتي '" + targetLetter + "' دەست پێبکات!");
+                    return;
+                }
+
+                if (!isValidMeaningfulKurdishWord(trimmed)) {
+                    showWordError("⚠️ تەنها وشەی ڕەسەنی کوردی قبوڵ دەکرێت!");
+                    return;
+                }
+
+                let wordsObj = room.words || {};
+                for(let k in wordsObj) {
+                    if(wordsObj[k].word === trimmed) {
+                        showWordError("⚠️ ئەم وشەیە پێشتر تۆمارکراوە!");
+                        return;
+                    }
+                }
+
+                let newWordKey = "w_" + Date.now();
+                wordsObj[newWordKey] = { word: trimmed, user: username };
+
+                room.scores[wordMyRole] = (room.scores[wordMyRole] || 0) + 10;
+
+                let updates = {
+                    words: wordsObj,
+                    scores: room.scores
+                };
+
+                update(roomRef, updates);
+
+                document.getElementById("wordInputText").value = "";
+                hideWordError();
+            });
+        };
+
+        function isValidMeaningfulKurdishWord(w) {
+            if (w.length < 3) return false;
+            const blockedList = ["الستار", "تايتار", "تيتاير", "تيتياير", "تبريرين", "توتو", "مومو", "دادا", "تيتي"];
+            if (blockedList.includes(w)) return false;
+            for (let i = 0; i < w.length - 2; i++) {
+                if (w[i] === w[i+1] && w[i+1] === w[i+2]) return false;
+            }
+            const validKurdishDictionary = [
+                "تانجى", "تاڤگە", "تاقە", "تەپۆلکە", "تەرزە", "تەموومژ", "تۆرەمە", "تەلار", "تیرۆر", "تەنیایی", "تۆمار", "تەپڵ", "تەمەن", "تەنیشت", "تەلەفۆن", "تووڕە", "تەون", "تۆپ", "تەختە",
+                "مامۆستا", "مایک", "مانگ", "مێوژ", "مەلەلە", "مێژوو", "مێشک", "میرات", "مۆم", "مۆزەخانە", "مریشک", "ماسی", "مێروو",
+                "باران", "بەهار", "بەفر", "بنار", "باڵندە", "بەرد", "بەیبوون", "بروسکە", "بۆنە", "بەختەوەر", "برا", "باوکی",
+                "درەخت", "دەریای", "دایک", "دیاری", "دڵسۆز", "دەفتەر", "دەمانچە", "دەنگ", "دوورگە", "دیمەن", "دانا", "دەست",
+                "ڕۆژمێر", "رووبار", "رەنگین", "رێواس", "رۆشنایی", "ڕێگا", "ڕێز", "ڕەشماڵ",
+                "ستێرە", "سێو", "سەرۆک", "سەوزە", "سەیران", "سلێمانی", "سپێدە", "سەرکەوتن", "سەهۆڵ",
+                "شارەزا", "شێرپەنجە", "شەقام", "شاکار", "شەماڵ", "شۆفێر", "شەکر", "شین",
+                "کوردستان", "کانی", "کۆمەڵگا", "کەلتوور", "کۆڵان", "کتێب", "کۆمپیوتەر", "کاروان",
+                "گوڵەبەڕۆژە", "گەشتیار", "گەورە", "گۆران", "گەنم", "گەردەلوول", "گۆرانی", "گوڵ",
+                "لاپەڕە", "لێڤا", "لاوک", "لانکە", "لۆژیک",
+                "نەورۆز", "ئەستێرە", "نیشتمان", "نووسەر", "ئاسمان", "ئاو", "ئاگر", "ئارام", "ئۆتۆمبیل",
+                "وێنە", "وشە", "وڵات", "وەرزی",
+                "هەتاو", "هەڵبەست", "هەولێر", "هێمن", "هەنار", "هەور",
+                "چیا", "چاو", "چیرۆک", "چایچی", "چەمەن",
+                "پێشمەرگە", "پاییز", "پرد", "پەپولە", "پەڕەسوورە", "پۆل"
+            ];
+            return validKurdishDictionary.includes(w);
+        }
+
+        function showWordError(msg) {
+            let alertBox = document.getElementById("wordErrorAlert");
+            let alertText = document.getElementById("wordErrorText");
+            alertText.innerText = msg;
+            alertBox.style.display = "block";
+            setTimeout(() => { alertBox.style.display = "none"; }, 3000);
+        }
+
+        function hideWordError() {
+            document.getElementById("wordErrorAlert").style.display = "none";
+        }
+
+        window.leaveWordRoomFirebase = function() {
+            if (clientTimerInterval) clearInterval(clientTimerInterval);
+            if (wordCurrentRoomId) {
+                remove(ref(database, 'word_lobby/' + wordCurrentRoomId));
+                wordCurrentRoomId = null;
+            }
         };
     </script>
 
-    <!-- Core UI & App Logic -->
     <script>
         let currentUser = "";
         let tempAvatarBase64 = "";
         let settingsTempAvatar = "";
 
+        // XO Local State
         window.xoState = ["", "", "", "", "", "", "", "", ""];
         window.xoTurn = "X";
         let xoMode = "bot";
         window.xoGameActive = true;
 
-        let tugP1Count = 0; let tugP2Count = 0; let tugTimer = 10; let tugActive = false; let tugTimerIntervalLocal = null;
-
-        const kurdishDict = ["مانگ", "باران", "کوردستان", "بەهار", "ئاسمان", "مێژوو", "کتێب", "درەخت", "گوڵ", "سەرکەوتن", "نیشتمان", "نووسەر"];
+        // Tug Local State
+        let tugMode = "bot";
+        let tugP1Count = 0;
+        let tugP2Count = 0;
+        let tugTimer = 10;
+        let tugActive = false;
+        let tugTimerIntervalLocal = null;
 
         window.onload = function() {
             loadSavedSettings();
@@ -988,7 +1385,6 @@
                 currentUser = savedUser;
                 loadUserData();
                 switchScreen("hubScreen");
-                checkDailyRewardStatus();
                 if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
                 if (window.loadLeaderboard) window.loadLeaderboard();
             } else {
@@ -997,78 +1393,54 @@
         };
 
         function switchScreen(id) {
-            AudioSys.playClick();
             document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
             document.getElementById(id).classList.add("active");
         }
 
         function switchAuthMode(mode) {
-            AudioSys.playClick();
-            document.getElementById('loginForm').style.display = mode === 'login' ? 'block' : 'none';
-            document.getElementById('registerForm').style.display = mode === 'register' ? 'block' : 'none';
-            document.getElementById('loginTabBtn').classList.toggle('active', mode === 'login');
-            document.getElementById('registerTabBtn').classList.toggle('active', mode === 'register');
+            if (mode === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginTabBtn').classList.add('active');
+                document.getElementById('registerTabBtn').classList.remove('active');
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('registerTabBtn').classList.add('active');
+                document.getElementById('loginTabBtn').classList.remove('active');
+            }
         }
 
         function togglePasswordVisibility(fieldId, btn) {
             let field = document.getElementById(fieldId);
-            field.type = field.type === "password" ? "text" : "password";
-            btn.innerText = field.type === "password" ? "👁️" : "🔒";
+            if (field.type === "password") { field.type = "text"; btn.innerText = "🔒"; }
+            else { field.type = "password"; btn.innerText = "👁️"; }
         }
 
-        async function handleImageUpload(event) {
+        function handleImageUpload(event) {
             let file = event.target.files[0];
             if (file) {
-                if (window.uploadImageToStorage) {
-                    try {
-                        let path = "avatars/" + Date.now() + "_" + file.name;
-                        tempAvatarBase64 = await window.uploadImageToStorage(file, path);
-                    } catch(e) {
-                        console.log("Storage Fallback to Data URL", e);
-                        let reader = new FileReader();
-                        reader.onload = function(e) { tempAvatarBase64 = e.target.result; };
-                        reader.readAsDataURL(file);
-                    }
-                } else {
-                    let reader = new FileReader();
-                    reader.onload = function(e) { tempAvatarBase64 = e.target.result; };
-                    reader.readAsDataURL(file);
-                }
-                
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById("avatarImgTag").src = e.target.result;
-                    document.getElementById("avatarImgTag").style.display = "block";
-                    document.getElementById("avatarPlaceholderText").style.display = "none";
-                };
+                    tempAvatarBase64 = e.target.result;
+                    let imgTag = document.getElementById("avatarImgTag");
+                    let textTag = document.getElementById("avatarPlaceholderText");
+                    imgTag.src = tempAvatarBase64; imgTag.style.display = "block"; textTag.style.display = "none";
+                }
                 reader.readAsDataURL(file);
             }
         }
 
-        async function handleSettingsImageUpload(event) {
+        function handleSettingsImageUpload(event) {
             let file = event.target.files[0];
             if (file) {
-                if (window.uploadImageToStorage) {
-                    try {
-                        let path = "avatars/settings_" + Date.now() + "_" + file.name;
-                        settingsTempAvatar = await window.uploadImageToStorage(file, path);
-                    } catch(e) {
-                        let reader = new FileReader();
-                        reader.onload = function(e) { settingsTempAvatar = e.target.result; };
-                        reader.readAsDataURL(file);
-                    }
-                } else {
-                    let reader = new FileReader();
-                    reader.onload = function(e) { settingsTempAvatar = e.target.result; };
-                    reader.readAsDataURL(file);
-                }
-
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById("settingsAvatarPreview").src = e.target.result;
-                    document.getElementById("settingsAvatarPreview").style.display = "block";
-                    document.getElementById("settingsAvatarPlaceholder").style.display = "none";
-                };
+                    settingsTempAvatar = e.target.result;
+                    let imgTag = document.getElementById("settingsAvatarPreview");
+                    let textTag = document.getElementById("settingsAvatarPlaceholder");
+                    imgTag.src = settingsTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
+                }
                 reader.readAsDataURL(file);
             }
         }
@@ -1079,137 +1451,116 @@
             let passConfirm = document.getElementById("regPasswordConfirm").value.trim();
             let birthdate = document.getElementById("regBirthdate").value;
 
-            if (!name || !pass || !passConfirm || !birthdate) { AudioSys.playError(); alert("تکایە هەموو خانەکان پڕبکەرەوە!"); return; }
-            if (localStorage.getItem("user_profile_" + name)) { AudioSys.playError(); alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
-            if (pass !== passConfirm) { AudioSys.playError(); alert("وشەی نهێنی یەک ناگرێتەوە!"); return; }
+            if (!name || !pass || !passConfirm || !birthdate) { alert("تکایە هەموو خانەکان پڕبکەرەوە!"); return; }
+            if (localStorage.getItem("user_profile_" + name)) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
+            if (pass.length < 8) { alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!"); return; }
+            if (pass !== passConfirm) { alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!"); return; }
 
-            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 0, frame: "" };
+            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 0 };
             localStorage.setItem("user_profile_" + name, JSON.stringify(profileData));
             localStorage.setItem("top_top_active_user", name);
             currentUser = name;
             
-            AudioSys.playWin();
             if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            loadUserData(); switchScreen("hubScreen"); checkDailyRewardStatus();
+            loadUserData();
+            switchScreen("hubScreen");
             if (window.loadLeaderboard) window.loadLeaderboard();
         }
 
         function loginUser() {
             let name = document.getElementById("loginUsername").value.trim();
             let pass = document.getElementById("loginPassword").value.trim();
-            let profileData = localStorage.getItem("user_profile_" + name);
+            if (!name || !pass) { alert("تکایە ناو و وشەی نهێنی بنووسە!"); return; }
 
-            if (!profileData || JSON.parse(profileData).password !== pass) {
-                AudioSys.playError(); alert("ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!"); return;
-            }
+            let profileData = localStorage.getItem("user_profile_" + name);
+            if (!profileData) { alert("ئەم ناوە بوونی نییە!"); return; }
+
+            let profile = JSON.parse(profileData);
+            if (profile.password !== pass) { alert("وشەی نهێنی هەڵەیە!"); return; }
 
             localStorage.setItem("top_top_active_user", name);
             currentUser = name;
-            AudioSys.playClick();
+
             if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            loadUserData(); switchScreen("hubScreen"); checkDailyRewardStatus();
+            loadUserData();
+            switchScreen("hubScreen");
             if (window.loadLeaderboard) window.loadLeaderboard();
         }
 
         function logoutUser() {
-            AudioSys.playClick();
+            if (window.setOfflineStatus) window.setOfflineStatus(currentUser);
             localStorage.removeItem("top_top_active_user");
-            currentUser = ""; switchScreen("authScreen");
+            currentUser = "";
+            switchScreen("authScreen");
         }
 
         function loadUserData() {
             let profileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = profileData ? JSON.parse(profileData) : { score: 0 };
+            let profile = profileData ? JSON.parse(profileData) : {};
             document.getElementById("hubUsernameText").innerText = currentUser;
-            document.getElementById("hubScoreDisplay").innerText = "⭐ " + (profile.score || 0) + " خاڵ";
 
             let avatarEl = document.getElementById("hubUserAvatar");
-            avatarEl.className = "avatar-preview " + (profile.frame || "");
-            if (profile.avatar) avatarEl.innerHTML = `<img src="${profile.avatar}">`;
-            else avatarEl.innerText = currentUser.charAt(0).toUpperCase();
-
+            if (profile.avatar) {
+                avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+            } else {
+                avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
+            }
             document.getElementById("settingsUsernameInput").value = currentUser;
         }
 
-        /* Daily Rewards System */
-        function checkDailyRewardStatus() {
-            let lastClaim = localStorage.getItem("toptop_claim_" + currentUser);
-            let today = new Date().toDateString();
-            document.getElementById("dailyRewardCard").style.display = lastClaim === today ? "none" : "block";
-        }
-
-        function claimDailyReward() {
-            let today = new Date().toDateString();
-            localStorage.setItem("toptop_claim_" + currentUser, today);
-            AudioSys.playWin();
-            if(window.addScore) window.addScore(currentUser, 25);
-            alert("پیرۆزە! ۲٥ خاڵی ڕۆژانەت وەرگرت! 🎁");
-            checkDailyRewardStatus();
-        }
-
-        /* Shop System */
-        function openGlobalShop() {
-            let profileData = JSON.parse(localStorage.getItem("user_profile_" + currentUser) || "{}");
-            document.getElementById("shopUserPoints").innerText = profileData.score || 0;
-            switchScreen("shopScreen");
-        }
-
-        function buyShopItem(itemType, cost) {
-            let profileData = JSON.parse(localStorage.getItem("user_profile_" + currentUser) || "{}");
-            let score = profileData.score || 0;
-            if(score < cost) { AudioSys.playError(); alert("خاڵت بەس نییە!"); return; }
-
-            profileData.score = score - cost;
-            
-            if(itemType === 'gold_frame') profileData.frame = 'gold-frame';
-            if(itemType === 'fire_frame') profileData.frame = 'fire-frame';
-            if(itemType === 'theme_blue') {
-                document.body.setAttribute("data-theme", "blue");
-                localStorage.setItem("toptop_theme", "blue");
-            }
-            if(itemType === 'theme_emerald') {
-                document.body.setAttribute("data-theme", "emerald");
-                localStorage.setItem("toptop_theme", "emerald");
-            }
-
-            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profileData));
-            AudioSys.playWin();
-            alert("کڕین سەرکەوتوو بوو! 🛍️");
-            loadUserData(); openGlobalShop();
-        }
-
-        /* Settings System */
         function saveProfileChanges() {
             let newName = document.getElementById("settingsUsernameInput").value.trim();
-            if (!newName) return;
-            let profile = JSON.parse(localStorage.getItem("user_profile_" + currentUser) || "{}");
-            profile.username = newName;
+            if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
+
+            let oldProfileData = localStorage.getItem("user_profile_" + currentUser);
+            let profile = oldProfileData ? JSON.parse(oldProfileData) : {};
+
+            if (newName !== currentUser) {
+                if (localStorage.getItem("user_profile_" + newName)) { alert("ئەم ناوە پێشتر تۆمارکراوە!"); return; }
+                if (window.setOfflineStatus) window.setOfflineStatus(currentUser);
+                localStorage.removeItem("user_profile_" + currentUser);
+                currentUser = newName;
+                localStorage.setItem("top_top_active_user", currentUser);
+                if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
+            }
+
+            profile.username = currentUser;
             if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
+
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            AudioSys.playWin(); alert("نوێکرایەوە!"); loadUserData();
+            alert("نوێکرایەوە!");
+            loadUserData();
         }
 
         function toggleSoundSetting() {
-            let isMuted = !document.getElementById("soundToggle").checked;
+            let isMuted = document.getElementById("soundToggle").checked;
             localStorage.setItem("toptop_sound_muted", isMuted);
         }
 
+        function toggleMusicSetting() {
+            let isMuted = document.getElementById("musicToggle").checked;
+            localStorage.setItem("toptop_music_muted", isMuted);
+        }
+
         function setAppTheme(themeName) {
-            AudioSys.playClick();
             document.body.setAttribute("data-theme", themeName);
             localStorage.setItem("toptop_theme", themeName);
         }
 
         function loadSavedSettings() {
             let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
-            document.getElementById("soundToggle").checked = !soundMuted;
-            document.body.setAttribute("data-theme", localStorage.getItem("toptop_theme") || "purple");
+            let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
+            let savedTheme = localStorage.getItem("toptop_theme") || "purple";
+
+            document.getElementById("soundToggle").checked = soundMuted;
+            document.getElementById("musicToggle").checked = musicMuted;
+            document.body.setAttribute("data-theme", savedTheme);
         }
 
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
-        /* XO Bot AI Engine (Easy, Medium, Hard Unbeatable AI) */
+        /* XO Navigation */
         function openXoMenu() {
             switchScreen("xoScreen");
             document.getElementById("xoModeSelect").style.display = "block";
@@ -1220,9 +1571,10 @@
         function startXoVsBot() {
             xoMode = "bot";
             document.getElementById("xoModeSelect").style.display = "none";
+            document.getElementById("xoLobbyArea").style.display = "none";
             document.getElementById("xoGameArea").style.display = "block";
             document.getElementById("playerXName").innerHTML = `<span style="color:#facc15">${currentUser} (تۆ)</span>`;
-            document.getElementById("playerOName").innerText = "کۆمپیوتەر 🤖 (AI)";
+            document.getElementById("playerOName").innerText = "کۆمپیوتەر";
             resetXoBoard();
         }
 
@@ -1233,19 +1585,18 @@
 
         function handleXoCellClick(index) {
             if (!window.xoGameActive || window.xoState[index] !== "") return;
+
             if (xoMode === "online") {
                 window.sendOnlineXoMove(index);
             } else {
-                AudioSys.playClick();
                 window.xoState[index] = window.xoTurn;
                 window.renderXoBoard();
 
                 if (window.checkXoWinnerLocal(window.xoState, window.xoTurn)) {
-                    AudioSys.playWin();
-                    document.getElementById("xoStatusText").innerText = "تۆ بردتەوە! 🎉";
+                    document.getElementById("xoStatusText").innerText = `بردیەوە ${window.xoTurn}! 🎉`;
                     window.xoGameActive = false;
                     document.getElementById("xoResetBtn").style.display = "block";
-                    if(window.addScore) window.addScore(currentUser, 10);
+                    if(window.xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
                     return;
                 }
 
@@ -1256,37 +1607,23 @@
                     return;
                 }
 
-                window.xoTurn = "O";
-                document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەر...";
-                setTimeout(botXoMove, 400);
+                if (window.xoTurn === "X") {
+                    window.xoTurn = "O";
+                    document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەر...";
+                    setTimeout(botXoMove, 500);
+                }
             }
         }
 
         function botXoMove() {
             if (!window.xoGameActive) return;
-            let diff = document.getElementById("xoDifficultySelect").value;
-            let bestIndex = -1;
-
-            if (diff === "easy") {
-                let empties = window.xoState.map((v, i) => v === "" ? i : null).filter(v => v !== null);
-                bestIndex = empties[Math.floor(Math.random() * empties.length)];
-            } else if (diff === "medium") {
-                if (Math.random() > 0.5) bestIndex = getBestMinimaxMove(window.xoState, "O").index;
-                else {
-                    let empties = window.xoState.map((v, i) => v === "" ? i : null).filter(v => v !== null);
-                    bestIndex = empties[Math.floor(Math.random() * empties.length)];
-                }
-            } else {
-                bestIndex = getBestMinimaxMove(window.xoState, "O").index;
-            }
-
-            if (bestIndex !== undefined && bestIndex !== -1) {
-                window.xoState[bestIndex] = "O";
+            let emptyIndices = window.xoState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+            if (emptyIndices.length > 0) {
+                let randomIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                window.xoState[randomIdx] = "O";
                 window.renderXoBoard();
-                AudioSys.playClick();
 
                 if (window.checkXoWinnerLocal(window.xoState, "O")) {
-                    AudioSys.playError();
                     document.getElementById("xoStatusText").innerText = "کۆمپیوتەر بردیەوە! 🤖";
                     window.xoGameActive = false;
                     document.getElementById("xoResetBtn").style.display = "block";
@@ -1305,41 +1642,6 @@
             }
         }
 
-        /* Minimax Algorithm for XO */
-        function getBestMinimaxMove(board, player) {
-            let availSpots = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
-            if (window.checkXoWinnerLocal(board, "X")) return { score: -10 };
-            if (window.checkXoWinnerLocal(board, "O")) return { score: 10 };
-            if (availSpots.length === 0) return { score: 0 };
-
-            let moves = [];
-            for (let i = 0; i < availSpots.length; i++) {
-                let move = {};
-                move.index = availSpots[i];
-                board[availSpots[i]] = player;
-
-                if (player === "O") move.score = getBestMinimaxMove(board, "X").score;
-                else move.score = getBestMinimaxMove(board, "O").score;
-
-                board[availSpots[i]] = "";
-                moves.push(move);
-            }
-
-            let bestMove;
-            if (player === "O") {
-                let bestScore = -10000;
-                for (let i = 0; i < moves.length; i++) {
-                    if (moves[i].score > bestScore) { bestScore = moves[i].score; bestMove = i; }
-                }
-            } else {
-                let bestScore = 10000;
-                for (let i = 0; i < moves.length; i++) {
-                    if (moves[i].score < bestScore) { bestScore = moves[i].score; bestMove = i; }
-                }
-            }
-            return moves[bestMove];
-        }
-
         window.renderXoBoard = function() {
             let cells = document.querySelectorAll(".xo-cell");
             cells.forEach((cell, idx) => {
@@ -1354,11 +1656,16 @@
         };
 
         function resetXoBoard() {
-            window.xoState = ["", "", "", "", "", "", "", "", ""];
-            window.xoTurn = "X"; window.xoGameActive = true;
-            document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
-            document.getElementById("xoResetBtn").style.display = "none";
-            window.renderXoBoard();
+            if (xoMode === "online") {
+                window.sendOnlineXoRestart();
+            } else {
+                window.xoState = ["", "", "", "", "", "", "", "", ""];
+                window.xoTurn = "X";
+                window.xoGameActive = true;
+                document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
+                document.getElementById("xoResetBtn").style.display = "none";
+                window.renderXoBoard();
+            }
         }
 
         function leaveXoGame() {
@@ -1366,140 +1673,178 @@
             backToHub();
         }
 
-        /* Tug Game System */
+        /* Tug of War Navigation & Shop */
         function openTugMenu() {
             switchScreen("tugScreen");
             document.getElementById("tugMenuArea").style.display = "block";
+            document.getElementById("tugShopArea").style.display = "none";
             document.getElementById("tugLobbyArea").style.display = "none";
             document.getElementById("tugGameArea").style.display = "none";
         }
 
-        function startTugVsBot() {
+        function openTugShop() {
             document.getElementById("tugMenuArea").style.display = "none";
+            document.getElementById("tugShopArea").style.display = "block";
+        }
+
+        function closeTugShop() {
+            document.getElementById("tugShopArea").style.display = "none";
+            document.getElementById("tugMenuArea").style.display = "block";
+        }
+
+        function buyTugItem(itemName, cost) {
+            let profileData = localStorage.getItem("user_profile_" + currentUser);
+            let profile = profileData ? JSON.parse(profileData) : { score: 0 };
+            let currentScore = profile.score || 0;
+
+            if (currentScore < cost) {
+                alert("خاڵت بەسە نییە بۆ کڕینی ئەم شتومەکەی! (پێویستت بە " + cost + " خاڵە)");
+                return;
+            }
+
+            profile.score = currentScore - cost;
+            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
+            if (window.addScore) {
+                // sync to firebase or deduct
+            }
+            alert("پیرۆزە! کڕینی سەرکەوتوو بوو.");
+            closeTugShop();
+        }
+
+        function startTugVsBot() {
+            tugMode = "bot";
+            document.getElementById("tugMenuArea").style.display = "none";
+            document.getElementById("tugShopArea").style.display = "none";
+            document.getElementById("tugLobbyArea").style.display = "none";
             document.getElementById("tugGameArea").style.display = "block";
             resetTugGame();
         }
 
         function startOnlineTug() {
+            tugMode = "online";
             if (window.startOnlineTugMatchmaking) window.startOnlineTugMatchmaking(currentUser);
         }
 
         function handleTugTap() {
             if (!tugActive) return;
-            AudioSys.playClick();
-            tugP1Count++;
-            document.getElementById("tugP1Clicks").innerText = tugP1Count;
-            updateTugRopePosition();
+
+            if (tugMode === "online") {
+                window.sendTugOnlineClick();
+            } else {
+                tugP1Count++;
+                document.getElementById("tugP1Clicks").innerText = tugP1Count;
+                updateTugRopePosition();
+            }
         }
 
         function updateTugRopePosition() {
-            let percent = Math.min(Math.max(50 + ((tugP1Count - tugP2Count) * 3), 5), 95);
+            let diff = tugP1Count - tugP2Count;
+            let percent = 50 + (diff * 3);
+            if (percent < 5) percent = 5;
+            if (percent > 95) percent = 95;
             document.getElementById("ropeKnot").style.left = percent + "%";
         }
 
         function resetTugGame() {
             if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
-            tugP1Count = 0; tugP2Count = 0; tugTimer = 10; tugActive = true;
+            tugP1Count = 0;
+            tugP2Count = 0;
+            tugTimer = 10;
+            tugActive = true;
             document.getElementById("tugP1Clicks").innerText = "٠";
             document.getElementById("tugP2Clicks").innerText = "٠";
             document.getElementById("tugTimerDisplay").innerText = "١٠ چرکە";
             document.getElementById("ropeKnot").style.left = "50%";
             document.getElementById("tugResetBtn").style.display = "none";
 
-            tugTimerIntervalLocal = setInterval(() => {
-                tugTimer--;
-                document.getElementById("tugTimerDisplay").innerText = tugTimer + " چرکە";
-                if (Math.random() > 0.3) {
-                    tugP2Count++;
-                    document.getElementById("tugP2Clicks").innerText = tugP2Count;
-                    updateTugRopePosition();
-                }
+            if (tugMode === "bot") {
+                tugTimerIntervalLocal = setInterval(() => {
+                    tugTimer--;
+                    document.getElementById("tugTimerDisplay").innerText = tugTimer + " چرکە";
 
-                if (tugTimer <= 0) {
-                    clearInterval(tugTimerIntervalLocal);
-                    tugActive = false;
-                    if (tugP1Count > tugP2Count) {
-                        AudioSys.playWin(); alert("پیرۆزە! تۆ بردەوەتەوە! 🎉");
-                        if (window.addScore) window.addScore(currentUser, 15);
-                    } else { AudioSys.playError(); alert("کۆمپیوتەر بردیەوە! 🤖"); }
-                    document.getElementById("tugResetBtn").style.display = "block";
-                }
-            }, 1000);
+                    // Bot taps randomly
+                    if (Math.random() > 0.3) {
+                        tugP2Count++;
+                        document.getElementById("tugP2Clicks").innerText = tugP2Count;
+                        updateTugRopePosition();
+                    }
+
+                    if (tugTimer <= 0) {
+                        clearInterval(tugTimerIntervalLocal);
+                        tugActive = false;
+                        if (tugP1Count > tugP2Count) {
+                            alert("پیرۆزە! تۆ بردەوەتەوە! 🎉");
+                            if (window.addScore) window.addScore(currentUser, 15);
+                        } else if (tugP2Count > tugP1Count) {
+                            alert("کۆمپیوتەر بردیەوە! 🤖");
+                        } else {
+                            alert("یەکسان بوون!");
+                        }
+                        document.getElementById("tugResetBtn").style.display = "block";
+                    }
+                }, 1000);
+            }
         }
 
         function leaveTugGame() {
             if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
-            if (window.leaveTugRoom) window.leaveTugRoom();
+            if (tugMode === "online" && window.leaveTugRoom) window.leaveTugRoom();
             backToHub();
         }
 
-        /* Word Game System & Hint Feature & Invite Logic */
+        /* Word Game Navigation */
         function openWordGameMenu() {
             switchScreen("wordScreen");
             document.getElementById("wordModeSelect").style.display = "block";
             document.getElementById("wordLobbyArea").style.display = "none";
             document.getElementById("wordGameArea").style.display = "none";
+            document.getElementById("wordInputText").disabled = false;
+            document.getElementById("wordSendBtn").disabled = false;
         }
 
-        window.startWordQuickRoom = function() {
-            document.getElementById("wordModeSelect").style.display = "none";
-            document.getElementById("wordGameArea").style.display = "block";
-            document.getElementById("wordGameStatusText").innerText = "گەڕان بۆ یاریزان...";
-        };
+        function startWordQuickRoom() {
+            if (window.startWordQuickRoomMatch) window.startWordQuickRoomMatch(currentUser);
+        }
 
-        window.createCustomWordRoom = function() {
+        function createCustomWordRoom() {
             let code = document.getElementById("createRoomCodeInput").value.trim();
-            if(!code) {
-                code = Math.floor(1000 + Math.random() * 9000).toString();
-                document.getElementById("createRoomCodeInput").value = code;
-            }
-            document.getElementById("wordModeSelect").style.display = "none";
-            document.getElementById("wordLobbyArea").style.display = "block";
-            document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت بۆ بانگکردنی هاوڕێکەت: " + code;
-        };
+            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.createCustomWordRoomFirebase) window.createCustomWordRoomFirebase(currentUser, code);
+        }
 
-        window.joinCustomWordRoom = function() {
+        function joinCustomWordRoom() {
             let code = document.getElementById("joinRoomCodeInput").value.trim();
-            if(!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
-            document.getElementById("wordModeSelect").style.display = "none";
-            document.getElementById("wordGameArea").style.display = "block";
-            document.getElementById("wordGameStatusText").innerText = "بەسترایەوە بە ژووری: " + code;
-        };
+            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.joinCustomWordRoomFirebase) window.joinCustomWordRoomFirebase(currentUser, code);
+        }
 
-        window.submitWordMove = function() {
-            let word = document.getElementById("wordInputText").value.trim();
-            if(word) {
-                let div = document.createElement('span');
-                div.className = "word-badge my-word";
-                div.innerText = word;
-                document.getElementById("wordsListContainer").appendChild(div);
-                document.getElementById("wordInputText").value = "";
+        function submitWordMove() {
+            let wordVal = document.getElementById("wordInputText").value.trim();
+            let targetLtr = document.getElementById("targetLetterDisplay").innerText;
+            if (!wordVal) return;
+            if (window.submitWordFirebaseMove) window.submitWordFirebaseMove(wordVal, targetLtr, currentUser);
+        }
+
+        function cancelMatchmaking(gameType) {
+            if (gameType === 'xo') {
+                if (window.leaveXoRoom) window.leaveXoRoom();
+                document.getElementById("xoLobbyArea").style.display = "none";
+                document.getElementById("xoModeSelect").style.display = "block";
+            } else if (gameType === 'word') {
+                if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
+                document.getElementById("wordLobbyArea").style.display = "none";
+                document.getElementById("wordModeSelect").style.display = "block";
+            } else if (gameType === 'tug') {
+                if (window.leaveTugRoom) window.leaveTugRoom();
+                document.getElementById("tugLobbyArea").style.display = "none";
+                document.getElementById("tugMenuArea").style.display = "block";
             }
-        };
-
-        function useWordHint() {
-            let profileData = JSON.parse(localStorage.getItem("user_profile_" + currentUser) || "{}");
-            if((profileData.score || 0) < 5) { AudioSys.playError(); alert("خاڵت بەس نییە بۆ یاریدەدەر (٥ خاڵ پێویستە)!"); return; }
-
-            let letter = document.getElementById("targetLetterDisplay").innerText;
-            let foundWord = kurdishDict.find(w => w.startsWith(letter));
-            if(foundWord) {
-                profileData.score -= 5;
-                localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profileData));
-                loadUserData();
-                document.getElementById("wordInputText").value = foundWord;
-                AudioSys.playWin();
-            } else { alert("هیچ پێشنیارێک نییە!"); }
         }
 
-        function cancelMatchmaking(type) {
-            AudioSys.playClick();
-            if (type === 'xo') leaveXoGame();
-            if (type === 'tug') leaveTugGame();
-            if (type === 'word') leaveWordGame();
+        function leaveWordGame() {
+            if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
+            backToHub();
         }
-
-        function leaveWordGame() { backToHub(); }
     </script>
 </body>
 </html>
