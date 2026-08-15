@@ -237,6 +237,20 @@
         }
         .tap-btn-giant:active { transform: scale(0.92); background: linear-gradient(135deg, #e11d48, #be123c); }
 
+        /* Chat & Friends Styles */
+        .chat-box {
+            height: 180px; overflow-y: auto; background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color); border-radius: 10px; padding: 8px;
+            margin-bottom: 8px; text-align: right;
+        }
+        .chat-msg { margin-bottom: 6px; font-size: 12px; }
+        .chat-user { font-weight: bold; color: var(--text-glow); }
+        .quiz-opt-btn {
+            background: var(--card-bg); border: 1px solid var(--primary-color);
+            color: #fff; padding: 10px; border-radius: 10px; width: 100%;
+            margin-bottom: 6px; font-weight: bold; cursor: pointer; text-align: right;
+        }
+
         /* Shop Styles */
         .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
         .shop-item {
@@ -331,10 +345,20 @@
                     <div id="hubUserAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
                     <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px;"></span>
                 </div>
-                <div style="display: flex; align-items: center;">
-                    <span class="online-badge"></span>
-                    <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 12px; color: #facc15; font-weight: bold;">⭐ <span id="hubUserScore">0</span></span>
+                    <div>
+                        <span class="online-badge"></span>
+                        <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Daily Reward Card -->
+            <div class="card" style="background: linear-gradient(135deg, rgba(234,179,8,0.2), var(--card-bg)); border-color: #facc15;">
+                <h3>🎁 دیاری و خاڵی ڕۆژانە</h3>
+                <p id="dailyRewardText">هەمیشە ڕۆژانە وەرگرتنی خاڵی خۆت فەرامۆش مەکە!</p>
+                <button class="btn" id="dailyRewardBtn" onclick="claimDailyReward()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000;">🎁 وەرگرتنی دیاری (٥٠ خاڵ)</button>
             </div>
 
             <div class="card">
@@ -342,7 +366,16 @@
                 <p>یاری هەڵبژێرە!</p>
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
                 <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); margin-bottom: 6px;" onclick="openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی)</button>
+            </div>
+
+            <div class="card">
+                <h3>👥 هاوڕێیان و چات</h3>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn" onclick="openFriendsScreen()" style="background: #2563eb; margin-top:0;">👥 هاوڕێیان</button>
+                    <button class="btn" onclick="openChatScreen()" style="background: #9333ea; margin-top:0;">💬 چاتی گشتی</button>
+                </div>
             </div>
 
             <div class="card">
@@ -355,6 +388,72 @@
             <div style="display: flex; gap: 8px; margin-top: auto;">
                 <button class="btn" onclick="openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
+        </div>
+
+        <!-- Quiz Game Screen -->
+        <div id="quizScreen" class="screen">
+            <div class="brand-title">پرسیار و وەڵام</div>
+            <div id="quizModeSelect" class="card">
+                <h3>مۆدی یاری هەڵبژێرە:</h3>
+                <button class="btn" onclick="startQuizGame('bot')" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
+                <button class="btn" onclick="startQuizGame('online')" style="background: #16a34a;">🌐 یاری ئۆنلاین</button>
+            </div>
+
+            <div id="quizGameArea" class="card" style="display: none;">
+                <div class="score-board">
+                    <div class="score-box">
+                        <span>خاڵت</span>
+                        <bold id="quizMyScore">0</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>پرسیار</span>
+                        <bold id="quizQIndex">1/5</bold>
+                    </div>
+                </div>
+
+                <div style="margin: 15px 0; text-align: center;">
+                    <h3 id="quizQuestionText" style="font-size: 16px; color: #fff;">پرسیار لێرە دەردەکەوێت...</h3>
+                </div>
+
+                <div id="quizOptionsContainer"></div>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Friends Screen -->
+        <div id="friendsScreen" class="screen">
+            <div class="brand-title">بەشی هاوڕێیان</div>
+            <div class="card">
+                <h3>➕ زیاتکردنی هاوڕێ</h3>
+                <div style="display: flex; gap: 6px;">
+                    <input type="text" id="friendSearchInput" placeholder="ناوی بەکارهێنەر...">
+                    <button class="btn" onclick="sendFriendRequest()" style="width: 100px; margin-top:0;">ناردن</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📜 لیستی هاوڕێیان</h3>
+                <div id="friendsListContainer">
+                    <p style="font-size: 11px; color: #cbd5e1; text-align: center;">هیچ هاوڕێیەک نەدۆزرایەوە</p>
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
+        </div>
+
+        <!-- Global Chat Screen -->
+        <div id="chatScreen" class="screen">
+            <div class="brand-title">چاتی گشتی پلاتفۆرم</div>
+            <div class="card" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="chat-box" id="globalChatBox"></div>
+                <div style="display: flex; gap: 6px; margin-top: auto;">
+                    <input type="text" id="chatInputText" placeholder="پەیامێک بنووسە..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                    <button class="btn" onclick="sendChatMessage()" style="width: 80px; margin-top:0;">ناردن</button>
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top: 10px;" onclick="backToHub()">گەڕانەوە</button>
         </div>
 
         <!-- XO Menu & Game Screen -->
@@ -615,7 +714,7 @@
     <!-- Firebase & Core Game Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -670,6 +769,7 @@
         window.dbOnValue = onValue;
         window.dbRemove = remove;
         window.dbUpdate = update;
+        window.dbPush = push;
 
         window.setOnlineStatus = function(username) {
             if (!username) return;
@@ -685,10 +785,21 @@
         };
 
         window.addScore = function(username, pts) {
+            if (!username) return;
             const scoreRef = ref(database, 'users/' + username + '/score');
             get(scoreRef).then(snapshot => {
                 let currentScore = snapshot.exists() ? snapshot.val() : 0;
-                set(scoreRef, currentScore + pts);
+                let newScore = currentScore + pts;
+                set(scoreRef, newScore);
+                
+                // Sync Local
+                let profileData = localStorage.getItem("user_profile_" + username);
+                if (profileData) {
+                    let p = JSON.parse(profileData);
+                    p.score = newScore;
+                    localStorage.setItem("user_profile_" + username, JSON.stringify(p));
+                }
+                loadUserData();
                 loadLeaderboard();
             });
         };
@@ -715,6 +826,76 @@
                     `;
                 });
                 document.getElementById('topScoresList').innerHTML = html || "<p style='text-align:center; font-size:11px;'>هیچ خاڵێک تۆمار نەکراوە</p>";
+            });
+        };
+
+        /* Chat System */
+        window.sendChatMessage = function() {
+            let msgInput = document.getElementById("chatInputText");
+            let msg = msgInput.value.trim();
+            if(!msg || !currentUser) return;
+
+            const chatRef = ref(database, 'global_chat');
+            push(chatRef, {
+                username: currentUser,
+                text: msg,
+                time: Date.now()
+            });
+            msgInput.value = "";
+        };
+
+        window.listenToChat = function() {
+            const chatRef = ref(database, 'global_chat');
+            onValue(chatRef, (snapshot) => {
+                const data = snapshot.val();
+                let chatBox = document.getElementById("globalChatBox");
+                if(!chatBox) return;
+                chatBox.innerHTML = "";
+                if(data) {
+                    let msgs = Object.values(data);
+                    msgs.sort((a,b) => a.time - b.time);
+                    msgs.forEach(m => {
+                        chatBox.innerHTML += `<div class="chat-msg"><span class="chat-user">${m.username}:</span> ${m.text}</div>`;
+                    });
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            });
+        };
+
+        /* Friends System */
+        window.sendFriendRequest = function() {
+            let friendName = document.getElementById("friendSearchInput").value.trim();
+            if(!friendName) return;
+            if(friendName === currentUser) { alert("ناتوانیت داواکاری بۆ خۆت بنێریت!"); return; }
+
+            const friendRef = ref(database, 'friends/' + friendName + '/' + currentUser);
+            set(friendRef, "accepted");
+            const myFriendRef = ref(database, 'friends/' + currentUser + '/' + friendName);
+            set(myFriendRef, "accepted");
+            alert("هاوڕێ زێدە کرا!");
+            document.getElementById("friendSearchInput").value = "";
+            loadFriendsList();
+        };
+
+        window.loadFriendsList = function() {
+            if(!currentUser) return;
+            const friendsRef = ref(database, 'friends/' + currentUser);
+            get(friendsRef).then(snapshot => {
+                let data = snapshot.val();
+                let container = document.getElementById("friendsListContainer");
+                container.innerHTML = "";
+                if(data) {
+                    for(let f in data) {
+                        container.innerHTML += `
+                            <div class="leaderboard-item">
+                                <span><b>👤</b> ${f}</span>
+                                <span style="color:#22c55e;">هاوڕێیە</span>
+                            </div>
+                        `;
+                    }
+                } else {
+                    container.innerHTML = "<p style='font-size:11px; color:#cbd5e1; text-align:center;'>هیچ هاوڕێیەک نەدۆزرایەوە</p>";
+                }
             });
         };
 
@@ -1034,7 +1215,7 @@
             }
         };
 
-        /* Word Game Online Engine with automatic continuous timer & 3s audio chime */
+        /* Word Game Online Engine */
         let wordCurrentRoomId = null;
         let wordMyRole = ""; 
         const kurdishLetters = ["ت", "م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ"];
@@ -1378,6 +1559,15 @@
         let tugActive = false;
         let tugTimerIntervalLocal = null;
 
+        // Quiz System Data
+        const quizQuestions = [
+            { q: "پایتەختی هەرێمی کوردستان کوێیە؟", opts: ["سلێمانی", "هەولێر", "دهۆک", "کەرکووک"], a: 1 },
+            { q: "چیا بەرزەکەی کوردستان ناوی چییە؟", opts: ["کۆڕەک", "هەڵگورد", "سەفین", "پیرەمەگرون"], a: 1 },
+            { q: "پیتەکانی زمانی کوردی بڕی چەندەن؟", opts: ["28", "34", "32", "30"], a: 1 }
+        ];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
         window.onload = function() {
             loadSavedSettings();
             let savedUser = localStorage.getItem("top_top_active_user");
@@ -1387,6 +1577,7 @@
                 switchScreen("hubScreen");
                 if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
                 if (window.loadLeaderboard) window.loadLeaderboard();
+                checkDailyRewardStatus();
             } else {
                 switchScreen("authScreen");
             }
@@ -1498,6 +1689,7 @@
             let profileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = profileData ? JSON.parse(profileData) : {};
             document.getElementById("hubUsernameText").innerText = currentUser;
+            document.getElementById("hubUserScore").innerText = profile.score || 0;
 
             let avatarEl = document.getElementById("hubUserAvatar");
             if (profile.avatar) {
@@ -1530,6 +1722,95 @@
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
             alert("نوێکرایەوە!");
             loadUserData();
+        }
+
+        /* Daily Rewards System */
+        function checkDailyRewardStatus() {
+            let lastClaim = localStorage.getItem("daily_reward_" + currentUser);
+            let btn = document.getElementById("dailyRewardBtn");
+            let txt = document.getElementById("dailyRewardText");
+            let now = Date.now();
+
+            if (lastClaim && (now - lastClaim < 24 * 60 * 60 * 1000)) {
+                btn.disabled = true;
+                btn.innerText = "✅ ڕۆژانە وەرگیراوە";
+                txt.innerText = "سبەی وەرگەڕێوە بۆ وەگرتنی خاڵی زۆرتر!";
+            } else {
+                btn.disabled = false;
+                btn.innerText = "🎁 وەرگرتنی دیاری (٥٠ خاڵ)";
+                txt.innerText = "خاڵی ڕۆژانەی خۆت کۆبکەرەوە!";
+            }
+        }
+
+        function claimDailyReward() {
+            let lastClaim = localStorage.getItem("daily_reward_" + currentUser);
+            let now = Date.now();
+
+            if (!lastClaim || (now - lastClaim >= 24 * 60 * 60 * 1000)) {
+                localStorage.setItem("daily_reward_" + currentUser, now);
+                if (window.addScore) window.addScore(currentUser, 50);
+                alert("پیرۆزە! ٥٠ خاڵی ڕۆژانەت وەرگرت! 🎉");
+                checkDailyRewardStatus();
+            }
+        }
+
+        /* Quiz Game Engine */
+        function openQuizMenu() {
+            switchScreen("quizScreen");
+            document.getElementById("quizModeSelect").style.display = "block";
+            document.getElementById("quizGameArea").style.display = "none";
+        }
+
+        function startQuizGame(mode) {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById("quizModeSelect").style.display = "none";
+            document.getElementById("quizGameArea").style.display = "block";
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if(currentQuizIndex >= quizQuestions.length) {
+                alert("یاری کۆتایی هات! خاڵەکەت: " + quizScore);
+                if(window.addScore) window.addScore(currentUser, quizScore);
+                backToHub();
+                return;
+            }
+
+            let q = quizQuestions[currentQuizIndex];
+            document.getElementById("quizQIndex").innerText = (currentQuizIndex + 1) + "/" + quizQuestions.length;
+            document.getElementById("quizMyScore").innerText = quizScore;
+            document.getElementById("quizQuestionText").innerText = q.q;
+
+            let optsContainer = document.getElementById("quizOptionsContainer");
+            optsContainer.innerHTML = "";
+            q.opts.forEach((opt, idx) => {
+                optsContainer.innerHTML += `
+                    <button class="quiz-opt-btn" onclick="submitQuizAnswer(${idx})">${opt}</button>
+                `;
+            });
+        }
+
+        function submitQuizAnswer(selectedIdx) {
+            let q = quizQuestions[currentQuizIndex];
+            if(selectedIdx === q.a) {
+                alert("وەڵامەکەت ڕاستە! 👏");
+                quizScore += 10;
+            } else {
+                alert("وەڵامەکەت هەڵەیە! ❌");
+            }
+            currentQuizIndex++;
+            renderQuizQuestion();
+        }
+
+        function openFriendsScreen() {
+            switchScreen("friendsScreen");
+            if(window.loadFriendsList) window.loadFriendsList();
+        }
+
+        function openChatScreen() {
+            switchScreen("chatScreen");
+            if(window.listenToChat) window.listenToChat();
         }
 
         function toggleSoundSetting() {
@@ -1704,10 +1985,8 @@
 
             profile.score = currentScore - cost;
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            if (window.addScore) {
-                // sync to firebase or deduct
-            }
             alert("پیرۆزە! کڕینی سەرکەوتوو بوو.");
+            loadUserData();
             closeTugShop();
         }
 
