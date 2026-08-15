@@ -116,6 +116,16 @@
             border-radius: 50%; margin-right: 4px; box-shadow: 0 0 6px #22c55e;
         }
 
+        /* XP Progress Bar Styles */
+        .xp-container {
+            width: 100%; background: rgba(0,0,0,0.4); border-radius: 10px; height: 12px;
+            margin: 8px 0; overflow: hidden; border: 1px solid var(--primary-color); position: relative;
+        }
+        .xp-fill {
+            height: 100%; background: linear-gradient(90deg, #f59e0b, #eab308);
+            width: 0%; transition: width 0.4s ease; border-radius: 10px;
+        }
+
         .setting-row {
             display: flex; justify-content: space-between; align-items: center;
             padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -343,15 +353,15 @@
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="top-bar">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <div id="hubUserAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
+                <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;" onclick="playSound('click'); openProfileScreen()">
+                    <div id="hubUserAvatar" style="width: 34px; height: 34px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
                     <div>
-                        <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px; display: block;"></span>
-                        <span id="hubUserRank" style="font-size: 9px; color: #facc15; font-weight: bold;">👶 تازەکار</span>
+                        <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 12px; display: block;"></span>
+                        <span id="hubUserLevelText" style="font-size: 9px; color: #facc15; font-weight: bold;">لیڤڵ ١</span>
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 12px; color: #facc15; font-weight: bold;">⭐ <span id="hubUserScore">0</span></span>
+                    <button class="btn" onclick="playSound('click'); openProfileScreen()" style="padding: 4px 8px; font-size: 11px; margin-top:0; background: rgba(147,51,234,0.3); border: 1px solid var(--text-glow);">👤 پرۆفایل</button>
                     <div>
                         <span class="online-badge"></span>
                         <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
@@ -393,6 +403,39 @@
             <div style="display: flex; gap: 8px; margin-top: auto;">
                 <button class="btn" onclick="playSound('click'); openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
+        </div>
+
+        <!-- Separate Profile Screen -->
+        <div id="profileScreen" class="screen">
+            <div class="brand-title">پرۆفایلی یاریزان</div>
+            <div class="card" style="text-align: center; padding: 20px;">
+                <div class="avatar-preview" style="width: 75px; height: 75px; margin: 0 auto 10px auto;">
+                    <img id="profileScreenAvatarImg" src="" alt="Avatar" style="display:none;" />
+                    <span id="profileScreenAvatarPlaceholder" style="font-size: 30px;">👤</span>
+                </div>
+                <h2 id="profileScreenName" style="margin: 0 0 5px 0; color: var(--text-glow); font-size: 18px;">ناوی یاریزان</h2>
+                <p id="profileScreenRank" style="font-size: 12px; color: #facc15; font-weight: bold; margin-bottom: 10px;">👶 تازەکار</p>
+                
+                <div style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-top: 10px; text-align: right;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                        <span>ئاست / لیڤڵ: <b id="profileScreenLevel" style="color: #facc15;">١</b></span>
+                        <span>کۆی XP: <b id="profileScreenXp" style="color: var(--text-glow);">٠</b></span>
+                    </div>
+                    <div class="xp-container">
+                        <div class="xp-fill" id="profileXpBar"></div>
+                    </div>
+                    <span style="font-size: 10px; color: #94a3b8; display: block; text-align: center;" id="profileXpNextText">بۆ لیڤڵی داهاتوو: ١٠٠ XP پێویستە</span>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <div style="flex: 1; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <span style="font-size: 10px; color: #cbd5e1; display: block;">⭐ خاڵی گشتی</span>
+                        <bold id="profileScreenScoreVal" style="font-size: 14px; font-weight: bold; color: #facc15;">0</bold>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Quiz Game Screen -->
@@ -1955,17 +1998,49 @@
             let profile = profileData ? JSON.parse(profileData) : {};
             let score = profile.score || 0;
 
-            document.getElementById("hubUsernameText").innerText = currentUser;
-            document.getElementById("hubUserScore").innerText = score;
-            document.getElementById("hubUserRank").innerText = getRankTitle(score);
+            // Level & XP Logic (هر 50 خاڵ = 1 لیڤڵ)
+            let level = Math.floor(score / 50) + 1;
+            let currentXpInLevel = score % 50;
+            let xpPercent = (currentXpInLevel / 50) * 100;
 
+            document.getElementById("hubUsernameText").innerText = currentUser;
+            document.getElementById("hubUserLevelText").innerText = "لیڤڵ " + level;
+
+            // Hub Avatar
             let avatarEl = document.getElementById("hubUserAvatar");
             if (profile.avatar) {
                 avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
             } else {
                 avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
             }
+
+            // Profile Screen Data update
+            document.getElementById("profileScreenName").innerText = currentUser;
+            document.getElementById("profileScreenRank").innerText = getRankTitle(score);
+            document.getElementById("profileScreenLevel").innerText = level;
+            document.getElementById("profileScreenXp").innerText = score;
+            document.getElementById("profileScreenScoreVal").innerText = score;
+            document.getElementById("profileXpBar").style.width = xpPercent + "%";
+            document.getElementById("profileXpNextText").innerText = `بۆ لیڤڵی داهاتوو (${50 - currentXpInLevel} XP) مانەوه`;
+
+            let profileAvatarImg = document.getElementById("profileScreenAvatarImg");
+            let profileAvatarPlaceholder = document.getElementById("profileScreenAvatarPlaceholder");
+            if (profile.avatar) {
+                profileAvatarImg.src = profile.avatar;
+                profileAvatarImg.style.display = "block";
+                profileAvatarPlaceholder.style.display = "none";
+            } else {
+                profileAvatarImg.style.display = "none";
+                profileAvatarPlaceholder.style.display = "block";
+                profileAvatarPlaceholder.innerText = currentUser.charAt(0).toUpperCase();
+            }
+
             document.getElementById("settingsUsernameInput").value = currentUser;
+        }
+
+        function openProfileScreen() {
+            loadUserData();
+            switchScreen("profileScreen");
         }
 
         function saveProfileChanges() {
