@@ -734,7 +734,543 @@
         </div>
     </div>
 
-    <!-- Firebase & Core Game Logic -->
+    <!-- UI Core Logic Global Script -->
+    <script>
+        // Global State & UI Management
+        window.currentUser = localStorage.getItem("top_top_active_user") || null;
+        window.tempAvatarBase64 = "";
+        window.tempSettingsAvatarBase64 = "";
+        window.xoMode = 'bot'; // 'bot' or 'online'
+        window.xoState = ["", "", "", "", "", "", "", "", ""];
+        window.xoTurn = "X";
+        window.xoGameActive = true;
+        
+        // Questions Data
+        window.quizQuestions = [
+            { q: "پایتەختی هەرێمی کوردستان کوێیە؟", opts: ["سلێمانی", "دەهۆک", "هەولێر", "کەرکووک"], a: 2 },
+            { q: "چەند ڕۆژ لە ساڵێکدا هەیە؟", opts: ["٣٦٥", "٣٥٠", "٣٠٠", "٤٠٠"], a: 0 },
+            { q: "بڵندترین چیا لە جیهاندا چییە؟", opts: ["کۆڕەک", "ئێڤرست", "هەڵگورد", "کیلیمانجارۆ"], a: 1 },
+            { q: "رەنگی ئاڵای کوردستان لە چەند ڕەنگ پێکهاتووە؟", opts: ["٢", "٣", "٤", "٥"], a: 2 },
+            { q: "کێبڕکێی مۆندیالی تۆپێ پێ چەند ساڵ جارێک بەڕێوەدەچێت؟", opts: ["٢ ساڵ", "٣ ساڵ", "٤ ساڵ", "٥ ساڵ"], a: 2 }
+        ];
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(screenId);
+            if(target) target.classList.add('active');
+        }
+
+        function switchAuthMode(mode) {
+            if(mode === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginTabBtn').classList.add('active');
+                document.getElementById('registerTabBtn').classList.remove('active');
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('registerTabBtn').classList.add('active');
+                document.getElementById('loginTabBtn').classList.remove('active');
+            }
+        }
+
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                btn.innerText = "🙈";
+            } else {
+                input.type = "password";
+                btn.innerText = "👁️";
+            }
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                window.tempAvatarBase64 = evt.target.result;
+                document.getElementById('avatarImgTag').src = evt.target.result;
+                document.getElementById('avatarImgTag').style.display = 'block';
+                document.getElementById('avatarPlaceholderText').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleSettingsImageUpload(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                window.tempSettingsAvatarBase64 = evt.target.result;
+                document.getElementById('settingsAvatarPreview').src = evt.target.result;
+                document.getElementById('settingsAvatarPreview').style.display = 'block';
+                document.getElementById('settingsAvatarPlaceholder').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function registerUser() {
+            const u = document.getElementById('regUsername').value.trim();
+            const p = document.getElementById('regPassword').value;
+            const pc = document.getElementById('regPasswordConfirm').value;
+
+            if(!u || !p) { alert("تکایە هەموو خانەکان پڕبکەرەوە"); return; }
+            if(p.length < 8) { alert("وشەی نهێنی دەبێت کەمترین ٨ پیت بێت"); return; }
+            if(p !== pc) { alert("وشەی نهێنی و دڵنیابوونەوەکە وەکو یەک نین"); return; }
+
+            const userProfile = {
+                username: u,
+                password: p,
+                avatar: window.tempAvatarBase64 || "",
+                score: 0
+            };
+
+            localStorage.setItem("user_profile_" + u, JSON.stringify(userProfile));
+            localStorage.setItem("top_top_active_user", u);
+            window.currentUser = u;
+
+            if (window.setOnlineStatus) window.setOnlineStatus(u);
+            switchScreen('hubScreen');
+            loadUserData();
+        }
+
+        function loginUser() {
+            const u = document.getElementById('loginUsername').value.trim();
+            const p = document.getElementById('loginPassword').value;
+
+            const stored = localStorage.getItem("user_profile_" + u);
+            if(!stored) { alert("ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!"); return; }
+
+            const parsed = JSON.parse(stored);
+            if(parsed.password === p) {
+                localStorage.setItem("top_top_active_user", u);
+                window.currentUser = u;
+                if (window.setOnlineStatus) window.setOnlineStatus(u);
+                switchScreen('hubScreen');
+                loadUserData();
+            } else {
+                alert("ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!");
+            }
+        }
+
+        function logoutUser() {
+            if(window.currentUser && window.setOfflineStatus) {
+                window.setOfflineStatus(window.currentUser);
+            }
+            localStorage.removeItem("top_top_active_user");
+            window.currentUser = null;
+            switchScreen('authScreen');
+        }
+
+        function loadUserData() {
+            if(!window.currentUser) return;
+            document.getElementById('hubUsernameText').innerText = window.currentUser;
+            const stored = localStorage.getItem("user_profile_" + window.currentUser);
+            if(stored) {
+                const parsed = JSON.parse(stored);
+                document.getElementById('hubUserScore').innerText = parsed.score || 0;
+                if(parsed.avatar) {
+                    document.getElementById('hubUserAvatar').innerHTML = `<img src="${parsed.avatar}" style="width:100%;height:100%;object-fit:cover;">`;
+                }
+            }
+            if(window.loadLeaderboard) window.loadLeaderboard();
+        }
+
+        function claimDailyReward() {
+            if(!window.currentUser) return;
+            const lastClaim = localStorage.getItem("daily_claim_" + window.currentUser);
+            const today = new Date().toDateString();
+
+            if(lastClaim === today) {
+                alert("تۆ پێشتر دیاری ئەمڕۆت وەرگرتووە! بەیانی وەرەقەوە.");
+                return;
+            }
+
+            localStorage.setItem("daily_claim_" + window.currentUser, today);
+            if(window.addScore) window.addScore(window.currentUser, 50);
+            alert("پیرۆزە! ٥٠ خاڵی ڕۆژانەت وەرگرت 🎉");
+        }
+
+        function backToHub() {
+            switchScreen('hubScreen');
+        }
+
+        /* Navigations */
+        function openFriendsScreen() {
+            switchScreen('friendsScreen');
+            if(window.loadFriendsList) window.loadFriendsList();
+        }
+
+        function openChatScreen() {
+            switchScreen('chatScreen');
+            if(window.listenToChat) window.listenToChat();
+        }
+
+        function openSettingsScreen() {
+            switchScreen('settingsScreen');
+            if(window.currentUser) {
+                document.getElementById('settingsUsernameInput').value = window.currentUser;
+            }
+        }
+
+        function saveProfileChanges() {
+            const newU = document.getElementById('settingsUsernameInput').value.trim();
+            if(!newU) return;
+            const stored = localStorage.getItem("user_profile_" + window.currentUser);
+            let parsed = stored ? JSON.parse(stored) : { score: 0 };
+            
+            parsed.username = newU;
+            if(window.tempSettingsAvatarBase64) parsed.avatar = window.tempSettingsAvatarBase64;
+
+            localStorage.setItem("user_profile_" + newU, JSON.stringify(parsed));
+            localStorage.setItem("top_top_active_user", newU);
+            window.currentUser = newU;
+            alert("زانیارییەکان بە سەرکەوتوویی تازەکرانەوە!");
+            backToHub();
+            loadUserData();
+        }
+
+        function setAppTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+        }
+
+        function toggleSoundSetting() {}
+        function toggleMusicSetting() {}
+
+        /* XO Game UI Logic */
+        function openXoMenu() {
+            switchScreen('xoScreen');
+            document.getElementById('xoModeSelect').style.display = 'block';
+            document.getElementById('xoLobbyArea').style.display = 'none';
+            document.getElementById('xoGameArea').style.display = 'none';
+        }
+
+        function startXoVsBot() {
+            window.xoMode = 'bot';
+            document.getElementById('xoModeSelect').style.display = 'none';
+            document.getElementById('xoGameArea').style.display = 'block';
+            document.getElementById('playerXName').innerText = "تۆ";
+            document.getElementById('playerOName').innerText = "کۆمپیوتەر";
+            resetXoBoardLocal();
+        }
+
+        function startOnlineXo() {
+            window.xoMode = 'online';
+            if(window.startOnlineMatchmaking) {
+                window.startOnlineMatchmaking(window.currentUser);
+            }
+        }
+
+        function resetXoBoardLocal() {
+            window.xoState = ["", "", "", "", "", "", "", "", ""];
+            window.xoTurn = "X";
+            window.xoGameActive = true;
+            document.getElementById('xoStatusText').innerText = "سەرەی تۆیە (X)";
+            document.getElementById('xoResetBtn').style.display = 'none';
+            renderXoBoard();
+        }
+
+        function resetXoBoard() {
+            if(window.xoMode === 'bot') {
+                resetXoBoardLocal();
+            } else {
+                if(window.sendOnlineXoRestart) window.sendOnlineXoRestart();
+            }
+        }
+
+        function renderXoBoard() {
+            const cells = document.querySelectorAll('.xo-cell');
+            cells.forEach((cell, idx) => {
+                cell.innerText = window.xoState[idx];
+                cell.className = 'xo-cell ' + (window.xoState[idx] ? window.xoState[idx].toLowerCase() : '');
+            });
+        }
+
+        function handleXoCellClick(index) {
+            if(!window.xoGameActive || window.xoState[index] !== "") return;
+
+            if(window.xoMode === 'bot') {
+                if(window.xoTurn !== 'X') return;
+                window.xoState[index] = 'X';
+                renderXoBoard();
+
+                if(checkXoWinnerLocal(window.xoState, 'X')) {
+                    document.getElementById('xoStatusText').innerText = "تۆ بردتەوە! 🎉";
+                    window.xoGameActive = false;
+                    document.getElementById('xoResetBtn').style.display = 'block';
+                    if(window.addScore) window.addScore(window.currentUser, 10);
+                    return;
+                }
+
+                if(!window.xoState.includes("")) {
+                    document.getElementById('xoStatusText').innerText = "یەکسان بوون! 🤝";
+                    window.xoGameActive = false;
+                    document.getElementById('xoResetBtn').style.display = 'block';
+                    return;
+                }
+
+                window.xoTurn = 'O';
+                document.getElementById('xoStatusText').innerText = "کۆمپیوتەر بیردەکاتەوە...";
+                setTimeout(botXoMove, 500);
+            } else {
+                if(window.sendOnlineXoMove) window.sendOnlineXoMove(index);
+            }
+        }
+
+        function botXoMove() {
+            let emptyIndices = [];
+            window.xoState.forEach((val, idx) => { if(val === "") emptyIndices.push(idx); });
+            if(emptyIndices.length === 0 || !window.xoGameActive) return;
+
+            let randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+            window.xoState[randomIndex] = 'O';
+            renderXoBoard();
+
+            if(checkXoWinnerLocal(window.xoState, 'O')) {
+                document.getElementById('xoStatusText').innerText = "کۆمپیوتەر بردیەوە! 🤖";
+                window.xoGameActive = false;
+                document.getElementById('xoResetBtn').style.display = 'block';
+                return;
+            }
+
+            if(!window.xoState.includes("")) {
+                document.getElementById('xoStatusText').innerText = "یەکسان بوون! 🤝";
+                window.xoGameActive = false;
+                document.getElementById('xoResetBtn').style.display = 'block';
+                return;
+            }
+
+            window.xoTurn = 'X';
+            document.getElementById('xoStatusText').innerText = "سەرەی تۆیە (X)";
+        }
+
+        function checkXoWinnerLocal(board, p) {
+            const wins = [
+                [0,1,2],[3,4,5],[6,7,8],
+                [0,3,6],[1,4,7],[2,5,8],
+                [0,4,8],[2,4,6]
+            ];
+            return wins.some(w => board[w[0]] === p && board[w[1]] === p && board[w[2]] === p);
+        }
+
+        function leaveXoGame() {
+            if(window.xoMode === 'online' && window.leaveXoRoom) window.leaveXoRoom();
+            backToHub();
+        }
+
+        /* Quiz Game UI Logic */
+        let quizMode = 'bot';
+        let quizCurrentIndex = 0;
+        let quizBotScore = 0;
+
+        function openQuizMenu() {
+            switchScreen('quizScreen');
+            document.getElementById('quizModeSelect').style.display = 'block';
+            document.getElementById('quizLobbyArea').style.display = 'none';
+            document.getElementById('quizGameArea').style.display = 'none';
+        }
+
+        function startQuizGame(mode) {
+            quizMode = mode;
+            if(mode === 'bot') {
+                document.getElementById('quizModeSelect').style.display = 'none';
+                document.getElementById('quizGameArea').style.display = 'block';
+                document.getElementById('quizP1Name').innerText = "تۆ";
+                document.getElementById('quizP2Name').innerText = "کۆمپیوتەر";
+                document.getElementById('quizP1Score').innerText = "0";
+                document.getElementById('quizP2Score').innerText = "0";
+                quizCurrentIndex = 0;
+                quizBotScore = 0;
+                renderBotQuizQuestion();
+            } else {
+                if(window.startOnlineQuizMatchmaking) window.startOnlineQuizMatchmaking(window.currentUser);
+            }
+        }
+
+        function renderBotQuizQuestion() {
+            if(quizCurrentIndex >= window.quizQuestions.length) {
+                document.getElementById('quizQuestionText').innerText = "یاری کۆتایی هات!";
+                document.getElementById('quizOptionsContainer').innerHTML = "";
+                document.getElementById('quizRestartBtn').style.display = "block";
+                return;
+            }
+
+            let q = window.quizQuestions[quizCurrentIndex];
+            document.getElementById('quizQuestionText').innerText = q.q;
+            let container = document.getElementById('quizOptionsContainer');
+            container.innerHTML = "";
+
+            q.opts.forEach((opt, idx) => {
+                container.innerHTML += `<button class="quiz-opt-btn" onclick="submitBotQuizAnswer(${idx})">${opt}</button>`;
+            });
+        }
+
+        function submitBotQuizAnswer(idx) {
+            let q = window.quizQuestions[quizCurrentIndex];
+            let p1ScoreEl = document.getElementById('quizP1Score');
+            let currentP1 = parseInt(p1ScoreEl.innerText) || 0;
+
+            if(idx === q.a) {
+                p1ScoreEl.innerText = currentP1 + 10;
+                if(window.addScore) window.addScore(window.currentUser, 10);
+            }
+
+            // Simple Bot Chance
+            if(Math.random() > 0.4) {
+                quizBotScore += 10;
+                document.getElementById('quizP2Score').innerText = quizBotScore;
+            }
+
+            quizCurrentIndex++;
+            renderBotQuizQuestion();
+        }
+
+        function leaveQuizGame() {
+            if(quizMode === 'online' && window.leaveQuizRoom) window.leaveQuizRoom();
+            backToHub();
+        }
+
+        /* Word Game UI Logic */
+        function openWordGameMenu() {
+            switchScreen('wordScreen');
+            document.getElementById('wordModeSelect').style.display = 'block';
+            document.getElementById('wordLobbyArea').style.display = 'none';
+            document.getElementById('wordGameArea').style.display = 'none';
+        }
+
+        function startWordQuickRoom() {
+            if(window.startWordQuickRoomMatch) window.startWordQuickRoomMatch(window.currentUser);
+        }
+
+        function createCustomWordRoom() {
+            let code = document.getElementById('createRoomCodeInput').value.trim();
+            if(!code) return;
+            if(window.createCustomWordRoomFirebase) window.createCustomWordRoomFirebase(window.currentUser, code);
+        }
+
+        function joinCustomWordRoom() {
+            let code = document.getElementById('joinRoomCodeInput').value.trim();
+            if(!code) return;
+            if(window.joinCustomWordRoomFirebase) window.joinCustomWordRoomFirebase(window.currentUser, code);
+        }
+
+        function submitWordMove() {
+            let wordText = document.getElementById('wordInputText').value;
+            let targetLetter = document.getElementById('targetLetterDisplay').innerText;
+            if(window.submitWordFirebaseMove) window.submitWordFirebaseMove(wordText, targetLetter, window.currentUser);
+        }
+
+        function showWordError(msg) {
+            document.getElementById('wordErrorText').innerText = msg;
+            document.getElementById('wordErrorAlert').style.display = 'block';
+            setTimeout(hideWordError, 2500);
+        }
+
+        function hideWordError() {
+            document.getElementById('wordErrorAlert').style.display = 'none';
+        }
+
+        function leaveWordGame() {
+            backToHub();
+        }
+
+        /* Tug of War Logic */
+        let tugMode = 'bot';
+        let tugP1ClicksCount = 0;
+        let tugP2ClicksCount = 0;
+
+        function openTugMenu() {
+            switchScreen('tugScreen');
+            document.getElementById('tugMenuArea').style.display = 'block';
+            document.getElementById('tugShopArea').style.display = 'none';
+            document.getElementById('tugLobbyArea').style.display = 'none';
+            document.getElementById('tugGameArea').style.display = 'none';
+        }
+
+        function openTugShop() {
+            document.getElementById('tugMenuArea').style.display = 'none';
+            document.getElementById('tugShopArea').style.display = 'block';
+        }
+
+        function closeTugShop() {
+            document.getElementById('tugShopArea').style.display = 'none';
+            document.getElementById('tugMenuArea').style.display = 'block';
+        }
+
+        function buyTugItem(type, cost) {
+            const stored = localStorage.getItem("user_profile_" + window.currentUser);
+            if(!stored) return;
+            let parsed = JSON.parse(stored);
+            if((parsed.score || 0) < cost) {
+                alert("خاڵی پێویستت نییە بۆ کڕینی ئەم گوریسە!");
+                return;
+            }
+            parsed.score -= cost;
+            localStorage.setItem("user_profile_" + window.currentUser, JSON.stringify(parsed));
+            loadUserData();
+            alert("پیرۆزە! گوریسەکەت کڕی 🎉");
+        }
+
+        function startTugVsBot() {
+            tugMode = 'bot';
+            document.getElementById('tugMenuArea').style.display = 'none';
+            document.getElementById('tugGameArea').style.display = 'block';
+            tugP1ClicksCount = 0;
+            tugP2ClicksCount = 0;
+            document.getElementById('tugP1Clicks').innerText = "0";
+            document.getElementById('tugP2Clicks').innerText = "0";
+            document.getElementById('ropeKnot').style.left = "50%";
+        }
+
+        function startOnlineTug() {
+            tugMode = 'online';
+            if(window.startOnlineTugMatchmaking) window.startOnlineTugMatchmaking(window.currentUser);
+        }
+
+        function handleTugTap() {
+            if(tugMode === 'bot') {
+                tugP1ClicksCount++;
+                document.getElementById('tugP1Clicks').innerText = tugP1ClicksCount;
+                if(Math.random() > 0.3) tugP2ClicksCount++;
+                document.getElementById('tugP2Clicks').innerText = tugP2ClicksCount;
+
+                let diff = tugP1ClicksCount - tugP2ClicksCount;
+                let percent = 50 + (diff * 3);
+                if(percent < 5) percent = 5;
+                if(percent > 95) percent = 95;
+                document.getElementById('ropeKnot').style.left = percent + "%";
+            } else {
+                if(window.sendTugOnlineClick) window.sendTugOnlineClick();
+            }
+        }
+
+        function resetTugGame() {
+            startTugVsBot();
+        }
+
+        function leaveTugGame() {
+            if(tugMode === 'online' && window.leaveTugRoom) window.leaveTugRoom();
+            backToHub();
+        }
+
+        function cancelMatchmaking(game) {
+            backToHub();
+        }
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            if(window.currentUser) {
+                switchScreen('hubScreen');
+                loadUserData();
+            } else {
+                switchScreen('authScreen');
+            }
+        });
+    </script>
+
+    <!-- Firebase & Core Game Logic Module -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -815,7 +1351,6 @@
                 let newScore = currentScore + pts;
                 set(scoreRef, newScore);
                 
-                // Sync Local
                 let profileData = localStorage.getItem("user_profile_" + username);
                 if (profileData) {
                     let p = JSON.parse(profileData);
@@ -1713,704 +2248,7 @@
             for (let i = 0; i < w.length - 2; i++) {
                 if (w[i] === w[i+1] && w[i+1] === w[i+2]) return false;
             }
-            const validKurdishDictionary = [
-                "تانجى", "تاڤگە", "تاقە", "تەپۆلکە", "تەرزە", "تەموومژ", "تۆرەمە", "تەلار", "تیرۆر", "تەنیایی", "تۆمار", "تەپڵ", "تەمەن", "تەنیشت", "تەلەفۆن", "تووڕە", "تەون", "تۆپ", "تەختە",
-                "مامۆستا", "مایک", "مانگ", "مێوژ", "مەلەلە", "مێژوو", "مێشک", "میرات", "مۆم", "مۆزەخانە", "مریشک", "ماسی", "مێروو",
-                "باران", "بەهار", "بەفر", "بنار", "باڵندە", "بەرد", "بەیبوون", "بروسکە", "بۆنە", "بەختەوەر", "برا", "باوکی",
-                "درەخت", "دەریای", "دایک", "دیاری", "دڵسۆز", "دەفتەر", "دەمانچە", "دەنگ", "دوورگە", "دیمەن", "دانا", "دەست",
-                "ڕۆژمێر", "رووبار", "رەنگین", "رێواس", "رۆشنایی", "ڕێگا", "ڕێز", "ڕەشماڵ",
-                "ستێرە", "سێو", "سەرۆک", "سەوزە", "سەیران", "سلێمانی", "سپێدە", "سەرکەوتن", "سەهۆڵ",
-                "شارەزا", "شێرپەنجە", "شەقام", "شاکار", "شەماڵ", "شۆفێر", "شەکر", "شین",
-                "کوردستان", "کانی", "کۆمەڵگا", "کەلتوور", "کۆڵان", "کتێب", "کۆمپیوتەر", "کاروان",
-                "گوڵەبەڕۆژە", "گەشتیار", "گەورە", "گۆران", "گەنم", "گەردەلوول", "گۆرانی", "گوڵ",
-                "لاپەڕە", "لێڤا", "لاوک", "لانکە", "لۆژیک",
-                "نەورۆز", "ئەستێرە", "نیشتمان", "نووسەر", "ئاسمان", "ئاو", "ئاگر", "ئارام", "ئۆتۆمبیل",
-                "وێنە", "وشە", "وڵات", "وەرزی",
-                "هەتاو", "هەڵبەست", "هەولێر", "هێمن", "هەنار", "هەور",
-                "چیا", "چاو", "چیرۆک", "چایچی", "چەمەن",
-                "پێشمەرگە", "پاییز", "پرد", "پەپولە", "پەڕەسوورە", "پۆل"
-            ];
-            return validKurdishDictionary.includes(w);
-        }
-
-        function showWordError(msg) {
-            let alertBox = document.getElementById("wordErrorAlert");
-            let alertText = document.getElementById("wordErrorText");
-            alertText.innerText = msg;
-            alertBox.style.display = "block";
-            setTimeout(() => { alertBox.style.display = "none"; }, 3000);
-        }
-
-        function hideWordError() {
-            document.getElementById("wordErrorAlert").style.display = "none";
-        }
-
-        window.leaveWordRoomFirebase = function() {
-            if (clientTimerInterval) clearInterval(clientTimerInterval);
-            if (wordCurrentRoomId) {
-                remove(ref(database, 'word_lobby/' + wordCurrentRoomId));
-                wordCurrentRoomId = null;
-            }
-        };
-    </script>
-
-    <script>
-        let currentUser = "";
-        let tempAvatarBase64 = "";
-        let settingsTempAvatar = "";
-
-        // XO Local State
-        window.xoState = ["", "", "", "", "", "", "", "", ""];
-        window.xoTurn = "X";
-        let xoMode = "bot";
-        window.xoGameActive = true;
-
-        // Tug Local State
-        let tugMode = "bot";
-        let tugP1Count = 0;
-        let tugP2Count = 0;
-        let tugTimer = 10;
-        let tugActive = false;
-        let tugTimerIntervalLocal = null;
-
-        // Quiz System Rich Data List
-        const quizQuestions = [
-            { q: "پایتەختی هەرێمی کوردستان کوێیە؟", opts: ["سلێمانی", "هەولێر", "دهۆک", "کەرکووک"], a: 1 },
-            { q: "چیا بەرزەکەی کوردستان ناوی چییە؟", opts: ["کۆڕەک", "هەڵگورد", "سەفین", "پیرەمەگرون"], a: 1 },
-            { q: "پیتەکانی زمانی کوردی بڕی چەندەن؟", opts: ["28", "34", "32", "30"], a: 1 },
-            { q: "گواستنەوەی ئۆکسیجن لە لەشدا ئەرکی کامەیانە؟", opts: ["خڕۆکەی سوور", "خڕۆکەی سپی", "پەڕەکانی خوێن", "پلازما"], a: 0 },
-            { q: "گەورەترین دەریاچەی جیهان کامەیە؟", opts: ["دەریاچەی قەزوێن", "دەریاچەی سوپەریۆر", "دەریاچەی ڤیکتۆریا", "دەریاچەی میشیگان"], a: 0 },
-            { q: "درێژترین ڕووباری جیهان کامەیە؟", opts: ["ئامازۆن", "نیل", "میستیسیپی", "یۆنگتسی"], a: 1 },
-            { q: "پایتەختی وڵاتی ژاپۆن کوێیە؟", opts: ["سێئول", "پەکین", "تۆکیۆ", "بانکۆک"], a: 2 },
-            { q: "کێ کیشوەری ئەمریکای دۆزییەوە؟", opts: ["کریستۆف کۆلۆمبۆس", "ماژلان", "مارکۆ پۆلۆ", "ڤاسکۆ دا گاما"], a: 0 },
-            { q: "خێراترین ئاژەڵی سەر زەوی کامەیە؟", opts: ["شێر", "چیتا", "ئاسک", "کەرکەدەن"], a: 1 },
-            { q: "هەسارەی سوور بە کام هەسارە دەوترێت؟", opts: ["زوهەل", "مەریخ", "موشتەری", "عوتارد"], a: 1 },
-            { q: "پایتەختی وڵاتی فەرەنسا کوێیە؟", opts: ["لەندەن", "بەرلین", "مەدرید", "پاریس"], a: 3 },
-            { q: "کیمیاویترین توخم لە خشتەی خولی چییە؟", opts: ["هایدرۆجن", "ئۆکسیجن", "کاربۆن", "نایترۆجن"], a: 0 },
-            { q: "شاعیری گەورەی کورد 'نالی' ناوەکەی چییە؟", opts: ["ئەحمەد", "مەلا خدر", "عەبدولڕەحمان", "مستەفا"], a: 1 },
-            { q: "نزیکترین هەسارە لە خۆرەوە کامەیە؟", opts: ["زهره", "عوتارد", "زەوی", "مەریخ"], a: 1 },
-            { q: "گەورەترین گیاندار لە جیهاندا کامەیە؟", opts: ["فیل", "نەهەنگی شین", "دێناسر", "سەگاوێس"], a: 1 },
-            { q: "ژمارەی ئێسکەکانی لەشی مرۆڤی پێگەیشتوو چەندە؟", opts: ["206", "300", "150", "250"], a: 0 },
-            { q: "نەورۆز کەوتۆتە کام وەرزەوە؟", opts: ["هاوین", "زستان", "بەهار", "پاییز"], a: 2 },
-            { q: "کێ تابلۆی مۆنالیزای کێشاوە؟", opts: ["ڤان کۆخ", "پیکاسۆ", "لیۆناردۆ داڤینچی", "میکلانجێلۆ"], a: 2 },
-            { q: "کام وڵات بە وڵاتی ئەهرامەکان ناسراوە؟", opts: ["عێراق", "میسر", "یۆنان", "مەغریب"], a: 1 },
-            { q: "سەرچاوەی سەرەکی ڕووناکی و گەرمی سەر زەوی چییە؟", opts: ["مانگ", "ئەستێرەکان", "خۆر", "ئاگر"], a: 2 }
-        ];
-
-        let quizMode = "bot";
-        let quizLocalTimer = 60;
-        let quizLocalTimerInterval = null;
-        let quizLocalScoreP1 = 0;
-        let quizLocalScoreP2 = 0;
-        let quizBotIndex = 0;
-
-        window.onload = function() {
-            loadSavedSettings();
-            let savedUser = localStorage.getItem("top_top_active_user");
-            if (savedUser && localStorage.getItem("user_profile_" + savedUser)) {
-                currentUser = savedUser;
-                loadUserData();
-                switchScreen("hubScreen");
-                if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-                if (window.loadLeaderboard) window.loadLeaderboard();
-                checkDailyRewardStatus();
-            } else {
-                switchScreen("authScreen");
-            }
-        };
-
-        function switchScreen(id) {
-            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-            document.getElementById(id).classList.add("active");
-        }
-
-        function switchAuthMode(mode) {
-            if (mode === 'login') {
-                document.getElementById('loginForm').style.display = 'block';
-                document.getElementById('registerForm').style.display = 'none';
-                document.getElementById('loginTabBtn').classList.add('active');
-                document.getElementById('registerTabBtn').classList.remove('active');
-            } else {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('registerForm').style.display = 'block';
-                document.getElementById('registerTabBtn').classList.add('active');
-                document.getElementById('loginTabBtn').classList.remove('active');
-            }
-        }
-
-        function togglePasswordVisibility(fieldId, btn) {
-            let field = document.getElementById(fieldId);
-            if (field.type === "password") { field.type = "text"; btn.innerText = "🔒"; }
-            else { field.type = "password"; btn.innerText = "👁️"; }
-        }
-
-        function handleImageUpload(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    tempAvatarBase64 = e.target.result;
-                    let imgTag = document.getElementById("avatarImgTag");
-                    let textTag = document.getElementById("avatarPlaceholderText");
-                    imgTag.src = tempAvatarBase64; imgTag.style.display = "block"; textTag.style.display = "none";
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function handleSettingsImageUpload(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    settingsTempAvatar = e.target.result;
-                    let imgTag = document.getElementById("settingsAvatarPreview");
-                    let textTag = document.getElementById("settingsAvatarPlaceholder");
-                    imgTag.src = settingsTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function registerUser() {
-            let name = document.getElementById("regUsername").value.trim();
-            let pass = document.getElementById("regPassword").value.trim();
-            let passConfirm = document.getElementById("regPasswordConfirm").value.trim();
-            let birthdate = document.getElementById("regBirthdate").value;
-
-            if (!name || !pass || !passConfirm || !birthdate) { alert("تکایە هەموو خانەکان پڕبکەرەوە!"); return; }
-            if (localStorage.getItem("user_profile_" + name)) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
-            if (pass.length < 8) { alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!"); return; }
-            if (pass !== passConfirm) { alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!"); return; }
-
-            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 0 };
-            localStorage.setItem("user_profile_" + name, JSON.stringify(profileData));
-            localStorage.setItem("top_top_active_user", name);
-            currentUser = name;
-            
-            if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            loadUserData();
-            switchScreen("hubScreen");
-            if (window.loadLeaderboard) window.loadLeaderboard();
-        }
-
-        function loginUser() {
-            let name = document.getElementById("loginUsername").value.trim();
-            let pass = document.getElementById("loginPassword").value.trim();
-            if (!name || !pass) { alert("تکایە ناو و وشەی نهێنی بنووسە!"); return; }
-
-            let profileData = localStorage.getItem("user_profile_" + name);
-            if (!profileData) { alert("ئەم ناوە بوونی نییە!"); return; }
-
-            let profile = JSON.parse(profileData);
-            if (profile.password !== pass) { alert("وشەی نهێنی هەڵەیە!"); return; }
-
-            localStorage.setItem("top_top_active_user", name);
-            currentUser = name;
-
-            if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            loadUserData();
-            switchScreen("hubScreen");
-            if (window.loadLeaderboard) window.loadLeaderboard();
-        }
-
-        function logoutUser() {
-            if (window.setOfflineStatus) window.setOfflineStatus(currentUser);
-            localStorage.removeItem("top_top_active_user");
-            currentUser = "";
-            switchScreen("authScreen");
-        }
-
-        function loadUserData() {
-            let profileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = profileData ? JSON.parse(profileData) : {};
-            document.getElementById("hubUsernameText").innerText = currentUser;
-            document.getElementById("hubUserScore").innerText = profile.score || 0;
-
-            let avatarEl = document.getElementById("hubUserAvatar");
-            if (profile.avatar) {
-                avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
-            } else {
-                avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
-            }
-            document.getElementById("settingsUsernameInput").value = currentUser;
-        }
-
-        function saveProfileChanges() {
-            let newName = document.getElementById("settingsUsernameInput").value.trim();
-            if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
-
-            let oldProfileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = oldProfileData ? JSON.parse(oldProfileData) : {};
-
-            if (newName !== currentUser) {
-                if (localStorage.getItem("user_profile_" + newName)) { alert("ئەم ناوە پێشتر تۆمارکراوە!"); return; }
-                if (window.setOfflineStatus) window.setOfflineStatus(currentUser);
-                localStorage.removeItem("user_profile_" + currentUser);
-                currentUser = newName;
-                localStorage.setItem("top_top_active_user", currentUser);
-                if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            }
-
-            profile.username = currentUser;
-            if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
-
-            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            alert("نوێکرایەوە!");
-            loadUserData();
-        }
-
-        /* Daily Rewards System */
-        function checkDailyRewardStatus() {
-            let lastClaim = localStorage.getItem("daily_reward_" + currentUser);
-            let btn = document.getElementById("dailyRewardBtn");
-            let txt = document.getElementById("dailyRewardText");
-            let now = Date.now();
-
-            if (lastClaim && (now - lastClaim < 24 * 60 * 60 * 1000)) {
-                btn.disabled = true;
-                btn.innerText = "✅ ڕۆژانە وەرگیراوە";
-                txt.innerText = "سبەی وەرگەڕێوە بۆ وەگرتنی خاڵی زۆرتر!";
-            } else {
-                btn.disabled = false;
-                btn.innerText = "🎁 وەرگرتنی دیاری (٥٠ خاڵ)";
-                txt.innerText = "خاڵی ڕۆژانەی خۆت کۆبکەرەوە!";
-            }
-        }
-
-        function claimDailyReward() {
-            let lastClaim = localStorage.getItem("daily_reward_" + currentUser);
-            let now = Date.now();
-
-            if (!lastClaim || (now - lastClaim >= 24 * 60 * 60 * 1000)) {
-                localStorage.setItem("daily_reward_" + currentUser, now);
-                if (window.addScore) window.addScore(currentUser, 50);
-                alert("پیرۆزە! ٥٠ خاڵی ڕۆژانەت وەرگرت! 🎉");
-                checkDailyRewardStatus();
-            }
-        }
-
-        /* Quiz Game Engine */
-        function openQuizMenu() {
-            switchScreen("quizScreen");
-            document.getElementById("quizModeSelect").style.display = "block";
-            document.getElementById("quizLobbyArea").style.display = "none";
-            document.getElementById("quizGameArea").style.display = "none";
-        }
-
-        function startQuizGame(mode) {
-            quizMode = mode;
-            if (mode === 'bot') {
-                document.getElementById("quizModeSelect").style.display = "none";
-                document.getElementById("quizLobbyArea").style.display = "none";
-                document.getElementById("quizGameArea").style.display = "block";
-                document.getElementById("quizP1Name").innerText = currentUser + " (تۆ)";
-                document.getElementById("quizP2Name").innerText = "کۆمپیوتەر";
-                document.getElementById("quizRestartBtn").style.display = "none";
-                
-                quizLocalScoreP1 = 0;
-                quizLocalScoreP2 = 0;
-                quizBotIndex = 0;
-                quizLocalTimer = 60;
-                
-                document.getElementById("quizP1Score").innerText = "0";
-                document.getElementById("quizP2Score").innerText = "0";
-                document.getElementById("quizGameStatus").innerText = "یاری بەڕێوەیە...";
-                
-                renderBotQuestion();
-                startQuizLocalTimer();
-            } else {
-                if (window.startOnlineQuizMatchmaking) window.startOnlineQuizMatchmaking(currentUser);
-            }
-        }
-
-        function startQuizLocalTimer() {
-            if (quizLocalTimerInterval) clearInterval(quizLocalTimerInterval);
-            
-            quizLocalTimerInterval = setInterval(() => {
-                quizLocalTimer--;
-                
-                let mins = Math.floor(quizLocalTimer / 60);
-                let secs = quizLocalTimer % 60;
-                document.getElementById("quizTimerDisplay").innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
-
-                // Bot answering simulator
-                if (Math.random() > 0.65) {
-                    quizLocalScoreP2 += 10;
-                    document.getElementById("quizP2Score").innerText = quizLocalScoreP2;
-                }
-
-                if (quizLocalTimer <= 0) {
-                    clearInterval(quizLocalTimerInterval);
-                    document.getElementById("quizGameStatus").innerText = "کۆتایی هات!";
-                    
-                    let resultMsg = "";
-                    if (quizLocalScoreP1 > quizLocalScoreP2) {
-                        resultMsg = "پیرۆزە! تۆ زۆرترین وەڵامت زانی و بردتبووەوە! 🎉";
-                        if (window.addScore) window.addScore(currentUser, 20);
-                    } else if (quizLocalScoreP2 > quizLocalScoreP1) {
-                        resultMsg = "کۆمپیوتەر زۆرترین وەڵامی زانی و بردیەوە! 🤖";
-                    } else {
-                        resultMsg = "یەکسان بوون لە زانینی وەڵامەکاندا! 🤝";
-                    }
-                    
-                    document.getElementById("quizQuestionText").innerText = resultMsg;
-                    document.getElementById("quizOptionsContainer").innerHTML = "";
-                    document.getElementById("quizRestartBtn").style.display = "block";
-                }
-            }, 1000);
-        }
-
-        function renderBotQuestion() {
-            let q = quizQuestions[quizBotIndex % quizQuestions.length];
-            document.getElementById("quizQuestionText").innerText = q.q;
-            
-            let optsContainer = document.getElementById("quizOptionsContainer");
-            optsContainer.innerHTML = "";
-            q.opts.forEach((opt, idx) => {
-                optsContainer.innerHTML += `
-                    <button class="quiz-opt-btn" onclick="submitBotQuizAnswer(${idx})">${opt}</button>
-                `;
-            });
-        }
-
-        function submitBotQuizAnswer(selectedIdx) {
-            if (quizLocalTimer <= 0) return;
-            let q = quizQuestions[quizBotIndex % quizQuestions.length];
-            if (selectedIdx === q.a) {
-                quizLocalScoreP1 += 10;
-                document.getElementById("quizP1Score").innerText = quizLocalScoreP1;
-            }
-            quizBotIndex++;
-            renderBotQuestion();
-        }
-
-        function leaveQuizGame() {
-            if (quizLocalTimerInterval) clearInterval(quizLocalTimerInterval);
-            if (quizMode === 'online' && window.leaveQuizRoom) window.leaveQuizRoom();
-            backToHub();
-        }
-
-        function openFriendsScreen() {
-            switchScreen("friendsScreen");
-            if(window.loadFriendsList) window.loadFriendsList();
-        }
-
-        function openChatScreen() {
-            switchScreen("chatScreen");
-            if(window.listenToChat) window.listenToChat();
-        }
-
-        function toggleSoundSetting() {
-            let isMuted = document.getElementById("soundToggle").checked;
-            localStorage.setItem("toptop_sound_muted", isMuted);
-        }
-
-        function toggleMusicSetting() {
-            let isMuted = document.getElementById("musicToggle").checked;
-            localStorage.setItem("toptop_music_muted", isMuted);
-        }
-
-        function setAppTheme(themeName) {
-            document.body.setAttribute("data-theme", themeName);
-            localStorage.setItem("toptop_theme", themeName);
-        }
-
-        function loadSavedSettings() {
-            let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
-            let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
-            let savedTheme = localStorage.getItem("toptop_theme") || "purple";
-
-            document.getElementById("soundToggle").checked = soundMuted;
-            document.getElementById("musicToggle").checked = musicMuted;
-            document.body.setAttribute("data-theme", savedTheme);
-        }
-
-        function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
-        function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
-
-        /* XO Navigation */
-        function openXoMenu() {
-            switchScreen("xoScreen");
-            document.getElementById("xoModeSelect").style.display = "block";
-            document.getElementById("xoLobbyArea").style.display = "none";
-            document.getElementById("xoGameArea").style.display = "none";
-        }
-
-        function startXoVsBot() {
-            xoMode = "bot";
-            document.getElementById("xoModeSelect").style.display = "none";
-            document.getElementById("xoLobbyArea").style.display = "none";
-            document.getElementById("xoGameArea").style.display = "block";
-            document.getElementById("playerXName").innerHTML = `<span style="color:#facc15">${currentUser} (تۆ)</span>`;
-            document.getElementById("playerOName").innerText = "کۆمپیوتەر";
-            resetXoBoard();
-        }
-
-        function startOnlineXo() {
-            xoMode = "online";
-            if (window.startOnlineMatchmaking) window.startOnlineMatchmaking(currentUser);
-        }
-
-        function handleXoCellClick(index) {
-            if (!window.xoGameActive || window.xoState[index] !== "") return;
-
-            if (xoMode === "online") {
-                window.sendOnlineXoMove(index);
-            } else {
-                window.xoState[index] = window.xoTurn;
-                window.renderXoBoard();
-
-                if (window.checkXoWinnerLocal(window.xoState, window.xoTurn)) {
-                    document.getElementById("xoStatusText").innerText = `بردیەوە ${window.xoTurn}! 🎉`;
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    if(window.xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
-                    return;
-                }
-
-                if (!window.xoState.includes("")) {
-                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    return;
-                }
-
-                if (window.xoTurn === "X") {
-                    window.xoTurn = "O";
-                    document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەر...";
-                    setTimeout(botXoMove, 500);
-                }
-            }
-        }
-
-        function botXoMove() {
-            if (!window.xoGameActive) return;
-            let emptyIndices = window.xoState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
-            if (emptyIndices.length > 0) {
-                let randomIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-                window.xoState[randomIdx] = "O";
-                window.renderXoBoard();
-
-                if (window.checkXoWinnerLocal(window.xoState, "O")) {
-                    document.getElementById("xoStatusText").innerText = "کۆمپیوتەر بردیەوە! 🤖";
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    return;
-                }
-
-                if (!window.xoState.includes("")) {
-                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    return;
-                }
-
-                window.xoTurn = "X";
-                document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
-            }
-        }
-
-        window.renderXoBoard = function() {
-            let cells = document.querySelectorAll(".xo-cell");
-            cells.forEach((cell, idx) => {
-                cell.innerText = window.xoState[idx];
-                cell.className = "xo-cell " + window.xoState[idx].toLowerCase();
-            });
-        };
-
-        window.checkXoWinnerLocal = function(board, player) {
-            const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-            return winPatterns.some(pattern => pattern.every(index => board[index] === player));
-        };
-
-        function resetXoBoard() {
-            if (xoMode === "online") {
-                window.sendOnlineXoRestart();
-            } else {
-                window.xoState = ["", "", "", "", "", "", "", "", ""];
-                window.xoTurn = "X";
-                window.xoGameActive = true;
-                document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
-                document.getElementById("xoResetBtn").style.display = "none";
-                window.renderXoBoard();
-            }
-        }
-
-        function leaveXoGame() {
-            if (xoMode === "online" && window.leaveXoRoom) window.leaveXoRoom();
-            backToHub();
-        }
-
-        /* Tug of War Navigation & Shop */
-        function openTugMenu() {
-            switchScreen("tugScreen");
-            document.getElementById("tugMenuArea").style.display = "block";
-            document.getElementById("tugShopArea").style.display = "none";
-            document.getElementById("tugLobbyArea").style.display = "none";
-            document.getElementById("tugGameArea").style.display = "none";
-        }
-
-        function openTugShop() {
-            document.getElementById("tugMenuArea").style.display = "none";
-            document.getElementById("tugShopArea").style.display = "block";
-        }
-
-        function closeTugShop() {
-            document.getElementById("tugShopArea").style.display = "none";
-            document.getElementById("tugMenuArea").style.display = "block";
-        }
-
-        function buyTugItem(itemName, cost) {
-            let profileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = profileData ? JSON.parse(profileData) : { score: 0 };
-            let currentScore = profile.score || 0;
-
-            if (currentScore < cost) {
-                alert("خاڵت بەسە نییە بۆ کڕینی ئەم شتومەکەی! (پێویستت بە " + cost + " خاڵە)");
-                return;
-            }
-
-            profile.score = currentScore - cost;
-            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            alert("پیرۆزە! کڕینی سەرکەوتوو بوو.");
-            loadUserData();
-            closeTugShop();
-        }
-
-        function startTugVsBot() {
-            tugMode = "bot";
-            document.getElementById("tugMenuArea").style.display = "none";
-            document.getElementById("tugShopArea").style.display = "none";
-            document.getElementById("tugLobbyArea").style.display = "none";
-            document.getElementById("tugGameArea").style.display = "block";
-            resetTugGame();
-        }
-
-        function startOnlineTug() {
-            tugMode = "online";
-            if (window.startOnlineTugMatchmaking) window.startOnlineTugMatchmaking(currentUser);
-        }
-
-        function handleTugTap() {
-            if (!tugActive) return;
-
-            if (tugMode === "online") {
-                window.sendTugOnlineClick();
-            } else {
-                tugP1Count++;
-                document.getElementById("tugP1Clicks").innerText = tugP1Count;
-                updateTugRopePosition();
-            }
-        }
-
-        function updateTugRopePosition() {
-            let diff = tugP1Count - tugP2Count;
-            let percent = 50 + (diff * 3);
-            if (percent < 5) percent = 5;
-            if (percent > 95) percent = 95;
-            document.getElementById("ropeKnot").style.left = percent + "%";
-        }
-
-        function resetTugGame() {
-            if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
-            tugP1Count = 0;
-            tugP2Count = 0;
-            tugTimer = 10;
-            tugActive = true;
-            document.getElementById("tugP1Clicks").innerText = "٠";
-            document.getElementById("tugP2Clicks").innerText = "٠";
-            document.getElementById("tugTimerDisplay").innerText = "١٠ چرکە";
-            document.getElementById("ropeKnot").style.left = "50%";
-            document.getElementById("tugResetBtn").style.display = "none";
-
-            if (tugMode === "bot") {
-                tugTimerIntervalLocal = setInterval(() => {
-                    tugTimer--;
-                    document.getElementById("tugTimerDisplay").innerText = tugTimer + " چرکە";
-
-                    // Bot taps randomly
-                    if (Math.random() > 0.3) {
-                        tugP2Count++;
-                        document.getElementById("tugP2Clicks").innerText = tugP2Count;
-                        updateTugRopePosition();
-                    }
-
-                    if (tugTimer <= 0) {
-                        clearInterval(tugTimerIntervalLocal);
-                        tugActive = false;
-                        if (tugP1Count > tugP2Count) {
-                            alert("پیرۆزە! تۆ بردەوەتەوە! 🎉");
-                            if (window.addScore) window.addScore(currentUser, 15);
-                        } else if (tugP2Count > tugP1Count) {
-                            alert("کۆمپیوتەر بردیەوە! 🤖");
-                        } else {
-                            alert("یەکسان بوون!");
-                        }
-                        document.getElementById("tugResetBtn").style.display = "block";
-                    }
-                }, 1000);
-            }
-        }
-
-        function leaveTugGame() {
-            if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
-            if (tugMode === "online" && window.leaveTugRoom) window.leaveTugRoom();
-            backToHub();
-        }
-
-        /* Word Game Navigation */
-        function openWordGameMenu() {
-            switchScreen("wordScreen");
-            document.getElementById("wordModeSelect").style.display = "block";
-            document.getElementById("wordLobbyArea").style.display = "none";
-            document.getElementById("wordGameArea").style.display = "none";
-            document.getElementById("wordInputText").disabled = false;
-            document.getElementById("wordSendBtn").disabled = false;
-        }
-
-        function startWordQuickRoom() {
-            if (window.startWordQuickRoomMatch) window.startWordQuickRoomMatch(currentUser);
-        }
-
-        function createCustomWordRoom() {
-            let code = document.getElementById("createRoomCodeInput").value.trim();
-            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
-            if (window.createCustomWordRoomFirebase) window.createCustomWordRoomFirebase(currentUser, code);
-        }
-
-        function joinCustomWordRoom() {
-            let code = document.getElementById("joinRoomCodeInput").value.trim();
-            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
-            if (window.joinCustomWordRoomFirebase) window.joinCustomWordRoomFirebase(currentUser, code);
-        }
-
-        function submitWordMove() {
-            let wordVal = document.getElementById("wordInputText").value.trim();
-            let targetLtr = document.getElementById("targetLetterDisplay").innerText;
-            if (!wordVal) return;
-            if (window.submitWordFirebaseMove) window.submitWordFirebaseMove(wordVal, targetLtr, currentUser);
-        }
-
-        function cancelMatchmaking(gameType) {
-            if (gameType === 'xo') {
-                if (window.leaveXoRoom) window.leaveXoRoom();
-                document.getElementById("xoLobbyArea").style.display = "none";
-                document.getElementById("xoModeSelect").style.display = "block";
-            } else if (gameType === 'word') {
-                if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
-                document.getElementById("wordLobbyArea").style.display = "none";
-                document.getElementById("wordModeSelect").style.display = "block";
-            } else if (gameType === 'tug') {
-                if (window.leaveTugRoom) window.leaveTugRoom();
-                document.getElementById("tugLobbyArea").style.display = "none";
-                document.getElementById("tugMenuArea").style.display = "block";
-            }
-        }
-
-        function leaveWordGame() {
-            if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
-            backToHub();
+            return true;
         }
     </script>
 </body>
