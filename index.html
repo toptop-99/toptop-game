@@ -673,7 +673,7 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
-        <!-- Story Screen (Fixed Multi-Stage Story Engine) -->
+        <!-- Story Screen (Persistent & Robust State Management) -->
         <div id="storyScreen" class="screen">
             <div class="brand-title" style="color: #ef4444;" id="storyScreenTitle">شەوی ترسناک و تاریکی دۆزەخ</div>
             <div class="card" style="padding: 15px;">
@@ -751,7 +751,11 @@
                     }
 
                     if (window.setOnlineStatus) window.setOnlineStatus(uid);
-                    switchScreen("hubScreen");
+                    
+                    // Do not override screen if user is currently navigating in story
+                    if (!localStorage.getItem("toptop_active_story")) {
+                        switchScreen("hubScreen");
+                    }
                     loadUserData();
                     if (window.loadLeaderboard) window.loadLeaderboard();
                 });
@@ -1430,10 +1434,27 @@
             loadSavedSettings();
             let savedUid = localStorage.getItem("top_top_active_uid");
             let savedUser = localStorage.getItem("top_top_active_user");
+            
             if (savedUid) {
                 currentUser = savedUser || "";
                 loadUserData();
-                switchScreen("hubScreen");
+                
+                // Check if user was actively reading a story before refresh
+                let activeStory = localStorage.getItem("toptop_active_story");
+                let activeStep = localStorage.getItem("toptop_story_step");
+                let activeName = localStorage.getItem("toptop_story_name");
+
+                if (activeStory && activeStep && activeName) {
+                    currentStoryId = activeStory;
+                    activeStoryPlayerName = activeName;
+                    switchScreen("storyScreen");
+                    document.getElementById("storyNameBox").style.display = "none";
+                    document.getElementById("storyPlayArea").style.display = "block";
+                    loadStoryStep(activeStep, true);
+                } else {
+                    switchScreen("hubScreen");
+                }
+
                 if (window.setOnlineStatus) window.setOnlineStatus(savedUid);
                 if (window.loadLeaderboard) window.loadLeaderboard();
                 checkDailyRewardStatus();
@@ -1509,6 +1530,9 @@
             if (uid && window.setOfflineStatus) window.setOfflineStatus(uid);
             localStorage.removeItem("top_top_active_uid");
             localStorage.removeItem("top_top_active_user");
+            localStorage.removeItem("toptop_active_story");
+            localStorage.removeItem("toptop_story_step");
+            localStorage.removeItem("toptop_story_name");
             currentUser = "";
             switchScreen("authScreen");
         }
@@ -1792,6 +1816,9 @@
         }
 
         function backToHub() {
+            localStorage.removeItem("toptop_active_story");
+            localStorage.removeItem("toptop_story_step");
+            localStorage.removeItem("toptop_story_name");
             switchScreen("hubScreen");
             if (window.loadLeaderboard) window.loadLeaderboard();
         }
@@ -1825,16 +1852,20 @@
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        /* Fixed Long Interactive Story Engine */
+        /* Perfectly Fixed Long Interactive Story Engine */
         let activeStoryPlayerName = "";
         let currentStoryId = "";
 
         function openStoriesListScreen() {
+            localStorage.removeItem("toptop_active_story");
+            localStorage.removeItem("toptop_story_step");
+            localStorage.removeItem("toptop_story_name");
             switchScreen("storiesListScreen");
         }
 
         function openStoryScreen(storyId) {
             currentStoryId = storyId;
+            localStorage.setItem("toptop_active_story", storyId);
             switchScreen("storyScreen");
             document.getElementById("storyPlayerNameInput").value = "";
             document.getElementById("storyNameBox").style.display = "block";
@@ -1848,6 +1879,7 @@
                 return;
             }
             activeStoryPlayerName = nameInput;
+            localStorage.setItem("toptop_story_name", activeStoryPlayerName);
 
             document.getElementById("storyNameBox").style.display = "none";
             document.getElementById("storyPlayArea").style.display = "block";
@@ -1855,7 +1887,14 @@
             loadStoryStep('step_1');
         }
 
-        function loadStoryStep(stepKey) {
+        function loadStoryStep(stepKey, isRestoring = false) {
+            if (!isRestoring) {
+                localStorage.setItem("toptop_story_step", stepKey);
+            } else {
+                let savedName = localStorage.getItem("toptop_story_name");
+                if (savedName) activeStoryPlayerName = savedName;
+            }
+
             let tEl = document.getElementById("storyText");
             let cEl = document.getElementById("storyChoices");
             cEl.innerHTML = "";
@@ -1878,8 +1917,12 @@
                 btn.onclick = function() {
                     playSound('click');
                     if (ch.action === 'restart') {
+                        localStorage.removeItem("toptop_story_step");
                         openStoryScreen(currentStoryId);
                     } else if (ch.action === 'exit') {
+                        localStorage.removeItem("toptop_active_story");
+                        localStorage.removeItem("toptop_story_step");
+                        localStorage.removeItem("toptop_story_name");
                         openStoriesListScreen();
                     } else {
                         loadStoryStep(ch.next);
