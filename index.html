@@ -296,10 +296,15 @@
         <!-- Hub Screen -->
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
+            
+            <!-- Profile Section on Top Left -->
             <div class="top-bar">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <div id="hubUserAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
-                    <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px;"></span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="hubUserAvatar" style="width: 38px; height: 38px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 13px; border: 2px solid var(--text-glow); cursor: pointer;" onclick="openSettingsScreen()">👤</div>
+                    <div>
+                        <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px; display: block;"></span>
+                        <span style="font-size: 9px; color: #cbd5e1;">پڕۆفایلی من</span>
+                    </div>
                 </div>
                 <div style="display: flex; align-items: center;">
                     <span class="online-badge"></span>
@@ -321,8 +326,10 @@
                 </div>
             </div>
             
+            <!-- Settings and Logout Buttons at the bottom of Hub -->
             <div style="display: flex; gap: 8px; margin-top: auto;">
-                <button class="btn" onclick="openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
+                <button class="btn" onclick="openSettingsScreen()" style="margin-top:0; flex: 1;">⚙️ ڕێکخستن</button>
+                <button class="btn" onclick="logoutUser()" style="margin-top:0; flex: 1; background: linear-gradient(135deg, #ef4444, #b91c1c);">🚪 دەرچوون</button>
             </div>
         </div>
 
@@ -390,7 +397,7 @@
                     <button class="btn" onclick="createCustomWordRoom()" style="background: #0284c7;">دروستکردن</button>
                 </div>
                 <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
-                    <label>چوونەژورەوە بۆ ژوور بە کۆد</label>
+                    <label>چوونەژوورەوە بۆ ژوور بە کۆد</label>
                     <input type="text" id="joinRoomCodeInput" placeholder="کۆدی ژوور بنووسە..." style="margin-bottom: 6px;">
                     <button class="btn" onclick="joinCustomWordRoom()" style="background: #9333ea;">چوونەژوورەوە</button>
                 </div>
@@ -447,7 +454,7 @@
             <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Settings Screen -->
+        <!-- Settings Screen (Without Logout Button) -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
             
@@ -493,11 +500,6 @@
                         <div class="theme-btn theme-emerald" onclick="setAppTheme('emerald')">سەوز</div>
                     </div>
                 </div>
-            </div>
-
-            <div class="card" style="border-color: #f87171;">
-                <h3 style="color: #f87171;">🚪 بەڕێوەبردنی حیساب</h3>
-                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 4px;" onclick="logoutUser()">دەرچوون</button>
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
@@ -782,7 +784,7 @@
             }
         };
 
-        /* Word Game Online Engine with automatic continuous timer & 3s audio chime */
+        /* Word Game Online Engine */
         let wordCurrentRoomId = null;
         let wordMyRole = ""; 
         const kurdishLetters = ["ت", "م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ"];
@@ -846,7 +848,7 @@
                         targetLetter: randomLetter,
                         words: {},
                         scores: { player1: 0, player2: 0 },
-                        startTime: Date.now(), // Auto start time immediately when room is created/joined
+                        startTime: Date.now(),
                         gameOver: false,
                         winnerName: ""
                     }).then(() => {
@@ -1024,19 +1026,16 @@
 
                 let trimmed = wordText.trim();
                 
-                // 1. Check starting letter
                 if (!trimmed.startsWith(targetLetter)) {
                     showWordError("⚠️ وشە دەبێت بە پيتي '" + targetLetter + "' دەست پێبکات!");
                     return;
                 }
 
-                // 2. Strict Meaningful Kurdish Dictionary Check
                 if (!isValidMeaningfulKurdishWord(trimmed)) {
-                    showWordError("⚠️ تەنها وشەی ڕەسەنی کوردی قبوڵ دەکرێت (وشەی بێ مانا و نموونەکانی وەک الستار، تايتار ڕەتن)!");
+                    showWordError("⚠️ تەنها وشەی ڕەسەنی کوردی قبوڵ دەکرێت!");
                     return;
                 }
 
-                // Check duplicate
                 let wordsObj = room.words || {};
                 for(let k in wordsObj) {
                     if(wordsObj[k].word === trimmed) {
@@ -1062,62 +1061,34 @@
             });
         };
 
-        // فەرهەنگی پشکنینی توند بۆ وشە کوردییەکان (ڕێگری لە هەموو وشە نامۆ و بێ ماناکان وەک الستار، تايتار، تيتياير و هتد)
         function isValidMeaningfulKurdishWord(w) {
             if (w.length < 3) return false;
-
-            // لیستی وشە قەدەغە و بێ ماناکان کە بەکارهێنەر داوای کردن یان نموونەن
-            const blockedList = ["الستار", "تايتار", "تيتاير", "تيتياير", "تبريرين", "توتو", "مومو", "دادا", "تيتي", "توتار", "تيتار", "ماما", "بابا", "بابۆ", "تاتە", "توتوت", "تيتيت"];
+            const blockedList = ["الستار", "تايتار", "تيتاير", "تيتياير", "تبريرين", "توتو", "مومو", "دادا", "تيتي"];
             if (blockedList.includes(w)) return false;
 
-            // پشکنینی پیتە دووبارەکان لەسەر یەک (بۆ نموونە سێ پیت یان زیاتر لەدوای یەک)
             for (let i = 0; i < w.length - 2; i++) {
-                if (w[i] === w[i+1] && w[i+1] === w[i+2]) {
-                    return false;
-                }
+                if (w[i] === w[i+1] && w[i+1] === w[i+2]) return false;
             }
 
-            // فەرهەنگی بنەڕەتی وشە کوردییە ڕەسەنە باوەکان بۆ دڵنیابوون لەوەی مانا دارن
             const validKurdishDictionary = [
-                // پیتى ت
                 "تانجى", "تاڤگە", "تاقە", "تەپۆلکە", "تەرزە", "تەموومژ", "تۆرەمە", "تەلار", "تیرۆر", "تەنیایی", "تۆمار", "تەپڵ", "تەمەن", "تەنیشت", "تەلەفۆن", "تووڕە", "تەون", "تەنیل", "تۆپ", "تەختە", "تەلان",
-                // پیتى م
                 "مامۆستا", "مایک", "مانگ", "مێوژ", "مەلەلە", "مێژوو", "مێشک", "میرات", "مۆم", "مۆزەخانە", "مریشک", "ماسی", "مێروو", "مۆدێرن", "مەکۆ",
-                // پیتى ب
                 "باران", "بەهار", "بەفر", "بنار", "باڵندە", "بەرد", "بەیبوون", "بروسکە", "بۆنە", "بەختەوەر", "برا", "باوکی", "بنەماڵە", "بیرۆکە", "بەرهەم",
-                // پیتى د
                 "درەخت", "دەریای", "دایک", "دیاری", "دڵسۆز", "دەفتەر", "دەمانچە", "دەنگ", "دوورگە", "دیمەن", "دانا", "دەست",
-                // پیتى ر
                 "ڕۆژمێر", "رووبار", "رەنگین", "رێواس", "رۆشنایی", "ڕێگا", "ڕێز", "ڕەشماڵ", "ڕوخسار",
-                // پیتى س
                 "ستێرە", "سێو", "سەرۆک", "سەوزە", "سەیران", "سلێمانی", "سپێدە", "سەرکەوتن", "سازگار", "سەهۆڵ",
-                // پیتى ش
                 "شارەزا", "شێرپەنجە", "شەقام", "شاکار", "شەماڵ", "شۆفێر", "شەکر", "شین", "شەوانە",
-                // پیتى ک
                 "کوردستان", "کانی", "کۆمەڵگا", "کەلتوور", "کۆڵان", "کتێب", "کۆمپیوتەر", "کاروان", "کەوانە", "کچە",
-                // پیتى گ
                 "گوڵەبەڕۆژە", "گەشتیار", "گەورە", "گۆران", "گەنم", "گەردەلوول", "گۆرانی", "گوڵ",
-                // پیتى ل
                 "لاپەڕە", "لێڤا", "لاوک", "لانکە", "لۆژیک", "لەشکر",
-                // پیتى ن
                 "نەورۆز", "ئەستێرە", "نیشتمان", "نووسەر", "ئاسمان", "ئاو", "ئاگر", "ئارام", "ئۆتۆمبیل", "ئەزموون",
-                // پیتى و
                 "وێنە", "وشە", "وڵات", "وەرزی", "وەشان",
-                // پیتى هـ
                 "هەتاو", "هەڵبەست", "هەولێر", "هێێمن", "هەنار", "هەور", "هەنگاو",
-                // پیتى چ
                 "چیا", "چاو", "چیرۆک", "چایچی", "چەمەن", "چەکدار",
-                // پیتى پ
                 "پێشمەرگە", "پاییز", "پرد", "پەپولە", "پەڕەسوورە", "پۆل", "پەرتووک"
             ];
 
-            // پشکنین: ئایا لە فەرهەنگەکەدا هەیە یان بە پیتە ڕەسەنەکان دەست پێدەکات و دووانەی نادروست نییە
-            if (validKurdishDictionary.includes(w)) {
-                return true;
-            }
-
-            // ئەگەر لە فەرهەنگەکە نەبوو، ڕەتی دەکەینەوە بۆ ئەوەی وشەی بێ مانا وەک الستار و تايتار تێپەڕ نەبن
-            return false;
+            return validKurdishDictionary.includes(w);
         }
 
         function showWordError(msg) {
@@ -1146,7 +1117,6 @@
         let tempAvatarBase64 = "";
         let settingsTempAvatar = "";
 
-        // XO Local State
         window.xoState = ["", "", "", "", "", "", "", "", ""];
         window.xoTurn = "X";
         let xoMode = "bot";
