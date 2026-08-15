@@ -201,11 +201,6 @@
 
         /* Puzzle Game Styles */
         .puzzle-board { text-align: center; padding: 5px; }
-        .puzzle-banner-img {
-            width: 100%; max-height: 150px; object-fit: cover; border-radius: 12px;
-            border: 2px solid var(--text-glow); margin-bottom: 10px;
-            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
-        }
         .scrambled-letters { display: flex; justify-content: center; gap: 6px; margin: 15px 0; flex-wrap: wrap; }
         .letter-chip {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
@@ -370,7 +365,7 @@
                 <button class="btn" id="dailyRewardBtn" onclick="playSound('click'); claimDailyReward()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000; padding: 6px; font-size: 11px; margin-top:0;">🎁 وەرگرتنی دیاری (٥٠ خاڵ)</button>
             </div>
 
-            <!-- Play Button Card (Clicking this reveals the games) -->
+            <!-- Play Button Card -->
             <div class="card" style="text-align: center; padding: 15px;">
                 <h3>🎮 بەشی یارییەکان</h3>
                 <p>بۆ دەستپێکردنی یاریکردن کرتە لێرە بکە</p>
@@ -397,7 +392,7 @@
             </div>
         </div>
 
-        <!-- Games List Screen (Revealed only when clicking "یاری کردن") -->
+        <!-- Games List Screen -->
         <div id="gamesListScreen" class="screen">
             <div class="brand-title">یارییەکان</div>
             <div class="card">
@@ -408,7 +403,7 @@
                         <div class="game-card-title">پازڵی کوردی</div>
                     </div>
                     <div class="game-card-item" onclick="playSound('click'); openWordGameMenu()">
-                        <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="وشە باران" class="game-card-img">
+                        <img src="https://i.postimg.cc/52CVXVXk/IMG-1019.png" alt="وشە باران" class="game-card-img">
                         <div class="game-card-title">وشە باران</div>
                     </div>
                 </div>
@@ -456,12 +451,11 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Puzzle Game Screen -->
+        <!-- Puzzle Game Screen (Banner image removed as requested) -->
         <div id="puzzleScreen" class="screen">
             <div class="brand-title">پازڵی کوردی</div>
 
             <div id="puzzleModeSelect" class="card">
-                <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="پازڵی کوردی" class="puzzle-banner-img">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
                 <button class="btn" onclick="playSound('click'); startPuzzleVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
                 <button class="btn" onclick="playSound('click'); startPuzzleQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
@@ -485,7 +479,6 @@
             </div>
 
             <div id="puzzleGameArea" style="display: none;" class="puzzle-board">
-                <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="پازڵی کوردی" class="puzzle-banner-img">
                 <div class="score-board">
                     <div class="score-box">
                         <span id="puzzleP1Title">یاریزانی ١</span>
@@ -555,7 +548,6 @@
             <div class="brand-title">وشە باران</div>
 
             <div id="wordModeSelect" class="card">
-                <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="وشە باران" class="puzzle-banner-img">
                 <h3>هەڵبژاردنی چۆنیەتی یاری (٢ خولەک):</h3>
                 <button class="btn" onclick="playSound('click'); startWordQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
                 <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
