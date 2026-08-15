@@ -166,7 +166,6 @@
             margin-bottom: 4px; border: 1px solid var(--border-color); font-size: 12px;
         }
 
-        /* Games Grid Styles */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -199,7 +198,6 @@
             background: rgba(0,0,0,0.4);
         }
 
-        /* Puzzle Game Styles */
         .puzzle-board { text-align: center; padding: 5px; }
         .scrambled-letters { display: flex; justify-content: center; gap: 6px; margin: 15px 0; flex-wrap: wrap; }
         .letter-chip {
@@ -209,7 +207,6 @@
             box-shadow: 0 4px 10px rgba(147, 51, 234, 0.4); border: 1px solid #c084fc;
         }
 
-        /* Word Game Styles */
         .word-game-board { text-align: center; padding: 10px; }
         .target-letter-box {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
@@ -372,7 +369,7 @@
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); font-size: 15px; padding: 12px;" onclick="playSound('click'); openGamesListModal()">🎮 یاری کردن</button>
             </div>
 
-            <!-- Story Section Hub Card (Added cleanly) -->
+            <!-- Story Section Hub Card -->
             <div class="card" style="text-align: center; padding: 12px; border-color: #ef4444;">
                 <h3 style="color: #f87171; font-size: 13px;">🌙 بەشی چیڕۆک</h3>
                 <p style="font-size: 11px; margin-bottom: 6px;">چیڕۆکی کارپێکەری ترسناک</p>
@@ -661,12 +658,23 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
-        <!-- Story Screen (Added cleanly as a separate independent section) -->
+        <!-- Story Screen (Updated with interactive username support) -->
         <div id="storyScreen" class="screen">
             <div class="brand-title" style="color: #ef4444;">شەوی ترسناک</div>
             <div class="card" style="padding: 15px;">
-                <p id="storyText" style="font-size: 14px; line-height: 1.6; color: #fff;"></p>
-                <div id="storyChoices" style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;"></div>
+                <!-- Step 1: Input Name Area -->
+                <div id="storyNameBox" style="text-align: center;">
+                    <h3 style="color: #f87171; margin-bottom: 8px;">🌙 بەخێر بێیت بۆ ژووری تاریکی</h3>
+                    <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ دەستپێکردنی چیڕۆکەکە:</p>
+                    <input type="text" id="storyPlayerNameInput" placeholder="ناوی خۆت لێرە بنووسە..." style="margin-bottom: 8px;">
+                    <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); startInteractiveStory()">دەستپێکردنی چیڕۆک</button>
+                </div>
+
+                <!-- Step 2: Story Playing Area -->
+                <div id="storyPlayArea" style="display: none;">
+                    <p id="storyText" style="font-size: 13px; line-height: 1.7; color: #fff; margin-bottom: 12px;"></p>
+                    <div id="storyChoices" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                </div>
             </div>
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
@@ -879,7 +887,7 @@
             { word: "هەولێر", scrambled: "ر ل هـ و ێ" },
             { word: "سلێمانی", scrambled: "ی ن م ل س ى" },
             { word: "بەهار", scrambled: "ر هـ ب ا ە" },
-            { word: "کوردستان", scrambled: "ن ا ت س د ر و ک" },
+            { word: "کوردستان", scrambled: "ن ا ت s د ر و ک" },
             { word: "ئەستێرە", scrambled: "ە ر ێ ت س ئـ ە" },
             { word: "گۆرانی", scrambled: "ی ن ا r گ و" },
             { word: "ئازادی", scrambled: "ی د ا ز ئـ ى" }
@@ -1620,7 +1628,7 @@
             { word: "هەولێر", scrambled: "ر ل هـ و ێ" },
             { word: "سلێمانی", scrambled: "ی ن م ل س ى" },
             { word: "بەهار", scrambled: "ر هـ ب ا ە" },
-            { word: "کوردستان", scrambled: "ن ا ت س د ر و ک" },
+            { word: "کوردستان", scrambled: "ن ا ت s د ر و ک" },
             { word: "ئەستێرە", scrambled: "ە ر ێ ت س ئـ ە" },
             { word: "گۆرانی", scrambled: "ی ن ا r گ و" },
             { word: "ئازادی", scrambled: "ی د ا ز ئـ ى" }
@@ -1661,58 +1669,61 @@
 
         function startPuzzleQuickRoom() {
             puzzleMode = "online";
-            if (window.startPuzzleQuickRoomMatch) window.startPuzzleQuickRoomMatch(currentUser);
+            if (window.startPuzzleQuickRoomMatch) {
+                window.startPuzzleQuickRoomMatch(currentUser);
+            }
+            document.getElementById("puzzleModeSelect").style.display = "none";
+            document.getElementById("puzzleLobbyArea").style.display = "block";
         }
 
         function createCustomPuzzleRoom() {
             let code = document.getElementById("puzzleCreateCodeInput").value.trim();
-            if (!code) { alert("تکایە کۆدێک بنووسە!"); return; }
+            if(!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
             puzzleMode = "online";
-            if (window.createCustomPuzzleRoomFirebase) window.createCustomPuzzleRoomFirebase(currentUser, code);
+            if (window.createCustomPuzzleRoomFirebase) {
+                window.createCustomPuzzleRoomFirebase(currentUser, code);
+            }
         }
 
         function joinCustomPuzzleRoom() {
             let code = document.getElementById("puzzleJoinCodeInput").value.trim();
-            if (!code) { alert("تکایە کۆدەکە بنووسە!"); return; }
+            if(!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
             puzzleMode = "online";
-            if (window.joinCustomPuzzleRoomFirebase) window.joinCustomPuzzleRoomFirebase(currentUser, code);
+            if (window.joinCustomPuzzleRoomFirebase) {
+                window.joinCustomPuzzleRoomFirebase(currentUser, code);
+            }
         }
 
         function submitPuzzleAnswer() {
-            let ans = document.getElementById("puzzleAnswerInput").value;
-            if (puzzleMode === "online") {
-                if (window.submitPuzzleFirebaseMove) window.submitPuzzleFirebaseMove(ans, currentUser);
-            } else {
-                if (ans.trim() === localPuzzleWord) {
+            let val = document.getElementById("puzzleAnswerInput").value.trim();
+            if(!val) return;
+            if(puzzleMode === "bot") {
+                if(val === localPuzzleWord) {
+                    alert("پیرۆزە! وەڵامەکەت ڕاستە 🎉");
+                    if(window.addScore) window.addScore(10);
                     playSound('victory');
-                    alert("پیرۆزە! وشەکەت بە ڕاستی دۆزییەوە! 🎉");
-                    if (window.addScore) window.addScore(15);
                     startPuzzleVsBot();
                 } else {
                     alert("وشەکە هەڵەیە، دووبارە هەوڵ بدەرەوە!");
                 }
                 document.getElementById("puzzleAnswerInput").value = "";
+            } else {
+                if (window.submitPuzzleFirebaseMove) {
+                    window.submitPuzzleFirebaseMove(val, currentUser);
+                }
             }
         }
 
-        function cancelPuzzleMatchmaking() {
-            if (window.leavePuzzleRoomFirebase) window.leavePuzzleRoomFirebase();
-            openPuzzleMenu();
-        }
-
         function leavePuzzleGame() {
-            if (puzzleMode === 'online' && window.leavePuzzleRoomFirebase) window.leavePuzzleRoomFirebase();
-            openGamesListModal();
+            if(puzzleMode === "online" && window.leavePuzzleRoomFirebase) {
+                window.leavePuzzleRoomFirebase();
+            }
+            switchScreen("gamesListScreen");
         }
 
-        function openFriendsScreen() {
-            switchScreen("friendsScreen");
-            if(window.loadFriendsList) window.loadFriendsList();
-        }
-
-        function openChatScreen() {
-            switchScreen("chatScreen");
-            if(window.listenToChat) window.listenToChat();
+        function cancelPuzzleMatchmaking() {
+            leavePuzzleGame();
+            openPuzzleMenu();
         }
 
         function openWordGameMenu() {
@@ -1723,40 +1734,65 @@
         }
 
         function startWordQuickRoom() {
-            if (window.startWordQuickRoomMatch) window.startWordQuickRoomMatch(currentUser);
+            if (window.startWordQuickRoomMatch) {
+                window.startWordQuickRoomMatch(currentUser);
+            }
         }
 
         function createCustomWordRoom() {
             let code = document.getElementById("createRoomCodeInput").value.trim();
-            if (!code) { alert("تکایە کۆدێک بنووسە!"); return; }
-            if (window.createCustomWordRoomFirebase) window.createCustomWordRoomFirebase(currentUser, code);
+            if(!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.createCustomWordRoomFirebase) {
+                window.createCustomWordRoomFirebase(currentUser, code);
+            }
         }
 
         function joinCustomWordRoom() {
             let code = document.getElementById("joinRoomCodeInput").value.trim();
-            if (!code) { alert("تکایە کۆدەکە بنووسە!"); return; }
-            if (window.joinCustomWordRoomFirebase) window.joinCustomWordRoomFirebase(currentUser, code);
+            if(!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.joinCustomWordRoomFirebase) {
+                window.joinCustomWordRoomFirebase(currentUser, code);
+            }
         }
 
         function submitWordMove() {
-            let val = document.getElementById("wordInputText").value;
-            let targetLetter = document.getElementById("targetLetterDisplay").innerText;
-            if (window.submitWordFirebaseMove) window.submitWordFirebaseMove(val, targetLetter, currentUser);
+            let val = document.getElementById("wordInputText").value.trim();
+            let target = document.getElementById("targetLetterDisplay").innerText;
+            if(!val) return;
+            if (window.submitWordFirebaseMove) {
+                window.submitWordFirebaseMove(val, target, currentUser);
+            }
         }
 
         function leaveWordGame() {
-            if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
-            openGamesListModal();
+            if (window.leaveWordRoomFirebase) {
+                window.leaveWordRoomFirebase();
+            }
+            switchScreen("gamesListScreen");
         }
 
+        function cancelMatchmaking(type) {
+            leaveWordGame();
+            openWordGameMenu();
+        }
+
+        function backToHub() {
+            switchScreen("hubScreen");
+            if (window.loadLeaderboard) window.loadLeaderboard();
+        }
+
+        function openSettingsScreen() { switchScreen("settingsScreen"); }
+        function openFriendsScreen() { switchScreen("friendsScreen"); loadFriendsList(); }
+        function openChatScreen() { switchScreen("chatScreen"); listenToChat(); }
+
         function toggleSoundSetting() {
-            let isMuted = document.getElementById("soundToggle").checked;
-            localStorage.setItem("toptop_sound_muted", isMuted);
+            let muted = document.getElementById("soundToggle").checked;
+            localStorage.setItem("toptop_sound_muted", muted);
         }
 
         function toggleMusicSetting() {
-            let isMuted = document.getElementById("musicToggle").checked;
-            localStorage.setItem("toptop_music_muted", isMuted);
+            let muted = document.getElementById("musicToggle").checked;
+            localStorage.setItem("toptop_music_muted", muted);
         }
 
         function setAppTheme(themeName) {
@@ -1765,59 +1801,86 @@
         }
 
         function loadSavedSettings() {
-            let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
-            let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
+            let mutedSound = localStorage.getItem("toptop_sound_muted") === "true";
+            let mutedMusic = localStorage.getItem("toptop_music_muted") === "true";
             let savedTheme = localStorage.getItem("toptop_theme") || "purple";
 
-            document.getElementById("soundToggle").checked = soundMuted;
-            document.getElementById("musicToggle").checked = musicMuted;
+            document.getElementById("soundToggle").checked = mutedSound;
+            document.getElementById("musicToggle").checked = mutedMusic;
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
-        function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
+        /* Interactive Story Logic with Username Support */
+        let activeStoryPlayerName = "";
 
-        function cancelMatchmaking(type) {
-            if (type === 'word' && window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
-            openGamesListModal();
-        }
-
-        // Story Section Functions (Added cleanly)
         function openStoryScreen() {
             switchScreen("storyScreen");
-            showStoryPart(0);
+            document.getElementById("storyNameBox").style.display = "block";
+            document.getElementById("storyPlayArea").style.display = "none";
+            if (window.currentUser) {
+                document.getElementById("storyPlayerNameInput").value = window.currentUser;
+            }
         }
 
-        const storyData = [
-            {
-                text: (currentUser || "محەممەد") + "، ئێوارەیەکی درەنگ بوو، ئاسمان پڕ ببوو لە هەوری ڕەش و باران شارەکەی داپۆشيبوو. تۆ بڕیاریدا بە پیادە بچیت بۆ ماڵی داپیرەت، کە دەکەوتە کۆڵانێکی کۆن و تاریکی گەڕەکەوە. لەناکاو، لە ژێر تیشکی لاوازی گڵۆپی کۆڵانەکەدا، سێبەرێکی مەزن و نامۆ لەبەردەمیدا ڕاوەستا. چی دەکەیت؟",
-                choices: [
-                    { text: "بە بوێرییەوە بەرەو پێشەوە بڕۆ و بزانە ئەوە چییە", next: 1 },
-                    { text: "خۆت بششارەوە پشت پەرژارە کۆنەکەی نزیکی", next: 2 }
-                ]
-            },
-            {
-                text: "تۆ بە بوێرییەوە بەرەو پێشەوە چوویت، لەناکاو سێبەرەکە جووڵا و پشیلەیەکی ڕەش بوو کە بریندار بوو! یارمەتیت دا و بە سەلامەتی گەیشتیتە ماڵی داپیرەت. بردتەوە! 🎉",
-                choices: [{ text: "دەستپێکردنەوە", next: 0 }]
-            },
-            {
-                text: "تۆ خۆت شاردەوە پشت پەرژارەکە، بەڵام دەنگێکی پێی ترسناک لە نزیکتەوە هات و سێبەرەکە وەستا لەبەردەمت... مخابن دۆڕایت! 💀",
-                choices: [{ text: "دووبارە هەوڵ بدەرەوە", next: 0 }]
+        function startInteractiveStory() {
+            let nameInput = document.getElementById("storyPlayerNameInput").value.trim();
+            if (!nameInput) {
+                alert("تکایە ناوی خۆت بنووسە!");
+                return;
             }
-        ];
+            activeStoryPlayerName = nameInput;
 
-        function showStoryPart(index) {
-            const part = storyData[index];
-            document.getElementById("storyText").innerText = part.text;
-            const choicesDiv = document.getElementById("storyChoices");
-            choicesDiv.innerHTML = "";
-            part.choices.forEach(c => {
-                const btn = document.createElement("button");
+            document.getElementById("storyNameBox").style.display = "none";
+            document.getElementById("storyPlayArea").style.display = "block";
+
+            loadStoryStep('step_1');
+        }
+
+        function loadStoryStep(stepKey) {
+            let tEl = document.getElementById("storyText");
+            let cEl = document.getElementById("storyChoices");
+            cEl.innerHTML = "";
+
+            let storyData = getStoryNodeData(stepKey, activeStoryPlayerName);
+            
+            tEl.innerText = storyData.text;
+
+            storyData.choices.forEach(ch => {
+                let btn = document.createElement("button");
                 btn.className = "btn";
-                btn.innerText = c.text;
-                btn.onclick = () => showStoryPart(c.next);
-                choicesDiv.appendChild(btn);
+                btn.style.background = "linear-gradient(135deg, #7f1d1d, #450a0a)";
+                btn.innerText = ch.text;
+                btn.onclick = function() {
+                    playSound('click');
+                    loadStoryStep(ch.next);
+                };
+                cEl.appendChild(btn);
             });
+        }
+
+        function getStoryNodeData(key, name) {
+            const nodes = {
+                'step_1': {
+                    text: `شەوێکی تاریک و درەنگانی شەو بوو. ${name} دەسویچی هەڵکرد و بەرەو ماڵی داپیرەی بەڕێکەوت کە لە ڕێگاکەیدا شتێکی سەیر و ترسناکی بینی... تەنها سێبەرێکی گەورە لەسەر دیوارەکە جووڵا!`,
+                    choices: [
+                        { text: "بەڕێوە پێشەوە و سەیری ئەوە بکە چییە", next: 'step_forward' },
+                        { text: "خۆت بشارەوە لە پشت دارێکەوە", next: 'step_hide' }
+                    ]
+                },
+                'step_forward': {
+                    text: `${name} هەنگاوی نایە پێشەوە و ڕووبەڕووی بووەوە... دەرکەوت تەنها سەگێکی ڕەشی گەورە بوو کە ڕێگای لێگرتبووی! سەگەکە خواردنی دەویست و ڕێگەی دا بە سەلامەتی تێپەڕیت و گەیشتیتە ماڵی داپیرەت. (کۆتایی سەرکەوتوو 🎉)`,
+                    choices: [
+                        { text: "🔄 دەستپێکردنەوەی چیڕۆک", next: 'step_1' }
+                    ]
+                },
+                'step_hide': {
+                    text: `${name} خۆی شاردەوە، بەڵام سێبەرەکە نزیکتر بووەوە و لە پڕ دەنگێکی گەورە هات! کەسێک لە تاریکییەوە بانگت کرد... (کۆتایی ترسناک و دۆڕان ❌)`,
+                    choices: [
+                        { text: "🔄 دووبارە هەوڵدانەوە", next: 'step_1' }
+                    ]
+                }
+            };
+            return nodes[key] || nodes['step_1'];
         }
     </script>
 </body>
