@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تۆپ تۆپ - XO</title>
+    <title>تۆپ تۆپ - پلاتفۆرمی یارییەکان</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
             --bg-gradient-2: #0d0714;
             --primary-color: #9333ea;
             --primary-hover: #7e22ce;
-            --card-bg: rgba(31, 19, 46, 0.8);
+            --card-bg: rgba(31, 19, 46, 0.85);
             --border-color: #581c87;
             --text-glow: #c084fc;
         }
@@ -24,7 +24,7 @@
             --bg-gradient-2: #020617;
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
-            --card-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.85);
             --border-color: #1e40af;
             --text-glow: #60a5fa;
         }
@@ -34,7 +34,7 @@
             --bg-gradient-2: #022c22;
             --primary-color: #059669;
             --primary-hover: #047857;
-            --card-bg: rgba(6, 78, 59, 0.8);
+            --card-bg: rgba(6, 78, 59, 0.85);
             --border-color: #065f46;
             --text-glow: #34d399;
         }
@@ -53,30 +53,30 @@
             transition: background 0.3s ease;
         }
         .brand-title {
-            text-align: center; font-size: 26px; font-weight: 900;
+            text-align: center; font-size: 24px; font-weight: 900;
             background: linear-gradient(135deg, var(--text-glow), var(--primary-color), #6b21a8);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin: 4px 0 10px 0; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
+            margin: 2px 0 8px 0; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
         }
         .screen { display: none; flex: 1; flex-direction: column; height: 100%; overflow-y: auto; }
         .screen.active { display: flex; }
-        .form-group { margin-bottom: 12px; text-align: right; }
-        label { display: block; font-size: 12px; margin-bottom: 6px; color: #e9d5ff; }
+        .form-group { margin-bottom: 10px; text-align: right; }
+        label { display: block; font-size: 11px; margin-bottom: 4px; color: #e9d5ff; }
         input, select {
-            width: 100%; padding: 12px 14px; background: var(--card-bg);
+            width: 100%; padding: 10px 12px; background: var(--card-bg);
             border: 1px solid var(--primary-color); border-radius: 12px; color: #fff;
-            font-size: 14px; outline: none; font-family: 'Noto Sans Arabic', sans-serif;
+            font-size: 13px; outline: none; font-family: 'Noto Sans Arabic', sans-serif;
         }
         .password-container { position: relative; }
         .password-container input { padding-left: 40px; }
         .toggle-password {
-            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-            background: none; border: none; cursor: pointer; font-size: 16px; color: #cbd5e1;
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; font-size: 14px; color: #cbd5e1;
         }
         .btn {
             width: 100%; background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-            color: #ffffff; border: none; padding: 12px; font-size: 15px;
-            font-weight: bold; border-radius: 12px; cursor: pointer; margin-top: 8px;
+            color: #ffffff; border: none; padding: 10px; font-size: 14px;
+            font-weight: bold; border-radius: 12px; cursor: pointer; margin-top: 6px;
             box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
             transition: transform 0.1s ease, background 0.3s ease;
         }
@@ -84,101 +84,143 @@
         .btn:active { transform: scale(0.96); }
         .google-btn {
             background: #ffffff; color: #1f132e; font-weight: bold;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             border: 1px solid var(--primary-color); box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-            margin-top: 10px;
+            margin-top: 8px;
         }
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; background: var(--card-bg);
-            padding: 10px 16px; border-radius: 14px; border: 1px solid var(--primary-color);
+            margin-bottom: 10px; background: var(--card-bg);
+            padding: 8px 14px; border-radius: 12px; border: 1px solid var(--primary-color);
         }
         .card {
-            background: var(--card-bg); border-radius: 14px;
-            padding: 14px; margin-bottom: 12px; text-align: right;
+            background: var(--card-bg); border-radius: 12px;
+            padding: 12px; margin-bottom: 10px; text-align: right;
             border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .card h3 { margin: 0 0 6px 0; color: var(--text-glow); font-size: 15px; }
-        .card p { margin: 0 0 8px 0; font-size: 12px; color: #e9d5ff; }
+        .card h3 { margin: 0 0 4px 0; color: var(--text-glow); font-size: 14px; }
+        .card p { margin: 0 0 6px 0; font-size: 11px; color: #e9d5ff; }
         
         .avatar-preview {
-            width: 60px; height: 60px; border-radius: 50%; background: #2e1065;
-            margin: 0 auto 8px auto; display: flex; justify-content: center; align-items: center;
+            width: 50px; height: 50px; border-radius: 50%; background: #2e1065;
+            margin: 0 auto 6px auto; display: flex; justify-content: center; align-items: center;
             overflow: hidden; border: 2px solid var(--text-glow); cursor: pointer; position: relative;
         }
         .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
-        .tab-switcher { display: flex; gap: 5px; margin-bottom: 10px; }
-        .tab-btn { flex: 1; background: var(--card-bg); border: 1px solid var(--primary-color); color: #e9d5ff; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .tab-switcher { display: flex; gap: 4px; margin-bottom: 8px; }
+        .tab-btn { flex: 1; background: var(--card-bg); border: 1px solid var(--primary-color); color: #e9d5ff; padding: 6px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
         .tab-btn.active { background: var(--primary-color); color: #fff; }
         .online-badge {
-            display: inline-block; width: 10px; height: 10px; background-color: #22c55e;
-            border-radius: 50%; margin-right: 5px; box-shadow: 0 0 8px #22c55e;
+            display: inline-block; width: 8px; height: 8px; background-color: #22c55e;
+            border-radius: 50%; margin-right: 4px; box-shadow: 0 0 6px #22c55e;
         }
 
         .setting-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .setting-row:last-child { border-bottom: none; }
-        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch { position: relative; display: inline-block; width: 42px; height: 22px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #334155; transition: .3s; border-radius: 24px;
+            background-color: #334155; transition: .3s; border-radius: 22px;
         }
         .slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
             background-color: white; transition: .3s; border-radius: 50%;
         }
         input:checked + .slider { background-color: var(--primary-color); }
-        input:checked + .slider:before { transform: translateX(22px); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
-        .theme-options { display: flex; gap: 8px; margin-top: 6px; }
+        .theme-options { display: flex; gap: 6px; margin-top: 4px; }
         .theme-btn {
-            flex: 1; padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
-            cursor: pointer; font-size: 12px; font-weight: bold; color: #fff; text-align: center;
+            flex: 1; padding: 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer; font-size: 11px; font-weight: bold; color: #fff; text-align: center;
         }
         .theme-purple { background: #9333ea; }
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
 
-        /* ----- XO Game Styles ----- */
+        /* XO Game Styles */
         .xo-board {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            width: 100%; max-width: 320px; margin: 15px auto; aspect-ratio: 1;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+            width: 100%; max-width: 280px; margin: 10px auto; aspect-ratio: 1;
         }
         .xo-cell {
-            background: var(--card-bg); border: 2px solid var(--text-glow); border-radius: 16px;
+            background: var(--card-bg); border: 2px solid var(--text-glow); border-radius: 14px;
             display: flex; justify-content: center; align-items: center;
-            font-size: 40px; font-weight: 900; cursor: pointer;
+            font-size: 36px; font-weight: 900; cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease;
         }
         .xo-cell:active { transform: scale(0.92); }
-        .xo-cell.x { color: #f43f5e; text-shadow: 0 0 12px rgba(244, 63, 94, 0.6); }
-        .xo-cell.o { color: #38bdf8; text-shadow: 0 0 12px rgba(56, 189, 248, 0.6); }
+        .xo-cell.x { color: #f43f5e; text-shadow: 0 0 10px rgba(244, 63, 94, 0.6); }
+        .xo-cell.o { color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); }
 
         .score-board {
             display: flex; justify-content: space-around; background: var(--card-bg);
-            padding: 10px; border-radius: 12px; border: 1px solid var(--primary-color); margin-bottom: 10px;
+            padding: 8px; border-radius: 10px; border: 1px solid var(--primary-color); margin-bottom: 8px;
         }
         .score-box { text-align: center; }
-        .score-box span { font-size: 11px; color: var(--text-glow); display: block; }
-        .score-box bold { font-size: 16px; font-weight: bold; color: #fff; }
+        .score-box span { font-size: 10px; color: var(--text-glow); display: block; }
+        .score-box bold { font-size: 14px; font-weight: bold; color: #fff; }
 
         .leaderboard-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 12px; background: var(--card-bg); border-radius: 10px;
-            margin-bottom: 6px; border: 1px solid var(--border-color);
+            padding: 6px 10px; background: var(--card-bg); border-radius: 8px;
+            margin-bottom: 4px; border: 1px solid var(--border-color); font-size: 12px;
+        }
+
+        /* Word Rain / Word Game Styles */
+        .word-game-board {
+            text-align: center; padding: 10px;
+        }
+        .target-letter-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            border-radius: 14px; padding: 12px; margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+        }
+        .target-letter {
+            font-size: 32px; font-weight: 900; color: #fff;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));
+        }
+        .word-input-container {
+            display: flex; gap: 8px; margin-bottom: 10px;
+        }
+        .words-list-container {
+            max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2);
+            border-radius: 10px; padding: 8px; margin-bottom: 8px; text-align: right;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .word-badge {
+            display: inline-block; background: rgba(147, 51, 234, 0.2);
+            border: 1px solid var(--text-glow); padding: 4px 10px; border-radius: 20px;
+            font-size: 12px; margin: 3px; color: #f8fafc;
+        }
+        .error-alert-box {
+            background: rgba(239, 68, 68, 0.15);
+            border: 2px solid #ef4444; border-radius: 12px;
+            padding: 10px; margin-top: 8px; text-align: center;
+            animation: pulseError 0.3s ease;
+        }
+        .error-alert-text {
+            color: #f87171; font-weight: 900; font-size: 13px;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+        }
+        @keyframes pulseError {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
         .spinner {
-            width: 50px; height: 50px;
-            border: 5px solid rgba(192, 132, 252, 0.2);
-            border-top: 5px solid var(--primary-color);
+            width: 40px; height: 40px;
+            border: 4px solid rgba(192, 132, 252, 0.2);
+            border-top: 4px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 15px auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -189,6 +231,7 @@
 <body data-theme="purple">
 
     <div class="container">
+        <!-- Auth Screen -->
         <div id="authScreen" class="screen active">
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="card">
@@ -198,14 +241,14 @@
                 </div>
 
                 <button class="btn google-btn" onclick="loginWithGoogle()">
-                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.14v3.15C3.15 21.31 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.14C.41 8.03 0 9.96 0 12s.41 3.97 1.14 5.42l4.14-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.15 2.69 1.14 6.58l4.14 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.14v3.15C3.15 21.31 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.14C.41 8.03 0 9.96 0 12s.41 3.97 1.14 5.42l4.14-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.15 2.69 1.14 6.58l4.14 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
                     بەردەوامبوون بە گوگڵ
                 </button>
-                <div style="text-align: center; margin: 10px 0; font-size: 11px; color: #94a3b8;">یان بە یۆزەر و پاسوۆرد</div>
+                <div style="text-align: center; margin: 8px 0; font-size: 10px; color: #94a3b8;">یان بە یۆزەر و پاسوۆرد</div>
 
                 <div id="registerForm" style="display: none;">
                     <div class="avatar-preview" onclick="document.getElementById('fileInput').click()">
-                        <span id="avatarPlaceholderText" style="font-size: 24px;">📷</span>
+                        <span id="avatarPlaceholderText" style="font-size: 20px;">📷</span>
                         <img id="avatarImgTag" style="display:none;" />
                     </div>
                     <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
@@ -252,29 +295,31 @@
             </div>
         </div>
 
+        <!-- Hub Screen -->
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="top-bar">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div id="hubUserAvatar" style="width: 32px; height: 32px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 12px; border: 1px solid #c084fc;">👤</div>
-                    <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow);"></span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <div id="hubUserAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
+                    <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px;"></span>
                 </div>
                 <div style="display: flex; align-items: center;">
                     <span class="online-badge"></span>
-                    <span style="font-size: 12px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
+                    <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                 </div>
             </div>
 
             <div class="card">
                 <h3>🎮 بەشی یارییەکان</h3>
                 <p>یاری هەڵبژێرە!</p>
-                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb);" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
             </div>
 
             <div class="card">
                 <h3>🏆 بەرزترین خاڵەکانی بەکارهێنەران</h3>
                 <div id="topScoresList">
-                    <p style="text-align: center; font-size: 12px; color: #cbd5e1;">چاوەڕێ بکە...</p>
+                    <p style="text-align: center; font-size: 11px; color: #cbd5e1;">چاوەڕێ بکە...</p>
                 </div>
             </div>
             
@@ -283,20 +328,21 @@
             </div>
         </div>
 
+        <!-- XO Menu & Game Screen -->
         <div id="xoScreen" class="screen">
             <div class="brand-title">یاری XO</div>
             
             <div id="xoModeSelect" class="card">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
                 <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
-                <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 10px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
+                <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 8px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
             </div>
 
-            <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 20px;">
-                <h3 style="color: var(--text-glow); font-size: 18px;">گەڕان بۆ یاریزان...</h3>
+            <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
+                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزان...</h3>
                 <div class="spinner"></div>
-                <p style="font-size: 13px; color: #cbd5e1;">تکایە چاوەڕێ بکە تا یاریزانی دووەم بەشدار دەبێت...</p>
-                <button class="btn" onclick="cancelMatchmaking()" style="background: #ef4444; margin-top: 15px;">پەشیمانبوونەوە</button>
+                <p style="font-size: 12px; color: #cbd5e1;">تکایە چاوەڕێ بکە تا یاریزانی دووەم بەشدار دەبێت...</p>
+                <button class="btn" onclick="cancelMatchmaking('xo')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
             <div id="xoGameArea" style="display: none;">
@@ -327,20 +373,85 @@
                     <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
                 </div>
 
-                <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="margin-top: 10px; display: none; background: #16a34a;">🔄 دەستپێکردنەوە</button>
+                <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="margin-top: 8px; display: none; background: #16a34a;">🔄 دەستپێکردنەوە</button>
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
+        <!-- Word Game Menu & Screen -->
+        <div id="wordScreen" class="screen">
+            <div class="brand-title">وشە باران</div>
+
+            <div id="wordModeSelect" class="card">
+                <h3>هەڵبژاردنی چۆنیەتی یاری:</h3>
+                <button class="btn" onclick="startWordQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
+                    <label>دروستکردنی ژوور بە کۆد</label>
+                    <input type="text" id="createRoomCodeInput" placeholder="کۆدی ژوور (بۆ نموونە: 1234)..." style="margin-bottom: 6px;">
+                    <button class="btn" onclick="createCustomWordRoom()" style="background: #0284c7;">دروستکردن</button>
+                </div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
+                    <label>چوونەژورەوە بۆ ژوور بە کۆد</label>
+                    <input type="text" id="joinRoomCodeInput" placeholder="کۆدی ژوور بنووسە..." style="margin-bottom: 6px;">
+                    <button class="btn" onclick="joinCustomWordRoom()" style="background: #9333ea;">چوونەژوورەوە</button>
+                </div>
+            </div>
+
+            <div id="wordLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
+                <h3 style="color: var(--text-glow); font-size: 16px;">چاوەڕوانی یاریزانی دووەم...</h3>
+                <div class="spinner"></div>
+                <p style="font-size: 12px; color: #cbd5e1;" id="wordLobbyText">کۆدی ژوورەکەت: --</p>
+                <button class="btn" onclick="cancelMatchmaking('word')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+            </div>
+
+            <div id="wordGameArea" style="display: none;" class="word-game-board">
+                <div class="score-board" style="margin-bottom: 8px;">
+                    <div class="score-box">
+                        <span>یاریزانی ١</span>
+                        <bold id="wordP1Name">تۆ</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>خاڵەکان</span>
+                        <bold id="wordScoreDisplay" style="color:var(--text-glow);">٠</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>یاریزانی ٢</span>
+                        <bold id="wordP2Name">بەرامبەر</bold>
+                    </div>
+                </div>
+
+                <div class="target-letter-box">
+                    <span style="font-size: 11px; display:block; color:#f3e8ff;">پیتە داواکراوەکە:</span>
+                    <span class="target-letter" id="targetLetterDisplay">م</span>
+                </div>
+
+                <div class="word-input-container">
+                    <input type="text" id="wordInputText" placeholder="وشەیەک بنووسە..." style="flex: 1;" onkeypress="if(event.key==='Enter') submitWordMove()">
+                    <button class="btn" onclick="submitWordMove()" style="margin-top: 0; width: 80px;">ناردن</button>
+                </div>
+
+                <div class="words-list-container" id="wordsListContainer">
+                    <span style="font-size: 11px; color: #94a3b8;">وشە تۆمارکراوەکان لێرە دەردەکەون...</span>
+                </div>
+
+                <div id="wordErrorAlert" class="error-alert-box" style="display: none;">
+                    <div class="error-alert-text" id="wordErrorText">⚠️ وشە هەڵەیە!</div>
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Settings Screen -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
             
             <div class="card">
                 <h3>👤 دەستکاری زانیارییەکان</h3>
-                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 8px;">
+                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 6px;">
                     <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
-                    <span id="settingsAvatarPlaceholder" style="font-size: 24px;">📷</span>
+                    <span id="settingsAvatarPlaceholder" style="font-size: 20px;">📷</span>
                 </div>
                 <input type="file" id="settingsFileInput" accept="image/*" style="display:none;" onchange="handleSettingsImageUpload(event)">
                 
@@ -355,22 +466,22 @@
                 <h3>🎵 دەنگ و مۆسیقا و ڕوکار</h3>
                 
                 <div class="setting-row">
-                    <span>بڕینی دەنگی یاری (Sound Effects)</span>
+                    <span>بڕینی دەنگی یاری</span>
                     <label class="switch">
                         <input type="checkbox" id="soundToggle" onchange="toggleSoundSetting()">
                         <span class="slider"></span>
                     </label>
                 </div>
 
-                <div class="setting-row" style="margin-top: 10px;">
-                    <span>بڕینی مۆسیقای پاشبنە (Background Music)</span>
+                <div class="setting-row" style="margin-top: 8px;">
+                    <span>بڕینی مۆسیقای پاشبنە</span>
                     <label class="switch">
                         <input type="checkbox" id="musicToggle" onchange="toggleMusicSetting()">
                         <span class="slider"></span>
                     </label>
                 </div>
 
-                <div style="margin-top: 12px;">
+                <div style="margin-top: 10px;">
                     <label>گۆڕینی ڕەنگی سەرەکی (Theme)</label>
                     <div class="theme-options">
                         <div class="theme-btn theme-purple" onclick="setAppTheme('purple')">مۆر</div>
@@ -382,13 +493,14 @@
 
             <div class="card" style="border-color: #f87171;">
                 <h3 style="color: #f87171;">🚪 بەڕێوەبردنی حیساب</h3>
-                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 5px;" onclick="logoutUser()">دەرچوون</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 4px;" onclick="logoutUser()">دەرچوون</button>
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
         </div>
     </div>
 
+    <!-- Firebase & Core Game Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -490,13 +602,13 @@
                         </div>
                     `;
                 });
-                document.getElementById('topScoresList').innerHTML = html || "<p style='text-align:center; font-size:12px;'>هیچ خاڵێک تۆمار نەکراوە</p>";
+                document.getElementById('topScoresList').innerHTML = html || "<p style='text-align:center; font-size:11px;'>هیچ خاڵێک تۆمار نەکراوە</p>";
             });
         };
 
-        let currentRoomId = null;
-        let myRole = ""; 
-        let roomUnsubscribe = null;
+        /* XO Online Engine */
+        let xoCurrentRoomId = null;
+        let xoMyRole = ""; 
 
         window.startOnlineMatchmaking = function(username) {
             const lobbyRef = ref(database, 'xo_lobby');
@@ -514,18 +626,18 @@
                 }
 
                 if (waitingRoomId) {
-                    currentRoomId = waitingRoomId;
-                    myRole = "O";
-                    update(ref(database, 'xo_lobby/' + currentRoomId), {
+                    xoCurrentRoomId = waitingRoomId;
+                    xoMyRole = "O";
+                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
                         playerO: username,
                         status: 'playing'
                     }).then(() => {
-                        listenToRoom(currentRoomId, username);
+                        listenToXoRoom(xoCurrentRoomId, username);
                     });
                 } else {
-                    currentRoomId = "room_" + Date.now();
-                    myRole = "X";
-                    const newRoomRef = ref(database, 'xo_lobby/' + currentRoomId);
+                    xoCurrentRoomId = "room_xo_" + Date.now();
+                    xoMyRole = "X";
+                    const newRoomRef = ref(database, 'xo_lobby/' + xoCurrentRoomId);
                     set(newRoomRef, {
                         playerX: username,
                         playerO: "",
@@ -537,15 +649,15 @@
                         restartO: false
                     }).then(() => {
                         onDisconnect(newRoomRef).remove();
-                        listenToRoom(currentRoomId, username);
+                        listenToXoRoom(xoCurrentRoomId, username);
                     });
                 }
             });
         };
 
-        function listenToRoom(roomId, username) {
+        function listenToXoRoom(roomId, username) {
             const roomRef = ref(database, 'xo_lobby/' + roomId);
-            roomUnsubscribe = onValue(roomRef, (snapshot) => {
+            onValue(roomRef, (snapshot) => {
                 const room = snapshot.val();
                 if (!room) return;
 
@@ -571,10 +683,10 @@
                         } else {
                             let winnerName = room.winner === 'X' ? room.playerX : room.playerO;
                             document.getElementById("xoStatusText").innerText = `بردیەوە ${winnerName}! 🎉`;
-                            if (room.winner === myRole && !room.scoreAdded) {
+                            if (room.winner === xoMyRole && !room.scoreAdded) {
                                 window.addScore(username, 10);
-                                if (myRole === 'X') {
-                                    update(ref(database, 'xo_lobby/' + currentRoomId), { scoreAdded: true });
+                                if (xoMyRole === 'X') {
+                                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { scoreAdded: true });
                                 }
                             }
                         }
@@ -583,7 +695,7 @@
                         let resetBtn = document.getElementById("xoResetBtn");
                         resetBtn.style.display = "block";
                         
-                        let myRestartClicked = (myRole === 'X' ? room.restartX : room.restartO);
+                        let myRestartClicked = (xoMyRole === 'X' ? room.restartX : room.restartO);
                         if (myRestartClicked) {
                             resetBtn.innerText = "⏳ چاوەڕوانی یاریزانی بەرامبەر...";
                             resetBtn.disabled = true;
@@ -593,8 +705,8 @@
                         }
 
                         if (room.restartX && room.restartO) {
-                            if (myRole === 'X') {
-                                update(ref(database, 'xo_lobby/' + currentRoomId), {
+                            if (xoMyRole === 'X') {
+                                update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
                                     board: ["", "", "", "", "", "", "", "", ""],
                                     turn: 'X',
                                     winner: "",
@@ -607,7 +719,7 @@
                     } else {
                         window.xoGameActive = true;
                         document.getElementById("xoResetBtn").style.display = "none";
-                        if (room.turn === myRole) {
+                        if (room.turn === xoMyRole) {
                             document.getElementById("xoStatusText").innerText = "سەرەی تۆیە! 🎯";
                         } else {
                             let turnName = room.turn === 'X' ? room.playerX : room.playerO;
@@ -618,52 +730,255 @@
             });
         }
 
-        window.sendOnlineMove = function(index) {
-            if (!currentRoomId) return;
-            if (window.xoTurn !== myRole) {
+        window.sendOnlineXoMove = function(index) {
+            if (!xoCurrentRoomId) return;
+            if (window.xoTurn !== xoMyRole) {
                 alert("چاوەڕێ بکە، هێشتا سەرەی تۆ نییە!");
                 return;
             }
 
             let newBoard = [...window.xoState];
-            newBoard[index] = myRole;
-            let nextTurn = myRole === 'X' ? 'O' : 'X';
+            newBoard[index] = xoMyRole;
+            let nextTurn = xoMyRole === 'X' ? 'O' : 'X';
             let winner = "";
 
-            if (window.checkXoWinnerLocal(newBoard, myRole)) {
-                winner = myRole;
+            if (window.checkXoWinnerLocal(newBoard, xoMyRole)) {
+                winner = xoMyRole;
             } else if (!newBoard.includes("")) {
                 winner = "draw";
             }
 
-            update(ref(database, 'xo_lobby/' + currentRoomId), {
+            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
                 board: newBoard,
                 turn: nextTurn,
                 winner: winner
             });
         };
 
-        window.sendOnlineRestart = function() {
-            if (!currentRoomId) return;
+        window.sendOnlineXoRestart = function() {
+            if (!xoCurrentRoomId) return;
             let updates = {};
-            if (myRole === 'X') updates.restartX = true;
+            if (xoMyRole === 'X') updates.restartX = true;
             else updates.restartO = true;
-            update(ref(database, 'xo_lobby/' + currentRoomId), updates);
+            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), updates);
         };
 
-        window.cancelMatchmaking = function() {
-            if (currentRoomId) {
-                remove(ref(database, 'xo_lobby/' + currentRoomId));
-                currentRoomId = null;
+        window.leaveXoRoom = function() {
+            if (xoCurrentRoomId) {
+                remove(ref(database, 'xo_lobby/' + xoCurrentRoomId));
+                xoCurrentRoomId = null;
             }
-            document.getElementById("xoLobbyArea").style.display = "none";
-            document.getElementById("xoModeSelect").style.display = "block";
         };
 
-        window.leaveOnlineRoom = function() {
-            if (currentRoomId) {
-                remove(ref(database, 'xo_lobby/' + currentRoomId));
-                currentRoomId = null;
+        /* Word Game Online Engine */
+        let wordCurrentRoomId = null;
+        let wordMyRole = ""; 
+        const kurdishLetters = ["م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ", "ت"];
+
+        window.startWordQuickRoomMatch = function(username) {
+            const lobbyRef = ref(database, 'word_lobby');
+            get(lobbyRef).then((snapshot) => {
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
+                if (lobbyData) {
+                    for (let id in lobbyData) {
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
+                    }
+                }
+
+                if (waitingRoomId) {
+                    wordCurrentRoomId = waitingRoomId;
+                    wordMyRole = "player2";
+                    update(ref(database, 'word_lobby/' + wordCurrentRoomId), {
+                        player2: username,
+                        status: 'playing'
+                    }).then(() => {
+                        listenToWordRoom(wordCurrentRoomId, username);
+                    });
+                } else {
+                    wordCurrentRoomId = "room_word_" + Date.now();
+                    wordMyRole = "player1";
+                    let randomLetter = kurdishLetters[Math.floor(Math.random() * kurdishLetters.length)];
+                    const newRoomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+                    set(newRoomRef, {
+                        player1: username,
+                        player2: "",
+                        status: 'waiting',
+                        targetLetter: randomLetter,
+                        words: {},
+                        scores: { player1: 0, player2: 0 }
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                        listenToWordRoom(wordCurrentRoomId, username);
+                    });
+                }
+            });
+        };
+
+        window.createCustomWordRoomFirebase = function(username, customCode) {
+            wordCurrentRoomId = customCode;
+            wordMyRole = "player1";
+            let randomLetter = kurdishLetters[Math.floor(Math.random() * kurdishLetters.length)];
+            const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+            
+            get(roomRef).then((snapshot) => {
+                if(snapshot.exists()) {
+                    alert("ئەم کۆدی ژوورە پێشتر هەیە، تکایە کۆدێکی تر بنووسە!");
+                    return;
+                }
+                set(roomRef, {
+                    player1: username,
+                    player2: "",
+                    status: 'waiting',
+                    targetLetter: randomLetter,
+                    words: {},
+                    scores: { player1: 0, player2: 0 }
+                }).then(() => {
+                    onDisconnect(roomRef).remove();
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "block";
+                    document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                    listenToWordRoom(wordCurrentRoomId, username);
+                });
+            });
+        };
+
+        window.joinCustomWordRoomFirebase = function(username, customCode) {
+            const roomRef = ref(database, 'word_lobby/' + customCode);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) {
+                    alert("هیچ ژوورێک بەم کۆدە بوونی نییە!");
+                    return;
+                }
+                let roomData = snapshot.val();
+                if(roomData.status !== 'waiting') {
+                    alert("ئەم ژوورە پڕ بووە یان دەستپێکردووە!");
+                    return;
+                }
+                wordCurrentRoomId = customCode;
+                wordMyRole = "player2";
+                update(roomRef, {
+                    player2: username,
+                    status: 'playing'
+                }).then(() => {
+                    listenToWordRoom(wordCurrentRoomId, username);
+                });
+            });
+        };
+
+        function listenToWordRoom(roomId, username) {
+            const roomRef = ref(database, 'word_lobby/' + roomId);
+            onValue(roomRef, (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                if (room.status === 'waiting') {
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "block";
+                    document.getElementById("wordGameArea").style.display = "none";
+                } else if (room.status === 'playing') {
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "none";
+                    document.getElementById("wordGameArea").style.display = "block";
+
+                    document.getElementById("wordP1Name").innerText = room.player1;
+                    document.getElementById("wordP2Name").innerText = room.player2 || "بەرامبەر";
+                    document.getElementById("targetLetterDisplay").innerText = room.targetLetter;
+
+                    let myScore = room.scores[wordMyRole] || 0;
+                    document.getElementById("wordScoreDisplay").innerText = myScore;
+
+                    let wordsObj = room.words || {};
+                    let wordsHtml = "";
+                    for(let key in wordsObj) {
+                        let wItem = wordsObj[key];
+                        wordsHtml += `<span class="word-badge">${wItem.word} (${wItem.user})</span>`;
+                    }
+                    document.getElementById("wordsListContainer").innerHTML = wordsHtml || "<span style='font-size: 11px; color: #94a3b8;'>هێشتا هیچ وشەیەک نەنووسراوە...</span>";
+                }
+            });
+        }
+
+        window.submitWordFirebaseMove = function(wordText, targetLetter, username) {
+            if (!wordCurrentRoomId) return;
+
+            // Validation logic requested:
+            // 1. Must start with target letter
+            // 2. Cannot be invalid patterns like repetitive/meaningless syllables (e.g., "مومو", "ماما", etc.)
+            let trimmed = wordText.trim();
+            if (!trimmed.startsWith(targetLetter)) {
+                showWordError("⚠️ وشە دەبێت بە پيتي '" + targetLetter + "' دەست پێبکات!");
+                return;
+            }
+
+            // Simple checks for repetitive nonsense syllables
+            let uniqueChars = new Set(trimmed.split("")).size;
+            if (trimmed.length < 2 || uniqueChars === 1 || isRepetitiveNonsense(trimmed)) {
+                showWordError("⚠️ وشە هەڵەیە! (وشەکە بێ مانا یان دووبارەیە)");
+                return;
+            }
+
+            const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) return;
+                let room = snapshot.val();
+                
+                // Check if word already added
+                let wordsObj = room.words || {};
+                for(let k in wordsObj) {
+                    if(wordsObj[k].word === trimmed) {
+                        showWordError("⚠️ ئەم وشەیە پێشتر تۆمارکراوە!");
+                        return;
+                    }
+                }
+
+                let newWordKey = "w_" + Date.now();
+                wordsObj[newWordKey] = { word: trimmed, user: username };
+
+                let currentScore = room.scores[wordMyRole] || 0;
+                let newScore = currentScore + 10;
+                room.scores[wordMyRole] = newScore;
+
+                update(roomRef, {
+                    words: wordsObj,
+                    scores: room.scores
+                });
+
+                document.getElementById("wordInputText").value = "";
+                hideWordError();
+                window.addScore(username, 5);
+            });
+        };
+
+        function isRepetitiveNonsense(w) {
+            if (w === "مومو" || w === "ماما" || w === "میامو" || w === "بابا" || w === "بابۆ" || w === "دادا") return true;
+            if (w.length === 4 && w[0] === w[2] && w[1] === w[3]) return true; // e.g. mamam, momom
+            return false;
+        }
+
+        function showWordError(msg) {
+            let alertBox = document.getElementById("wordErrorAlert");
+            let alertText = document.getElementById("wordErrorText");
+            alertText.innerText = msg;
+            alertBox.style.display = "block";
+            setTimeout(() => {
+                alertBox.style.display = "none";
+            }, 3000);
+        }
+
+        function hideWordError() {
+            document.getElementById("wordErrorAlert").style.display = "none";
+        }
+
+        window.leaveWordRoomFirebase = function() {
+            if (wordCurrentRoomId) {
+                remove(ref(database, 'word_lobby/' + wordCurrentRoomId));
+                wordCurrentRoomId = null;
             }
         };
     </script>
@@ -673,6 +988,7 @@
         let tempAvatarBase64 = "";
         let settingsTempAvatar = "";
 
+        // XO Local State
         window.xoState = ["", "", "", "", "", "", "", "", ""];
         window.xoTurn = "X";
         let xoMode = "bot";
@@ -873,6 +1189,7 @@
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
+        /* XO Navigation & Play */
         function openXoMenu() {
             switchScreen("xoScreen");
             document.getElementById("xoModeSelect").style.display = "block";
@@ -901,7 +1218,7 @@
             if (!window.xoGameActive || window.xoState[index] !== "") return;
 
             if (xoMode === "online") {
-                window.sendOnlineMove(index);
+                window.sendOnlineXoMove(index);
             } else {
                 window.xoState[index] = window.xoTurn;
                 window.renderXoBoard();
@@ -977,7 +1294,7 @@
 
         function resetXoBoard() {
             if (xoMode === "online") {
-                window.sendOnlineRestart();
+                window.sendOnlineXoRestart();
             } else {
                 window.xoState = ["", "", "", "", "", "", "", "", ""];
                 window.xoTurn = "X";
@@ -989,8 +1306,66 @@
         }
 
         function leaveXoGame() {
-            if (xoMode === "online" && window.leaveOnlineRoom) {
-                window.leaveOnlineRoom();
+            if (xoMode === "online" && window.leaveXoRoom) {
+                window.leaveXoRoom();
+            }
+            backToHub();
+        }
+
+        /* Word Game Navigation & Play */
+        function openWordGameMenu() {
+            switchScreen("wordScreen");
+            document.getElementById("wordModeSelect").style.display = "block";
+            document.getElementById("wordLobbyArea").style.display = "none";
+            document.getElementById("wordGameArea").style.display = "none";
+        }
+
+        function startWordQuickRoom() {
+            if (window.startWordQuickRoomMatch) {
+                window.startWordQuickRoomMatch(currentUser);
+            }
+        }
+
+        function createCustomWordRoom() {
+            let code = document.getElementById("createRoomCodeInput").value.trim();
+            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.createCustomWordRoomFirebase) {
+                window.createCustomWordRoomFirebase(currentUser, code);
+            }
+        }
+
+        function joinCustomWordRoom() {
+            let code = document.getElementById("joinRoomCodeInput").value.trim();
+            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.joinCustomWordRoomFirebase) {
+                window.joinCustomWordRoomFirebase(currentUser, code);
+            }
+        }
+
+        function submitWordMove() {
+            let wordVal = document.getElementById("wordInputText").value.trim();
+            let targetLtr = document.getElementById("targetLetterDisplay").innerText;
+            if (!wordVal) return;
+            if (window.submitWordFirebaseMove) {
+                window.submitWordFirebaseMove(wordVal, targetLtr, currentUser);
+            }
+        }
+
+        function cancelMatchmaking(gameType) {
+            if (gameType === 'xo') {
+                if (window.leaveXoRoom) window.leaveXoRoom();
+                document.getElementById("xoLobbyArea").style.display = "none";
+                document.getElementById("xoModeSelect").style.display = "block";
+            } else if (gameType === 'word') {
+                if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
+                document.getElementById("wordLobbyArea").style.display = "none";
+                document.getElementById("wordModeSelect").style.display = "block";
+            }
+        }
+
+        function leaveWordGame() {
+            if (window.leaveWordRoomFirebase) {
+                window.leaveWordRoomFirebase();
             }
             backToHub();
         }
