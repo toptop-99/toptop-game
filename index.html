@@ -409,11 +409,18 @@
         <div id="profileScreen" class="screen">
             <div class="brand-title">پرۆفایلی یاریزان</div>
             <div class="card" style="text-align: center; padding: 20px;">
-                <div class="avatar-preview" style="width: 75px; height: 75px; margin: 0 auto 10px auto;">
+                <div class="avatar-preview" onclick="playSound('click'); document.getElementById('profileFileInput').click()" style="width: 75px; height: 75px; margin: 0 auto 10px auto;">
                     <img id="profileScreenAvatarImg" src="" alt="Avatar" style="display:none;" />
                     <span id="profileScreenAvatarPlaceholder" style="font-size: 30px;">👤</span>
                 </div>
-                <h2 id="profileScreenName" style="margin: 0 0 5px 0; color: var(--text-glow); font-size: 18px;">ناوی یاریزان</h2>
+                <input type="file" id="profileFileInput" accept="image/*" style="display:none;" onchange="handleProfileScreenImageUpload(event)">
+                
+                <div class="form-group" style="text-align: right; margin-top: 10px;">
+                    <label>ناوی بەکارهێنەر</label>
+                    <input type="text" id="profileUsernameInput" placeholder="ناوی نوێ...">
+                </div>
+                <button class="btn" onclick="playSound('click'); saveProfileChanges()" style="margin-bottom: 10px;">پاشەکەوتکردنی گۆڕانکارییەکان</button>
+
                 <p id="profileScreenRank" style="font-size: 12px; color: #facc15; font-weight: bold; margin-bottom: 10px;">👶 تازەکار</p>
                 
                 <div style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-top: 10px; text-align: right;">
@@ -724,21 +731,6 @@
         <!-- Settings Screen -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
-            
-            <div class="card">
-                <h3>👤 دەستکاری زانیارییەکان</h3>
-                <div class="avatar-preview" onclick="playSound('click'); document.getElementById('settingsFileInput').click()" style="margin-bottom: 6px;">
-                    <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
-                    <span id="settingsAvatarPlaceholder" style="font-size: 20px;">📷</span>
-                </div>
-                <input type="file" id="settingsFileInput" accept="image/*" style="display:none;" onchange="handleSettingsImageUpload(event)">
-                
-                <div class="form-group">
-                    <label>ناوی بەکارهێنەر</label>
-                    <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
-                </div>
-                <button class="btn" onclick="playSound('click'); saveProfileChanges()">پاشەکەوتکردن</button>
-            </div>
 
             <div class="card">
                 <h3>🎵 دەنگ و مۆسیقا و ڕوکار</h3>
@@ -1786,8 +1778,7 @@
 
     <script>
         let currentUser = "";
-        let tempAvatarBase64 = "";
-        let settingsTempAvatar = "";
+        let profileTempAvatar = "";
 
         // XO Local State
         window.xoState = ["", "", "", "", "", "", "", "", ""];
@@ -1914,6 +1905,7 @@
             else { field.type = "password"; btn.innerText = "👁️"; }
         }
 
+        let tempAvatarBase64 = "";
         function handleImageUpload(event) {
             let file = event.target.files[0];
             if (file) {
@@ -1928,15 +1920,15 @@
             }
         }
 
-        function handleSettingsImageUpload(event) {
+        function handleProfileScreenImageUpload(event) {
             let file = event.target.files[0];
             if (file) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    settingsTempAvatar = e.target.result;
-                    let imgTag = document.getElementById("settingsAvatarPreview");
-                    let textTag = document.getElementById("settingsAvatarPlaceholder");
-                    imgTag.src = settingsTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
+                    profileTempAvatar = e.target.result;
+                    let imgTag = document.getElementById("profileScreenAvatarImg");
+                    let textTag = document.getElementById("profileScreenAvatarPlaceholder");
+                    imgTag.src = profileTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
                 }
                 reader.readAsDataURL(file);
             }
@@ -2012,7 +2004,8 @@
                     profileAvatarPlaceholder.innerText = currentUser.charAt(0).toUpperCase();
                 }
 
-                document.getElementById("settingsUsernameInput").value = currentUser;
+                document.getElementById("profileUsernameInput").value = currentUser;
+                profileTempAvatar = profile.avatar || "";
             });
         }
 
@@ -2025,7 +2018,7 @@
             let uid = localStorage.getItem("top_top_active_uid");
             if (!uid) return;
 
-            let newName = document.getElementById("settingsUsernameInput").value.trim();
+            let newName = document.getElementById("profileUsernameInput").value.trim();
             if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
 
             const userRef = window.dbRef(window.db, 'users/' + uid);
@@ -2033,10 +2026,10 @@
                 if (!snapshot.exists()) return;
                 let profile = snapshot.val();
                 profile.username = newName;
-                if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
+                if (profileTempAvatar) profile.avatar = profileTempAvatar;
 
                 window.dbSet(userRef, profile).then(() => {
-                    alert("نوێکرایەوە!");
+                    alert("گۆڕانکارییەکان پاشەکەوت کران!");
                     currentUser = newName;
                     localStorage.setItem("top_top_active_user", currentUser);
                     loadUserData();
