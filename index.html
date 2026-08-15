@@ -182,6 +182,38 @@
             margin-bottom: 4px; border: 1px solid var(--border-color); font-size: 12px;
         }
 
+        /* Puzzle Game Styles */
+        .puzzle-board { text-align: center; padding: 5px; }
+        .scrambled-letters { display: flex; justify-content: center; gap: 6px; margin: 15px 0; flex-wrap: wrap; }
+        .letter-chip {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: #fff; width: 45px; height: 45px; border-radius: 10px;
+            display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: 900;
+            box-shadow: 0 4px 10px rgba(147, 51, 234, 0.4); border: 1px solid #c084fc;
+        }
+
+        /* Wheel of Fortune Styles */
+        .wheel-container { text-align: center; padding: 10px; position: relative; }
+        .wheel {
+            width: 220px; height: 220px; border-radius: 50%; border: 6px solid #facc15;
+            margin: 15px auto; position: relative; overflow: hidden;
+            background: conic-gradient(
+                #9333ea 0deg 60deg,
+                #2563eb 60deg 120deg,
+                #059669 120deg 180deg,
+                #d97706 180deg 240deg,
+                #e11d48 240deg 300deg,
+                #ca8a04 300deg 360deg
+            );
+            transition: transform 3s cubic-bezier(0.15, 0.95, 0.15, 1);
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+        }
+        .wheel-pointer {
+            width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent;
+            border-bottom: 20px solid #facc15; position: absolute; top: -2px; left: 50%;
+            transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
         /* Word Game Styles */
         .word-game-board { text-align: center; padding: 10px; }
         .target-letter-box {
@@ -382,7 +414,9 @@
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="playSound('click'); openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
                 <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="playSound('click'); openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
                 <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); margin-bottom: 6px;" onclick="playSound('click'); openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="playSound('click'); openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی ١ خولەک)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); margin-bottom: 6px;" onclick="playSound('click'); openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی ١ خولەک)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="playSound('click'); openPuzzleMenu()">🧩 پازڵی کوردی (ئۆنلاین + کۆمپیوتەر)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="playSound('click'); openWheelMenu()">🎡 چەرخی بەختەوەری (Lucky Spin)</button>
             </div>
 
             <div class="card">
@@ -440,6 +474,83 @@
                         <bold id="profileScreenScoreVal" style="font-size: 14px; font-weight: bold; color: #facc15;">0</bold>
                     </div>
                 </div>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Puzzle Game Screen -->
+        <div id="puzzleScreen" class="screen">
+            <div class="brand-title">پازڵی کوردی</div>
+
+            <div id="puzzleModeSelect" class="card">
+                <h3>مۆدی یاری هەڵبژێرە:</h3>
+                <button class="btn" onclick="playSound('click'); startPuzzleVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
+                <button class="btn" onclick="playSound('click'); startPuzzleQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
+                    <label>دروستکردنی ژوور بە کۆد</label>
+                    <input type="text" id="puzzleCreateCodeInput" placeholder="کۆدی ژوور (بۆ نموونە: 777)..." style="margin-bottom: 6px;">
+                    <button class="btn" onclick="playSound('click'); createCustomPuzzleRoom()" style="background: #0284c7;">دروستکردن</button>
+                </div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
+                    <label>چوونەژورەوە بۆ ژوور بە کۆد</label>
+                    <input type="text" id="puzzleJoinCodeInput" placeholder="کۆدی ژوور بنووسە..." style="margin-bottom: 6px;">
+                    <button class="btn" onclick="playSound('click'); joinCustomPuzzleRoom()" style="background: #9333ea;">چوونەژوورەوە</button>
+                </div>
+            </div>
+
+            <div id="puzzleLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
+                <h3 style="color: var(--text-glow); font-size: 16px;">چاوەڕوانی یاریزانی دووەم...</h3>
+                <div class="spinner"></div>
+                <p style="font-size: 12px; color: #cbd5e1;" id="puzzleLobbyText">کۆدی ژوورەکەت: --</p>
+                <button class="btn" onclick="playSound('click'); cancelPuzzleMatchmaking()" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+            </div>
+
+            <div id="puzzleGameArea" style="display: none;" class="puzzle-board">
+                <div class="score-board">
+                    <div class="score-box">
+                        <span id="puzzleP1Title">یاریزانی ١</span>
+                        <bold id="puzzleP1Score">٠</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>دۆخ</span>
+                        <bold id="puzzleStatusText" style="color:var(--text-glow);">پیتەکان ڕێک بخە</bold>
+                    </div>
+                    <div class="score-box">
+                        <span id="puzzleP2Title">یاریزانی ٢</span>
+                        <bold id="puzzleP2Score">٠</bold>
+                    </div>
+                </div>
+
+                <div class="card" style="text-align: center; padding: 15px;">
+                    <p style="font-size: 11px; color: #e9d5ff; margin-bottom: 4px;">پیتە تێکەڵکراوەکان:</p>
+                    <div class="scrambled-letters" id="scrambledLettersContainer"></div>
+                    
+                    <div class="form-group" style="margin-top: 12px;">
+                        <input type="text" id="puzzleAnswerInput" placeholder="وشە ڕاستەکە لێرە بنووسە..." onkeypress="if(event.key==='Enter') submitPuzzleAnswer()">
+                    </div>
+                    <button class="btn" onclick="playSound('click'); submitPuzzleAnswer()" style="background: #16a34a;">ناردنی وەڵام</button>
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leavePuzzleGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Wheel of Fortune Screen -->
+        <div id="wheelScreen" class="screen">
+            <div class="brand-title">چەرخی بەختەوەری</div>
+            
+            <div class="card wheel-container">
+                <h3>🎡 خولانەوەی چەرخ و بردنەوەی خاڵ</h3>
+                <p>ڕۆژانە تەنها یەکجار دەتوانیت چەرخەکە بخوولێنیتەوە!</p>
+                
+                <div style="position: relative; width: 220px; margin: 0 auto;">
+                    <div class="wheel-pointer"></div>
+                    <div class="wheel" id="fortuneWheel"></div>
+                </div>
+
+                <button class="btn" id="spinWheelBtn" onclick="playSound('click'); spinFortuneWheel()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000; margin-top: 15px;">🎡 چەرخەکە بخوولێنەوە!</button>
+                <p id="wheelResultText" style="font-size: 13px; font-weight: bold; color: #facc15; margin-top: 10px;"></p>
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
@@ -959,6 +1070,192 @@
                     container.innerHTML = "<p style='font-size:11px; color:#cbd5e1; text-align:center;'>هیچ هاوڕێیەک نەدۆزرایەوە</p>";
                 }
             });
+        };
+
+        /* Puzzle Game Online Engine */
+        let puzzleCurrentRoomId = null;
+        let puzzleMyRole = "";
+
+        const kurdishPuzzleWords = [
+            { word: "باران", scrambled: "ر ا ب ا ن" },
+            { word: "هەولێر", scrambled: "ر ل هـ و ێ" },
+            { word: "سلێمانی", scrambled: "ی ن م ل س ى" },
+            { word: "بەهار", scrambled: "ر هـ ب ا ە" },
+            { word: "کوردستان", scrambled: "ن ا ت س د ر و ک" },
+            { word: "ئەستێرە", scrambled: "ە ر ێ ت س ئـ ە" },
+            { word: "گۆرانی", scrambled: "ی ن ا ر گ و" },
+            { word: "ئازادی", scrambled: "ی د ا ز ئـ ى" }
+        ];
+
+        window.startPuzzleQuickRoomMatch = function(username) {
+            const lobbyRef = ref(database, 'puzzle_lobby');
+            get(lobbyRef).then((snapshot) => {
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
+                if (lobbyData) {
+                    for (let id in lobbyData) {
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
+                    }
+                }
+
+                let randomPuzzle = kurdishPuzzleWords[Math.floor(Math.random() * kurdishPuzzleWords.length)];
+
+                if (waitingRoomId) {
+                    puzzleCurrentRoomId = waitingRoomId;
+                    puzzleMyRole = "player2";
+                    update(ref(database, 'puzzle_lobby/' + puzzleCurrentRoomId), {
+                        player2: username,
+                        status: 'playing'
+                    }).then(() => {
+                        listenToPuzzleRoom(puzzleCurrentRoomId, username);
+                    });
+                } else {
+                    puzzleCurrentRoomId = "room_puzzle_" + Date.now();
+                    puzzleMyRole = "player1";
+                    const newRoomRef = ref(database, 'puzzle_lobby/' + puzzleCurrentRoomId);
+                    set(newRoomRef, {
+                        player1: username,
+                        player2: "",
+                        status: 'waiting',
+                        targetWord: randomPuzzle.word,
+                        scrambled: randomPuzzle.scrambled,
+                        scores: { player1: 0, player2: 0 },
+                        winnerName: ""
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        document.getElementById("puzzleLobbyText").innerText = "کۆدی ژوورەکەت: " + puzzleCurrentRoomId;
+                        listenToPuzzleRoom(puzzleCurrentRoomId, username);
+                    });
+                }
+            });
+        };
+
+        window.createCustomPuzzleRoomFirebase = function(username, customCode) {
+            puzzleCurrentRoomId = customCode;
+            puzzleMyRole = "player1";
+            let randomPuzzle = kurdishPuzzleWords[Math.floor(Math.random() * kurdishPuzzleWords.length)];
+            const roomRef = ref(database, 'puzzle_lobby/' + puzzleCurrentRoomId);
+            
+            get(roomRef).then((snapshot) => {
+                if(snapshot.exists()) {
+                    alert("ئەم کۆدی ژوورە پێشتر هەیە!");
+                    return;
+                }
+                set(roomRef, {
+                    player1: username,
+                    player2: "",
+                    status: 'waiting',
+                    targetWord: randomPuzzle.word,
+                    scrambled: randomPuzzle.scrambled,
+                    scores: { player1: 0, player2: 0 },
+                    winnerName: ""
+                }).then(() => {
+                    onDisconnect(roomRef).remove();
+                    document.getElementById("puzzleModeSelect").style.display = "none";
+                    document.getElementById("puzzleLobbyArea").style.display = "block";
+                    document.getElementById("puzzleLobbyText").innerText = "کۆدی ژوورەکەت: " + puzzleCurrentRoomId;
+                    listenToPuzzleRoom(puzzleCurrentRoomId, username);
+                });
+            });
+        };
+
+        window.joinCustomPuzzleRoomFirebase = function(username, customCode) {
+            const roomRef = ref(database, 'puzzle_lobby/' + customCode);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) {
+                    alert("هیچ ژوورێک بەم کۆدە بوونی نییە!");
+                    return;
+                }
+                let roomData = snapshot.val();
+                if(roomData.status !== 'waiting') {
+                    alert("ئەم ژوورە پڕ بووە!");
+                    return;
+                }
+                puzzleCurrentRoomId = customCode;
+                puzzleMyRole = "player2";
+                update(roomRef, {
+                    player2: username,
+                    status: 'playing'
+                }).then(() => {
+                    listenToPuzzleRoom(puzzleCurrentRoomId, username);
+                });
+            });
+        };
+
+        function listenToPuzzleRoom(roomId, username) {
+            const roomRef = ref(database, 'puzzle_lobby/' + roomId);
+            onValue(roomRef, (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                if (room.status === 'waiting') {
+                    document.getElementById("puzzleModeSelect").style.display = "none";
+                    document.getElementById("puzzleLobbyArea").style.display = "block";
+                    document.getElementById("puzzleGameArea").style.display = "none";
+                } else if (room.status === 'playing') {
+                    document.getElementById("puzzleModeSelect").style.display = "none";
+                    document.getElementById("puzzleLobbyArea").style.display = "none";
+                    document.getElementById("puzzleGameArea").style.display = "block";
+
+                    let p1Text = room.player1 + (puzzleMyRole === 'player1' ? " (تۆ)" : "");
+                    let p2Text = (room.player2 || "بەرامبەر") + (puzzleMyRole === 'player2' ? " (تۆ)" : "");
+
+                    document.getElementById("puzzleP1Title").innerText = p1Text;
+                    document.getElementById("puzzleP2Title").innerText = p2Text;
+                    document.getElementById("puzzleP1Score").innerText = room.scores.player1 || 0;
+                    document.getElementById("puzzleP2Score").innerText = room.scores.player2 || 0;
+
+                    let chipsHtml = "";
+                    room.scrambled.split(" ").forEach(ch => {
+                        chipsHtml += `<div class="letter-chip">${ch}</div>`;
+                    });
+                    document.getElementById("scrambledLettersContainer").innerHTML = chipsHtml;
+
+                    if (room.winnerName) {
+                        document.getElementById("puzzleStatusText").innerText = room.winnerName;
+                        document.getElementById("puzzleAnswerInput").disabled = true;
+                    } else {
+                        document.getElementById("puzzleStatusText").innerText = "پیتەکان ڕێک بخە!";
+                    }
+                }
+            });
+        }
+
+        window.submitPuzzleFirebaseMove = function(answerText, username) {
+            if (!puzzleCurrentRoomId) return;
+            const roomRef = ref(database, 'puzzle_lobby/' + puzzleCurrentRoomId);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) return;
+                let room = snapshot.val();
+                if (room.winnerName) return;
+
+                let trimmed = answerText.trim();
+                if (trimmed === room.targetWord) {
+                    let wName = username + " بردیەوە! 🎉";
+                    room.scores[puzzleMyRole] = (room.scores[puzzleMyRole] || 0) + 15;
+                    playSound('victory');
+
+                    update(roomRef, {
+                        scores: room.scores,
+                        winnerName: wName
+                    });
+                    if (puzzleMyRole === 'player1' && window.addScore) window.addScore(15);
+                } else {
+                    alert("وشەکە هەڵەیە، دووبارە هەوڵ بدەرەوە!");
+                }
+                document.getElementById("puzzleAnswerInput").value = "";
+            });
+        };
+
+        window.leavePuzzleRoomFirebase = function() {
+            if (puzzleCurrentRoomId) {
+                remove(ref(database, 'puzzle_lobby/' + puzzleCurrentRoomId));
+                puzzleCurrentRoomId = null;
+            }
         };
 
         /* Online Quiz Engine */
@@ -2212,6 +2509,137 @@
 
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
+
+        /* Puzzle Game Navigation & Logic */
+        const kurdishPuzzleWordsList = [
+            { word: "باران", scrambled: "ر ا ب ا ن" },
+            { word: "هەولێر", scrambled: "ر ل هـ و ێ" },
+            { word: "سلێمانی", scrambled: "ی ن م ل س ى" },
+            { word: "بەهار", scrambled: "ر هـ ب ا ە" },
+            { word: "کوردستان", scrambled: "ن ا ت س د ر و ک" },
+            { word: "ئەستێرە", scrambled: "ە ر ێ ت س ئـ ە" },
+            { word: "گۆرانی", scrambled: "ی ن ا ر گ و" },
+            { word: "ئازادی", scrambled: "ی د ا ز ئـ ى" }
+        ];
+
+        function openPuzzleMenu() {
+            switchScreen("puzzleScreen");
+            document.getElementById("puzzleModeSelect").style.display = "block";
+            document.getElementById("puzzleLobbyArea").style.display = "none";
+            document.getElementById("puzzleGameArea").style.display = "none";
+        }
+
+        function startPuzzleVsBot() {
+            puzzleMode = "bot";
+            document.getElementById("puzzleModeSelect").style.display = "none";
+            document.getElementById("puzzleLobbyArea").style.display = "none";
+            document.getElementById("puzzleGameArea").style.display = "block";
+
+            document.getElementById("puzzleP1Title").innerText = currentUser + " (تۆ)";
+            document.getElementById("puzzleP2Title").innerText = "کۆمپیوتەر";
+            document.getElementById("puzzleP1Score").innerText = "0";
+            document.getElementById("puzzleP2Score").innerText = "0";
+            document.getElementById("puzzleAnswerInput").disabled = false;
+
+            let p = kurdishPuzzleWordsList[Math.floor(Math.random() * kurdishPuzzleWordsList.length)];
+            localPuzzleWord = p.word;
+
+            let chipsHtml = "";
+            p.scrambled.split(" ").forEach(ch => {
+                chipsHtml += `<div class="letter-chip">${ch}</div>`;
+            });
+            document.getElementById("scrambledLettersContainer").innerHTML = chipsHtml;
+            document.getElementById("puzzleStatusText").innerText = "پیتەکان ڕێک بخە!";
+        }
+
+        function startPuzzleQuickRoom() {
+            puzzleMode = "online";
+            if (window.startPuzzleQuickRoomMatch) window.startPuzzleQuickRoomMatch(currentUser);
+        }
+
+        function createCustomPuzzleRoom() {
+            let code = document.getElementById("puzzleCreateCodeInput").value.trim();
+            if (!code) { alert("تکایە کۆدێک بنووسە!"); return; }
+            puzzleMode = "online";
+            if (window.createCustomPuzzleRoomFirebase) window.createCustomPuzzleRoomFirebase(currentUser, code);
+        }
+
+        function joinCustomPuzzleRoom() {
+            let code = document.getElementById("puzzleJoinCodeInput").value.trim();
+            if (!code) { alert("تکایە کۆدەکە بنووسە!"); return; }
+            puzzleMode = "online";
+            if (window.joinCustomPuzzleRoomFirebase) window.joinCustomPuzzleRoomFirebase(currentUser, code);
+        }
+
+        function submitPuzzleAnswer() {
+            let ans = document.getElementById("puzzleAnswerInput").value;
+            if (puzzleMode === "online") {
+                if (window.submitPuzzleFirebaseMove) window.submitPuzzleFirebaseMove(ans, currentUser);
+            } else {
+                if (ans.trim() === localPuzzleWord) {
+                    playSound('victory');
+                    alert("پیرۆزە! وشەکەت بە ڕاستی دۆزییەوە! 🎉");
+                    if (window.addScore) window.addScore(15);
+                    startPuzzleVsBot();
+                } else {
+                    alert("وشەکە هەڵەیە، دووبارە هەوڵ بدەرەوە!");
+                }
+                document.getElementById("puzzleAnswerInput").value = "";
+            }
+        }
+
+        function cancelPuzzleMatchmaking() {
+            if (window.leavePuzzleRoomFirebase) window.leavePuzzleRoomFirebase();
+            openPuzzleMenu();
+        }
+
+        function leavePuzzleGame() {
+            if (puzzleMode === 'online' && window.leavePuzzleRoomFirebase) window.leavePuzzleRoomFirebase();
+            backToHub();
+        }
+
+        /* Wheel of Fortune Logic */
+        function openWheelMenu() {
+            switchScreen("wheelScreen");
+            document.getElementById("wheelResultText").innerText = "";
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (uid) {
+                let lastSpin = localStorage.getItem("wheel_spin_" + uid);
+                let now = Date.now();
+                let btn = document.getElementById("spinWheelBtn");
+                if (lastSpin && (now - lastSpin < 24 * 60 * 60 * 1000)) {
+                    btn.disabled = true;
+                    btn.innerText = "✅ چەرخەکە خولێنراوەتەوە بۆ ئەمڕۆ";
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = "🎡 چەرخەکە بخوولێنەوە!";
+                }
+            }
+        }
+
+        let wheelDegrees = 0;
+        function spinFortuneWheel() {
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (!uid) return;
+
+            let btn = document.getElementById("spinWheelBtn");
+            btn.disabled = true;
+
+            let extraDeg = Math.floor(Math.random() * 360) + 1440;
+            wheelDegrees += extraDeg;
+            let wheelEl = document.getElementById("fortuneWheel");
+            wheelEl.style.transform = `rotate(${wheelDegrees}deg)`;
+
+            setTimeout(() => {
+                let prizes = [10, 25, 50, 100, 200, 15];
+                let randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+
+                localStorage.setItem("wheel_spin_" + uid, Date.now());
+                if (window.addScore) window.addScore(randomPrize);
+                playSound('victory');
+                document.getElementById("wheelResultText").innerText = `🎉 پیرۆزە! ${randomPrize} خاڵت لە چەرخی بەختەوەری بردەوە!`;
+            }, 3000);
+        }
 
         /* XO Navigation & Logic */
         function openXoMenu() {
