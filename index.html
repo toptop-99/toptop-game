@@ -53,10 +53,10 @@
             transition: background 0.3s ease;
         }
         .brand-title {
-            text-align: center; font-size: 24px; font-weight: 900;
+            text-align: center; font-size: 22px; font-weight: 900;
             background: linear-gradient(135deg, var(--text-glow), var(--primary-color), #6b21a8);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin: 2px 0 8px 0; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
+            margin: 2px 0 6px 0; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
         }
         .screen { display: none; flex: 1; flex-direction: column; height: 100%; overflow-y: auto; }
         .screen.active { display: flex; }
@@ -90,20 +90,20 @@
         }
         .top-bar {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; background: var(--card-bg);
-            padding: 8px 14px; border-radius: 12px; border: 1px solid var(--primary-color);
+            margin-bottom: 8px; background: var(--card-bg);
+            padding: 6px 12px; border-radius: 12px; border: 1px solid var(--primary-color);
         }
         .card {
             background: var(--card-bg); border-radius: 12px;
-            padding: 12px; margin-bottom: 10px; text-align: right;
+            padding: 10px; margin-bottom: 8px; text-align: right;
             border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .card h3 { margin: 0 0 4px 0; color: var(--text-glow); font-size: 14px; }
-        .card p { margin: 0 0 6px 0; font-size: 11px; color: #e9d5ff; }
+        .card h3 { margin: 0 0 4px 0; color: var(--text-glow); font-size: 13px; }
+        .card p { margin: 0 0 4px 0; font-size: 11px; color: #e9d5ff; }
         
         .avatar-preview {
-            width: 50px; height: 50px; border-radius: 50%; background: #2e1065;
+            width: 45px; height: 45px; border-radius: 50%; background: #2e1065;
             margin: 0 auto 6px auto; display: flex; justify-content: center; align-items: center;
             overflow: hidden; border: 2px solid var(--text-glow); cursor: pointer; position: relative;
         }
@@ -117,8 +117,8 @@
         }
 
         .xp-container {
-            width: 100%; background: rgba(0,0,0,0.4); border-radius: 10px; height: 12px;
-            margin: 8px 0; overflow: hidden; border: 1px solid var(--primary-color); position: relative;
+            width: 100%; background: rgba(0,0,0,0.4); border-radius: 10px; height: 10px;
+            margin: 6px 0; overflow: hidden; border: 1px solid var(--primary-color); position: relative;
         }
         .xp-fill {
             height: 100%; background: linear-gradient(90deg, #f59e0b, #eab308);
@@ -166,10 +166,43 @@
             margin-bottom: 4px; border: 1px solid var(--border-color); font-size: 12px;
         }
 
+        /* Games Grid Styles (Like the provided image) */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .game-card-item {
+            background: var(--card-bg);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: transform 0.1s ease, border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .game-card-item:active { transform: scale(0.94); }
+        .game-card-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        .game-card-title {
+            padding: 6px 4px;
+            font-size: 12px;
+            font-weight: 900;
+            color: #fff;
+            background: rgba(0,0,0,0.3);
+        }
+
         /* Puzzle Game Styles */
         .puzzle-board { text-align: center; padding: 5px; }
         .puzzle-banner-img {
-            width: 100%; max-height: 160px; object-fit: cover; border-radius: 12px;
+            width: 100%; max-height: 150px; object-fit: cover; border-radius: 12px;
             border: 2px solid var(--text-glow); margin-bottom: 10px;
             box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
         }
@@ -315,98 +348,95 @@
             <div class="brand-title">تۆپ تۆپ</div>
             <div class="top-bar">
                 <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;" onclick="playSound('click'); openProfileScreen()">
-                    <div id="hubUserAvatar" style="width: 34px; height: 34px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
+                    <div id="hubUserAvatar" style="width: 32px; height: 32px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
                     <div>
-                        <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 12px; display: block;"></span>
+                        <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 11px; display: block;"></span>
                         <span id="hubUserLevelText" style="font-size: 9px; color: #facc15; font-weight: bold;">لیڤڵ ١</span>
                     </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <button class="btn" onclick="playSound('click'); openProfileScreen()" style="padding: 4px 8px; font-size: 11px; margin-top:0; background: rgba(147,51,234,0.3); border: 1px solid var(--text-glow);">👤 پرۆفایل</button>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <button class="btn" onclick="playSound('click'); openProfileScreen()" style="padding: 3px 6px; font-size: 10px; margin-top:0; background: rgba(147,51,234,0.3); border: 1px solid var(--text-glow);">👤 پرۆفایل</button>
                     <div>
                         <span class="online-badge"></span>
-                        <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
+                        <span style="font-size: 10px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                     </div>
                 </div>
             </div>
 
             <!-- Daily Reward Card -->
-            <div class="card" style="background: linear-gradient(135deg, rgba(234,179,8,0.2), var(--card-bg)); border-color: #facc15;">
-                <h3>🎁 دیاری و خاڵی ڕۆژانە</h3>
-                <p id="dailyRewardText">هەمیشە ڕۆژانە وەرگرتنی خاڵی خۆت فەرامۆش مەکە!</p>
-                <button class="btn" id="dailyRewardBtn" onclick="playSound('click'); claimDailyReward()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000;">🎁 وەرگرتنی دیاری (٥٠ خاڵ)</button>
+            <div class="card" style="background: linear-gradient(135deg, rgba(234,179,8,0.2), var(--card-bg)); border-color: #facc15; padding: 8px 10px;">
+                <h3 style="font-size: 12px; margin-bottom: 2px;">🎁 دیاری و خاڵی ڕۆژانە</h3>
+                <p id="dailyRewardText" style="font-size: 10px; margin-bottom: 4px;">هەمیشە ڕۆژانە وەرگرتنی خاڵی خۆت فەرامۆش مەکە!</p>
+                <button class="btn" id="dailyRewardBtn" onclick="playSound('click'); claimDailyReward()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000; padding: 6px; font-size: 11px; margin-top:0;">🎁 وەرگرتنی دیاری (٥٠ خاڵ)</button>
             </div>
 
             <div class="card">
-                <h3>🎮 بەشی یارییەکان</h3>
-                <p>یاری هەڵبژێرە!</p>
-                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="playSound('click'); openGamesListModal()">🎮 یاری کردن</button>
-            </div>
-
-            <div class="card">
-                <h3>👥 هاوڕێیان و چات</h3>
-                <div style="display: flex; gap: 6px;">
-                    <button class="btn" onclick="playSound('click'); openFriendsScreen()" style="background: #2563eb; margin-top:0;">👥 هاوڕێیان</button>
-                    <button class="btn" onclick="playSound('click'); openChatScreen()" style="background: #9333ea; margin-top:0;">💬 چاتی گشتی</button>
+                <h3>🎮 یارییەکان</h3>
+                <div class="games-grid">
+                    <div class="game-card-item" onclick="playSound('click'); openPuzzleMenu()">
+                        <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="پازڵی کوردی" class="game-card-img">
+                        <div class="game-card-title">پازڵی کوردی</div>
+                    </div>
+                    <div class="game-card-item" onclick="playSound('click'); openWordGameMenu()">
+                        <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="وشە باران" class="game-card-img">
+                        <div class="game-card-title">وشە باران</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <h3>🏆 بەرزترین خاڵەکانی بەکارهێنەران</h3>
+            <div class="card" style="padding: 8px 10px;">
+                <h3 style="font-size: 12px; margin-bottom: 4px;">👥 هاوڕێیان و چات</h3>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn" onclick="playSound('click'); openFriendsScreen()" style="background: #2563eb; margin-top:0; padding: 6px; font-size: 11px;">👥 هاوڕێیان</button>
+                    <button class="btn" onclick="playSound('click'); openChatScreen()" style="background: #9333ea; margin-top:0; padding: 6px; font-size: 11px;">💬 چاتی گشتی</button>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 8px 10px;">
+                <h3 style="font-size: 12px; margin-bottom: 4px;">🏆 بەرزترین خاڵەکانی بەکارهێنەران</h3>
                 <div id="topScoresList">
-                    <p style="text-align: center; font-size: 11px; color: #cbd5e1;">چاوەڕێ بکە...</p>
+                    <p style="text-align: center; font-size: 10px; color: #cbd5e1;">چاوەڕێ بکە...</p>
                 </div>
             </div>
             
             <div style="display: flex; gap: 8px; margin-top: auto;">
-                <button class="btn" onclick="playSound('click'); openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
+                <button class="btn" onclick="playSound('click'); openSettingsScreen()" style="margin-top:0; padding: 6px; font-size: 11px;">⚙️ ڕێکخستن</button>
             </div>
-        </div>
-
-        <!-- Games List Screen -->
-        <div id="gamesListScreen" class="screen">
-            <div class="brand-title">یارییەکان</div>
-            <div class="card">
-                <h3>یاری دڵخوازی خۆت هەڵبژێرە:</h3>
-                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 8px;" onclick="playSound('click'); openPuzzleMenu()">🧩 پازڵی کوردی</button>
-                <button class="btn" style="background: linear-gradient(135deg, #9333ea, #7e22ce);" onclick="playSound('click'); openWordGameMenu()">📝 وشە باران</button>
-            </div>
-            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
         <!-- Separate Profile Screen -->
         <div id="profileScreen" class="screen">
             <div class="brand-title">پرۆفایلی یاریزان</div>
-            <div class="card" style="text-align: center; padding: 20px;">
-                <div class="avatar-preview" onclick="playSound('click'); document.getElementById('profileFileInput').click()" style="width: 75px; height: 75px; margin: 0 auto 10px auto;">
+            <div class="card" style="text-align: center; padding: 15px;">
+                <div class="avatar-preview" onclick="playSound('click'); document.getElementById('profileFileInput').click()" style="width: 70px; height: 70px; margin: 0 auto 8px auto;">
                     <img id="profileScreenAvatarImg" src="" alt="Avatar" style="display:none;" />
-                    <span id="profileScreenAvatarPlaceholder" style="font-size: 30px;">👤</span>
+                    <span id="profileScreenAvatarPlaceholder" style="font-size: 26px;">👤</span>
                 </div>
                 <input type="file" id="profileFileInput" accept="image/*" style="display:none;" onchange="handleProfileScreenImageUpload(event)">
                 
-                <div class="form-group" style="text-align: right; margin-top: 10px;">
+                <div class="form-group" style="text-align: right; margin-top: 8px;">
                     <label>ناوی بەکارهێنەر</label>
                     <input type="text" id="profileUsernameInput" placeholder="ناوی نوێ...">
                 </div>
-                <button class="btn" onclick="playSound('click'); saveProfileChanges()" style="margin-bottom: 10px;">پاشەکەوتکردنی گۆڕانکارییەکان</button>
+                <button class="btn" onclick="playSound('click'); saveProfileChanges()" style="margin-bottom: 8px;">پاشەکەوتکردنی گۆڕانکارییەکان</button>
 
-                <p id="profileScreenRank" style="font-size: 12px; color: #facc15; font-weight: bold; margin-bottom: 10px;">👶 تازەکار</p>
+                <p id="profileScreenRank" style="font-size: 12px; color: #facc15; font-weight: bold; margin-bottom: 8px;">👶 تازەکار</p>
                 
-                <div style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; margin-top: 10px; text-align: right;">
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <div style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 8px; margin-top: 8px; text-align: right;">
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;">
                         <span>ئاست / لیڤڵ: <b id="profileScreenLevel" style="color: #facc15;">١</b></span>
                         <span>کۆی XP: <b id="profileScreenXp" style="color: var(--text-glow);">٠</b></span>
                     </div>
                     <div class="xp-container">
                         <div class="xp-fill" id="profileXpBar"></div>
                     </div>
-                    <span style="font-size: 10px; color: #94a3b8; display: block; text-align: center;" id="profileXpNextText">بۆ لیڤڵی داهاتوو: ١٠٠ XP پێویستە</span>
+                    <span style="font-size: 9px; color: #94a3b8; display: block; text-align: center;" id="profileXpNextText">بۆ لیڤڵی داهاتوو: ١٠٠ XP پێویستە</span>
                 </div>
 
-                <div style="display: flex; gap: 10px; margin-top: 15px;">
-                    <div style="flex: 1; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <div style="flex: 1; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 8px; border: 1px solid var(--border-color);">
                         <span style="font-size: 10px; color: #cbd5e1; display: block;">⭐ خاڵی گشتی</span>
-                        <bold id="profileScreenScoreVal" style="font-size: 14px; font-weight: bold; color: #facc15;">0</bold>
+                        <bold id="profileScreenScoreVal" style="font-size: 13px; font-weight: bold; color: #facc15;">0</bold>
                     </div>
                 </div>
             </div>
@@ -459,11 +489,11 @@
                     </div>
                 </div>
 
-                <div class="card" style="text-align: center; padding: 15px;">
+                <div class="card" style="text-align: center; padding: 12px;">
                     <p style="font-size: 11px; color: #e9d5ff; margin-bottom: 4px;">پیتە تێکەڵکراوەکان:</p>
                     <div class="scrambled-letters" id="scrambledLettersContainer"></div>
                     
-                    <div class="form-group" style="margin-top: 12px;">
+                    <div class="form-group" style="margin-top: 10px;">
                         <input type="text" id="puzzleAnswerInput" placeholder="وشە ڕاستەکە لێرە بنووسە..." onkeypress="if(event.key==='Enter') submitPuzzleAnswer()">
                     </div>
                     <button class="btn" onclick="playSound('click'); submitPuzzleAnswer()" style="background: #16a34a;">ناردنی وەڵام</button>
@@ -513,6 +543,7 @@
             <div class="brand-title">وشە باران</div>
 
             <div id="wordModeSelect" class="card">
+                <img src="https://i.postimg.cc/15q14BFs/IMG-1013.png" alt="وشە باران" class="puzzle-banner-img">
                 <h3>هەڵبژاردنی چۆنیەتی یاری (٢ خولەک):</h3>
                 <button class="btn" onclick="playSound('click'); startWordQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
                 <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
@@ -744,7 +775,7 @@
                         </div>
                     `;
                 });
-                document.getElementById('topScoresList').innerHTML = html || "<p style='text-align:center; font-size:11px;'>هیچ خاڵێک تۆمار نەکراوە</p>";
+                document.getElementById('topScoresList').innerHTML = html || "<p style='text-align:center; font-size:10px;'>هیچ خاڵێک تۆمار نەکراوە</p>";
             });
         };
 
@@ -1557,10 +1588,6 @@
                 alert("پیرۆزە! ٥٠ خاڵی ڕۆژانەت وەرگرت! 🎉");
                 checkDailyRewardStatus();
             }
-        }
-
-        function openGamesListModal() {
-            switchScreen("gamesListScreen");
         }
 
         const kurdishPuzzleWordsList = [
