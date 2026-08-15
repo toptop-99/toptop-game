@@ -372,6 +372,13 @@
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); font-size: 15px; padding: 12px;" onclick="playSound('click'); openGamesListModal()">🎮 یاری کردن</button>
             </div>
 
+            <!-- Story Section Hub Card (Added cleanly) -->
+            <div class="card" style="text-align: center; padding: 12px; border-color: #ef4444;">
+                <h3 style="color: #f87171; font-size: 13px;">🌙 بەشی چیڕۆک</h3>
+                <p style="font-size: 11px; margin-bottom: 6px;">چیڕۆکی کارپێکەری ترسناک</p>
+                <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a); font-size: 13px; padding: 10px; margin-top:0;" onclick="playSound('click'); openStoryScreen()">🌙 شەوی ترسناک</button>
+            </div>
+
             <div class="card" style="padding: 8px 10px;">
                 <h3 style="font-size: 12px; margin-bottom: 4px;">👥 هاوڕێیان و چات</h3>
                 <div style="display: flex; gap: 6px;">
@@ -451,7 +458,7 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Puzzle Game Screen (Banner image removed as requested) -->
+        <!-- Puzzle Game Screen -->
         <div id="puzzleScreen" class="screen">
             <div class="brand-title">پازڵی کوردی</div>
 
@@ -652,6 +659,16 @@
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
+        </div>
+
+        <!-- Story Screen (Added cleanly as a separate independent section) -->
+        <div id="storyScreen" class="screen">
+            <div class="brand-title" style="color: #ef4444;">شەوی ترسناک</div>
+            <div class="card" style="padding: 15px;">
+                <p id="storyText" style="font-size: 14px; line-height: 1.6; color: #fff;"></p>
+                <div id="storyChoices" style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
     </div>
 
@@ -1763,6 +1780,44 @@
         function cancelMatchmaking(type) {
             if (type === 'word' && window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
             openGamesListModal();
+        }
+
+        // Story Section Functions (Added cleanly)
+        function openStoryScreen() {
+            switchScreen("storyScreen");
+            showStoryPart(0);
+        }
+
+        const storyData = [
+            {
+                text: (currentUser || "محەممەد") + "، ئێوارەیەکی درەنگ بوو، ئاسمان پڕ ببوو لە هەوری ڕەش و باران شارەکەی داپۆشيبوو. تۆ بڕیاریدا بە پیادە بچیت بۆ ماڵی داپیرەت، کە دەکەوتە کۆڵانێکی کۆن و تاریکی گەڕەکەوە. لەناکاو، لە ژێر تیشکی لاوازی گڵۆپی کۆڵانەکەدا، سێبەرێکی مەزن و نامۆ لەبەردەمیدا ڕاوەستا. چی دەکەیت؟",
+                choices: [
+                    { text: "بە بوێرییەوە بەرەو پێشەوە بڕۆ و بزانە ئەوە چییە", next: 1 },
+                    { text: "خۆت بششارەوە پشت پەرژارە کۆنەکەی نزیکی", next: 2 }
+                ]
+            },
+            {
+                text: "تۆ بە بوێرییەوە بەرەو پێشەوە چوویت، لەناکاو سێبەرەکە جووڵا و پشیلەیەکی ڕەش بوو کە بریندار بوو! یارمەتیت دا و بە سەلامەتی گەیشتیتە ماڵی داپیرەت. بردتەوە! 🎉",
+                choices: [{ text: "دەستپێکردنەوە", next: 0 }]
+            },
+            {
+                text: "تۆ خۆت شاردەوە پشت پەرژارەکە، بەڵام دەنگێکی پێی ترسناک لە نزیکتەوە هات و سێبەرەکە وەستا لەبەردەمت... مخابن دۆڕایت! 💀",
+                choices: [{ text: "دووبارە هەوڵ بدەرەوە", next: 0 }]
+            }
+        ];
+
+        function showStoryPart(index) {
+            const part = storyData[index];
+            document.getElementById("storyText").innerText = part.text;
+            const choicesDiv = document.getElementById("storyChoices");
+            choicesDiv.innerHTML = "";
+            part.choices.forEach(c => {
+                const btn = document.createElement("button");
+                btn.className = "btn";
+                btn.innerText = c.text;
+                btn.onclick = () => showStoryPart(c.next);
+                choicesDiv.appendChild(btn);
+            });
         }
     </script>
 </body>
