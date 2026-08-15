@@ -251,9 +251,7 @@
             margin-bottom: 6px; font-weight: bold; cursor: pointer; text-align: right;
             transition: background 0.2s;
         }
-        .quiz-opt-btn:hover {
-            background: var(--primary-hover);
-        }
+        .quiz-opt-btn:hover { background: var(--primary-hover); }
 
         /* Shop Styles */
         .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
@@ -293,7 +291,7 @@
                 <div style="text-align: center; margin: 8px 0; font-size: 10px; color: #94a3b8;">یان بە یۆزەر و پاسوۆرد</div>
 
                 <div id="registerForm" style="display: none;">
-                    <div class="avatar-preview" onclick="document.getElementById('fileInput').click()">
+                    <div class="avatar-preview" onclick="playSound('click'); document.getElementById('fileInput').click()">
                         <span id="avatarPlaceholderText" style="font-size: 20px;">📷</span>
                         <img id="avatarImgTag" style="display:none;" />
                     </div>
@@ -321,7 +319,7 @@
                             <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPasswordConfirm', this)">👁️</button>
                         </div>
                     </div>
-                    <button class="btn" onclick="registerUser()">دروستکردنی حیساب</button>
+                    <button class="btn" onclick="playSound('click'); registerUser()">دروستکردنی حیساب</button>
                 </div>
 
                 <div id="loginForm">
@@ -336,7 +334,7 @@
                             <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
                         </div>
                     </div>
-                    <button class="btn" onclick="loginUser()">چوونەژوورەوە</button>
+                    <button class="btn" onclick="playSound('click'); loginUser()">چوونەژوورەوە</button>
                 </div>
             </div>
         </div>
@@ -347,7 +345,10 @@
             <div class="top-bar">
                 <div style="display: flex; align-items: center; gap: 6px;">
                     <div id="hubUserAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
-                    <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px;"></span>
+                    <div>
+                        <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px; display: block;"></span>
+                        <span id="hubUserRank" style="font-size: 9px; color: #facc15; font-weight: bold;">👶 تازەکار</span>
+                    </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="font-size: 12px; color: #facc15; font-weight: bold;">⭐ <span id="hubUserScore">0</span></span>
@@ -362,23 +363,23 @@
             <div class="card" style="background: linear-gradient(135deg, rgba(234,179,8,0.2), var(--card-bg)); border-color: #facc15;">
                 <h3>🎁 دیاری و خاڵی ڕۆژانە</h3>
                 <p id="dailyRewardText">هەمیشە ڕۆژانە وەرگرتنی خاڵی خۆت فەرامۆش مەکە!</p>
-                <button class="btn" id="dailyRewardBtn" onclick="claimDailyReward()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000;">🎁 وەرگرتنی دیاری (٥٠ خاڵ)</button>
+                <button class="btn" id="dailyRewardBtn" onclick="playSound('click'); claimDailyReward()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000;">🎁 وەرگرتنی دیاری (٥٠ خاڵ)</button>
             </div>
 
             <div class="card">
                 <h3>🎮 بەشی یارییەکان</h3>
                 <p>یاری هەڵبژێرە!</p>
-                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); margin-bottom: 6px;" onclick="openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی ١ خولەک)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="playSound('click'); openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="playSound('click'); openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); margin-bottom: 6px;" onclick="playSound('click'); openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="playSound('click'); openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی ١ خولەک)</button>
             </div>
 
             <div class="card">
                 <h3>👥 هاوڕێیان و چات</h3>
                 <div style="display: flex; gap: 6px;">
-                    <button class="btn" onclick="openFriendsScreen()" style="background: #2563eb; margin-top:0;">👥 هاوڕێیان</button>
-                    <button class="btn" onclick="openChatScreen()" style="background: #9333ea; margin-top:0;">💬 چاتی گشتی</button>
+                    <button class="btn" onclick="playSound('click'); openFriendsScreen()" style="background: #2563eb; margin-top:0;">👥 هاوڕێیان</button>
+                    <button class="btn" onclick="playSound('click'); openChatScreen()" style="background: #9333ea; margin-top:0;">💬 چاتی گشتی</button>
                 </div>
             </div>
 
@@ -390,7 +391,7 @@
             </div>
             
             <div style="display: flex; gap: 8px; margin-top: auto;">
-                <button class="btn" onclick="openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
+                <button class="btn" onclick="playSound('click'); openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
         </div>
 
@@ -399,15 +400,15 @@
             <div class="brand-title">پرسیار و وەڵام</div>
             <div id="quizModeSelect" class="card">
                 <h3>مۆدی یاری هەڵبژێرە (١ خولەک تەحەدی):</h3>
-                <button class="btn" onclick="startQuizGame('bot')" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
-                <button class="btn" onclick="startQuizGame('online')" style="background: #16a34a;">🌐 یاری ئۆنلاین (دژ بە یاریزان)</button>
+                <button class="btn" onclick="playSound('click'); startQuizGame('bot')" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
+                <button class="btn" onclick="playSound('click'); startQuizGame('online')" style="background: #16a34a;">🌐 یاری ئۆنلاین (دژ بە یاریزان)</button>
             </div>
 
             <div id="quizLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
                 <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزانی بەرامبەر...</h3>
                 <div class="spinner"></div>
                 <p style="font-size: 12px; color: #cbd5e1;">تکایە چاوەڕێ بکە...</p>
-                <button class="btn" onclick="cancelQuizMatchmaking()" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+                <button class="btn" onclick="playSound('click'); cancelQuizMatchmaking()" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
             <div id="quizGameArea" class="card" style="display: none;">
@@ -438,10 +439,10 @@
                 </div>
 
                 <div id="quizOptionsContainer"></div>
-                <button class="btn" id="quizRestartBtn" onclick="leaveQuizGame()" style="display: none; background: #16a34a; margin-top: 10px;">🔄 گەڕانەوە</button>
+                <button class="btn" id="quizRestartBtn" onclick="playSound('click'); leaveQuizGame()" style="display: none; background: #16a34a; margin-top: 10px;">🔄 گەڕانەوە</button>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="leaveQuizGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveQuizGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Friends Screen -->
@@ -451,7 +452,7 @@
                 <h3>➕ زیاتکردنی هاوڕێ</h3>
                 <div style="display: flex; gap: 6px;">
                     <input type="text" id="friendSearchInput" placeholder="ناوی بەکارهێنەر...">
-                    <button class="btn" onclick="sendFriendRequest()" style="width: 100px; margin-top:0;">ناردن</button>
+                    <button class="btn" onclick="playSound('click'); sendFriendRequest()" style="width: 100px; margin-top:0;">ناردن</button>
                 </div>
             </div>
 
@@ -462,7 +463,7 @@
                 </div>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
         <!-- Global Chat Screen -->
@@ -472,11 +473,11 @@
                 <div class="chat-box" id="globalChatBox"></div>
                 <div style="display: flex; gap: 6px; margin-top: auto;">
                     <input type="text" id="chatInputText" placeholder="پەیامێک بنووسە..." onkeypress="if(event.key==='Enter') sendChatMessage()">
-                    <button class="btn" onclick="sendChatMessage()" style="width: 80px; margin-top:0;">ناردن</button>
+                    <button class="btn" onclick="playSound('click'); sendChatMessage()" style="width: 80px; margin-top:0;">ناردن</button>
                 </div>
             </div>
 
-            <button class="btn" style="margin-top: 10px;" onclick="backToHub()">گەڕانەوە</button>
+            <button class="btn" style="margin-top: 10px;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
         <!-- XO Menu & Game Screen -->
@@ -485,15 +486,15 @@
             
             <div id="xoModeSelect" class="card">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
-                <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
-                <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 8px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
+                <button class="btn" onclick="playSound('click'); startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
+                <button class="btn" onclick="playSound('click'); startOnlineXo()" style="background: #16a34a; margin-top: 8px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
             </div>
 
             <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
                 <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزان...</h3>
                 <div class="spinner"></div>
                 <p style="font-size: 12px; color: #cbd5e1;">تکایە چاوەڕێ بکە تا یاریزانی دووەم بەشدار دەبێت...</p>
-                <button class="btn" onclick="cancelMatchmaking('xo')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+                <button class="btn" onclick="playSound('click'); cancelMatchmaking('xo')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
             <div id="xoGameArea" style="display: none;">
@@ -524,10 +525,10 @@
                     <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
                 </div>
 
-                <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="margin-top: 8px; display: none; background: #16a34a;">🔄 دەستپێکردنەوە</button>
+                <button class="btn" id="xoResetBtn" onclick="playSound('click'); resetXoBoard()" style="margin-top: 8px; display: none; background: #16a34a;">🔄 دەستپێکردنەوە</button>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Word Game Menu & Screen -->
@@ -536,16 +537,16 @@
 
             <div id="wordModeSelect" class="card">
                 <h3>هەڵبژاردنی چۆنیەتی یاری (٢ خولەک):</h3>
-                <button class="btn" onclick="startWordQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
+                <button class="btn" onclick="playSound('click'); startWordQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
                 <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
                     <label>دروستکردنی ژوور بە کۆد</label>
                     <input type="text" id="createRoomCodeInput" placeholder="کۆدی ژوور (بۆ نموونە: 1234)..." style="margin-bottom: 6px;">
-                    <button class="btn" onclick="createCustomWordRoom()" style="background: #0284c7;">دروستکردن</button>
+                    <button class="btn" onclick="playSound('click'); createCustomWordRoom()" style="background: #0284c7;">دروستکردن</button>
                 </div>
                 <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
                     <label>چوونەژورەوە بۆ ژوور بە کۆد</label>
                     <input type="text" id="joinRoomCodeInput" placeholder="کۆدی ژوور بنووسە..." style="margin-bottom: 6px;">
-                    <button class="btn" onclick="joinCustomWordRoom()" style="background: #9333ea;">چوونەژوورەوە</button>
+                    <button class="btn" onclick="playSound('click'); joinCustomWordRoom()" style="background: #9333ea;">چوونەژوورەوە</button>
                 </div>
             </div>
 
@@ -553,7 +554,7 @@
                 <h3 style="color: var(--text-glow); font-size: 16px;">چاوەڕوانی یاریزانی دووەم...</h3>
                 <div class="spinner"></div>
                 <p style="font-size: 12px; color: #cbd5e1;" id="wordLobbyText">کۆدی ژوورەکەت: --</p>
-                <button class="btn" onclick="cancelMatchmaking('word')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+                <button class="btn" onclick="playSound('click'); cancelMatchmaking('word')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
             <div id="wordGameArea" style="display: none;" class="word-game-board">
@@ -585,7 +586,7 @@
 
                 <div class="word-input-container">
                     <input type="text" id="wordInputText" placeholder="وشەی مانا دار بنووسە..." style="flex: 1;" onkeypress="if(event.key==='Enter') submitWordMove()">
-                    <button class="btn" id="wordSendBtn" onclick="submitWordMove()" style="margin-top: 0; width: 80px;">ناردن</button>
+                    <button class="btn" id="wordSendBtn" onclick="playSound('click'); submitWordMove()" style="margin-top: 0; width: 80px;">ناردن</button>
                 </div>
 
                 <div class="words-list-container" id="wordsListContainer">
@@ -597,7 +598,7 @@
                 </div>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Tug of War Menu, Shop & Game Screen -->
@@ -606,9 +607,9 @@
 
             <div id="tugMenuArea" class="card">
                 <h3>مۆدی یاری گوریس هەڵبژێرە:</h3>
-                <button class="btn" onclick="startTugVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 دژ بە کۆمپیوتەر</button>
-                <button class="btn" onclick="startOnlineTug()" style="background: #16a34a; margin-bottom: 6px;">🌐 یاری ئۆنلاین (بەستراو بە Firebase)</button>
-                <button class="btn" onclick="openTugShop()" style="background: #f59e0b;">🛒 بەشی شوپینگ (کڕینی گوریسی تایبەت)</button>
+                <button class="btn" onclick="playSound('click'); startTugVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 دژ بە کۆمپیوتەر</button>
+                <button class="btn" onclick="playSound('click'); startOnlineTug()" style="background: #16a34a; margin-bottom: 6px;">🌐 یاری ئۆنلاین (بەستراو بە Firebase)</button>
+                <button class="btn" onclick="playSound('click'); openTugShop()" style="background: #f59e0b;">🛒 بەشی شوپینگ (کڕینی گوریسی تایبەت)</button>
             </div>
 
             <!-- Tug Shop Area -->
@@ -619,32 +620,32 @@
                     <div class="shop-item">
                         <h4>🔴 گوریسی سوور</h4>
                         <p>٥٠ خاڵ</p>
-                        <button class="btn" onclick="buyTugItem('red', 50)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                        <button class="btn" onclick="playSound('click'); buyTugItem('red', 50)" style="padding: 6px; font-size: 11px;">کڕین</button>
                     </div>
                     <div class="shop-item">
                         <h4>🟡 گوریسی زەرد</h4>
                         <p>٧٥ خاڵ</p>
-                        <button class="btn" onclick="buyTugItem('yellow', 75)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                        <button class="btn" onclick="playSound('click'); buyTugItem('yellow', 75)" style="padding: 6px; font-size: 11px;">کڕین</button>
                     </div>
                     <div class="shop-item">
                         <h4>⭐ گوریسی ئاست (زێر)</h4>
                         <p>١٥٠ خاڵ</p>
-                        <button class="btn" onclick="buyTugItem('gold', 150)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                        <button class="btn" onclick="playSound('click'); buyTugItem('gold', 150)" style="padding: 6px; font-size: 11px;">کڕین</button>
                     </div>
                     <div class="shop-item">
                         <h4>🔥 گوریسی ئاگرین</h4>
                         <p>٢٥٠ خاڵ</p>
-                        <button class="btn" onclick="buyTugItem('fire', 250)" style="padding: 6px; font-size: 11px;">کڕین</button>
+                        <button class="btn" onclick="playSound('click'); buyTugItem('fire', 250)" style="padding: 6px; font-size: 11px;">کڕین</button>
                     </div>
                 </div>
-                <button class="btn" onclick="closeTugShop()" style="background: #ef4444; margin-top: 10px;">گەڕانەوە بۆ منۆی گوریس</button>
+                <button class="btn" onclick="playSound('click'); closeTugShop()" style="background: #ef4444; margin-top: 10px;">گەڕانەوە بۆ منۆی گوریس</button>
             </div>
 
             <div id="tugLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
                 <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزانی گوریس...</h3>
                 <div class="spinner"></div>
                 <p style="font-size: 12px; color: #cbd5e1;">چاوەڕێ بکە تا یاریزانێک دەچێتە ژوورەوە...</p>
-                <button class="btn" onclick="cancelMatchmaking('tug')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+                <button class="btn" onclick="playSound('click'); cancelMatchmaking('tug')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
             <div id="tugGameArea" style="display: none;">
@@ -668,13 +669,13 @@
                     <div class="rope-track">
                         <div class="rope-knot" id="ropeKnot"></div>
                     </div>
-                    <div class="tap-btn-giant" onclick="handleTugTap()">کرتە بکە! ⚡</div>
+                    <div class="tap-btn-giant" onclick="playSound('click'); handleTugTap()">کرتە بکە! ⚡</div>
                 </div>
 
-                <button class="btn" id="tugResetBtn" onclick="resetTugGame()" style="display: none; background: #16a34a;">🔄 یاری نوێ</button>
+                <button class="btn" id="tugResetBtn" onclick="playSound('click'); resetTugGame()" style="display: none; background: #16a34a;">🔄 یاری نوێ</button>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="leaveTugGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveTugGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Settings Screen -->
@@ -683,7 +684,7 @@
             
             <div class="card">
                 <h3>👤 دەستکاری زانیارییەکان</h3>
-                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 6px;">
+                <div class="avatar-preview" onclick="playSound('click'); document.getElementById('settingsFileInput').click()" style="margin-bottom: 6px;">
                     <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
                     <span id="settingsAvatarPlaceholder" style="font-size: 20px;">📷</span>
                 </div>
@@ -693,7 +694,7 @@
                     <label>ناوی بەکارهێنەر</label>
                     <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
                 </div>
-                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
+                <button class="btn" onclick="playSound('click'); saveProfileChanges()">پاشەکەوتکردن</button>
             </div>
 
             <div class="card">
@@ -718,19 +719,19 @@
                 <div style="margin-top: 10px;">
                     <label>گۆڕینی ڕەنگی سەرەکی (Theme)</label>
                     <div class="theme-options">
-                        <div class="theme-btn theme-purple" onclick="setAppTheme('purple')">مۆر</div>
-                        <div class="theme-btn theme-blue" onclick="setAppTheme('blue')">شین</div>
-                        <div class="theme-btn theme-emerald" onclick="setAppTheme('emerald')">سەوز</div>
+                        <div class="theme-btn theme-purple" onclick="playSound('click'); setAppTheme('purple')">مۆر</div>
+                        <div class="theme-btn theme-blue" onclick="playSound('click'); setAppTheme('blue')">شین</div>
+                        <div class="theme-btn theme-emerald" onclick="playSound('click'); setAppTheme('emerald')">سەوز</div>
                     </div>
                 </div>
             </div>
 
             <div class="card" style="border-color: #f87171;">
                 <h3 style="color: #f87171;">🚪 بەڕێوەبردنی حیساب</h3>
-                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 4px;" onclick="logoutUser()">دەرچوون</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 4px;" onclick="playSound('click'); logoutUser()">دەرچوون</button>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
     </div>
 
@@ -1000,6 +1001,7 @@
                             else if (p2Score > p1Score) wName = (room.player2 || "یاریزانی ٢") + " زۆرترین وەڵامی زانی و بردیەوە! 🎉";
                             else wName = "یەکسان بوون لە زانینی وەڵامەکاندا! 🤝";
                             
+                            playSound('victory');
                             if (quizMyRole === 'player1') {
                                 update(roomRef, { gameOver: true, winnerName: wName });
                             }
@@ -1065,7 +1067,7 @@
             
             q.opts.forEach((opt, idx) => {
                 optsContainer.innerHTML += `
-                    <button class="quiz-opt-btn" onclick="submitOnlineQuizAnswer(${idx})">${opt}</button>
+                    <button class="quiz-opt-btn" onclick="playSound('click'); submitOnlineQuizAnswer(${idx})">${opt}</button>
                 `;
             });
         }
@@ -1197,6 +1199,7 @@
                         } else {
                             let winnerName = room.winner === 'X' ? room.playerX : room.playerO;
                             document.getElementById("xoStatusText").innerText = `بردیەوە ${winnerName}! 🎉`;
+                            playSound('victory');
                             if (room.winner === xoMyRole && !room.scoreAdded) {
                                 window.addScore(username, 10);
                                 if (xoMyRole === 'X') {
@@ -1399,6 +1402,7 @@
                             alert("یەکسان بوون!");
                         } else {
                             alert("بردیەوە: " + room.winner);
+                            playSound('victory');
                             if (room.winner === username) window.addScore(username, 15);
                         }
                         document.getElementById("tugResetBtn").style.display = "block";
@@ -1433,26 +1437,6 @@
         let wordMyRole = ""; 
         const kurdishLetters = ["ت", "م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ"];
         let clientTimerInterval = null;
-
-        function playVictorySound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                let now = ctx.currentTime;
-                let notes = [440, 554, 659, 880];
-                notes.forEach((freq, idx) => {
-                    let osc = ctx.createOscillator();
-                    let gain = ctx.createGain();
-                    osc.type = "sine";
-                    osc.frequency.setValueAtTime(freq, now + (idx * 0.2));
-                    gain.gain.setValueAtTime(0.2, now + (idx * 0.2));
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.2) + 0.5);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now + (idx * 0.2));
-                    osc.stop(now + (idx * 0.2) + 0.6);
-                });
-            } catch(e) {}
-        }
 
         window.startWordQuickRoomMatch = function(username) {
             const lobbyRef = ref(database, 'word_lobby');
@@ -1587,7 +1571,7 @@
                             if (p1Score > p2Score) wName = room.player1 + " بردیەوە! 🎉";
                             else if (p2Score > p1Score) wName = (room.player2 || "یاریزانی ٢") + " بردیەوە! 🎉";
                             
-                            playVictorySound();
+                            playSound('victory');
 
                             if (wordMyRole === 'player1') {
                                 update(roomRef, { gameOver: true, winnerName: wName });
@@ -1772,6 +1756,45 @@
         let tugActive = false;
         let tugTimerIntervalLocal = null;
 
+        // Sound Engine (Web Audio API)
+        function playSound(type) {
+            let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
+            if (soundMuted) return;
+
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                let now = ctx.currentTime;
+                let osc = ctx.createOscillator();
+                let gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'victory') {
+                    let notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        let o = ctx.createOscillator();
+                        let g = ctx.createGain();
+                        o.type = 'triangle';
+                        o.frequency.setValueAtTime(freq, now + (idx * 0.12));
+                        g.gain.setValueAtTime(0.1, now + (idx * 0.12));
+                        g.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.12) + 0.3);
+                        o.connect(g);
+                        g.connect(ctx.destination);
+                        o.start(now + (idx * 0.12));
+                        o.stop(now + (idx * 0.12) + 0.35);
+                    });
+                }
+            } catch(e) {}
+        }
+        window.playSound = playSound;
+
         // Quiz System Data
         const quizQuestions = [
             { q: "پایتەختی هەرێمی کوردستان کوێیە؟", opts: ["سلێمانی", "هەولێر", "دهۆک", "کەرکووک"], a: 1 },
@@ -1920,11 +1943,21 @@
             switchScreen("authScreen");
         }
 
+        function getRankTitle(score) {
+            if (score >= 300) return "👑 پاشای یارییەکان";
+            if (score >= 150) return "⭐ یاریزانی ئالتونی";
+            if (score >= 70) return "🔥 یاریزانی شارەزا";
+            return "👶 تازەکار";
+        }
+
         function loadUserData() {
             let profileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = profileData ? JSON.parse(profileData) : {};
+            let score = profile.score || 0;
+
             document.getElementById("hubUsernameText").innerText = currentUser;
-            document.getElementById("hubUserScore").innerText = profile.score || 0;
+            document.getElementById("hubUserScore").innerText = score;
+            document.getElementById("hubUserRank").innerText = getRankTitle(score);
 
             let avatarEl = document.getElementById("hubUserAvatar");
             if (profile.avatar) {
@@ -1984,6 +2017,7 @@
             if (!lastClaim || (now - lastClaim >= 24 * 60 * 60 * 1000)) {
                 localStorage.setItem("daily_reward_" + currentUser, now);
                 if (window.addScore) window.addScore(currentUser, 50);
+                playSound('victory');
                 alert("پیرۆزە! ٥٠ خاڵی ڕۆژانەت وەرگرت! 🎉");
                 checkDailyRewardStatus();
             }
@@ -2045,6 +2079,7 @@
                     let resultMsg = "";
                     if (quizLocalScoreP1 > quizLocalScoreP2) {
                         resultMsg = "پیرۆزە! تۆ زۆرترین وەڵامت زانی و بردتبووەوە! 🎉";
+                        playSound('victory');
                         if (window.addScore) window.addScore(currentUser, 20);
                     } else if (quizLocalScoreP2 > quizLocalScoreP1) {
                         resultMsg = "کۆمپیوتەر زۆرترین وەڵامی زانی و بردیەوە! 🤖";
@@ -2067,7 +2102,7 @@
             optsContainer.innerHTML = "";
             q.opts.forEach((opt, idx) => {
                 optsContainer.innerHTML += `
-                    <button class="quiz-opt-btn" onclick="submitBotQuizAnswer(${idx})">${opt}</button>
+                    <button class="quiz-opt-btn" onclick="playSound('click'); submitBotQuizAnswer(${idx})">${opt}</button>
                 `;
             });
         }
@@ -2183,6 +2218,7 @@
         }
 
         function handleXoCellClick(index) {
+            playSound('click');
             if (!window.xoGameActive || window.xoState[index] !== "") return;
 
             if (xoMode === "online") {
@@ -2193,6 +2229,7 @@
 
                 if (window.checkXoWinnerLocal(window.xoState, window.xoTurn)) {
                     document.getElementById("xoStatusText").innerText = `بردیەوە ${window.xoTurn}! 🎉`;
+                    playSound('victory');
                     window.xoGameActive = false;
                     document.getElementById("xoResetBtn").style.display = "block";
                     if(window.xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
@@ -2348,6 +2385,7 @@
                     document.getElementById("tugResetBtn").style.display = "block";
 
                     if (tugP1Count > tugP2Count) {
+                        playSound('victory');
                         alert("پیرۆزە! بردتەوە! 🎉");
                         if (window.addScore) window.addScore(currentUser, 15);
                     } else if (tugP2Count > tugP1Count) {
