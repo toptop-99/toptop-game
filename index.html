@@ -372,8 +372,8 @@
             <!-- Story Section Hub Card -->
             <div class="card" style="text-align: center; padding: 12px; border-color: #ef4444;">
                 <h3 style="color: #f87171; font-size: 13px;">🌙 بەشی چیڕۆک</h3>
-                <p style="font-size: 11px; margin-bottom: 6px;">چیڕۆکی کارپێکەری ترسناک</p>
-                <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a); font-size: 13px; padding: 10px; margin-top:0;" onclick="playSound('click'); openStoryScreen()">🌙 شەوی ترسناک</button>
+                <p style="font-size: 11px; margin-bottom: 6px;">چیڕۆکی کارپێکەری ترسناک و سەرکێشی</p>
+                <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a); font-size: 13px; padding: 10px; margin-top:0;" onclick="playSound('click'); openStoriesListScreen()">🌙 چیڕۆکەکان</button>
             </div>
 
             <div class="card" style="padding: 8px 10px;">
@@ -409,6 +409,21 @@
                     <div class="game-card-item" onclick="playSound('click'); openWordGameMenu()">
                         <img src="https://i.postimg.cc/52CVXVXk/IMG-1019.png" alt="وشە باران" class="game-card-img">
                         <div class="game-card-title">وشە باران</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Stories List Screen (New Stories Menu Section) -->
+        <div id="storiesListScreen" class="screen">
+            <div class="brand-title" style="color: #ef4444;">بەشی چیڕۆکەکان</div>
+            <div class="card">
+                <h3 style="color: #f87171;">چیڕۆکێک هەڵبژێرە بۆ خوندنەوە:</h3>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                    <div class="game-card-item" style="padding: 12px; text-align: right; background: linear-gradient(135deg, #7f1d1d, #2d0606);" onclick="playSound('click'); openStoryScreen('scary_night')">
+                        <div class="game-card-title" style="background: none; font-size: 14px;">🌙 شەوی ترسناک</div>
+                        <p style="font-size: 11px; color: #fca5a5; margin: 4px 0 0 0;">چیڕۆکێکی تاریک لە درەنگانی شەو و سەردانی ماڵی داپیرە...</p>
                     </div>
                 </div>
             </div>
@@ -658,16 +673,16 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
-        <!-- Story Screen (Updated with interactive username support) -->
+        <!-- Story Screen (Independent Interactive Story Screen) -->
         <div id="storyScreen" class="screen">
-            <div class="brand-title" style="color: #ef4444;">شەوی ترسناک</div>
+            <div class="brand-title" style="color: #ef4444;" id="storyScreenTitle">شەوی ترسناک</div>
             <div class="card" style="padding: 15px;">
-                <!-- Step 1: Input Name Area -->
+                <!-- Step 1: Input Name Area (Always starts blank for manual typing) -->
                 <div id="storyNameBox" style="text-align: center;">
-                    <h3 style="color: #f87171; margin-bottom: 8px;">🌙 بەخێر بێیت بۆ ژووری تاریکی</h3>
-                    <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ دەستپێکردنی چیڕۆکەکە:</p>
+                    <h3 style="color: #f87171; margin-bottom: 8px;">🌙 دەستپێکردنی چیڕۆک</h3>
+                    <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ ناوەڕۆکی چیڕۆکەکە:</p>
                     <input type="text" id="storyPlayerNameInput" placeholder="ناوی خۆت لێرە بنووسە..." style="margin-bottom: 8px;">
-                    <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); startInteractiveStory()">دەستپێکردنی چیڕۆک</button>
+                    <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); startInteractiveStory()">دەستپێکردن</button>
                 </div>
 
                 <!-- Step 2: Story Playing Area -->
@@ -676,7 +691,7 @@
                     <div id="storyChoices" style="display: flex; flex-direction: column; gap: 8px;"></div>
                 </div>
             </div>
-            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); openStoriesListScreen()">گەڕانەوە بۆ لیستی چیڕۆکەکان</button>
         </div>
     </div>
 
@@ -1810,16 +1825,21 @@
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        /* Interactive Story Logic with Username Support */
+        /* Stories Menu and Interactive Story Logic */
         let activeStoryPlayerName = "";
+        let currentStoryId = "";
 
-        function openStoryScreen() {
+        function openStoriesListScreen() {
+            switchScreen("storiesListScreen");
+        }
+
+        function openStoryScreen(storyId) {
+            currentStoryId = storyId;
             switchScreen("storyScreen");
+            // خانەی ناونووسین بەتاڵ دەبێت و یاریزان خۆی ناوی دەنووسێت
+            document.getElementById("storyPlayerNameInput").value = "";
             document.getElementById("storyNameBox").style.display = "block";
             document.getElementById("storyPlayArea").style.display = "none";
-            if (window.currentUser) {
-                document.getElementById("storyPlayerNameInput").value = window.currentUser;
-            }
         }
 
         function startInteractiveStory() {
@@ -1841,7 +1861,7 @@
             let cEl = document.getElementById("storyChoices");
             cEl.innerHTML = "";
 
-            let storyData = getStoryNodeData(stepKey, activeStoryPlayerName);
+            let storyData = getStoryNodeData(currentStoryId, stepKey, activeStoryPlayerName);
             
             tEl.innerText = storyData.text;
 
@@ -1858,29 +1878,32 @@
             });
         }
 
-        function getStoryNodeData(key, name) {
-            const nodes = {
-                'step_1': {
-                    text: `شەوێکی تاریک و درەنگانی شەو بوو. ${name} دەسویچی هەڵکرد و بەرەو ماڵی داپیرەی بەڕێکەوت کە لە ڕێگاکەیدا شتێکی سەیر و ترسناکی بینی... تەنها سێبەرێکی گەورە لەسەر دیوارەکە جووڵا!`,
-                    choices: [
-                        { text: "بەڕێوە پێشەوە و سەیری ئەوە بکە چییە", next: 'step_forward' },
-                        { text: "خۆت بشارەوە لە پشت دارێکەوە", next: 'step_hide' }
-                    ]
-                },
-                'step_forward': {
-                    text: `${name} هەنگاوی نایە پێشەوە و ڕووبەڕووی بووەوە... دەرکەوت تەنها سەگێکی ڕەشی گەورە بوو کە ڕێگای لێگرتبووی! سەگەکە خواردنی دەویست و ڕێگەی دا بە سەلامەتی تێپەڕیت و گەیشتیتە ماڵی داپیرەت. (کۆتایی سەرکەوتوو 🎉)`,
-                    choices: [
-                        { text: "🔄 دەستپێکردنەوەی چیڕۆک", next: 'step_1' }
-                    ]
-                },
-                'step_hide': {
-                    text: `${name} خۆی شاردەوە، بەڵام سێبەرەکە نزیکتر بووەوە و لە پڕ دەنگێکی گەورە هات! کەسێک لە تاریکییەوە بانگت کرد... (کۆتایی ترسناک و دۆڕان ❌)`,
-                    choices: [
-                        { text: "🔄 دووبارە هەوڵدانەوە", next: 'step_1' }
-                    ]
-                }
-            };
-            return nodes[key] || nodes['step_1'];
+        function getStoryNodeData(storyId, key, name) {
+            if (storyId === 'scary_night') {
+                const nodes = {
+                    'step_1': {
+                        text: `شەوێکی تاریک و درەنگانی شەو بوو. ${name} دەسویچی هەڵکرد و بەرەو ماڵی داپیرەی بەڕێکەوت کە لە ڕێگاکەیدا شتێکی سەیر و ترسناکی بینی... تەنها سێبەرێکی گەورە لەسەر دیوارەکە جووڵا!`,
+                        choices: [
+                            { text: "بەڕێوە پێشەوە و سەیری ئەوە بکە چییە", next: 'step_forward' },
+                            { text: "خۆت بشارەوە لە پشت دارێکەوە", next: 'step_hide' }
+                        ]
+                    },
+                    'step_forward': {
+                        text: `${name} هەنگاوی نایە پێشەوە و ڕووبەڕووی بووەوە... دەرکەوت تەنها سەگێکی ڕەشی گەورە بوو کە ڕێگای لێگرتبووی! سەگەکە خواردنی دەویست و ڕێگەی دا بە سەلامەتی تێپەڕیت و گەیشتیتە ماڵی داپیرەت. (کۆتایی سەرکەوتوو 🎉)`,
+                        choices: [
+                            { text: "🔄 دەستپێکردنەوەی چیڕۆک", next: 'step_1' }
+                        ]
+                    },
+                    'step_hide': {
+                        text: `${name} خۆی شاردەوە، بەڵام سێبەرەکە نزیکتر بووەوە و لە پڕ دەنگێکی گەورە هات! کەسێک لە تاریکییەوە بانگت کرد... (کۆتایی ترسناک و دۆڕان ❌)`,
+                        choices: [
+                            { text: "🔄 دووبارە هەوڵدانەوە", next: 'step_1' }
+                        ]
+                    }
+                };
+                return nodes[key] || nodes['step_1'];
+            }
+            return { text: "چیڕۆک نەدۆزرایەوە", choices: [] };
         }
     </script>
 </body>
