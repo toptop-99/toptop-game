@@ -93,6 +93,15 @@
             margin-bottom: 10px; background: var(--card-bg);
             padding: 8px 14px; border-radius: 12px; border: 1px solid var(--primary-color);
         }
+        
+        /* Circular Floating Setting Button style matching user reference */
+        .circle-setting-btn {
+            width: 48px; height: 48px; border-radius: 50%; background: #ffffff;
+            border: none; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s ease;
+        }
+        .circle-setting-btn:active { transform: scale(0.90); }
+
         .card {
             background: var(--card-bg); border-radius: 12px;
             padding: 12px; margin-bottom: 10px; text-align: right;
@@ -297,19 +306,16 @@
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
             
-            <!-- Profile Section on Top Left -->
+            <!-- Top Bar with Circular Settings Button and Online Status -->
             <div class="top-bar">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <div id="hubUserAvatar" style="width: 38px; height: 38px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 13px; border: 2px solid var(--text-glow); cursor: pointer;" onclick="openSettingsScreen()">👤</div>
-                    <div>
-                        <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px; display: block;"></span>
-                        <span style="font-size: 9px; color: #cbd5e1;">پڕۆفایلی من</span>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center;">
                     <span class="online-badge"></span>
                     <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                 </div>
+                <!-- Circular Setting Button as requested -->
+                <button class="circle-setting-btn" onclick="openSettingsScreen()" title="ڕێکخستنەکان">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
             </div>
 
             <div class="card">
@@ -324,12 +330,6 @@
                 <div id="topScoresList">
                     <p style="text-align: center; font-size: 11px; color: #cbd5e1;">چاوەڕێ بکە...</p>
                 </div>
-            </div>
-            
-            <!-- Settings and Logout Buttons at the bottom of Hub -->
-            <div style="display: flex; gap: 8px; margin-top: auto;">
-                <button class="btn" onclick="openSettingsScreen()" style="margin-top:0; flex: 1;">⚙️ ڕێکخستن</button>
-                <button class="btn" onclick="logoutUser()" style="margin-top:0; flex: 1; background: linear-gradient(135deg, #ef4444, #b91c1c);">🚪 دەرچوون</button>
             </div>
         </div>
 
@@ -454,23 +454,24 @@
             <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Settings Screen (Without Logout Button) -->
+        <!-- Settings Screen (With Profile Section on top & Logout Button inside) -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
             
-            <div class="card">
-                <h3>👤 دەستکاری زانیارییەکان</h3>
-                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 6px;">
+            <!-- Profile Section on top inside Settings with image and 'پڕۆفایل' text underneath -->
+            <div class="card" style="text-align: center;">
+                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 4px;">
                     <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
                     <span id="settingsAvatarPlaceholder" style="font-size: 20px;">📷</span>
                 </div>
+                <span style="font-size: 12px; font-weight: bold; color: var(--text-glow); display: block; margin-bottom: 8px;">پڕۆفایل</span>
                 <input type="file" id="settingsFileInput" accept="image/*" style="display:none;" onchange="handleSettingsImageUpload(event)">
                 
-                <div class="form-group">
+                <div class="form-group" style="text-align: right;">
                     <label>ناوی بەکارهێنەر</label>
                     <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
                 </div>
-                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
+                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردنی گۆڕانکاری پڕۆفایل</button>
             </div>
 
             <div class="card">
@@ -502,7 +503,9 @@
                 </div>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
+            <!-- Logout Button inside Settings -->
+            <button class="btn" onclick="logoutUser()" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-bottom: 6px;">🚪 دەرچوون لە حیساب</button>
+            <button class="btn" onclick="backToHub()" style="margin-top: 0;">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
     </div>
 
@@ -1241,13 +1244,18 @@
         function loadUserData() {
             let profileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = profileData ? JSON.parse(profileData) : {};
-            document.getElementById("hubUsernameText").innerText = currentUser;
 
-            let avatarEl = document.getElementById("hubUserAvatar");
+            let avatarEl = document.getElementById("settingsAvatarPreview");
+            let placeholderEl = document.getElementById("settingsAvatarPlaceholder");
+            
             if (profile.avatar) {
-                avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+                avatarEl.src = profile.avatar;
+                avatarEl.style.display = "block";
+                placeholderEl.style.display = "none";
             } else {
-                avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
+                avatarEl.style.display = "none";
+                placeholderEl.style.display = "block";
+                placeholderEl.innerText = "📷";
             }
             document.getElementById("settingsUsernameInput").value = currentUser;
         }
@@ -1272,7 +1280,7 @@
             if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
 
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            alert("نوێکرایەوە!");
+            alert("پاشەکەوتکرا!");
             loadUserData();
         }
 
