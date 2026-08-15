@@ -172,25 +172,21 @@
             margin-bottom: 4px; border: 1px solid var(--border-color); font-size: 12px;
         }
 
-        /* Word Rain / Word Game Styles */
-        .word-game-board {
-            text-align: center; padding: 10px;
-        }
+        /* Word Game Styles */
+        .word-game-board { text-align: center; padding: 10px; }
         .target-letter-box {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-            border-radius: 14px; padding: 12px; margin-bottom: 10px;
+            border-radius: 14px; padding: 10px; margin-bottom: 8px;
             box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+            display: flex; justify-content: space-between; align-items: center; padding-left: 15px; padding-right: 15px;
         }
-        .target-letter {
-            font-size: 32px; font-weight: 900; color: #fff;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));
-        }
-        .word-input-container {
-            display: flex; gap: 8px; margin-bottom: 10px;
-        }
+        .target-letter { font-size: 28px; font-weight: 900; color: #fff; }
+        .timer-display { font-size: 18px; font-weight: 900; color: #fde047; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 8px; }
+        
+        .word-input-container { display: flex; gap: 8px; margin-bottom: 8px; }
         .words-list-container {
-            max-height: 120px; overflow-y: auto; background: rgba(0,0,0,0.2);
-            border-radius: 10px; padding: 8px; margin-bottom: 8px; text-align: right;
+            max-height: 110px; overflow-y: auto; background: rgba(0,0,0,0.2);
+            border-radius: 10px; padding: 8px; margin-bottom: 6px; text-align: right;
             border: 1px solid rgba(255,255,255,0.05);
         }
         .word-badge {
@@ -201,11 +197,11 @@
         .error-alert-box {
             background: rgba(239, 68, 68, 0.15);
             border: 2px solid #ef4444; border-radius: 12px;
-            padding: 10px; margin-top: 8px; text-align: center;
+            padding: 8px; margin-top: 6px; text-align: center;
             animation: pulseError 0.3s ease;
         }
         .error-alert-text {
-            color: #f87171; font-weight: 900; font-size: 13px;
+            color: #f87171; font-weight: 900; font-size: 12px;
             text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
         }
         @keyframes pulseError {
@@ -222,10 +218,7 @@
             animation: spin 1s linear infinite;
             margin: 15px auto;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body data-theme="purple">
@@ -384,7 +377,7 @@
             <div class="brand-title">وشە باران</div>
 
             <div id="wordModeSelect" class="card">
-                <h3>هەڵبژاردنی چۆنیەتی یاری:</h3>
+                <h3>هەڵبژاردنی چۆنیەتی یاری (٢ خولەک):</h3>
                 <button class="btn" onclick="startWordQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
                 <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
                     <label>دروستکردنی ژوور بە کۆد</label>
@@ -406,33 +399,39 @@
             </div>
 
             <div id="wordGameArea" style="display: none;" class="word-game-board">
-                <div class="score-board" style="margin-bottom: 8px;">
-                    <div class="score-box">
-                        <span>یاریزانی ١</span>
-                        <bold id="wordP1Name">تۆ</bold>
+                <div class="target-letter-box">
+                    <div>
+                        <span style="font-size: 10px; display:block; color:#f3e8ff; text-align:right;">پيتي داواکراو:</span>
+                        <span class="target-letter" id="targetLetterDisplay">ت</span>
                     </div>
-                    <div class="score-box">
-                        <span>خاڵەکان</span>
-                        <bold id="wordScoreDisplay" style="color:var(--text-glow);">٠</bold>
-                    </div>
-                    <div class="score-box">
-                        <span>یاریزانی ٢</span>
-                        <bold id="wordP2Name">بەرامبەر</bold>
+                    <div>
+                        <span style="font-size: 10px; display:block; color:#fde047; text-align:left;">کاتی ماوە:</span>
+                        <div class="timer-display" id="wordTimerDisplay">٠٢:٠٠</div>
                     </div>
                 </div>
 
-                <div class="target-letter-box">
-                    <span style="font-size: 11px; display:block; color:#f3e8ff;">پیتە داواکراوەکە:</span>
-                    <span class="target-letter" id="targetLetterDisplay">م</span>
+                <div class="score-board" style="margin-bottom: 6px;">
+                    <div class="score-box">
+                        <span id="wordP1Title">یاریزانی ١ (تۆ)</span>
+                        <bold id="wordP1Score">٠</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>دۆخ</span>
+                        <bold id="wordGameStatusText" style="color:var(--text-glow);">یاری بەڕێوەیە</bold>
+                    </div>
+                    <div class="score-box">
+                        <span id="wordP2Title">یاریزانی ٢</span>
+                        <bold id="wordP2Score">٠</bold>
+                    </div>
                 </div>
 
                 <div class="word-input-container">
-                    <input type="text" id="wordInputText" placeholder="وشەیەک بنووسە..." style="flex: 1;" onkeypress="if(event.key==='Enter') submitWordMove()">
-                    <button class="btn" onclick="submitWordMove()" style="margin-top: 0; width: 80px;">ناردن</button>
+                    <input type="text" id="wordInputText" placeholder="وشەی مانا دار بنووسە..." style="flex: 1;" onkeypress="if(event.key==='Enter') submitWordMove()">
+                    <button class="btn" id="wordSendBtn" onclick="submitWordMove()" style="margin-top: 0; width: 80px;">ناردن</button>
                 </div>
 
                 <div class="words-list-container" id="wordsListContainer">
-                    <span style="font-size: 11px; color: #94a3b8;">وشە تۆمارکراوەکان لێرە دەردەکەون...</span>
+                    <span style="font-size: 11px; color: #94a3b8;">وشە پەسەندکراوەکان لێرە دەردەکەون...</span>
                 </div>
 
                 <div id="wordErrorAlert" class="error-alert-box" style="display: none;">
@@ -770,10 +769,10 @@
             }
         };
 
-        /* Word Game Online Engine */
+        /* Word Game Online Engine with 2-Minute Timer & Meaning Check */
         let wordCurrentRoomId = null;
         let wordMyRole = ""; 
-        const kurdishLetters = ["م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ", "ت"];
+        const kurdishLetters = ["ت", "م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ"];
 
         window.startWordQuickRoomMatch = function(username) {
             const lobbyRef = ref(database, 'word_lobby');
@@ -795,7 +794,8 @@
                     wordMyRole = "player2";
                     update(ref(database, 'word_lobby/' + wordCurrentRoomId), {
                         player2: username,
-                        status: 'playing'
+                        status: 'playing',
+                        startTime: Date.now()
                     }).then(() => {
                         listenToWordRoom(wordCurrentRoomId, username);
                     });
@@ -810,7 +810,10 @@
                         status: 'waiting',
                         targetLetter: randomLetter,
                         words: {},
-                        scores: { player1: 0, player2: 0 }
+                        scores: { player1: 0, player2: 0 },
+                        startTime: 0,
+                        gameOver: false,
+                        winnerName: ""
                     }).then(() => {
                         onDisconnect(newRoomRef).remove();
                         document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
@@ -837,7 +840,10 @@
                     status: 'waiting',
                     targetLetter: randomLetter,
                     words: {},
-                    scores: { player1: 0, player2: 0 }
+                    scores: { player1: 0, player2: 0 },
+                    startTime: 0,
+                    gameOver: false,
+                    winnerName: ""
                 }).then(() => {
                     onDisconnect(roomRef).remove();
                     document.getElementById("wordModeSelect").style.display = "none";
@@ -864,7 +870,8 @@
                 wordMyRole = "player2";
                 update(roomRef, {
                     player2: username,
-                    status: 'playing'
+                    status: 'playing',
+                    startTime: Date.now()
                 }).then(() => {
                     listenToWordRoom(wordCurrentRoomId, username);
                 });
@@ -886,12 +893,47 @@
                     document.getElementById("wordLobbyArea").style.display = "none";
                     document.getElementById("wordGameArea").style.display = "block";
 
-                    document.getElementById("wordP1Name").innerText = room.player1;
-                    document.getElementById("wordP2Name").innerText = room.player2 || "بەرامبەر";
+                    document.getElementById("wordP1Title").innerText = room.player1 + (wordMyRole === 'player1' ? " (تۆ)" : "");
+                    document.getElementById("wordP2Title").innerText = (room.player2 || "بەرامبەر") + (wordMyRole === 'player2' ? " (تۆ)" : "");
                     document.getElementById("targetLetterDisplay").innerText = room.targetLetter;
 
-                    let myScore = room.scores[wordMyRole] || 0;
-                    document.getElementById("wordScoreDisplay").innerText = myScore;
+                    let p1Score = room.scores.player1 || 0;
+                    let p2Score = room.scores.player2 || 0;
+                    document.getElementById("wordP1Score").innerText = p1Score;
+                    document.getElementById("wordP2Score").innerText = p2Score;
+
+                    // Timer Calculation (2 minutes = 120 seconds)
+                    if (room.startTime && !room.gameOver) {
+                        let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
+                        let timeLeft = 120 - elapsed;
+
+                        if (timeLeft <= 0) {
+                            timeLeft = 0;
+                            // Determine winner
+                            if (!room.winnerName) {
+                                let wName = "یەکسان بوون!";
+                                if (p1Score > p2Score) wName = room.player1 + " بردیەوە! 🎉";
+                                else if (p2Score > p1Score) wName = room.player2 + " بردیەوە! 🎉";
+                                
+                                if (wordMyRole === 'player1') {
+                                    update(roomRef, { gameOver: true, winnerName: wName });
+                                    if (p1Score > p2Score) window.addScore(room.player1, 15);
+                                    else if (p2Score > p1Score) window.addScore(room.player2, 15);
+                                }
+                            }
+                        }
+
+                        let mins = Math.floor(timeLeft / 60);
+                        let secs = timeLeft % 60;
+                        document.getElementById("wordTimerDisplay").innerText = 
+                            (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
+
+                        if (timeLeft <= 0 && room.winnerName) {
+                            document.getElementById("wordGameStatusText").innerText = room.winnerName;
+                            document.getElementById("wordInputText").disabled = true;
+                            document.getElementById("wordSendBtn").disabled = true;
+                        }
+                    }
 
                     let wordsObj = room.words || {};
                     let wordsHtml = "";
@@ -907,28 +949,27 @@
         window.submitWordFirebaseMove = function(wordText, targetLetter, username) {
             if (!wordCurrentRoomId) return;
 
-            // Validation logic requested:
-            // 1. Must start with target letter
-            // 2. Cannot be invalid patterns like repetitive/meaningless syllables (e.g., "مومو", "ماما", etc.)
-            let trimmed = wordText.trim();
-            if (!trimmed.startsWith(targetLetter)) {
-                showWordError("⚠️ وشە دەبێت بە پيتي '" + targetLetter + "' دەست پێبکات!");
-                return;
-            }
-
-            // Simple checks for repetitive nonsense syllables
-            let uniqueChars = new Set(trimmed.split("")).size;
-            if (trimmed.length < 2 || uniqueChars === 1 || isRepetitiveNonsense(trimmed)) {
-                showWordError("⚠️ وشە هەڵەیە! (وشەکە بێ مانا یان دووبارەیە)");
-                return;
-            }
-
             const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
             get(roomRef).then((snapshot) => {
                 if(!snapshot.exists()) return;
                 let room = snapshot.val();
+                if (room.gameOver) return;
+
+                let trimmed = wordText.trim();
                 
-                // Check if word already added
+                // 1. Check starting letter
+                if (!trimmed.startsWith(targetLetter)) {
+                    showWordError("⚠️ وشە دەبێت بە پيتي '" + targetLetter + "' دەست پێبکات!");
+                    return;
+                }
+
+                // 2. Check meaning & validity rules (No nonsense like tutut, titit, momo, etc.)
+                if (!isValidMeaningfulKurdishWord(trimmed, targetLetter)) {
+                    showWordError("⚠️ وشە هەڵەیە! (تەنها وشەی مانا دار و ڕاستەقینە قبوڵە)");
+                    return;
+                }
+
+                // Check duplicate
                 let wordsObj = room.words || {};
                 for(let k in wordsObj) {
                     if(wordsObj[k].word === trimmed) {
@@ -940,9 +981,7 @@
                 let newWordKey = "w_" + Date.now();
                 wordsObj[newWordKey] = { word: trimmed, user: username };
 
-                let currentScore = room.scores[wordMyRole] || 0;
-                let newScore = currentScore + 10;
-                room.scores[wordMyRole] = newScore;
+                room.scores[wordMyRole] = (room.scores[wordMyRole] || 0) + 10;
 
                 update(roomRef, {
                     words: wordsObj,
@@ -951,14 +990,26 @@
 
                 document.getElementById("wordInputText").value = "";
                 hideWordError();
-                window.addScore(username, 5);
+                window.addScore(username, 3);
             });
         };
 
-        function isRepetitiveNonsense(w) {
-            if (w === "مومو" || w === "ماما" || w === "میامو" || w === "بابا" || w === "بابۆ" || w === "دادا") return true;
-            if (w.length === 4 && w[0] === w[2] && w[1] === w[3]) return true; // e.g. mamam, momom
-            return false;
+        // Strict validation to filter out meaningless syllables and accept only meaningful words
+        function isValidMeaningfulKurdishWord(w, targetLtr) {
+            if (w.length < 2) return false;
+            
+            // Check repetitive meaningless strings like tutut, titit, momo, dada, etc.
+            let uniqueChars = new Set(w.split("")).size;
+            if (uniqueChars === 1) return false;
+            
+            // Disallow obvious nonsense patterns
+            let nonsenseList = ["توتو", "تيتي", "توتار", "تيتار", "مومو", "ماما", "ميامو", "بابا", "بابۆ", "دادا", "تاتە"];
+            if (nonsenseList.includes(w)) return false;
+
+            // Simple syllable repetition check (e.g., toto, titi, kaka)
+            if (w.length === 4 && w[0] === w[2] && w[1] === w[3]) return false;
+
+            return true;
         }
 
         function showWordError(msg) {
@@ -966,9 +1017,7 @@
             let alertText = document.getElementById("wordErrorText");
             alertText.innerText = msg;
             alertBox.style.display = "block";
-            setTimeout(() => {
-                alertBox.style.display = "none";
-            }, 3000);
+            setTimeout(() => { alertBox.style.display = "none"; }, 3000);
         }
 
         function hideWordError() {
@@ -1029,13 +1078,8 @@
 
         function togglePasswordVisibility(fieldId, btn) {
             let field = document.getElementById(fieldId);
-            if (field.type === "password") {
-                field.type = "text";
-                btn.innerText = "🔒";
-            } else {
-                field.type = "password";
-                btn.innerText = "👁️";
-            }
+            if (field.type === "password") { field.type = "text"; btn.innerText = "🔒"; }
+            else { field.type = "password"; btn.innerText = "👁️"; }
         }
 
         function handleImageUpload(event) {
@@ -1077,14 +1121,7 @@
             if (pass.length < 8) { alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!"); return; }
             if (pass !== passConfirm) { alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!"); return; }
 
-            let profileData = {
-                username: name,
-                password: pass,
-                birthdate: birthdate,
-                avatar: tempAvatarBase64 || "",
-                score: 0
-            };
-
+            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 0 };
             localStorage.setItem("user_profile_" + name, JSON.stringify(profileData));
             localStorage.setItem("top_top_active_user", name);
             currentUser = name;
@@ -1160,7 +1197,6 @@
             loadUserData();
         }
 
-        /* Settings Actions */
         function toggleSoundSetting() {
             let isMuted = document.getElementById("soundToggle").checked;
             localStorage.setItem("toptop_sound_muted", isMuted);
@@ -1189,7 +1225,7 @@
         function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
-        /* XO Navigation & Play */
+        /* XO Navigation */
         function openXoMenu() {
             switchScreen("xoScreen");
             document.getElementById("xoModeSelect").style.display = "block";
@@ -1209,9 +1245,7 @@
 
         function startOnlineXo() {
             xoMode = "online";
-            if (window.startOnlineMatchmaking) {
-                window.startOnlineMatchmaking(currentUser);
-            }
+            if (window.startOnlineMatchmaking) window.startOnlineMatchmaking(currentUser);
         }
 
         function handleXoCellClick(index) {
@@ -1282,14 +1316,8 @@
         };
 
         window.checkXoWinnerLocal = function(board, player) {
-            const winPatterns = [
-                [0,1,2], [3,4,5], [6,7,8],
-                [0,3,6], [1,4,7], [2,5,8],
-                [0,4,8], [2,4,6]
-            ];
-            return winPatterns.some(pattern => {
-                return pattern.every(index => board[index] === player);
-            });
+            const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+            return winPatterns.some(pattern => pattern.every(index => board[index] === player));
         };
 
         function resetXoBoard() {
@@ -1306,49 +1334,41 @@
         }
 
         function leaveXoGame() {
-            if (xoMode === "online" && window.leaveXoRoom) {
-                window.leaveXoRoom();
-            }
+            if (xoMode === "online" && window.leaveXoRoom) window.leaveXoRoom();
             backToHub();
         }
 
-        /* Word Game Navigation & Play */
+        /* Word Game Navigation */
         function openWordGameMenu() {
             switchScreen("wordScreen");
             document.getElementById("wordModeSelect").style.display = "block";
             document.getElementById("wordLobbyArea").style.display = "none";
             document.getElementById("wordGameArea").style.display = "none";
+            document.getElementById("wordInputText").disabled = false;
+            document.getElementById("wordSendBtn").disabled = false;
         }
 
         function startWordQuickRoom() {
-            if (window.startWordQuickRoomMatch) {
-                window.startWordQuickRoomMatch(currentUser);
-            }
+            if (window.startWordQuickRoomMatch) window.startWordQuickRoomMatch(currentUser);
         }
 
         function createCustomWordRoom() {
             let code = document.getElementById("createRoomCodeInput").value.trim();
             if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
-            if (window.createCustomWordRoomFirebase) {
-                window.createCustomWordRoomFirebase(currentUser, code);
-            }
+            if (window.createCustomWordRoomFirebase) window.createCustomWordRoomFirebase(currentUser, code);
         }
 
         function joinCustomWordRoom() {
             let code = document.getElementById("joinRoomCodeInput").value.trim();
             if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
-            if (window.joinCustomWordRoomFirebase) {
-                window.joinCustomWordRoomFirebase(currentUser, code);
-            }
+            if (window.joinCustomWordRoomFirebase) window.joinCustomWordRoomFirebase(currentUser, code);
         }
 
         function submitWordMove() {
             let wordVal = document.getElementById("wordInputText").value.trim();
             let targetLtr = document.getElementById("targetLetterDisplay").innerText;
             if (!wordVal) return;
-            if (window.submitWordFirebaseMove) {
-                window.submitWordFirebaseMove(wordVal, targetLtr, currentUser);
-            }
+            if (window.submitWordFirebaseMove) window.submitWordFirebaseMove(wordVal, targetLtr, currentUser);
         }
 
         function cancelMatchmaking(gameType) {
@@ -1364,9 +1384,7 @@
         }
 
         function leaveWordGame() {
-            if (window.leaveWordRoomFirebase) {
-                window.leaveWordRoomFirebase();
-            }
+            if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
             backToHub();
         }
     </script>
