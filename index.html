@@ -241,6 +241,51 @@
             margin: 15px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Shopping Store Styles */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .shop-item-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .shop-item-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+        }
+        .shop-item-icon {
+            font-size: 32px;
+            margin: 6px 0;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+        }
+        .shop-item-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-glow);
+            margin-bottom: 4px;
+        }
+        .shop-item-price {
+            font-size: 11px;
+            color: #fde047;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body data-theme="purple">
@@ -337,7 +382,8 @@
                 <h3>🎮 بەشی یارییەکان</h3>
                 <p>یاری هەڵبژێرە!</p>
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb);" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #eab308, #ca8a04);" onclick="openShopScreen()">💎 بەشی شوپینگ (مێزەڵانی زێر و الماس)</button>
             </div>
 
             <div class="card">
@@ -467,6 +513,71 @@
             </div>
 
             <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Shopping Store Screen (مێزەڵانی زێر و الماس) -->
+        <div id="shopScreen" class="screen">
+            <div class="brand-title">شوپینگ (مێزەڵانی زێر و الماس)</div>
+
+            <div class="card" style="text-align: center; margin-bottom: 8px;">
+                <p style="font-size: 12px; color: var(--text-glow); font-weight: bold;">💎 گرانترین و جوانترین مێزەڵانی زێر و الماس ڕێزلێنراو بۆ سەرکردەکان!</p>
+            </div>
+
+            <div class="shop-grid">
+                <!-- Item 1 -->
+                <div class="shop-item-card">
+                    <div>
+                        <div class="shop-item-icon">🌟</div>
+                        <div class="shop-item-title">مێزەڵانی زێری شاھانە</div>
+                        <p style="font-size: 10px; color: #e9d5ff;">دروستکراو له زێری خاوێن و بریسکەدار</p>
+                    </div>
+                    <div>
+                        <div class="shop-item-price">٥,٠٠٠ خاڵ</div>
+                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('مێزەڵانی زێری شاھانە', 5000)">کڕین</button>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="shop-item-card">
+                    <div>
+                        <div class="shop-item-icon">💎</div>
+                        <div class="shop-item-title">مێزەڵانی ئەڵماسی ئەستێرەیی</div>
+                        <p style="font-size: 10px; color: #e9d5ff;">پڕ لە ئەڵماسی پاکی پۆڵایین مرتب</p>
+                    </div>
+                    <div>
+                        <div class="shop-item-price">١٥,٠٠٠ خاڵ</div>
+                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('مێزەڵانی ئەڵماسی ئەستێرەیی', 15000)">کڕین</button>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="shop-item-card">
+                    <div>
+                        <div class="shop-item-icon">👑</div>
+                        <div class="shop-item-title">تاجی زێر و ئەڵماسی مەزن</div>
+                        <p style="font-size: 10px; color: #e9d5ff;">گرانترین دیاری تایبەت به تۆرەمەکان</p>
+                    </div>
+                    <div>
+                        <div class="shop-item-price">٥٠,٠٠٠ خاڵ</div>
+                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('تاجی زێر و ئەڵماسی مەزن', 50000)">کڕین</button>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="shop-item-card">
+                    <div>
+                        <div class="shop-item-icon">🏆</div>
+                        <div class="shop-item-title">جامە خاوێنەکەی ئەڵماس</div>
+                        <p style="font-size: 10px; color: #e9d5ff;">دیزاینی تایبەت و ناوازە به الماسّ</p>
+                    </div>
+                    <div>
+                        <div class="shop-item-price">١٠٠,٠٠٠ خاڵ</div>
+                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('جامە خاوێنەکەی ئەڵماس', 100000)">کڕین</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Dedicated Profile Screen (Expanded for Future Features) -->
@@ -1348,6 +1459,15 @@
         function openProfileScreen() { loadUserData(); switchScreen("profileScreen"); }
         function openSettingsScreen() { switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
+
+        /* Shopping Screen Navigation */
+        function openShopScreen() {
+            switchScreen("shopScreen");
+        }
+
+        function buyShopItem(itemName, itemPrice) {
+            alert("پیرۆزە! تۆ بە سەرکەوتوویی '" + itemName + "' ات کڕی بە بڕی " + itemPrice + " خاڵ!");
+        }
 
         /* XO Navigation */
         function openXoMenu() {
