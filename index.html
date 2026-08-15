@@ -94,11 +94,19 @@
             padding: 8px 14px; border-radius: 12px; border: 1px solid var(--primary-color);
         }
         
-        /* Circular Floating Setting Button style matching user reference */
+        /* Circular Profile & Setting Button styles */
+        .circle-profile-btn {
+            width: 48px; height: 48px; border-radius: 50%; background: #2e1065;
+            border: 2px solid var(--text-glow); display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; transition: transform 0.2s ease;
+        }
+        .circle-profile-btn img { width: 100%; height: 100%; object-fit: cover; }
+        .circle-profile-btn:active { transform: scale(0.90); }
+
         .circle-setting-btn {
-            width: 48px; height: 48px; border-radius: 50%; background: #ffffff;
-            border: none; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s ease;
+            width: 48px; height: 48px; border-radius: 50%; background: var(--card-bg);
+            border: 2px solid var(--primary-color); display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s ease; font-size: 22px;
         }
         .circle-setting-btn:active { transform: scale(0.90); }
 
@@ -112,8 +120,8 @@
         .card p { margin: 0 0 6px 0; font-size: 11px; color: #e9d5ff; }
         
         .avatar-preview {
-            width: 50px; height: 50px; border-radius: 50%; background: #2e1065;
-            margin: 0 auto 6px auto; display: flex; justify-content: center; align-items: center;
+            width: 90px; height: 90px; border-radius: 50%; background: #2e1065;
+            margin: 0 auto 10px auto; display: flex; justify-content: center; align-items: center;
             overflow: hidden; border: 2px solid var(--text-glow); cursor: pointer; position: relative;
         }
         .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
@@ -306,15 +314,22 @@
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
             
-            <!-- Top Bar with Circular Settings Button and Online Status -->
+            <!-- Top Bar: Profile on the Right, Setting on the Left -->
             <div class="top-bar">
+                <!-- Profile Button on the Right -->
+                <button class="circle-profile-btn" onclick="openProfileScreen()" title="پڕۆفایل">
+                    <img id="hubAvatarImg" src="" alt="Profile" style="display:none;" />
+                    <span id="hubAvatarPlaceholder" style="font-size: 16px; color: #fff;">👤</span>
+                </button>
+
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span class="online-badge"></span>
                     <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                 </div>
-                <!-- Circular Setting Button as requested -->
+
+                <!-- Setting Button on the Left -->
                 <button class="circle-setting-btn" onclick="openSettingsScreen()" title="ڕێکخستنەکان">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    ⚙️
                 </button>
             </div>
 
@@ -454,25 +469,36 @@
             <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Settings Screen (With Profile Section on top & Logout Button inside) -->
-        <div id="settingsScreen" class="screen">
-            <div class="brand-title">ڕێکخستنەکان</div>
+        <!-- Dedicated Profile Screen (Expanded for Future Features) -->
+        <div id="profileScreen" class="screen">
+            <div class="brand-title">پڕۆفایلی من</div>
             
-            <!-- Profile Section on top inside Settings with image and 'پڕۆفایل' text underneath -->
-            <div class="card" style="text-align: center;">
-                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 4px;">
-                    <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
-                    <span id="settingsAvatarPlaceholder" style="font-size: 20px;">📷</span>
+            <div class="card" style="text-align: center; padding: 20px;">
+                <div class="avatar-preview" onclick="document.getElementById('profileFileInput').click()" style="margin-bottom: 12px;">
+                    <img id="profileAvatarPreview" src="" alt="Avatar" style="display:none;" />
+                    <span id="profileAvatarPlaceholder" style="font-size: 32px;">📷</span>
                 </div>
-                <span style="font-size: 12px; font-weight: bold; color: var(--text-glow); display: block; margin-bottom: 8px;">پڕۆفایل</span>
-                <input type="file" id="settingsFileInput" accept="image/*" style="display:none;" onchange="handleSettingsImageUpload(event)">
+                <input type="file" id="profileFileInput" accept="image/*" style="display:none;" onchange="handleProfileImageUpload(event)">
                 
                 <div class="form-group" style="text-align: right;">
                     <label>ناوی بەکارهێنەر</label>
-                    <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
+                    <input type="text" id="profileUsernameInput" placeholder="ناوی نوێ...">
                 </div>
-                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردنی گۆڕانکاری پڕۆفایل</button>
+                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردنی گۆڕانکاری</button>
             </div>
+
+            <!-- Future features placeholder card -->
+            <div class="card">
+                <h3>⭐ زانیاری و ئاماری یاریزان</h3>
+                <p>لێرە دەتوانیت لە داهاتوودا تایبەتمەندی و ئاماری زیاتر زیاد بکەیت.</p>
+            </div>
+
+            <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Settings Screen (Only Settings and Logout) -->
+        <div id="settingsScreen" class="screen">
+            <div class="brand-title">ڕێکخستنەکان</div>
 
             <div class="card">
                 <h3>🎵 دەنگ و مۆسیقا و ڕوکار</h3>
@@ -505,7 +531,7 @@
 
             <!-- Logout Button inside Settings -->
             <button class="btn" onclick="logoutUser()" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-bottom: 6px;">🚪 دەرچوون لە حیساب</button>
-            <button class="btn" onclick="backToHub()" style="margin-top: 0;">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
     </div>
 
@@ -1118,7 +1144,7 @@
     <script>
         let currentUser = "";
         let tempAvatarBase64 = "";
-        let settingsTempAvatar = "";
+        let profileTempAvatar = "";
 
         window.xoState = ["", "", "", "", "", "", "", "", ""];
         window.xoTurn = "X";
@@ -1178,15 +1204,15 @@
             }
         }
 
-        function handleSettingsImageUpload(event) {
+        function handleProfileImageUpload(event) {
             let file = event.target.files[0];
             if (file) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    settingsTempAvatar = e.target.result;
-                    let imgTag = document.getElementById("settingsAvatarPreview");
-                    let textTag = document.getElementById("settingsAvatarPlaceholder");
-                    imgTag.src = settingsTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
+                    profileTempAvatar = e.target.result;
+                    let imgTag = document.getElementById("profileAvatarPreview");
+                    let textTag = document.getElementById("profileAvatarPlaceholder");
+                    imgTag.src = profileTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
                 }
                 reader.readAsDataURL(file);
             }
@@ -1245,23 +1271,33 @@
             let profileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = profileData ? JSON.parse(profileData) : {};
 
-            let avatarEl = document.getElementById("settingsAvatarPreview");
-            let placeholderEl = document.getElementById("settingsAvatarPlaceholder");
+            let avatarEl = document.getElementById("profileAvatarPreview");
+            let placeholderEl = document.getElementById("profileAvatarPlaceholder");
             
+            let hubAvatarImg = document.getElementById("hubAvatarImg");
+            let hubPlaceholder = document.getElementById("hubAvatarPlaceholder");
+
             if (profile.avatar) {
                 avatarEl.src = profile.avatar;
                 avatarEl.style.display = "block";
                 placeholderEl.style.display = "none";
+
+                hubAvatarImg.src = profile.avatar;
+                hubAvatarImg.style.display = "block";
+                hubPlaceholder.style.display = "none";
             } else {
                 avatarEl.style.display = "none";
                 placeholderEl.style.display = "block";
                 placeholderEl.innerText = "📷";
+
+                hubAvatarImg.style.display = "none";
+                hubPlaceholder.style.display = "block";
             }
-            document.getElementById("settingsUsernameInput").value = currentUser;
+            document.getElementById("profileUsernameInput").value = currentUser;
         }
 
         function saveProfileChanges() {
-            let newName = document.getElementById("settingsUsernameInput").value.trim();
+            let newName = document.getElementById("profileUsernameInput").value.trim();
             if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
 
             let oldProfileData = localStorage.getItem("user_profile_" + currentUser);
@@ -1277,7 +1313,7 @@
             }
 
             profile.username = currentUser;
-            if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
+            if (profileTempAvatar) profile.avatar = profileTempAvatar;
 
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
             alert("پاشەکەوتکرا!");
@@ -1309,7 +1345,8 @@
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
+        function openProfileScreen() { loadUserData(); switchScreen("profileScreen"); }
+        function openSettingsScreen() { switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
         /* XO Navigation */
