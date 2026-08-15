@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تۆپ تۆپ - پلاتفۆرمی کۆنکان</title>
+    <title>تۆپ تۆپ - پلاتفۆرمی یارییەکان</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
@@ -93,22 +93,6 @@
             margin-bottom: 10px; background: var(--card-bg);
             padding: 8px 14px; border-radius: 12px; border: 1px solid var(--primary-color);
         }
-        
-        .circle-profile-btn {
-            width: 48px; height: 48px; border-radius: 50%; background: #2e1065;
-            border: 2px solid var(--text-glow); display: flex; justify-content: center; align-items: center;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; transition: transform 0.2s ease;
-        }
-        .circle-profile-btn img { width: 100%; height: 100%; object-fit: cover; }
-        .circle-profile-btn:active { transform: scale(0.90); }
-
-        .circle-setting-btn {
-            width: 48px; height: 48px; border-radius: 50%; background: var(--card-bg);
-            border: 2px solid var(--primary-color); display: flex; justify-content: center; align-items: center;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s ease; font-size: 22px;
-        }
-        .circle-setting-btn:active { transform: scale(0.90); }
-
         .card {
             background: var(--card-bg); border-radius: 12px;
             padding: 12px; margin-bottom: 10px; text-align: right;
@@ -119,8 +103,8 @@
         .card p { margin: 0 0 6px 0; font-size: 11px; color: #e9d5ff; }
         
         .avatar-preview {
-            width: 90px; height: 90px; border-radius: 50%; background: #2e1065;
-            margin: 0 auto 10px auto; display: flex; justify-content: center; align-items: center;
+            width: 50px; height: 50px; border-radius: 50%; background: #2e1065;
+            margin: 0 auto 6px auto; display: flex; justify-content: center; align-items: center;
             overflow: hidden; border: 2px solid var(--text-glow); cursor: pointer; position: relative;
         }
         .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
@@ -159,77 +143,20 @@
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
 
-        /* Konkan Game Specific Styles */
-        .konkan-table {
-            background: #14532d;
-            border: 4px solid #166534;
-            border-radius: 16px;
-            padding: 10px;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-            margin-bottom: 8px;
+        /* XO Game Styles */
+        .xo-board {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+            width: 100%; max-width: 280px; margin: 10px auto; aspect-ratio: 1;
         }
-        .konkan-deck-area {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            align-items: center;
-            margin: 10px 0;
+        .xo-cell {
+            background: var(--card-bg); border: 2px solid var(--text-glow); border-radius: 14px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 36px; font-weight: 900; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease;
         }
-        .konkan-card {
-            width: 42px;
-            height: 60px;
-            background: #f8fafc;
-            color: #0f172a;
-            border-radius: 6px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-weight: 900;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            border: 2px solid #cbd5e1;
-            transition: transform 0.1s;
-        }
-        .konkan-card:active { transform: scale(0.92); }
-        .konkan-card.red { color: #dc2626; border-color: #fca5a5; }
-        .konkan-card.blue { color: #2563eb; border-color: #93c5fd; }
-        .konkan-card.black { color: #1e293b; border-color: #94a3b8; }
-        .konkan-card.yellow { color: #d97706; border-color: #fde047; }
-        
-        .konkan-deck-pile {
-            width: 50px;
-            height: 70px;
-            background: #991b1b;
-            border: 2px dashed #f8fafc;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            font-weight: bold;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        .player-rack {
-            background: #451a03;
-            border: 3px solid #78350f;
-            border-radius: 10px;
-            padding: 8px;
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            min-height: 80px;
-            align-items: center;
-            box-shadow: inset 0 4px 6px rgba(0,0,0,0.6);
-        }
+        .xo-cell:active { transform: scale(0.92); }
+        .xo-cell.x { color: #f43f5e; text-shadow: 0 0 10px rgba(244, 63, 94, 0.6); }
+        .xo-cell.o { color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); }
 
         .score-board {
             display: flex; justify-content: space-around; background: var(--card-bg);
@@ -245,6 +172,49 @@
             margin-bottom: 4px; border: 1px solid var(--border-color); font-size: 12px;
         }
 
+        /* Word Game Styles */
+        .word-game-board { text-align: center; padding: 10px; }
+        .target-letter-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            border-radius: 14px; padding: 10px; margin-bottom: 8px;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+            display: flex; justify-content: space-between; align-items: center; padding-left: 15px; padding-right: 15px;
+        }
+        .target-letter { font-size: 28px; font-weight: 900; color: #fff; }
+        .timer-display { font-size: 18px; font-weight: 900; color: #fde047; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 8px; }
+        
+        .word-input-container { display: flex; gap: 8px; margin-bottom: 8px; }
+        .words-list-container {
+            max-height: 110px; overflow-y: auto; background: rgba(0,0,0,0.2);
+            border-radius: 10px; padding: 8px; margin-bottom: 6px; text-align: right;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .word-badge {
+            display: inline-block; background: rgba(147, 51, 234, 0.2);
+            border: 1px solid var(--text-glow); padding: 4px 10px; border-radius: 20px;
+            font-size: 12px; margin: 3px; color: #f8fafc;
+        }
+        .word-badge.my-word {
+            background: rgba(234, 179, 8, 0.3) !important;
+            border-color: #facc15 !important;
+            color: #fef08a !important;
+        }
+        .error-alert-box {
+            background: rgba(239, 68, 68, 0.15);
+            border: 2px solid #ef4444; border-radius: 12px;
+            padding: 8px; margin-top: 6px; text-align: center;
+            animation: pulseError 0.3s ease;
+        }
+        .error-alert-text {
+            color: #f87171; font-weight: 900; font-size: 12px;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+        }
+        @keyframes pulseError {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
         .spinner {
             width: 40px; height: 40px;
             border: 4px solid rgba(192, 132, 252, 0.2);
@@ -254,59 +224,6 @@
             margin: 15px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .shop-item-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        .shop-item-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #ffd700, #ff8c00);
-        }
-        .shop-item-icon {
-            font-size: 32px;
-            margin: 6px 0;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-        }
-        .shop-item-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--text-glow);
-            margin-bottom: 4px;
-        }
-        .shop-item-price {
-            font-size: 11px;
-            color: #fde047;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        .user-balance-badge {
-            background: rgba(253, 224, 71, 0.2);
-            border: 1px solid #fde047;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            color: #fde047;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body data-theme="purple">
@@ -379,29 +296,22 @@
         <!-- Hub Screen -->
         <div id="hubScreen" class="screen">
             <div class="brand-title">تۆپ تۆپ</div>
-            
             <div class="top-bar">
-                <button class="circle-profile-btn" onclick="openProfileScreen()" title="پڕۆفایل">
-                    <img id="hubAvatarImg" src="" alt="Profile" style="display:none;" />
-                    <span id="hubAvatarPlaceholder" style="font-size: 16px; color: #fff;">👤</span>
-                </button>
-
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div class="user-balance-badge" id="hubUserScoreDisplay">💰 ٠ خاڵ</div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <div id="hubUserAvatar" style="width: 30px; height: 30px; border-radius: 50%; background: #9333ea; overflow: hidden; display: flex; justify-content: center; align-items: center; font-size: 11px; border: 1px solid #c084fc;">👤</div>
+                    <span id="hubUsernameText" style="font-weight: bold; color: var(--text-glow); font-size: 13px;"></span>
+                </div>
+                <div style="display: flex; align-items: center;">
                     <span class="online-badge"></span>
                     <span style="font-size: 11px; color: #4ade80; font-weight: bold;">ئۆنلاین</span>
                 </div>
-
-                <button class="circle-setting-btn" onclick="openSettingsScreen()" title="ڕێکخستنەکان">
-                    ⚙️
-                </button>
             </div>
 
             <div class="card">
-                <h3>🎴 بەشی یارییەکانی کۆنکان</h3>
-                <p>یاری مێزی بە چێژ!</p>
-                <button class="btn" style="background: linear-gradient(135deg, #16a34a, #15803d); margin-bottom: 6px;" onclick="openKonkanMenu()">🃏 یاری کۆنکان (سەرەکی)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #eab308, #ca8a04);" onclick="openShopScreen()">💎 بەشی شوپینگ (مێزەڵانی زێر و الماس)</button>
+                <h3>🎮 بەشی یارییەکان</h3>
+                <p>یاری هەڵبژێرە!</p>
+                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb);" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
             </div>
 
             <div class="card">
@@ -410,157 +320,151 @@
                     <p style="text-align: center; font-size: 11px; color: #cbd5e1;">چاوەڕێ بکە...</p>
                 </div>
             </div>
+            
+            <div style="display: flex; gap: 8px; margin-top: auto;">
+                <button class="btn" onclick="openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
+            </div>
         </div>
 
-        <!-- Konkan Screen -->
-        <div id="konkanScreen" class="screen">
-            <div class="brand-title">یاری کۆنکان</div>
+        <!-- XO Menu & Game Screen -->
+        <div id="xoScreen" class="screen">
+            <div class="brand-title">یاری XO</div>
             
-            <div id="konkanModeSelect" class="card">
+            <div id="xoModeSelect" class="card">
                 <h3>مۆدی یاری هەڵبژێرە:</h3>
-                <button class="btn" onclick="startKonkanVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
-                <button class="btn" onclick="startOnlineKonkan()" style="background: #16a34a; margin-top: 8px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
+                <button class="btn" onclick="startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
+                <button class="btn" onclick="startOnlineXo()" style="background: #16a34a; margin-top: 8px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
             </div>
 
-            <div id="konkanLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
-                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزان بۆ کۆنکان...</h3>
+            <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
+                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزان...</h3>
                 <div class="spinner"></div>
                 <p style="font-size: 12px; color: #cbd5e1;">تکایە چاوەڕێ بکە تا یاریزانی دووەم بەشدار دەبێت...</p>
-                <button class="btn" onclick="cancelKonkanMatchmaking()" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
+                <button class="btn" onclick="cancelMatchmaking('xo')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
-            <div id="konkanGameArea" style="display: none;">
+            <div id="xoGameArea" style="display: none;">
                 <div class="score-board">
                     <div class="score-box">
-                        <span>یاریزان</span>
-                        <bold id="konkanPlayerName">تۆ</bold>
+                        <span id="playerXTitle">یاریزانی X</span>
+                        <bold id="playerXName">تۆ</bold>
                     </div>
                     <div class="score-box">
                         <span>دۆخ</span>
-                        <bold id="konkanStatusText" style="color:var(--text-glow);">نۆرەی تۆیە</bold>
+                        <bold id="xoStatusText" style="color:var(--text-glow);">دەستپێک</bold>
                     </div>
                     <div class="score-box">
-                        <span>بەرامبەر</span>
-                        <bold id="konkanOpponentName">کۆمپیوتەر</bold>
+                        <span id="playerOTitle">یاریزانی O</span>
+                        <bold id="playerOName">کۆمپیوتەر</bold>
                     </div>
                 </div>
 
-                <div class="konkan-table">
-                    <div style="display: flex; justify-content: space-between; font-size: 11px; color: #bbf7d0;">
-                        <span id="opponentCardCount">پەلی بەرامبەر: ١٤</span>
-                        <span>مێزی کۆنکان</span>
-                    </div>
-
-                    <div class="konkan-deck-area">
-                        <div class="konkan-deck-pile" onclick="konkanDrawFromDeck()">کۆمەڵە (گڵۆپ)</div>
-                        <div id="konkanDiscardPile" class="konkan-card black" onclick="konkanDrawFromDiscard()">٦</div>
-                    </div>
-
-                    <div style="text-align: center;">
-                        <button class="btn" onclick="konkanDeclareWin()" style="width: auto; padding: 6px 16px; background: #ca8a04; font-size: 12px;">کۆنکان!</button>
-                    </div>
+                <div class="xo-board" id="xoBoard">
+                    <div class="xo-cell" onclick="handleXoCellClick(0)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(1)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(2)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(3)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(4)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(5)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(6)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(7)"></div>
+                    <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
                 </div>
 
-                <label style="margin-bottom: 4px; color: #fde047;">پەلەکانی دەستت (کلیک بکە بۆ فڕێدان):</label>
-                <div class="player-rack" id="konkanPlayerRack">
-                    <!-- Cards injected dynamically -->
-                </div>
+                <button class="btn" id="xoResetBtn" onclick="resetXoBoard()" style="margin-top: 8px; display: none; background: #16a34a;">🔄 دەستپێکردنەوە</button>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="leaveKonkanGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Shopping Store Screen (مێزەڵانی زێر و الماس) -->
-        <div id="shopScreen" class="screen">
-            <div class="brand-title">شوپینگ (مێزەڵانی زێر و الماس)</div>
+        <!-- Word Game Menu & Screen -->
+        <div id="wordScreen" class="screen">
+            <div class="brand-title">وشە باران</div>
 
-            <div class="card" style="text-align: center; margin-bottom: 8px;">
-                <p style="font-size: 12px; color: var(--text-glow); font-weight: bold;">💎 گرانترین و جوانترین مێزەڵانی زێر و الماس ڕێزلێنراو بۆ سەرکردەکان!</p>
-                <p style="font-size: 11px; color: #fde047; margin-top: 4px;" id="shopUserBalanceText">باڵانسی تۆ: ٠ خاڵ</p>
-            </div>
-
-            <div class="shop-grid">
-                <div class="shop-item-card">
-                    <div>
-                        <div class="shop-item-icon">🌟</div>
-                        <div class="shop-item-title">مێزەڵانی زێری شاھانە</div>
-                        <p style="font-size: 10px; color: #e9d5ff;">دروستکراو له زێری خاوێن و بریسکەدار</p>
-                    </div>
-                    <div>
-                        <div class="shop-item-price">٥,٠٠٠ خاڵ</div>
-                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('مێزەڵانی زێری شاھانە', 5000)">کڕین</button>
-                    </div>
+            <div id="wordModeSelect" class="card">
+                <h3>هەڵبژاردنی چۆنیەتی یاری (٢ خولەک):</h3>
+                <button class="btn" onclick="startWordQuickRoom()" style="background: #16a34a; margin-bottom: 8px;">⚡ ژووری خێرا (ئۆنلاین)</button>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
+                    <label>دروستکردنی ژوور بە کۆد</label>
+                    <input type="text" id="createRoomCodeInput" placeholder="کۆدی ژوور (بۆ نموونە: 1234)..." style="margin-bottom: 6px;">
+                    <button class="btn" onclick="createCustomWordRoom()" style="background: #0284c7;">دروستکردن</button>
                 </div>
-
-                <div class="shop-item-card">
-                    <div>
-                        <div class="shop-item-icon">💎</div>
-                        <div class="shop-item-title">مێزەڵانی ئەڵماسی ئەستێرەیی</div>
-                        <p style="font-size: 10px; color: #e9d5ff;">پڕ لە ئەڵماسی پاکی پۆڵایین مرتب</p>
-                    </div>
-                    <div>
-                        <div class="shop-item-price">١٥,٠٠٠ خاڵ</div>
-                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('مێزەڵانی ئەڵماسی ئەستێرەیی', 15000)">کڕین</button>
-                    </div>
-                </div>
-
-                <div class="shop-item-card">
-                    <div>
-                        <div class="shop-item-icon">👑</div>
-                        <div class="shop-item-title">تاجی زێر و ئەڵماسی مەزن</div>
-                        <p style="font-size: 10px; color: #e9d5ff;">گرانترین دیاری تایبەت به تۆرەمەکان</p>
-                    </div>
-                    <div>
-                        <div class="shop-item-price">٥٠,٠٠٠ خاڵ</div>
-                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('تاجی زێر و ئەڵماسی مەزن', 50000)">کڕین</button>
-                    </div>
-                </div>
-
-                <div class="shop-item-card">
-                    <div>
-                        <div class="shop-item-icon">🏆</div>
-                        <div class="shop-item-title">جامە خاوێنەکەی ئەڵماس</div>
-                        <p style="font-size: 10px; color: #e9d5ff;">دیزاینی تایبەت و ناوازە به الماسّ</p>
-                    </div>
-                    <div>
-                        <div class="shop-item-price">١٠٠,٠٠٠ خاڵ</div>
-                        <button class="btn" style="padding: 6px; font-size: 11px; margin-top: 4px;" onclick="buyShopItem('جامە خاوێنەکەی ئەڵماس', 100000)">کڕین</button>
-                    </div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 8px 0; padding-top: 6px;">
+                    <label>چوونەژورەوە بۆ ژوور بە کۆد</label>
+                    <input type="text" id="joinRoomCodeInput" placeholder="کۆدی ژوور بنووسە..." style="margin-bottom: 6px;">
+                    <button class="btn" onclick="joinCustomWordRoom()" style="background: #9333ea;">چوونەژوورەوە</button>
                 </div>
             </div>
 
-            <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
-        </div>
-
-        <!-- Profile Screen -->
-        <div id="profileScreen" class="screen">
-            <div class="brand-title">پڕۆفایلی من</div>
-            
-            <div class="card" style="text-align: center; padding: 20px;">
-                <div class="avatar-preview" onclick="document.getElementById('profileFileInput').click()" style="margin-bottom: 12px;">
-                    <img id="profileAvatarPreview" src="" alt="Avatar" style="display:none;" />
-                    <span id="profileAvatarPlaceholder" style="font-size: 32px;">📷</span>
-                </div>
-                <input type="file" id="profileFileInput" accept="image/*" style="display:none;" onchange="handleProfileImageUpload(event)">
-                
-                <div class="form-group" style="text-align: right;">
-                    <label>ناوی بەکارهێنەر</label>
-                    <input type="text" id="profileUsernameInput" placeholder="ناوی نوێ...">
-                </div>
-                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردنی گۆڕانکاری</button>
+            <div id="wordLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
+                <h3 style="color: var(--text-glow); font-size: 16px;">چاوەڕوانی یاریزانی دووەم...</h3>
+                <div class="spinner"></div>
+                <p style="font-size: 12px; color: #cbd5e1;" id="wordLobbyText">کۆدی ژوورەکەت: --</p>
+                <button class="btn" onclick="cancelMatchmaking('word')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
-            <div class="card">
-                <h3>⭐ زانیاری و ئاماری یاریزان</h3>
-                <p id="profileUserStatsText">کۆی خاڵەکانت: ٠</p>
+            <div id="wordGameArea" style="display: none;" class="word-game-board">
+                <div class="target-letter-box">
+                    <div>
+                        <span style="font-size: 10px; display:block; color:#f3e8ff; text-align:right;">پيتي داواکراو:</span>
+                        <span class="target-letter" id="targetLetterDisplay">ت</span>
+                    </div>
+                    <div>
+                        <span style="font-size: 10px; display:block; color:#fde047; text-align:left;">کاتی ماوە:</span>
+                        <div class="timer-display" id="wordTimerDisplay">٠٢:٠٠</div>
+                    </div>
+                </div>
+
+                <div class="score-board" style="margin-bottom: 6px;">
+                    <div class="score-box">
+                        <span id="wordP1Title">یاریزانی ١</span>
+                        <bold id="wordP1Score">٠</bold>
+                    </div>
+                    <div class="score-box">
+                        <span>دۆخ</span>
+                        <bold id="wordGameStatusText" style="color:var(--text-glow);">یاری بەڕێوەیە...</bold>
+                    </div>
+                    <div class="score-box">
+                        <span id="wordP2Title">یاریزانی ٢</span>
+                        <bold id="wordP2Score">٠</bold>
+                    </div>
+                </div>
+
+                <div class="word-input-container">
+                    <input type="text" id="wordInputText" placeholder="وشەی مانا دار بنووسە..." style="flex: 1;" onkeypress="if(event.key==='Enter') submitWordMove()">
+                    <button class="btn" id="wordSendBtn" onclick="submitWordMove()" style="margin-top: 0; width: 80px;">ناردن</button>
+                </div>
+
+                <div class="words-list-container" id="wordsListContainer">
+                    <span style="font-size: 11px; color: #94a3b8;">وشە پەسەندکراوەکان لێرە دەردەکەون...</span>
+                </div>
+
+                <div id="wordErrorAlert" class="error-alert-box" style="display: none;">
+                    <div class="error-alert-text" id="wordErrorText">⚠️ وشە هەڵەیە!</div>
+                </div>
             </div>
 
-            <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Settings Screen -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
+            
+            <div class="card">
+                <h3>👤 دەستکاری زانیارییەکان</h3>
+                <div class="avatar-preview" onclick="document.getElementById('settingsFileInput').click()" style="margin-bottom: 6px;">
+                    <img id="settingsAvatarPreview" src="" alt="Avatar" style="display:none;" />
+                    <span id="settingsAvatarPlaceholder" style="font-size: 20px;">📷</span>
+                </div>
+                <input type="file" id="settingsFileInput" accept="image/*" style="display:none;" onchange="handleSettingsImageUpload(event)">
+                
+                <div class="form-group">
+                    <label>ناوی بەکارهێنەر</label>
+                    <input type="text" id="settingsUsernameInput" placeholder="ناوی نوێ...">
+                </div>
+                <button class="btn" onclick="saveProfileChanges()">پاشەکەوتکردن</button>
+            </div>
 
             <div class="card">
                 <h3>🎵 دەنگ و مۆسیقا و ڕوکار</h3>
@@ -591,11 +495,16 @@
                 </div>
             </div>
 
-            <button class="btn" onclick="logoutUser()" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-bottom: 6px;">🚪 دەرچوون لە حیساب</button>
-            <button class="btn" onclick="backToHub()" style="margin-top: auto;">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <div class="card" style="border-color: #f87171;">
+                <h3 style="color: #f87171;">🚪 بەڕێوەبردنی حیساب</h3>
+                <button class="btn" style="background: linear-gradient(135deg, #ef4444, #b91c1c); margin-top: 4px;" onclick="logoutUser()">دەرچوون</button>
+            </div>
+
+            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە</button>
         </div>
     </div>
 
+    <!-- Firebase & Core Game Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -628,7 +537,7 @@
                         username: username,
                         email: user.email,
                         avatar: avatar,
-                        score: 1000
+                        score: 0
                     };
 
                     localStorage.setItem("user_profile_" + username, JSON.stringify(profileData));
@@ -641,7 +550,7 @@
                     loadUserData();
                     if (window.loadLeaderboard) window.loadLeaderboard();
                 }).catch((error) => {
-                    console.error("هەڵە:", error);
+                    console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
                     alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
                 });
         };
@@ -659,15 +568,6 @@
             const userStatusRef = ref(database, 'users/' + username + '/status');
             set(userStatusRef, 'online');
             onDisconnect(userStatusRef).set('offline');
-            
-            const scoreRef = ref(database, 'users/' + username + '/score');
-            get(scoreRef).then(snap => {
-                if(!snap.exists()) {
-                    let localProf = JSON.parse(localStorage.getItem("user_profile_" + username) || "{}");
-                    let currentScr = localProf.score || 1000;
-                    set(scoreRef, currentScr);
-                }
-            });
         };
 
         window.setOfflineStatus = function(username) {
@@ -680,14 +580,7 @@
             const scoreRef = ref(database, 'users/' + username + '/score');
             get(scoreRef).then(snapshot => {
                 let currentScore = snapshot.exists() ? snapshot.val() : 0;
-                let newScore = currentScore + pts;
-                set(scoreRef, newScore);
-                
-                let prof = JSON.parse(localStorage.getItem("user_profile_" + username) || "{}");
-                prof.score = newScore;
-                localStorage.setItem("user_profile_" + username, JSON.stringify(prof));
-                
-                loadUserData();
+                set(scoreRef, currentScore + pts);
                 loadLeaderboard();
             });
         };
@@ -717,12 +610,206 @@
             });
         };
 
-        /* Konkan Online Engine */
-        let konkanCurrentRoomId = null;
-        let konkanMyRole = "";
+        /* XO Online Engine */
+        let xoCurrentRoomId = null;
+        let xoMyRole = ""; 
 
-        window.startOnlineKonkanMatchmaking = function(username) {
-            const lobbyRef = ref(database, 'konkan_lobby');
+        window.startOnlineMatchmaking = function(username) {
+            const lobbyRef = ref(database, 'xo_lobby');
+            get(lobbyRef).then((snapshot) => {
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
+                if (lobbyData) {
+                    for (let id in lobbyData) {
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].playerX !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
+                    }
+                }
+
+                if (waitingRoomId) {
+                    xoCurrentRoomId = waitingRoomId;
+                    xoMyRole = "O";
+                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
+                        playerO: username,
+                        status: 'playing'
+                    }).then(() => {
+                        listenToXoRoom(xoCurrentRoomId, username);
+                    });
+                } else {
+                    xoCurrentRoomId = "room_xo_" + Date.now();
+                    xoMyRole = "X";
+                    const newRoomRef = ref(database, 'xo_lobby/' + xoCurrentRoomId);
+                    set(newRoomRef, {
+                        playerX: username,
+                        playerO: "",
+                        status: 'waiting',
+                        turn: 'X',
+                        board: ["", "", "", "", "", "", "", "", ""],
+                        winner: "",
+                        restartX: false,
+                        restartO: false
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        listenToXoRoom(xoCurrentRoomId, username);
+                    });
+                }
+            });
+        };
+
+        function listenToXoRoom(roomId, username) {
+            const roomRef = ref(database, 'xo_lobby/' + roomId);
+            onValue(roomRef, (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                if (room.status === 'waiting') {
+                    document.getElementById("xoModeSelect").style.display = "none";
+                    document.getElementById("xoLobbyArea").style.display = "block";
+                    document.getElementById("xoGameArea").style.display = "none";
+                } else if (room.status === 'playing') {
+                    document.getElementById("xoModeSelect").style.display = "none";
+                    document.getElementById("xoLobbyArea").style.display = "none";
+                    document.getElementById("xoGameArea").style.display = "block";
+
+                    let xLabel = room.playerX + (xoMyRole === 'X' ? " (تۆ)" : "");
+                    let oLabel = (room.playerO || "بەرامبەر") + (xoMyRole === 'O' ? " (تۆ)" : "");
+                    
+                    if (xoMyRole === 'X') {
+                        document.getElementById("playerXName").innerHTML = `<span style="color:#facc15">${xLabel}</span>`;
+                        document.getElementById("playerOName").innerText = oLabel;
+                    } else {
+                        document.getElementById("playerXName").innerText = xLabel;
+                        document.getElementById("playerOName").innerHTML = `<span style="color:#facc15">${oLabel}</span>`;
+                    }
+
+                    window.xoState = room.board || ["", "", "", "", "", "", "", "", ""];
+                    window.xoTurn = room.turn;
+                    window.renderXoBoard();
+
+                    if (room.winner) {
+                        if (room.winner === 'draw') {
+                            document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
+                        } else {
+                            let winnerName = room.winner === 'X' ? room.playerX : room.playerO;
+                            document.getElementById("xoStatusText").innerText = `بردیەوە ${winnerName}! 🎉`;
+                            if (room.winner === xoMyRole && !room.scoreAdded) {
+                                window.addScore(username, 10);
+                                if (xoMyRole === 'X') {
+                                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { scoreAdded: true });
+                                }
+                            }
+                        }
+                        window.xoGameActive = false;
+                        
+                        let resetBtn = document.getElementById("xoResetBtn");
+                        resetBtn.style.display = "block";
+                        
+                        let myRestartClicked = (xoMyRole === 'X' ? room.restartX : room.restartO);
+                        if (myRestartClicked) {
+                            resetBtn.innerText = "⏳ چاوەڕوانی یاریزانی بەرامبەر...";
+                            resetBtn.disabled = true;
+                        } else {
+                            resetBtn.innerText = "🔄 دەستپێکردنەوە";
+                            resetBtn.disabled = false;
+                        }
+
+                        if (room.restartX && room.restartO) {
+                            if (xoMyRole === 'X') {
+                                update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
+                                    board: ["", "", "", "", "", "", "", "", ""],
+                                    turn: 'X',
+                                    winner: "",
+                                    restartX: false,
+                                    restartO: false,
+                                    scoreAdded: false
+                                });
+                            }
+                        }
+                    } else {
+                        window.xoGameActive = true;
+                        document.getElementById("xoResetBtn").style.display = "none";
+                        if (room.turn === xoMyRole) {
+                            document.getElementById("xoStatusText").innerText = "سەرەی تۆیە! 🎯";
+                        } else {
+                            let turnName = room.turn === 'X' ? room.playerX : room.playerO;
+                            document.getElementById("xoStatusText").innerText = `سەرەی ${turnName}`;
+                        }
+                    }
+                }
+            });
+        }
+
+        window.sendOnlineXoMove = function(index) {
+            if (!xoCurrentRoomId) return;
+            if (window.xoTurn !== xoMyRole) {
+                alert("چاوەڕێ بکە، هێشتا سەرەی تۆ نییە!");
+                return;
+            }
+
+            let newBoard = [...window.xoState];
+            newBoard[index] = xoMyRole;
+            let nextTurn = xoMyRole === 'X' ? 'O' : 'X';
+            let winner = "";
+
+            if (window.checkXoWinnerLocal(newBoard, xoMyRole)) {
+                winner = xoMyRole;
+            } else if (!newBoard.includes("")) {
+                winner = "draw";
+            }
+
+            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
+                board: newBoard,
+                turn: nextTurn,
+                winner: winner
+            });
+        };
+
+        window.sendOnlineXoRestart = function() {
+            if (!xoCurrentRoomId) return;
+            let updates = {};
+            if (xoMyRole === 'X') updates.restartX = true;
+            else updates.restartO = true;
+            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), updates);
+        };
+
+        window.leaveXoRoom = function() {
+            if (xoCurrentRoomId) {
+                remove(ref(database, 'xo_lobby/' + xoCurrentRoomId));
+                xoCurrentRoomId = null;
+            }
+        };
+
+        /* Word Game Online Engine with automatic continuous timer & 3s audio chime */
+        let wordCurrentRoomId = null;
+        let wordMyRole = ""; 
+        const kurdishLetters = ["ت", "م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ"];
+        let clientTimerInterval = null;
+
+        function playVictorySound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                let now = ctx.currentTime;
+                let notes = [440, 554, 659, 880];
+                notes.forEach((freq, idx) => {
+                    let osc = ctx.createOscillator();
+                    let gain = ctx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(freq, now + (idx * 0.2));
+                    gain.gain.setValueAtTime(0.2, now + (idx * 0.2));
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.2) + 0.5);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + (idx * 0.2));
+                    osc.stop(now + (idx * 0.2) + 0.6);
+                });
+            } catch(e) {}
+        }
+
+        window.startWordQuickRoomMatch = function(username) {
+            const lobbyRef = ref(database, 'word_lobby');
             get(lobbyRef).then((snapshot) => {
                 let lobbyData = snapshot.val();
                 let waitingRoomId = null;
@@ -737,164 +824,319 @@
                 }
 
                 if (waitingRoomId) {
-                    konkanCurrentRoomId = waitingRoomId;
-                    konkanMyRole = "player2";
-                    update(ref(database, 'konkan_lobby/' + konkanCurrentRoomId), {
+                    wordCurrentRoomId = waitingRoomId;
+                    wordMyRole = "player2";
+                    update(ref(database, 'word_lobby/' + wordCurrentRoomId), {
                         player2: username,
-                        status: 'playing'
+                        status: 'playing',
+                        startTime: Date.now()
                     }).then(() => {
-                        listenToKonkanRoom(konkanCurrentRoomId, username);
+                        startClientTimerLoop();
+                        listenToWordRoom(wordCurrentRoomId, username);
                     });
                 } else {
-                    konkanCurrentRoomId = "room_konkan_" + Date.now();
-                    konkanMyRole = "player1";
-                    
-                    let initialDeck = generateKonkanDeck();
-                    let p1Cards = initialDeck.splice(0, 14);
-                    let p2Cards = initialDeck.splice(0, 14);
-                    let discardTop = initialDeck.pop();
-
-                    const newRoomRef = ref(database, 'konkan_lobby/' + konkanCurrentRoomId);
+                    wordCurrentRoomId = "room_word_" + Date.now();
+                    wordMyRole = "player1";
+                    let randomLetter = kurdishLetters[Math.floor(Math.random() * kurdishLetters.length)];
+                    const newRoomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
                     set(newRoomRef, {
                         player1: username,
                         player2: "",
                         status: 'waiting',
-                        turn: 'player1',
-                        deck: initialDeck,
-                        discard: discardTop,
-                        p1Cards: p1Cards,
-                        p2Cards: p2Cards,
-                        winner: ""
+                        targetLetter: randomLetter,
+                        words: {},
+                        scores: { player1: 0, player2: 0 },
+                        startTime: Date.now(), // Auto start time immediately when room is created/joined
+                        gameOver: false,
+                        winnerName: ""
                     }).then(() => {
                         onDisconnect(newRoomRef).remove();
-                        listenToKonkanRoom(konkanCurrentRoomId, username);
+                        document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                        startClientTimerLoop();
+                        listenToWordRoom(wordCurrentRoomId, username);
                     });
                 }
             });
         };
 
-        function generateKonkanDeck() {
-            let deck = [];
-            let suits = ['red', 'blue', 'black', 'yellow'];
-            suits.forEach(suit => {
-                for(let i = 1; i <= 13; i++) {
-                    deck.push({ value: i, suit: suit });
+        window.createCustomWordRoomFirebase = function(username, customCode) {
+            wordCurrentRoomId = customCode;
+            wordMyRole = "player1";
+            let randomLetter = kurdishLetters[Math.floor(Math.random() * kurdishLetters.length)];
+            const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+            
+            get(roomRef).then((snapshot) => {
+                if(snapshot.exists()) {
+                    alert("ئەم کۆدی ژوورە پێشتر هەیە، تکایە کۆدێکی تر بنووسە!");
+                    return;
                 }
+                set(roomRef, {
+                    player1: username,
+                    player2: "",
+                    status: 'waiting',
+                    targetLetter: randomLetter,
+                    words: {},
+                    scores: { player1: 0, player2: 0 },
+                    startTime: Date.now(),
+                    gameOver: false,
+                    winnerName: ""
+                }).then(() => {
+                    onDisconnect(roomRef).remove();
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "block";
+                    document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                    startClientTimerLoop();
+                    listenToWordRoom(wordCurrentRoomId, username);
+                });
             });
-            // Shuffle
-            for (let i = deck.length - 1; i > 0; i--) {
-                let j = Math.floor(Math.random() * (i + 1));
-                [deck[i], deck[j]] = [deck[j], deck[i]];
-            }
-            return deck;
+        };
+
+        window.joinCustomWordRoomFirebase = function(username, customCode) {
+            const roomRef = ref(database, 'word_lobby/' + customCode);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) {
+                    alert("هیچ ژوورێک بەم کۆدە بوونی نییە!");
+                    return;
+                }
+                let roomData = snapshot.val();
+                if(roomData.status !== 'waiting') {
+                    alert("ئەم ژوورە پڕ بووە یان دەستپێکردووە!");
+                    return;
+                }
+                wordCurrentRoomId = customCode;
+                wordMyRole = "player2";
+                update(roomRef, {
+                    player2: username,
+                    status: 'playing',
+                    startTime: Date.now()
+                }).then(() => {
+                    startClientTimerLoop();
+                    listenToWordRoom(wordCurrentRoomId, username);
+                });
+            });
+        };
+
+        function startClientTimerLoop() {
+            if (clientTimerInterval) clearInterval(clientTimerInterval);
+            
+            clientTimerInterval = setInterval(() => {
+                if (!wordCurrentRoomId) return;
+                const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+                get(roomRef).then((snapshot) => {
+                    if (!snapshot.exists()) return;
+                    let room = snapshot.val();
+                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
+
+                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
+                    let timeLeft = 120 - elapsed;
+
+                    if (timeLeft <= 0) {
+                        timeLeft = 0;
+                        clearInterval(clientTimerInterval);
+
+                        if (!room.winnerName) {
+                            let p1Score = room.scores.player1 || 0;
+                            let p2Score = room.scores.player2 || 0;
+                            let wName = "یەکسان بوون! 🤝";
+                            if (p1Score > p2Score) wName = room.player1 + " بردیەوە! 🎉";
+                            else if (p2Score > p1Score) wName = (room.player2 || "یاریزانی ٢") + " بردیەوە! 🎉";
+                            
+                            playVictorySound();
+
+                            if (wordMyRole === 'player1') {
+                                update(roomRef, { gameOver: true, winnerName: wName });
+                            }
+                        }
+                    }
+
+                    let mins = Math.floor(timeLeft / 60);
+                    let secs = timeLeft % 60;
+                    let timerEl = document.getElementById("wordTimerDisplay");
+                    if (timerEl) {
+                        timerEl.innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
+                    }
+                });
+            }, 1000);
         }
 
-        function listenToKonkanRoom(roomId, username) {
-            const roomRef = ref(database, 'konkan_lobby/' + roomId);
+        function listenToWordRoom(roomId, username) {
+            const roomRef = ref(database, 'word_lobby/' + roomId);
             onValue(roomRef, (snapshot) => {
                 const room = snapshot.val();
                 if (!room) return;
 
                 if (room.status === 'waiting') {
-                    document.getElementById("konkanModeSelect").style.display = "none";
-                    document.getElementById("konkanLobbyArea").style.display = "block";
-                    document.getElementById("konkanGameArea").style.display = "none";
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "block";
+                    document.getElementById("wordGameArea").style.display = "none";
                 } else if (room.status === 'playing') {
-                    document.getElementById("konkanModeSelect").style.display = "none";
-                    document.getElementById("konkanLobbyArea").style.display = "none";
-                    document.getElementById("konkanGameArea").style.display = "block";
+                    document.getElementById("wordModeSelect").style.display = "none";
+                    document.getElementById("wordLobbyArea").style.display = "none";
+                    document.getElementById("wordGameArea").style.display = "block";
 
-                    let p1Label = room.player1 + (konkanMyRole === 'player1' ? " (تۆ)" : "");
-                    let p2Label = (room.player2 || "بەرامبەر") + (konkanMyRole === 'player2' ? " (تۆ)" : "");
+                    let p1Text = room.player1 + (wordMyRole === 'player1' ? " (تۆ)" : "");
+                    let p2Text = (room.player2 || "بەرامبەر") + (wordMyRole === 'player2' ? " (تۆ)" : "");
 
-                    document.getElementById("konkanPlayerName").innerText = (konkanMyRole === 'player1' ? p1Label : p2Label);
-                    document.getElementById("konkanOpponentName").innerText = (konkanMyRole === 'player1' ? p2Label : p1Label);
-
-                    let myCards = konkanMyRole === 'player1' ? room.p1Cards : room.p2Cards;
-                    let oppCardsCount = konkanMyRole === 'player1' ? (room.p2Cards ? room.p2Cards.length : 14) : (room.p1Cards ? room.p1Cards.length : 14);
-                    
-                    document.getElementById("opponentCardCount").innerText = `پەلی بەرامبەر: ${oppCardsCount}`;
-                    
-                    renderKonkanRack(myCards || []);
-                    renderKonkanDiscard(room.discard);
-
-                    if (room.winner) {
-                        if(room.winner === konkanMyRole) {
-                            document.getElementById("konkanStatusText").innerText = "پیرۆزە! تۆ سەرکەوتی! 🎉";
-                            if(!room.scoreAdded && konkanMyRole === 'player1') {
-                                window.addScore(username, 100);
-                                update(roomRef, { scoreAdded: true });
-                            }
-                        } else {
-                            document.getElementById("konkanStatusText").innerText = "یاریزان بەرامبەر بردیەوە! 🏆";
-                        }
+                    if (wordMyRole === 'player1') {
+                        document.getElementById("wordP1Title").innerHTML = `<span style="color:#facc15">${p1Text}</span>`;
+                        document.getElementById("wordP2Title").innerText = p2Text;
                     } else {
-                        if (room.turn === konkanMyRole) {
-                            document.getElementById("konkanStatusText").innerText = "نۆرەی تۆیە - پەلەیەک هەڵبژێرە 🎯";
-                        } else {
-                            document.getElementById("konkanStatusText").innerText = "نۆرەی یاریزانی بەرامبەرە...";
-                        }
+                        document.getElementById("wordP1Title").innerText = p1Text;
+                        document.getElementById("wordP2Title").innerHTML = `<span style="color:#facc15">${p2Text}</span>`;
                     }
+
+                    document.getElementById("targetLetterDisplay").innerText = room.targetLetter;
+
+                    let p1Score = room.scores.player1 || 0;
+                    let p2Score = room.scores.player2 || 0;
+                    document.getElementById("wordP1Score").innerText = p1Score;
+                    document.getElementById("wordP2Score").innerText = p2Score;
+
+                    if (room.winnerName) {
+                        document.getElementById("wordGameStatusText").innerText = room.winnerName;
+                        document.getElementById("wordInputText").disabled = true;
+                        document.getElementById("wordSendBtn").disabled = true;
+                    } else {
+                        document.getElementById("wordGameStatusText").innerText = "یاری بەڕێوەیە...";
+                    }
+
+                    let wordsObj = room.words || {};
+                    let wordsHtml = "";
+                    for(let key in wordsObj) {
+                        let wItem = wordsObj[key];
+                        let isMyW = (wItem.user === username);
+                        let badgeClass = isMyW ? "word-badge my-word" : "word-badge";
+                        wordsHtml += `<span class="${badgeClass}">${wItem.word} (${wItem.user})</span>`;
+                    }
+                    document.getElementById("wordsListContainer").innerHTML = wordsHtml || "<span style='font-size: 11px; color: #94a3b8;'>هێشتا هیچ وشەیەک نەنووسراوە...</span>";
                 }
             });
+        };
+
+        window.submitWordFirebaseMove = function(wordText, targetLetter, username) {
+            if (!wordCurrentRoomId) return;
+
+            const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) return;
+                let room = snapshot.val();
+                if (room.gameOver) return;
+
+                let trimmed = wordText.trim();
+                
+                // 1. Check starting letter
+                if (!trimmed.startsWith(targetLetter)) {
+                    showWordError("⚠️ وشە دەبێت بە پيتي '" + targetLetter + "' دەست پێبکات!");
+                    return;
+                }
+
+                // 2. Strict Meaningful Kurdish Dictionary Check
+                if (!isValidMeaningfulKurdishWord(trimmed)) {
+                    showWordError("⚠️ تەنها وشەی ڕەسەنی کوردی قبوڵ دەکرێت (وشەی بێ مانا و نموونەکانی وەک الستار، تايتار ڕەتن)!");
+                    return;
+                }
+
+                // Check duplicate
+                let wordsObj = room.words || {};
+                for(let k in wordsObj) {
+                    if(wordsObj[k].word === trimmed) {
+                        showWordError("⚠️ ئەم وشەیە پێشتر تۆمارکراوە!");
+                        return;
+                    }
+                }
+
+                let newWordKey = "w_" + Date.now();
+                wordsObj[newWordKey] = { word: trimmed, user: username };
+
+                room.scores[wordMyRole] = (room.scores[wordMyRole] || 0) + 10;
+
+                let updates = {
+                    words: wordsObj,
+                    scores: room.scores
+                };
+
+                update(roomRef, updates);
+
+                document.getElementById("wordInputText").value = "";
+                hideWordError();
+            });
+        };
+
+        // فەرهەنگی پشکنینی توند بۆ وشە کوردییەکان (ڕێگری لە هەموو وشە نامۆ و بێ ماناکان وەک الستار، تايتار، تيتياير و هتد)
+        function isValidMeaningfulKurdishWord(w) {
+            if (w.length < 3) return false;
+
+            // لیستی وشە قەدەغە و بێ ماناکان کە بەکارهێنەر داوای کردن یان نموونەن
+            const blockedList = ["الستار", "تايتار", "تيتاير", "تيتياير", "تبريرين", "توتو", "مومو", "دادا", "تيتي", "توتار", "تيتار", "ماما", "بابا", "بابۆ", "تاتە", "توتوت", "تيتيت"];
+            if (blockedList.includes(w)) return false;
+
+            // پشکنینی پیتە دووبارەکان لەسەر یەک (بۆ نموونە سێ پیت یان زیاتر لەدوای یەک)
+            for (let i = 0; i < w.length - 2; i++) {
+                if (w[i] === w[i+1] && w[i+1] === w[i+2]) {
+                    return false;
+                }
+            }
+
+            // فەرهەنگی بنەڕەتی وشە کوردییە ڕەسەنە باوەکان بۆ دڵنیابوون لەوەی مانا دارن
+            const validKurdishDictionary = [
+                // پیتى ت
+                "تانجى", "تاڤگە", "تاقە", "تەپۆلکە", "تەرزە", "تەموومژ", "تۆرەمە", "تەلار", "تیرۆر", "تەنیایی", "تۆمار", "تەپڵ", "تەمەن", "تەنیشت", "تەلەفۆن", "تووڕە", "تەون", "تەنیل", "تۆپ", "تەختە", "تەلان",
+                // پیتى م
+                "مامۆستا", "مایک", "مانگ", "مێوژ", "مەلەلە", "مێژوو", "مێشک", "میرات", "مۆم", "مۆزەخانە", "مریشک", "ماسی", "مێروو", "مۆدێرن", "مەکۆ",
+                // پیتى ب
+                "باران", "بەهار", "بەفر", "بنار", "باڵندە", "بەرد", "بەیبوون", "بروسکە", "بۆنە", "بەختەوەر", "برا", "باوکی", "بنەماڵە", "بیرۆکە", "بەرهەم",
+                // پیتى د
+                "درەخت", "دەریای", "دایک", "دیاری", "دڵسۆز", "دەفتەر", "دەمانچە", "دەنگ", "دوورگە", "دیمەن", "دانا", "دەست",
+                // پیتى ر
+                "ڕۆژمێر", "رووبار", "رەنگین", "رێواس", "رۆشنایی", "ڕێگا", "ڕێز", "ڕەشماڵ", "ڕوخسار",
+                // پیتى س
+                "ستێرە", "سێو", "سەرۆک", "سەوزە", "سەیران", "سلێمانی", "سپێدە", "سەرکەوتن", "سازگار", "سەهۆڵ",
+                // پیتى ش
+                "شارەزا", "شێرپەنجە", "شەقام", "شاکار", "شەماڵ", "شۆفێر", "شەکر", "شین", "شەوانە",
+                // پیتى ک
+                "کوردستان", "کانی", "کۆمەڵگا", "کەلتوور", "کۆڵان", "کتێب", "کۆمپیوتەر", "کاروان", "کەوانە", "کچە",
+                // پیتى گ
+                "گوڵەبەڕۆژە", "گەشتیار", "گەورە", "گۆران", "گەنم", "گەردەلوول", "گۆرانی", "گوڵ",
+                // پیتى ل
+                "لاپەڕە", "لێڤا", "لاوک", "لانکە", "لۆژیک", "لەشکر",
+                // پیتى ن
+                "نەورۆز", "ئەستێرە", "نیشتمان", "نووسەر", "ئاسمان", "ئاو", "ئاگر", "ئارام", "ئۆتۆمبیل", "ئەزموون",
+                // پیتى و
+                "وێنە", "وشە", "وڵات", "وەرزی", "وەشان",
+                // پیتى هـ
+                "هەتاو", "هەڵبەست", "هەولێر", "هێێمن", "هەنار", "هەور", "هەنگاو",
+                // پیتى چ
+                "چیا", "چاو", "چیرۆک", "چایچی", "چەمەن", "چەکدار",
+                // پیتى پ
+                "پێشمەرگە", "پاییز", "پرد", "پەپولە", "پەڕەسوورە", "پۆل", "پەرتووک"
+            ];
+
+            // پشکنین: ئایا لە فەرهەنگەکەدا هەیە یان بە پیتە ڕەسەنەکان دەست پێدەکات و دووانەی نادروست نییە
+            if (validKurdishDictionary.includes(w)) {
+                return true;
+            }
+
+            // ئەگەر لە فەرهەنگەکە نەبوو، ڕەتی دەکەینەوە بۆ ئەوەی وشەی بێ مانا وەک الستار و تايتار تێپەڕ نەبن
+            return false;
         }
 
-        window.konkanOnlineDiscardCard = function(cardIndex) {
-            const roomRef = ref(database, 'konkan_lobby/' + konkanCurrentRoomId);
-            get(roomRef).then(snapshot => {
-                let room = snapshot.val();
-                if(!room || room.turn !== konkanMyRole || room.winner) return;
+        function showWordError(msg) {
+            let alertBox = document.getElementById("wordErrorAlert");
+            let alertText = document.getElementById("wordErrorText");
+            alertText.innerText = msg;
+            alertBox.style.display = "block";
+            setTimeout(() => { alertBox.style.display = "none"; }, 3000);
+        }
 
-                let myKey = konkanMyRole === 'player1' ? 'p1Cards' : 'p2Cards';
-                let myCards = room[myKey] || [];
-                
-                let discardedCard = myCards.splice(cardIndex, 1)[0];
-                let nextTurn = konkanMyRole === 'player1' ? 'player2' : 'player1';
+        function hideWordError() {
+            document.getElementById("wordErrorAlert").style.display = "none";
+        }
 
-                let updates = {};
-                updates[myKey] = myCards;
-                updates.discard = discardedCard;
-                updates.turn = nextTurn;
-
-                update(roomRef, updates);
-            });
-        };
-
-        window.konkanOnlineDrawDeck = function() {
-            const roomRef = ref(database, 'konkan_lobby/' + konkanCurrentRoomId);
-            get(roomRef).then(snapshot => {
-                let room = snapshot.val();
-                if(!room || room.turn !== konkanMyRole || room.winner) return;
-
-                let deck = room.deck || [];
-                if(deck.length === 0) return;
-
-                let drawnCard = deck.pop();
-                let myKey = konkanMyRole === 'player1' ? 'p1Cards' : 'p2Cards';
-                let myCards = room[myKey] || [];
-                myCards.push(drawnCard);
-
-                let updates = {};
-                updates.deck = deck;
-                updates[myKey] = myCards;
-
-                update(roomRef, updates);
-            });
-        };
-
-        window.konkanOnlineDeclareWin = function() {
-            const roomRef = ref(database, 'konkan_lobby/' + konkanCurrentRoomId);
-            get(roomRef).then(snapshot => {
-                let room = snapshot.val();
-                if(!room || room.winner) return;
-                update(roomRef, { winner: konkanMyRole });
-            });
-        };
-
-        window.leaveKonkanRoomFirebase = function() {
-            if (konkanCurrentRoomId) {
-                remove(ref(database, 'konkan_lobby/' + konkanCurrentRoomId));
-                konkanCurrentRoomId = null;
+        window.leaveWordRoomFirebase = function() {
+            if (clientTimerInterval) clearInterval(clientTimerInterval);
+            if (wordCurrentRoomId) {
+                remove(ref(database, 'word_lobby/' + wordCurrentRoomId));
+                wordCurrentRoomId = null;
             }
         };
     </script>
@@ -902,16 +1144,13 @@
     <script>
         let currentUser = "";
         let tempAvatarBase64 = "";
-        let profileTempAvatar = "";
+        let settingsTempAvatar = "";
 
-        let konkanMode = "bot";
-        let konkanGameState = {
-            playerRack: [],
-            opponentCount: 14,
-            deck: [],
-            discard: { value: 7, suit: 'red' },
-            turn: 'player'
-        };
+        // XO Local State
+        window.xoState = ["", "", "", "", "", "", "", "", ""];
+        window.xoTurn = "X";
+        let xoMode = "bot";
+        window.xoGameActive = true;
 
         window.onload = function() {
             loadSavedSettings();
@@ -966,15 +1205,15 @@
             }
         }
 
-        function handleProfileImageUpload(event) {
+        function handleSettingsImageUpload(event) {
             let file = event.target.files[0];
             if (file) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    profileTempAvatar = e.target.result;
-                    let imgTag = document.getElementById("profileAvatarPreview");
-                    let textTag = document.getElementById("profileAvatarPlaceholder");
-                    imgTag.src = profileTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
+                    settingsTempAvatar = e.target.result;
+                    let imgTag = document.getElementById("settingsAvatarPreview");
+                    let textTag = document.getElementById("settingsAvatarPlaceholder");
+                    imgTag.src = settingsTempAvatar; imgTag.style.display = "block"; textTag.style.display = "none";
                 }
                 reader.readAsDataURL(file);
             }
@@ -991,7 +1230,7 @@
             if (pass.length < 8) { alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!"); return; }
             if (pass !== passConfirm) { alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!"); return; }
 
-            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 1000 };
+            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 0 };
             localStorage.setItem("user_profile_" + name, JSON.stringify(profileData));
             localStorage.setItem("top_top_active_user", name);
             currentUser = name;
@@ -1032,40 +1271,19 @@
         function loadUserData() {
             let profileData = localStorage.getItem("user_profile_" + currentUser);
             let profile = profileData ? JSON.parse(profileData) : {};
-            let currentScore = profile.score || 0;
+            document.getElementById("hubUsernameText").innerText = currentUser;
 
-            let avatarEl = document.getElementById("profileAvatarPreview");
-            let placeholderEl = document.getElementById("profileAvatarPlaceholder");
-            
-            let hubAvatarImg = document.getElementById("hubAvatarImg");
-            let hubPlaceholder = document.getElementById("hubAvatarPlaceholder");
-
+            let avatarEl = document.getElementById("hubUserAvatar");
             if (profile.avatar) {
-                avatarEl.src = profile.avatar;
-                avatarEl.style.display = "block";
-                placeholderEl.style.display = "none";
-
-                hubAvatarImg.src = profile.avatar;
-                hubAvatarImg.style.display = "block";
-                hubPlaceholder.style.display = "none";
+                avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
             } else {
-                avatarEl.style.display = "none";
-                placeholderEl.style.display = "block";
-                placeholderEl.innerText = "📷";
-
-                hubAvatarImg.style.display = "none";
-                hubPlaceholder.style.display = "block";
+                avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
             }
-            document.getElementById("profileUsernameInput").value = currentUser;
-            document.getElementById("hubUserScoreDisplay").innerText = "💰 " + currentScore + " خاڵ";
-            document.getElementById("profileUserStatsText").innerText = "کۆی خاڵەکانت: " + currentScore;
-            
-            let shopBalanceText = document.getElementById("shopUserBalanceText");
-            if(shopBalanceText) shopBalanceText.innerText = "باڵانسی تۆ: " + currentScore + " خاڵ";
+            document.getElementById("settingsUsernameInput").value = currentUser;
         }
 
         function saveProfileChanges() {
-            let newName = document.getElementById("profileUsernameInput").value.trim();
+            let newName = document.getElementById("settingsUsernameInput").value.trim();
             if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
 
             let oldProfileData = localStorage.getItem("user_profile_" + currentUser);
@@ -1081,10 +1299,10 @@
             }
 
             profile.username = currentUser;
-            if (profileTempAvatar) profile.avatar = profileTempAvatar;
+            if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
 
             localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            alert("پاشەکەوتکرا!");
+            alert("نوێکرایەوە!");
             loadUserData();
         }
 
@@ -1113,168 +1331,169 @@
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        function openProfileScreen() { loadUserData(); switchScreen("profileScreen"); }
-        function openSettingsScreen() { switchScreen("settingsScreen"); }
+        function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
         function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
-        /* Shopping Screen Navigation & Purchasing Logic */
-        function openShopScreen() {
-            loadUserData();
-            switchScreen("shopScreen");
+        /* XO Navigation */
+        function openXoMenu() {
+            switchScreen("xoScreen");
+            document.getElementById("xoModeSelect").style.display = "block";
+            document.getElementById("xoLobbyArea").style.display = "none";
+            document.getElementById("xoGameArea").style.display = "none";
         }
 
-        function buyShopItem(itemName, itemPrice) {
-            let profileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = profileData ? JSON.parse(profileData) : {};
-            let currentScore = profile.score || 0;
+        function startXoVsBot() {
+            xoMode = "bot";
+            document.getElementById("xoModeSelect").style.display = "none";
+            document.getElementById("xoLobbyArea").style.display = "none";
+            document.getElementById("xoGameArea").style.display = "block";
+            document.getElementById("playerXName").innerHTML = `<span style="color:#facc15">${currentUser} (تۆ)</span>`;
+            document.getElementById("playerOName").innerText = "کۆمپیوتەر";
+            resetXoBoard();
+        }
 
-            if (currentScore < itemPrice) {
-                alert("⚠️ خاڵەکانت بەس نییە! پێویستت بە " + itemPrice + " خاڵ هەیە بۆ کڕینی ئەم مێزەڵانە.");
-                return;
+        function startOnlineXo() {
+            xoMode = "online";
+            if (window.startOnlineMatchmaking) window.startOnlineMatchmaking(currentUser);
+        }
+
+        function handleXoCellClick(index) {
+            if (!window.xoGameActive || window.xoState[index] !== "") return;
+
+            if (xoMode === "online") {
+                window.sendOnlineXoMove(index);
+            } else {
+                window.xoState[index] = window.xoTurn;
+                window.renderXoBoard();
+
+                if (window.checkXoWinnerLocal(window.xoState, window.xoTurn)) {
+                    document.getElementById("xoStatusText").innerText = `بردیەوە ${window.xoTurn}! 🎉`;
+                    window.xoGameActive = false;
+                    document.getElementById("xoResetBtn").style.display = "block";
+                    if(window.xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
+                    return;
+                }
+
+                if (!window.xoState.includes("")) {
+                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
+                    window.xoGameActive = false;
+                    document.getElementById("xoResetBtn").style.display = "block";
+                    return;
+                }
+
+                if (window.xoTurn === "X") {
+                    window.xoTurn = "O";
+                    document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەر...";
+                    setTimeout(botXoMove, 500);
+                }
             }
+        }
 
-            let newScore = currentScore - itemPrice;
-            profile.score = newScore;
-            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
+        function botXoMove() {
+            if (!window.xoGameActive) return;
+            let emptyIndices = window.xoState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+            if (emptyIndices.length > 0) {
+                let randomIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                window.xoState[randomIdx] = "O";
+                window.renderXoBoard();
 
-            if (window.db && window.dbRef && window.dbSet) {
-                const scoreRef = window.dbRef(window.db, 'users/' + currentUser + '/score');
-                window.dbSet(scoreRef, newScore);
+                if (window.checkXoWinnerLocal(window.xoState, "O")) {
+                    document.getElementById("xoStatusText").innerText = "کۆمپیوتەر بردیەوە! 🤖";
+                    window.xoGameActive = false;
+                    document.getElementById("xoResetBtn").style.display = "block";
+                    return;
+                }
+
+                if (!window.xoState.includes("")) {
+                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
+                    window.xoGameActive = false;
+                    document.getElementById("xoResetBtn").style.display = "block";
+                    return;
+                }
+
+                window.xoTurn = "X";
+                document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
             }
-
-            alert("🎉 پیرۆزە! تۆ بە سەرکەوتوویی '" + itemName + "' ات کڕی بە بڕی " + itemPrice + " خاڵ!");
-            loadUserData();
-            if (window.loadLeaderboard) window.loadLeaderboard();
         }
 
-        /* Konkan Game Local & UI Management */
-        function openKonkanMenu() {
-            switchScreen("konkanScreen");
-            document.getElementById("konkanModeSelect").style.display = "block";
-            document.getElementById("konkanLobbyArea").style.display = "none";
-            document.getElementById("konkanGameArea").style.display = "none";
-        }
-
-        function startKonkanVsBot() {
-            konkanMode = "bot";
-            document.getElementById("konkanModeSelect").style.display = "none";
-            document.getElementById("konkanLobbyArea").style.display = "none";
-            document.getElementById("konkanGameArea").style.display = "block";
-            document.getElementById("konkanPlayerName").innerText = currentUser + " (تۆ)";
-            document.getElementById("konkanOpponentName").innerText = "کۆمپیوتەر";
-            
-            initLocalKonkanGame();
-        }
-
-        function startOnlineKonkan() {
-            konkanMode = "online";
-            if (window.startOnlineKonkanMatchmaking) window.startOnlineKonkanMatchmaking(currentUser);
-        }
-
-        function initLocalKonkanGame() {
-            let suits = ['red', 'blue', 'black', 'yellow'];
-            let fullDeck = [];
-            suits.forEach(s => {
-                for(let i=1; i<=13; i++) fullDeck.push({ value: i, suit: s });
+        window.renderXoBoard = function() {
+            let cells = document.querySelectorAll(".xo-cell");
+            cells.forEach((cell, idx) => {
+                cell.innerText = window.xoState[idx];
+                cell.className = "xo-cell " + window.xoState[idx].toLowerCase();
             });
-            // shuffle
-            for(let i=fullDeck.length-1; i>0; i--) {
-                let j = Math.floor(Math.random()*(i+1));
-                [fullDeck[i], fullDeck[j]] = [fullDeck[j], fullDeck[i]];
-            }
-
-            konkanGameState.playerRack = fullDeck.splice(0, 14);
-            konkanGameState.deck = fullDeck;
-            konkanGameState.discard = fullDeck.pop();
-            konkanGameState.opponentCount = 14;
-            konkanGameState.turn = 'player';
-
-            renderKonkanLocalUI();
-        }
-
-        function renderKonkanLocalUI() {
-            renderKonkanRack(konkanGameState.playerRack);
-            renderKonkanDiscard(konkanGameState.discard);
-            document.getElementById("opponentCardCount").innerText = `پەلی بەرامبەر: ${konkanGameState.opponentCount}`;
-            document.getElementById("konkanStatusText").innerText = konkanGameState.turn === 'player' ? "نۆرەی تۆیە - پەلەیەک هەڵبژێرە" : "نۆرەی کۆمپیوتەرە...";
-        }
-
-        window.renderKonkanRack = function(cards) {
-            let rackEl = document.getElementById("konkanPlayerRack");
-            let html = "";
-            cards.forEach((c, idx) => {
-                html += `<div class="konkan-card ${c.suit}" onclick="konkanCardClicked(${idx})">${c.value}</div>`;
-            });
-            rackEl.innerHTML = html;
         };
 
-        window.renderKonkanDiscard = function(card) {
-            let discardEl = document.getElementById("konkanDiscardPile");
-            discardEl.className = `konkan-card ${card.suit}`;
-            discardEl.innerText = card.value;
+        window.checkXoWinnerLocal = function(board, player) {
+            const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+            return winPatterns.some(pattern => pattern.every(index => board[index] === player));
         };
 
-        window.konkanCardClicked = function(idx) {
-            if (konkanMode === 'online') {
-                window.konkanOnlineDiscardCard(idx);
+        function resetXoBoard() {
+            if (xoMode === "online") {
+                window.sendOnlineXoRestart();
             } else {
-                if (konkanGameState.turn !== 'player') return;
-                let removed = konkanGameState.playerRack.splice(idx, 1)[0];
-                konkanGameState.discard = removed;
-                konkanGameState.turn = 'bot';
-                renderKonkanLocalUI();
-
-                setTimeout(botKonkanTurn, 1000);
-            }
-        };
-
-        window.konkanDrawFromDeck = function() {
-            if (konkanMode === 'online') {
-                window.konkanOnlineDrawDeck();
-            } else {
-                if (konkanGameState.turn !== 'player' || konkanGameState.deck.length === 0) return;
-                let drawn = konkanGameState.deck.pop();
-                konkanGameState.playerRack.push(drawn);
-                renderKonkanLocalUI();
-            }
-        };
-
-        window.konkanDrawFromDiscard = function() {
-            if (konkanMode === 'online') return;
-            if (konkanGameState.turn !== 'player') return;
-            konkanGameState.playerRack.push(konkanGameState.discard);
-            renderKonkanLocalUI();
-        };
-
-        function botKonkanTurn() {
-            if (konkanGameState.opponentCount > 0) {
-                konkanGameState.opponentCount--;
-            }
-            konkanGameState.turn = 'player';
-            renderKonkanLocalUI();
-            if (konkanGameState.playerRack.length === 0) {
-                alert("کۆمپیوتەر یارییەکەی بردەوە!");
+                window.xoState = ["", "", "", "", "", "", "", "", ""];
+                window.xoTurn = "X";
+                window.xoGameActive = true;
+                document.getElementById("xoStatusText").innerText = `سەرەی ${currentUser}`;
+                document.getElementById("xoResetBtn").style.display = "none";
+                window.renderXoBoard();
             }
         }
 
-        window.konkanDeclareWin = function() {
-            if (konkanMode === 'online') {
-                window.konkanOnlineDeclareWin();
-            } else {
-                alert("پیرۆزە! تۆ کۆنکانت کرد و بردەوە! 🎉");
-                if(window.addScore) window.addScore(currentUser, 100);
-                backToHub();
-            }
-        };
-
-        function cancelKonkanMatchmaking() {
-            if (window.leaveKonkanRoomFirebase) window.leaveKonkanRoomFirebase();
-            document.getElementById("konkanLobbyArea").style.display = "none";
-            document.getElementById("konkanModeSelect").style.display = "block";
+        function leaveXoGame() {
+            if (xoMode === "online" && window.leaveXoRoom) window.leaveXoRoom();
+            backToHub();
         }
 
-        function leaveKonkanGame() {
-            if (konkanMode === 'online' && window.leaveKonkanRoomFirebase) window.leaveKonkanRoomFirebase();
+        /* Word Game Navigation */
+        function openWordGameMenu() {
+            switchScreen("wordScreen");
+            document.getElementById("wordModeSelect").style.display = "block";
+            document.getElementById("wordLobbyArea").style.display = "none";
+            document.getElementById("wordGameArea").style.display = "none";
+            document.getElementById("wordInputText").disabled = false;
+            document.getElementById("wordSendBtn").disabled = false;
+        }
+
+        function startWordQuickRoom() {
+            if (window.startWordQuickRoomMatch) window.startWordQuickRoomMatch(currentUser);
+        }
+
+        function createCustomWordRoom() {
+            let code = document.getElementById("createRoomCodeInput").value.trim();
+            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.createCustomWordRoomFirebase) window.createCustomWordRoomFirebase(currentUser, code);
+        }
+
+        function joinCustomWordRoom() {
+            let code = document.getElementById("joinRoomCodeInput").value.trim();
+            if (!code) { alert("تکایە کۆدی ژوور بنووسە!"); return; }
+            if (window.joinCustomWordRoomFirebase) window.joinCustomWordRoomFirebase(currentUser, code);
+        }
+
+        function submitWordMove() {
+            let wordVal = document.getElementById("wordInputText").value.trim();
+            let targetLtr = document.getElementById("targetLetterDisplay").innerText;
+            if (!wordVal) return;
+            if (window.submitWordFirebaseMove) window.submitWordFirebaseMove(wordVal, targetLtr, currentUser);
+        }
+
+        function cancelMatchmaking(gameType) {
+            if (gameType === 'xo') {
+                if (window.leaveXoRoom) window.leaveXoRoom();
+                document.getElementById("xoLobbyArea").style.display = "none";
+                document.getElementById("xoModeSelect").style.display = "block";
+            } else if (gameType === 'word') {
+                if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
+                document.getElementById("wordLobbyArea").style.display = "none";
+                document.getElementById("wordModeSelect").style.display = "block";
+            }
+        }
+
+        function leaveWordGame() {
+            if (window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
             backToHub();
         }
     </script>
