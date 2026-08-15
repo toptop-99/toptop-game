@@ -673,7 +673,7 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
-        <!-- Story Screen (Extremely Long Multi-Stage Story Engine) -->
+        <!-- Story Screen (Fixed Multi-Stage Story Engine) -->
         <div id="storyScreen" class="screen">
             <div class="brand-title" style="color: #ef4444;" id="storyScreenTitle">شەوی ترسناک و تاریکی دۆزەخ</div>
             <div class="card" style="padding: 15px;">
@@ -681,7 +681,7 @@
                 <div id="storyNameBox" style="text-align: center;">
                     <h3 style="color: #f87171; margin-bottom: 8px;">🌙 دەستپێکردنی گەشتی مەزن</h3>
                     <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ تێکەڵبوون لەگەڵ ئەم چیڕۆکە درێژەدا:</p>
-                    <input type="text" id="storyPlayerNameInput" placeholder="ناوی خۆت لێرە بنووسە..." style="margin-bottom: 8px;">
+                    <input type="text" id="storyPlayerNameInput" placeholder="ناوی خۆت لێرە بنووسە..." style="margin-bottom: 8px;" onkeypress="if(event.key==='Enter') startInteractiveStory()">
                     <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); startInteractiveStory()">دەستپێکردنی گەشت</button>
                 </div>
 
@@ -1825,7 +1825,7 @@
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        /* Highly Extended Long Interactive Story Engine */
+        /* Fixed Long Interactive Story Engine */
         let activeStoryPlayerName = "";
         let currentStoryId = "";
 
