@@ -804,25 +804,35 @@
             signInWithPopup(auth, provider)
                 .then((result) => {
                     const user = result.user;
+                    let uid = user.uid;
                     let username = user.displayName || user.email.split('@')[0];
                     let avatar = user.photoURL || "";
 
-                    let profileData = {
-                        username: username,
-                        email: user.email,
-                        avatar: avatar,
-                        score: 0
-                    };
+                    const userRef = ref(database, 'users/' + uid);
+                    get(userRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            let data = snapshot.val();
+                            window.currentUser = data.username;
+                            localStorage.setItem("top_top_active_uid", uid);
+                            localStorage.setItem("top_top_active_user", window.currentUser);
+                        } else {
+                            let profileData = {
+                                username: username,
+                                email: user.email,
+                                avatar: avatar,
+                                score: 0
+                            };
+                            set(userRef, profileData);
+                            window.currentUser = username;
+                            localStorage.setItem("top_top_active_uid", uid);
+                            localStorage.setItem("top_top_active_user", username);
+                        }
 
-                    localStorage.setItem("user_profile_" + username, JSON.stringify(profileData));
-                    localStorage.setItem("top_top_active_user", username);
-                    
-                    window.currentUser = username;
-                    if (window.setOnlineStatus) window.setOnlineStatus(username);
-                    
-                    switchScreen("hubScreen");
-                    loadUserData();
-                    if (window.loadLeaderboard) window.loadLeaderboard();
+                        if (window.setOnlineStatus) window.setOnlineStatus(uid);
+                        switchScreen("hubScreen");
+                        loadUserData();
+                        if (window.loadLeaderboard) window.loadLeaderboard();
+                    });
                 }).catch((error) => {
                     console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
                     alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
@@ -838,33 +848,27 @@
         window.dbUpdate = update;
         window.dbPush = push;
 
-        window.setOnlineStatus = function(username) {
-            if (!username) return;
-            const userStatusRef = ref(database, 'users/' + username + '/status');
+        window.setOnlineStatus = function(uid) {
+            if (!uid) return;
+            const userStatusRef = ref(database, 'users/' + uid + '/status');
             set(userStatusRef, 'online');
             onDisconnect(userStatusRef).set('offline');
         };
 
-        window.setOfflineStatus = function(username) {
-            if (!username) return;
-            const userStatusRef = ref(database, 'users/' + username + '/status');
+        window.setOfflineStatus = function(uid) {
+            if (!uid) return;
+            const userStatusRef = ref(database, 'users/' + uid + '/status');
             set(userStatusRef, 'offline');
         };
 
-        window.addScore = function(username, pts) {
-            if (!username) return;
-            const scoreRef = ref(database, 'users/' + username + '/score');
+        window.addScore = function(pts) {
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (!uid) return;
+            const scoreRef = ref(database, 'users/' + uid + '/score');
             get(scoreRef).then(snapshot => {
                 let currentScore = snapshot.exists() ? snapshot.val() : 0;
                 let newScore = currentScore + pts;
                 set(scoreRef, newScore);
-                
-                let profileData = localStorage.getItem("user_profile_" + username);
-                if (profileData) {
-                    let p = JSON.parse(profileData);
-                    p.score = newScore;
-                    localStorage.setItem("user_profile_" + username, JSON.stringify(p));
-                }
                 loadUserData();
                 loadLeaderboard();
             });
@@ -876,8 +880,8 @@
                 const data = snapshot.val();
                 let scoreList = [];
                 if(data) {
-                    for(let u in data) {
-                        scoreList.push({ username: u, score: data[u].score || 0 });
+                    for(let uid in data) {
+                        scoreList.push({ username: data[uid].username || "یاریزان", score: data[uid].score || 0 });
                     }
                 }
                 scoreList.sort((a,b) => b.score - a.score);
@@ -1244,7 +1248,7 @@
                             document.getElementById("xoStatusText").innerText = `بردیەوە ${winnerName}! 🎉`;
                             playSound('victory');
                             if (room.winner === xoMyRole && !room.scoreAdded) {
-                                window.addScore(username, 10);
+                                window.addScore(10);
                                 if (xoMyRole === 'X') {
                                     update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { scoreAdded: true });
                                 }
@@ -1446,7 +1450,7 @@
                         } else {
                             alert("بردیەوە: " + room.winner);
                             playSound('victory');
-                            if (room.winner === username) window.addScore(username, 15);
+                            if (room.winner === username) window.addScore(15);
                         }
                         document.getElementById("tugResetBtn").style.display = "block";
                     }
@@ -1871,12 +1875,13 @@
 
         window.onload = function() {
             loadSavedSettings();
+            let savedUid = localStorage.getItem("top_top_active_uid");
             let savedUser = localStorage.getItem("top_top_active_user");
-            if (savedUser && localStorage.getItem("user_profile_" + savedUser)) {
-                currentUser = savedUser;
+            if (savedUid) {
+                currentUser = savedUser || "";
                 loadUserData();
                 switchScreen("hubScreen");
-                if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
+                if (window.setOnlineStatus) window.setOnlineStatus(savedUid);
                 if (window.loadLeaderboard) window.loadLeaderboard();
                 checkDailyRewardStatus();
             } else {
@@ -1938,49 +1943,17 @@
         }
 
         function registerUser() {
-            let name = document.getElementById("regUsername").value.trim();
-            let pass = document.getElementById("regPassword").value.trim();
-            let passConfirm = document.getElementById("regPasswordConfirm").value.trim();
-            let birthdate = document.getElementById("regBirthdate").value;
-
-            if (!name || !pass || !passConfirm || !birthdate) { alert("تکایە هەموو خانەکان پڕبکەرەوە!"); return; }
-            if (localStorage.getItem("user_profile_" + name)) { alert("ئەم ناوی بەکارهێنەرە پێشتر تۆمار کراوە!"); return; }
-            if (pass.length < 8) { alert("وشەی نهێنی دەبێت کەمتر نەبێت لە ٨ پیت!"); return; }
-            if (pass !== passConfirm) { alert("وشەی نهێنی و دڵنیابوونەوەکەی یەک نین!"); return; }
-
-            let profileData = { username: name, password: pass, birthdate: birthdate, avatar: tempAvatarBase64 || "", score: 0 };
-            localStorage.setItem("user_profile_" + name, JSON.stringify(profileData));
-            localStorage.setItem("top_top_active_user", name);
-            currentUser = name;
-            
-            if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            loadUserData();
-            switchScreen("hubScreen");
-            if (window.loadLeaderboard) window.loadLeaderboard();
+            alert("تکایە بۆ پاراستنی هەمیشەیی خاڵەکانت، لە ڕێگەی (بەردەوامبوون بە گوگڵ)ەوە بچە ژوورەوە!");
         }
 
         function loginUser() {
-            let name = document.getElementById("loginUsername").value.trim();
-            let pass = document.getElementById("loginPassword").value.trim();
-            if (!name || !pass) { alert("تکایە ناو و وشەی نهێنی بنووسە!"); return; }
-
-            let profileData = localStorage.getItem("user_profile_" + name);
-            if (!profileData) { alert("ئەم ناوە بوونی نییە!"); return; }
-
-            let profile = JSON.parse(profileData);
-            if (profile.password !== pass) { alert("وشەی نهێنی هەڵەیە!"); return; }
-
-            localStorage.setItem("top_top_active_user", name);
-            currentUser = name;
-
-            if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            loadUserData();
-            switchScreen("hubScreen");
-            if (window.loadLeaderboard) window.loadLeaderboard();
+            alert("تکایە بۆ پاراستنی هەمیشەیی خاڵەکانت، لە ڕێگەی (بەردەوامبوون بە گوگڵ)ەوە بچە ژوورەوە!");
         }
 
         function logoutUser() {
-            if (window.setOfflineStatus) window.setOfflineStatus(currentUser);
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (uid && window.setOfflineStatus) window.setOfflineStatus(uid);
+            localStorage.removeItem("top_top_active_uid");
             localStorage.removeItem("top_top_active_user");
             currentUser = "";
             switchScreen("authScreen");
@@ -1994,48 +1967,53 @@
         }
 
         function loadUserData() {
-            let profileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = profileData ? JSON.parse(profileData) : {};
-            let score = profile.score || 0;
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (!uid) return;
 
-            // Level & XP Logic (هر 50 خاڵ = 1 لیڤڵ)
-            let level = Math.floor(score / 50) + 1;
-            let currentXpInLevel = score % 50;
-            let xpPercent = (currentXpInLevel / 50) * 100;
+            const userRef = window.dbRef(window.db, 'users/' + uid);
+            window.dbGet(userRef).then((snapshot) => {
+                if (!snapshot.exists()) return;
+                let profile = snapshot.val();
+                currentUser = profile.username;
+                localStorage.setItem("top_top_active_user", currentUser);
+                let score = profile.score || 0;
 
-            document.getElementById("hubUsernameText").innerText = currentUser;
-            document.getElementById("hubUserLevelText").innerText = "لیڤڵ " + level;
+                let level = Math.floor(score / 50) + 1;
+                let currentXpInLevel = score % 50;
+                let xpPercent = (currentXpInLevel / 50) * 100;
 
-            // Hub Avatar
-            let avatarEl = document.getElementById("hubUserAvatar");
-            if (profile.avatar) {
-                avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
-            } else {
-                avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
-            }
+                document.getElementById("hubUsernameText").innerText = currentUser;
+                document.getElementById("hubUserLevelText").innerText = "لیڤڵ " + level;
 
-            // Profile Screen Data update
-            document.getElementById("profileScreenName").innerText = currentUser;
-            document.getElementById("profileScreenRank").innerText = getRankTitle(score);
-            document.getElementById("profileScreenLevel").innerText = level;
-            document.getElementById("profileScreenXp").innerText = score;
-            document.getElementById("profileScreenScoreVal").innerText = score;
-            document.getElementById("profileXpBar").style.width = xpPercent + "%";
-            document.getElementById("profileXpNextText").innerText = `بۆ لیڤڵی داهاتوو (${50 - currentXpInLevel} XP) مانەوه`;
+                let avatarEl = document.getElementById("hubUserAvatar");
+                if (profile.avatar) {
+                    avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+                } else {
+                    avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
+                }
 
-            let profileAvatarImg = document.getElementById("profileScreenAvatarImg");
-            let profileAvatarPlaceholder = document.getElementById("profileScreenAvatarPlaceholder");
-            if (profile.avatar) {
-                profileAvatarImg.src = profile.avatar;
-                profileAvatarImg.style.display = "block";
-                profileAvatarPlaceholder.style.display = "none";
-            } else {
-                profileAvatarImg.style.display = "none";
-                profileAvatarPlaceholder.style.display = "block";
-                profileAvatarPlaceholder.innerText = currentUser.charAt(0).toUpperCase();
-            }
+                document.getElementById("profileScreenName").innerText = currentUser;
+                document.getElementById("profileScreenRank").innerText = getRankTitle(score);
+                document.getElementById("profileScreenLevel").innerText = level;
+                document.getElementById("profileScreenXp").innerText = score;
+                document.getElementById("profileScreenScoreVal").innerText = score;
+                document.getElementById("profileXpBar").style.width = xpPercent + "%";
+                document.getElementById("profileXpNextText").innerText = `بۆ لیڤڵی داهاتوو (${50 - currentXpInLevel} XP) مانەوه`;
 
-            document.getElementById("settingsUsernameInput").value = currentUser;
+                let profileAvatarImg = document.getElementById("profileScreenAvatarImg");
+                let profileAvatarPlaceholder = document.getElementById("profileScreenAvatarPlaceholder");
+                if (profile.avatar) {
+                    profileAvatarImg.src = profile.avatar;
+                    profileAvatarImg.style.display = "block";
+                    profileAvatarPlaceholder.style.display = "none";
+                } else {
+                    profileAvatarImg.style.display = "none";
+                    profileAvatarPlaceholder.style.display = "block";
+                    profileAvatarPlaceholder.innerText = currentUser.charAt(0).toUpperCase();
+                }
+
+                document.getElementById("settingsUsernameInput").value = currentUser;
+            });
         }
 
         function openProfileScreen() {
@@ -2044,32 +2022,34 @@
         }
 
         function saveProfileChanges() {
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (!uid) return;
+
             let newName = document.getElementById("settingsUsernameInput").value.trim();
             if (!newName) { alert("تکایە ناوی بەکارهێنەر پڕبکەرەوە!"); return; }
 
-            let oldProfileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = oldProfileData ? JSON.parse(oldProfileData) : {};
+            const userRef = window.dbRef(window.db, 'users/' + uid);
+            window.dbGet(userRef).then((snapshot) => {
+                if (!snapshot.exists()) return;
+                let profile = snapshot.val();
+                profile.username = newName;
+                if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
 
-            if (newName !== currentUser) {
-                if (localStorage.getItem("user_profile_" + newName)) { alert("ئەم ناوە پێشتر تۆمارکراوە!"); return; }
-                if (window.setOfflineStatus) window.setOfflineStatus(currentUser);
-                localStorage.removeItem("user_profile_" + currentUser);
-                currentUser = newName;
-                localStorage.setItem("top_top_active_user", currentUser);
-                if (window.setOnlineStatus) window.setOnlineStatus(currentUser);
-            }
-
-            profile.username = currentUser;
-            if (settingsTempAvatar) profile.avatar = settingsTempAvatar;
-
-            localStorage.setItem("user_profile_" + currentUser, JSON.stringify(profile));
-            alert("نوێکرایەوە!");
-            loadUserData();
+                window.dbSet(userRef, profile).then(() => {
+                    alert("نوێکرایەوە!");
+                    currentUser = newName;
+                    localStorage.setItem("top_top_active_user", currentUser);
+                    loadUserData();
+                });
+            });
         }
 
         /* Daily Rewards System */
         function checkDailyRewardStatus() {
-            let lastClaim = localStorage.getItem("daily_reward_" + currentUser);
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (!uid) return;
+
+            let lastClaim = localStorage.getItem("daily_reward_" + uid);
             let btn = document.getElementById("dailyRewardBtn");
             let txt = document.getElementById("dailyRewardText");
             let now = Date.now();
@@ -2086,12 +2066,15 @@
         }
 
         function claimDailyReward() {
-            let lastClaim = localStorage.getItem("daily_reward_" + currentUser);
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (!uid) return;
+
+            let lastClaim = localStorage.getItem("daily_reward_" + uid);
             let now = Date.now();
 
             if (!lastClaim || (now - lastClaim >= 24 * 60 * 60 * 1000)) {
-                localStorage.setItem("daily_reward_" + currentUser, now);
-                if (window.addScore) window.addScore(currentUser, 50);
+                localStorage.setItem("daily_reward_" + uid, now);
+                if (window.addScore) window.addScore(50);
                 playSound('victory');
                 alert("پیرۆزە! ٥٠ خاڵی ڕۆژانەت وەرگرت! 🎉");
                 checkDailyRewardStatus();
@@ -2155,7 +2138,7 @@
                     if (quizLocalScoreP1 > quizLocalScoreP2) {
                         resultMsg = "پیرۆزە! تۆ زۆرترین وەڵامت زانی و بردتبووەوە! 🎉";
                         playSound('victory');
-                        if (window.addScore) window.addScore(currentUser, 20);
+                        if (window.addScore) window.addScore(20);
                     } else if (quizLocalScoreP2 > quizLocalScoreP1) {
                         resultMsg = "کۆمپیوتەر زۆرترین وەڵامی زانی و بردیەوە! 🤖";
                     } else {
@@ -2307,7 +2290,7 @@
                     playSound('victory');
                     window.xoGameActive = false;
                     document.getElementById("xoResetBtn").style.display = "block";
-                    if(window.xoTurn === "X" && window.addScore) window.addScore(currentUser, 10);
+                    if(window.xoTurn === "X" && window.addScore) window.addScore(10);
                     return;
                 }
 
@@ -2413,17 +2396,23 @@
         }
 
         function buyTugItem(item, price) {
-            let profileData = localStorage.getItem("user_profile_" + currentUser);
-            let profile = profileData ? JSON.parse(profileData) : {};
-            let score = profile.score || 0;
+            let uid = localStorage.getItem("top_top_active_uid");
+            if (!uid) return;
 
-            if (score < price) {
-                alert("خاڵی پێویستت نییە!");
-                return;
-            }
+            const userRef = window.dbRef(window.db, 'users/' + uid);
+            window.dbGet(userRef).then((snapshot) => {
+                if(!snapshot.exists()) return;
+                let profile = snapshot.val();
+                let score = profile.score || 0;
 
-            if (window.addScore) window.addScore(currentUser, -price);
-            alert("کڕینەکەت سەرکەوتوو بوو!");
+                if (score < price) {
+                    alert("خاڵی پێویستت نییە!");
+                    return;
+                }
+
+                window.addScore(-price);
+                alert("کڕینەکەت سەرکەوتوو بوو!");
+            });
         }
 
         function startTugVsBot() {
@@ -2447,7 +2436,6 @@
                 tugTimer--;
                 document.getElementById("tugTimerDisplay").innerText = tugTimer + " چرکە";
 
-                // Bot click simulation
                 if (Math.random() > 0.3) {
                     tugP2Count++;
                     document.getElementById("tugP2Clicks").innerText = tugP2Count;
@@ -2462,7 +2450,7 @@
                     if (tugP1Count > tugP2Count) {
                         playSound('victory');
                         alert("پیرۆزە! بردتەوە! 🎉");
-                        if (window.addScore) window.addScore(currentUser, 15);
+                        if (window.addScore) window.addScore(15);
                     } else if (tugP2Count > tugP1Count) {
                         alert("کۆمپیوتەر بردیەوە! 🤖");
                     } else {
