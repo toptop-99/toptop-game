@@ -249,6 +249,10 @@
             background: var(--card-bg); border: 1px solid var(--primary-color);
             color: #fff; padding: 10px; border-radius: 10px; width: 100%;
             margin-bottom: 6px; font-weight: bold; cursor: pointer; text-align: right;
+            transition: background 0.2s;
+        }
+        .quiz-opt-btn:hover {
+            background: var(--primary-hover);
         }
 
         /* Shop Styles */
@@ -367,7 +371,7 @@
                 <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
                 <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
                 <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); margin-bottom: 6px;" onclick="openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی ١ خولەک)</button>
             </div>
 
             <div class="card">
@@ -394,31 +398,50 @@
         <div id="quizScreen" class="screen">
             <div class="brand-title">پرسیار و وەڵام</div>
             <div id="quizModeSelect" class="card">
-                <h3>مۆدی یاری هەڵبژێرە:</h3>
+                <h3>مۆدی یاری هەڵبژێرە (١ خولەک تەحەدی):</h3>
                 <button class="btn" onclick="startQuizGame('bot')" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
-                <button class="btn" onclick="startQuizGame('online')" style="background: #16a34a;">🌐 یاری ئۆنلاین</button>
+                <button class="btn" onclick="startQuizGame('online')" style="background: #16a34a;">🌐 یاری ئۆنلاین (دژ بە یاریزان)</button>
+            </div>
+
+            <div id="quizLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
+                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزانی بەرامبەر...</h3>
+                <div class="spinner"></div>
+                <p style="font-size: 12px; color: #cbd5e1;">تکایە چاوەڕێ بکە...</p>
+                <button class="btn" onclick="cancelQuizMatchmaking()" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
             </div>
 
             <div id="quizGameArea" class="card" style="display: none;">
-                <div class="score-board">
-                    <div class="score-box">
-                        <span>خاڵت</span>
-                        <bold id="quizMyScore">0</bold>
+                <div class="target-letter-box" style="margin-bottom: 12px;">
+                    <div>
+                        <span style="font-size: 10px; display:block; color:#f3e8ff; text-align:right;">دۆخی یاری:</span>
+                        <span id="quizGameStatus" style="font-size: 14px; font-weight: bold; color: #fff;">یاری بەڕێوەیە...</span>
                     </div>
-                    <div class="score-box">
-                        <span>پرسیار</span>
-                        <bold id="quizQIndex">1/5</bold>
+                    <div>
+                        <span style="font-size: 10px; display:block; color:#fde047; text-align:left;">کاتی ماوە:</span>
+                        <div class="timer-display" id="quizTimerDisplay">٠١:٠٠</div>
                     </div>
                 </div>
 
-                <div style="margin: 15px 0; text-align: center;">
-                    <h3 id="quizQuestionText" style="font-size: 16px; color: #fff;">پرسیار لێرە دەردەکەوێت...</h3>
+                <div class="score-board">
+                    <div class="score-box">
+                        <span id="quizP1Name">یاریزانی ١ (تۆ)</span>
+                        <bold id="quizP1Score">0</bold>
+                    </div>
+                    <div class="score-box">
+                        <span id="quizP2Name">یاریزانی ٢</span>
+                        <bold id="quizP2Score">0</bold>
+                    </div>
+                </div>
+
+                <div style="margin: 15px 0; text-align: center; min-height: 50px;">
+                    <h3 id="quizQuestionText" style="font-size: 15px; color: #fff;">پرسیار لێرە دەردەکەوێت...</h3>
                 </div>
 
                 <div id="quizOptionsContainer"></div>
+                <button class="btn" id="quizRestartBtn" onclick="leaveQuizGame()" style="display: none; background: #16a34a; margin-top: 10px;">🔄 گەڕانەوە</button>
             </div>
 
-            <button class="btn" style="margin-top: auto;" onclick="backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="leaveQuizGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Friends Screen -->
@@ -897,6 +920,197 @@
                     container.innerHTML = "<p style='font-size:11px; color:#cbd5e1; text-align:center;'>هیچ هاوڕێیەک نەدۆزرایەوە</p>";
                 }
             });
+        };
+
+        /* Online Quiz Engine */
+        let quizCurrentRoomId = null;
+        let quizMyRole = "";
+        let quizTimerInterval = null;
+
+        window.startOnlineQuizMatchmaking = function(username) {
+            const lobbyRef = ref(database, 'quiz_lobby');
+            get(lobbyRef).then((snapshot) => {
+                let lobbyData = snapshot.val();
+                let waitingRoomId = null;
+
+                if (lobbyData) {
+                    for (let id in lobbyData) {
+                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
+                            waitingRoomId = id;
+                            break;
+                        }
+                    }
+                }
+
+                if (waitingRoomId) {
+                    quizCurrentRoomId = waitingRoomId;
+                    quizMyRole = "player2";
+                    update(ref(database, 'quiz_lobby/' + quizCurrentRoomId), {
+                        player2: username,
+                        status: 'playing',
+                        startTime: Date.now()
+                    }).then(() => {
+                        listenToQuizRoom(quizCurrentRoomId, username);
+                        startQuizTimerLoop();
+                    });
+                } else {
+                    quizCurrentRoomId = "room_quiz_" + Date.now();
+                    quizMyRole = "player1";
+                    const newRoomRef = ref(database, 'quiz_lobby/' + quizCurrentRoomId);
+                    set(newRoomRef, {
+                        player1: username,
+                        player2: "",
+                        status: 'waiting',
+                        scores: { player1: 0, player2: 0 },
+                        currentQIndices: { player1: 0, player2: 0 },
+                        startTime: Date.now(),
+                        gameOver: false,
+                        winnerName: ""
+                    }).then(() => {
+                        onDisconnect(newRoomRef).remove();
+                        listenToQuizRoom(quizCurrentRoomId, username);
+                        startQuizTimerLoop();
+                    });
+                }
+            });
+        };
+
+        function startQuizTimerLoop() {
+            if (quizTimerInterval) clearInterval(quizTimerInterval);
+            
+            quizTimerInterval = setInterval(() => {
+                if (!quizCurrentRoomId) return;
+                const roomRef = ref(database, 'quiz_lobby/' + quizCurrentRoomId);
+                get(roomRef).then((snapshot) => {
+                    if (!snapshot.exists()) return;
+                    let room = snapshot.val();
+                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
+
+                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
+                    let timeLeft = 60 - elapsed;
+
+                    if (timeLeft <= 0) {
+                        timeLeft = 0;
+                        clearInterval(quizTimerInterval);
+
+                        if (!room.winnerName) {
+                            let p1Score = room.scores.player1 || 0;
+                            let p2Score = room.scores.player2 || 0;
+                            let wName = "";
+                            if (p1Score > p2Score) wName = room.player1 + " زۆرترین وەڵامی زانی و بردیەوە! 🎉";
+                            else if (p2Score > p1Score) wName = (room.player2 || "یاریزانی ٢") + " زۆرترین وەڵامی زانی و بردیەوە! 🎉";
+                            else wName = "یەکسان بوون لە زانینی وەڵامەکاندا! 🤝";
+                            
+                            if (quizMyRole === 'player1') {
+                                update(roomRef, { gameOver: true, winnerName: wName });
+                            }
+                        }
+                    }
+
+                    let mins = Math.floor(timeLeft / 60);
+                    let secs = timeLeft % 60;
+                    let timerEl = document.getElementById("quizTimerDisplay");
+                    if (timerEl) {
+                        timerEl.innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
+                    }
+                });
+            }, 1000);
+        }
+
+        function listenToQuizRoom(roomId, username) {
+            const roomRef = ref(database, 'quiz_lobby/' + roomId);
+            onValue(roomRef, (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                if (room.status === 'waiting') {
+                    document.getElementById("quizModeSelect").style.display = "none";
+                    document.getElementById("quizLobbyArea").style.display = "block";
+                    document.getElementById("quizGameArea").style.display = "none";
+                } else if (room.status === 'playing') {
+                    document.getElementById("quizModeSelect").style.display = "none";
+                    document.getElementById("quizLobbyArea").style.display = "none";
+                    document.getElementById("quizGameArea").style.display = "block";
+
+                    let p1Text = room.player1 + (quizMyRole === 'player1' ? " (تۆ)" : "");
+                    let p2Text = (room.player2 || "بەرامبەر") + (quizMyRole === 'player2' ? " (تۆ)" : "");
+
+                    document.getElementById("quizP1Name").innerText = p1Text;
+                    document.getElementById("quizP2Name").innerText = p2Text;
+
+                    let p1Score = room.scores.player1 || 0;
+                    let p2Score = room.scores.player2 || 0;
+                    document.getElementById("quizP1Score").innerText = p1Score;
+                    document.getElementById("quizP2Score").innerText = p2Score;
+
+                    if (room.gameOver) {
+                        document.getElementById("quizGameStatus").innerText = "کۆتایی هات!";
+                        document.getElementById("quizQuestionText").innerText = room.winnerName;
+                        document.getElementById("quizOptionsContainer").innerHTML = "";
+                        document.getElementById("quizRestartBtn").style.display = "block";
+                    } else {
+                        document.getElementById("quizGameStatus").innerText = "یاری بەڕێوەیە...";
+                        renderOnlineQuestion(room);
+                    }
+                }
+            });
+        }
+
+        function renderOnlineQuestion(room) {
+            let myQIndex = room.currentQIndices[quizMyRole] || 0;
+            let q = quizQuestions[myQIndex % quizQuestions.length];
+            
+            document.getElementById("quizQuestionText").innerText = q.q;
+            let optsContainer = document.getElementById("quizOptionsContainer");
+            optsContainer.innerHTML = "";
+            
+            q.opts.forEach((opt, idx) => {
+                optsContainer.innerHTML += `
+                    <button class="quiz-opt-btn" onclick="submitOnlineQuizAnswer(${idx})">${opt}</button>
+                `;
+            });
+        }
+
+        window.submitOnlineQuizAnswer = function(selectedIdx) {
+            if (!quizCurrentRoomId) return;
+
+            const roomRef = ref(database, 'quiz_lobby/' + quizCurrentRoomId);
+            get(roomRef).then((snapshot) => {
+                if(!snapshot.exists()) return;
+                let room = snapshot.val();
+                if (room.gameOver) return;
+
+                let myQIndex = room.currentQIndices[quizMyRole] || 0;
+                let q = quizQuestions[myQIndex % quizQuestions.length];
+
+                if (selectedIdx === q.a) {
+                    room.scores[quizMyRole] = (room.scores[quizMyRole] || 0) + 10;
+                }
+
+                room.currentQIndices[quizMyRole] = myQIndex + 1;
+
+                update(roomRef, {
+                    scores: room.scores,
+                    currentQIndices: room.currentQIndices
+                });
+            });
+        };
+
+        window.cancelQuizMatchmaking = function() {
+            if (quizCurrentRoomId) {
+                remove(ref(database, 'quiz_lobby/' + quizCurrentRoomId));
+                quizCurrentRoomId = null;
+            }
+            document.getElementById("quizLobbyArea").style.display = "none";
+            document.getElementById("quizModeSelect").style.display = "block";
+        };
+
+        window.leaveQuizRoom = function() {
+            if (quizTimerInterval) clearInterval(quizTimerInterval);
+            if (quizCurrentRoomId) {
+                remove(ref(database, 'quiz_lobby/' + quizCurrentRoomId));
+                quizCurrentRoomId = null;
+            }
         };
 
         /* XO Online Engine */
@@ -1559,14 +1773,36 @@
         let tugActive = false;
         let tugTimerIntervalLocal = null;
 
-        // Quiz System Data
+        // Quiz System Rich Data List
         const quizQuestions = [
             { q: "پایتەختی هەرێمی کوردستان کوێیە؟", opts: ["سلێمانی", "هەولێر", "دهۆک", "کەرکووک"], a: 1 },
             { q: "چیا بەرزەکەی کوردستان ناوی چییە؟", opts: ["کۆڕەک", "هەڵگورد", "سەفین", "پیرەمەگرون"], a: 1 },
-            { q: "پیتەکانی زمانی کوردی بڕی چەندەن؟", opts: ["28", "34", "32", "30"], a: 1 }
+            { q: "پیتەکانی زمانی کوردی بڕی چەندەن؟", opts: ["28", "34", "32", "30"], a: 1 },
+            { q: "گواستنەوەی ئۆکسیجن لە لەشدا ئەرکی کامەیانە؟", opts: ["خڕۆکەی سوور", "خڕۆکەی سپی", "پەڕەکانی خوێن", "پلازما"], a: 0 },
+            { q: "گەورەترین دەریاچەی جیهان کامەیە؟", opts: ["دەریاچەی قەزوێن", "دەریاچەی سوپەریۆر", "دەریاچەی ڤیکتۆریا", "دەریاچەی میشیگان"], a: 0 },
+            { q: "درێژترین ڕووباری جیهان کامەیە؟", opts: ["ئامازۆن", "نیل", "میستیسیپی", "یۆنگتسی"], a: 1 },
+            { q: "پایتەختی وڵاتی ژاپۆن کوێیە؟", opts: ["سێئول", "پەکین", "تۆکیۆ", "بانکۆک"], a: 2 },
+            { q: "کێ کیشوەری ئەمریکای دۆزییەوە؟", opts: ["کریستۆف کۆلۆمبۆس", "ماژلان", "مارکۆ پۆلۆ", "ڤاسکۆ دا گاما"], a: 0 },
+            { q: "خێراترین ئاژەڵی سەر زەوی کامەیە؟", opts: ["شێر", "چیتا", "ئاسک", "کەرکەدەن"], a: 1 },
+            { q: "هەسارەی سوور بە کام هەسارە دەوترێت؟", opts: ["زوهەل", "مەریخ", "موشتەری", "عوتارد"], a: 1 },
+            { q: "پایتەختی وڵاتی فەرەنسا کوێیە؟", opts: ["لەندەن", "بەرلین", "مەدرید", "پاریس"], a: 3 },
+            { q: "کیمیاویترین توخم لە خشتەی خولی چییە؟", opts: ["هایدرۆجن", "ئۆکسیجن", "کاربۆن", "نایترۆجن"], a: 0 },
+            { q: "شاعیری گەورەی کورد 'نالی' ناوەکەی چییە؟", opts: ["ئەحمەد", "مەلا خدر", "عەبدولڕەحمان", "مستەفا"], a: 1 },
+            { q: "نزیکترین هەسارە لە خۆرەوە کامەیە؟", opts: ["زهره", "عوتارد", "زەوی", "مەریخ"], a: 1 },
+            { q: "گەورەترین گیاندار لە جیهاندا کامەیە؟", opts: ["فیل", "نەهەنگی شین", "دێناسر", "سەگاوێس"], a: 1 },
+            { q: "ژمارەی ئێسکەکانی لەشی مرۆڤی پێگەیشتوو چەندە؟", opts: ["206", "300", "150", "250"], a: 0 },
+            { q: "نەورۆز کەوتۆتە کام وەرزەوە؟", opts: ["هاوین", "زستان", "بەهار", "پاییز"], a: 2 },
+            { q: "کێ تابلۆی مۆنالیزای کێشاوە؟", opts: ["ڤان کۆخ", "پیکاسۆ", "لیۆناردۆ داڤینچی", "میکلانجێلۆ"], a: 2 },
+            { q: "کام وڵات بە وڵاتی ئەهرامەکان ناسراوە؟", opts: ["عێراق", "میسر", "یۆنان", "مەغریب"], a: 1 },
+            { q: "سەرچاوەی سەرەکی ڕووناکی و گەرمی سەر زەوی چییە؟", opts: ["مانگ", "ئەستێرەکان", "خۆر", "ئاگر"], a: 2 }
         ];
-        let currentQuizIndex = 0;
-        let quizScore = 0;
+
+        let quizMode = "bot";
+        let quizLocalTimer = 60;
+        let quizLocalTimerInterval = null;
+        let quizLocalScoreP1 = 0;
+        let quizLocalScoreP2 = 0;
+        let quizBotIndex = 0;
 
         window.onload = function() {
             loadSavedSettings();
@@ -1758,49 +1994,101 @@
         function openQuizMenu() {
             switchScreen("quizScreen");
             document.getElementById("quizModeSelect").style.display = "block";
+            document.getElementById("quizLobbyArea").style.display = "none";
             document.getElementById("quizGameArea").style.display = "none";
         }
 
         function startQuizGame(mode) {
-            currentQuizIndex = 0;
-            quizScore = 0;
-            document.getElementById("quizModeSelect").style.display = "none";
-            document.getElementById("quizGameArea").style.display = "block";
-            renderQuizQuestion();
+            quizMode = mode;
+            if (mode === 'bot') {
+                document.getElementById("quizModeSelect").style.display = "none";
+                document.getElementById("quizLobbyArea").style.display = "none";
+                document.getElementById("quizGameArea").style.display = "block";
+                document.getElementById("quizP1Name").innerText = currentUser + " (تۆ)";
+                document.getElementById("quizP2Name").innerText = "کۆمپیوتەر";
+                document.getElementById("quizRestartBtn").style.display = "none";
+                
+                quizLocalScoreP1 = 0;
+                quizLocalScoreP2 = 0;
+                quizBotIndex = 0;
+                quizLocalTimer = 60;
+                
+                document.getElementById("quizP1Score").innerText = "0";
+                document.getElementById("quizP2Score").innerText = "0";
+                document.getElementById("quizGameStatus").innerText = "یاری بەڕێوەیە...";
+                
+                renderBotQuestion();
+                startQuizLocalTimer();
+            } else {
+                if (window.startOnlineQuizMatchmaking) window.startOnlineQuizMatchmaking(currentUser);
+            }
         }
 
-        function renderQuizQuestion() {
-            if(currentQuizIndex >= quizQuestions.length) {
-                alert("یاری کۆتایی هات! خاڵەکەت: " + quizScore);
-                if(window.addScore) window.addScore(currentUser, quizScore);
-                backToHub();
-                return;
-            }
+        function startQuizLocalTimer() {
+            if (quizLocalTimerInterval) clearInterval(quizLocalTimerInterval);
+            
+            quizLocalTimerInterval = setInterval(() => {
+                quizLocalTimer--;
+                
+                let mins = Math.floor(quizLocalTimer / 60);
+                let secs = quizLocalTimer % 60;
+                document.getElementById("quizTimerDisplay").innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
 
-            let q = quizQuestions[currentQuizIndex];
-            document.getElementById("quizQIndex").innerText = (currentQuizIndex + 1) + "/" + quizQuestions.length;
-            document.getElementById("quizMyScore").innerText = quizScore;
+                // Bot answering simulator
+                if (Math.random() > 0.65) {
+                    quizLocalScoreP2 += 10;
+                    document.getElementById("quizP2Score").innerText = quizLocalScoreP2;
+                }
+
+                if (quizLocalTimer <= 0) {
+                    clearInterval(quizLocalTimerInterval);
+                    document.getElementById("quizGameStatus").innerText = "کۆتایی هات!";
+                    
+                    let resultMsg = "";
+                    if (quizLocalScoreP1 > quizLocalScoreP2) {
+                        resultMsg = "پیرۆزە! تۆ زۆرترین وەڵامت زانی و بردتبووەوە! 🎉";
+                        if (window.addScore) window.addScore(currentUser, 20);
+                    } else if (quizLocalScoreP2 > quizLocalScoreP1) {
+                        resultMsg = "کۆمپیوتەر زۆرترین وەڵامی زانی و بردیەوە! 🤖";
+                    } else {
+                        resultMsg = "یەکسان بوون لە زانینی وەڵامەکاندا! 🤝";
+                    }
+                    
+                    document.getElementById("quizQuestionText").innerText = resultMsg;
+                    document.getElementById("quizOptionsContainer").innerHTML = "";
+                    document.getElementById("quizRestartBtn").style.display = "block";
+                }
+            }, 1000);
+        }
+
+        function renderBotQuestion() {
+            let q = quizQuestions[quizBotIndex % quizQuestions.length];
             document.getElementById("quizQuestionText").innerText = q.q;
-
+            
             let optsContainer = document.getElementById("quizOptionsContainer");
             optsContainer.innerHTML = "";
             q.opts.forEach((opt, idx) => {
                 optsContainer.innerHTML += `
-                    <button class="quiz-opt-btn" onclick="submitQuizAnswer(${idx})">${opt}</button>
+                    <button class="quiz-opt-btn" onclick="submitBotQuizAnswer(${idx})">${opt}</button>
                 `;
             });
         }
 
-        function submitQuizAnswer(selectedIdx) {
-            let q = quizQuestions[currentQuizIndex];
-            if(selectedIdx === q.a) {
-                alert("وەڵامەکەت ڕاستە! 👏");
-                quizScore += 10;
-            } else {
-                alert("وەڵامەکەت هەڵەیە! ❌");
+        function submitBotQuizAnswer(selectedIdx) {
+            if (quizLocalTimer <= 0) return;
+            let q = quizQuestions[quizBotIndex % quizQuestions.length];
+            if (selectedIdx === q.a) {
+                quizLocalScoreP1 += 10;
+                document.getElementById("quizP1Score").innerText = quizLocalScoreP1;
             }
-            currentQuizIndex++;
-            renderQuizQuestion();
+            quizBotIndex++;
+            renderBotQuestion();
+        }
+
+        function leaveQuizGame() {
+            if (quizLocalTimerInterval) clearInterval(quizLocalTimerInterval);
+            if (quizMode === 'online' && window.leaveQuizRoom) window.leaveQuizRoom();
+            backToHub();
         }
 
         function openFriendsScreen() {
