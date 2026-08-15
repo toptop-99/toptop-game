@@ -116,7 +116,6 @@
             border-radius: 50%; margin-right: 4px; box-shadow: 0 0 6px #22c55e;
         }
 
-        /* XP Progress Bar Styles */
         .xp-container {
             width: 100%; background: rgba(0,0,0,0.4); border-radius: 10px; height: 12px;
             margin: 8px 0; overflow: hidden; border: 1px solid var(--primary-color); position: relative;
@@ -153,21 +152,6 @@
         .theme-blue { background: #2563eb; }
         .theme-emerald { background: #059669; }
 
-        /* XO Game Styles */
-        .xo-board {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-            width: 100%; max-width: 280px; margin: 10px auto; aspect-ratio: 1;
-        }
-        .xo-cell {
-            background: var(--card-bg); border: 2px solid var(--text-glow); border-radius: 14px;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 36px; font-weight: 900; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease;
-        }
-        .xo-cell:active { transform: scale(0.92); }
-        .xo-cell.x { color: #f43f5e; text-shadow: 0 0 10px rgba(244, 63, 94, 0.6); }
-        .xo-cell.o { color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); }
-
         .score-board {
             display: flex; justify-content: space-around; background: var(--card-bg);
             padding: 8px; border-radius: 10px; border: 1px solid var(--primary-color); margin-bottom: 8px;
@@ -195,28 +179,6 @@
             color: #fff; width: 45px; height: 45px; border-radius: 10px;
             display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: 900;
             box-shadow: 0 4px 10px rgba(147, 51, 234, 0.4); border: 1px solid #c084fc;
-        }
-
-        /* Wheel of Fortune Styles */
-        .wheel-container { text-align: center; padding: 10px; position: relative; }
-        .wheel {
-            width: 220px; height: 220px; border-radius: 50%; border: 6px solid #facc15;
-            margin: 15px auto; position: relative; overflow: hidden;
-            background: conic-gradient(
-                #9333ea 0deg 60deg,
-                #2563eb 60deg 120deg,
-                #059669 120deg 180deg,
-                #d97706 180deg 240deg,
-                #e11d48 240deg 300deg,
-                #ca8a04 300deg 360deg
-            );
-            transition: transform 3s cubic-bezier(0.15, 0.95, 0.15, 1);
-            box-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
-        }
-        .wheel-pointer {
-            width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent;
-            border-bottom: 20px solid #facc15; position: absolute; top: -2px; left: 50%;
-            transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
         /* Word Game Styles */
@@ -262,29 +224,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Tug of War Styles */
-        .tug-arena {
-            background: rgba(0,0,0,0.3); border-radius: 14px; padding: 15px; margin-bottom: 10px; text-align: center;
-            border: 1px solid var(--primary-color); position: relative; overflow: hidden;
-        }
-        .rope-track {
-            width: 100%; height: 16px; background: #334155; border-radius: 8px; margin: 20px 0; position: relative; overflow: visible;
-        }
-        .rope-knot {
-            width: 28px; height: 28px; background: #eab308; border-radius: 50%;
-            position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-            box-shadow: 0 0 10px #eab308; transition: left 0.1s ease;
-        }
-        .tap-btn-giant {
-            width: 100%; max-width: 220px; height: 90px; margin: 15px auto;
-            background: linear-gradient(135deg, #f43f5e, #e11d48); border-radius: 50% / 30%;
-            display: flex; justify-content: center; align-items: center; font-size: 22px; font-weight: 900;
-            color: #fff; cursor: pointer; box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
-            border: 3px solid #ffe4e6; transition: transform 0.05s ease;
-        }
-        .tap-btn-giant:active { transform: scale(0.92); background: linear-gradient(135deg, #e11d48, #be123c); }
-
-        /* Chat & Friends Styles */
         .chat-box {
             height: 180px; overflow-y: auto; background: rgba(0,0,0,0.3);
             border: 1px solid var(--border-color); border-radius: 10px; padding: 8px;
@@ -292,21 +231,6 @@
         }
         .chat-msg { margin-bottom: 6px; font-size: 12px; }
         .chat-user { font-weight: bold; color: var(--text-glow); }
-        .quiz-opt-btn {
-            background: var(--card-bg); border: 1px solid var(--primary-color);
-            color: #fff; padding: 10px; border-radius: 10px; width: 100%;
-            margin-bottom: 6px; font-weight: bold; cursor: pointer; text-align: right;
-            transition: background 0.2s;
-        }
-        .quiz-opt-btn:hover { background: var(--primary-hover); }
-
-        /* Shop Styles */
-        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
-        .shop-item {
-            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center;
-        }
-        .shop-item h4 { margin: 0 0 4px 0; font-size: 12px; color: var(--text-glow); }
-        .shop-item p { font-size: 10px; color: #cbd5e1; margin-bottom: 6px; }
 
         .spinner {
             width: 40px; height: 40px;
@@ -416,12 +340,7 @@
             <div class="card">
                 <h3>🎮 بەشی یارییەکان</h3>
                 <p>یاری هەڵبژێرە!</p>
-                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom: 6px;" onclick="playSound('click'); openXoMenu()">❌⭕ یاری XO (تۆپ و خاچ)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="playSound('click'); openWordGameMenu()">📝 یاری پیت و وشە (وشە باران)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); margin-bottom: 6px;" onclick="playSound('click'); openTugMenu()">🪢 یاری ڕاکێشانی گوریس (شۆپینگ + ئۆنلاین)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); margin-bottom: 6px;" onclick="playSound('click'); openQuizMenu()">❓ یاری پرسیار و وەڵام (تەحەدی ١ خولەک)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 6px;" onclick="playSound('click'); openPuzzleMenu()">🧩 پازڵی کوردی (ئۆنلاین + کۆمپیوتەر)</button>
-                <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="playSound('click'); openWheelMenu()">🎡 چەرخی بەختەوەری (Lucky Spin)</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="playSound('click'); openGamesListModal()">🎮 یاری کردن</button>
             </div>
 
             <div class="card">
@@ -442,6 +361,17 @@
             <div style="display: flex; gap: 8px; margin-top: auto;">
                 <button class="btn" onclick="playSound('click'); openSettingsScreen()" style="margin-top:0;">⚙️ ڕێکخستن</button>
             </div>
+        </div>
+
+        <!-- Games List Screen -->
+        <div id="gamesListScreen" class="screen">
+            <div class="brand-title">یارییەکان</div>
+            <div class="card">
+                <h3>یاری دڵخوازی خۆت هەڵبژێرە:</h3>
+                <button class="btn" style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-bottom: 8px;" onclick="playSound('click'); openPuzzleMenu()">🧩 پازڵی کوردی</button>
+                <button class="btn" style="background: linear-gradient(135deg, #9333ea, #7e22ce);" onclick="playSound('click'); openWordGameMenu()">📝 وشە باران</button>
+            </div>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
         <!-- Separate Profile Screen -->
@@ -543,76 +473,6 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leavePuzzleGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Wheel of Fortune Screen -->
-        <div id="wheelScreen" class="screen">
-            <div class="brand-title">چەرخی بەختەوەری</div>
-            
-            <div class="card wheel-container">
-                <h3>🎡 خولانەوەی چەرخ و بردنەوەی خاڵ</h3>
-                <p>ڕۆژانە تەنها یەکجار دەتوانیت چەرخەکە بخوولێنیتەوە!</p>
-                
-                <div style="position: relative; width: 220px; margin: 0 auto;">
-                    <div class="wheel-pointer"></div>
-                    <div class="wheel" id="fortuneWheel"></div>
-                </div>
-
-                <button class="btn" id="spinWheelBtn" onclick="playSound('click'); spinFortuneWheel()" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #000; margin-top: 15px;">🎡 چەرخەکە بخوولێنەوە!</button>
-                <p id="wheelResultText" style="font-size: 13px; font-weight: bold; color: #facc15; margin-top: 10px;"></p>
-            </div>
-
-            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
-        </div>
-
-        <!-- Quiz Game Screen -->
-        <div id="quizScreen" class="screen">
-            <div class="brand-title">پرسیار و وەڵام</div>
-            <div id="quizModeSelect" class="card">
-                <h3>مۆدی یاری هەڵبژێرە (١ خولەک تەحەدی):</h3>
-                <button class="btn" onclick="playSound('click'); startQuizGame('bot')" style="background: #2563eb; margin-bottom: 6px;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
-                <button class="btn" onclick="playSound('click'); startQuizGame('online')" style="background: #16a34a;">🌐 یاری ئۆنلاین (دژ بە یاریزان)</button>
-            </div>
-
-            <div id="quizLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
-                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزانی بەرامبەر...</h3>
-                <div class="spinner"></div>
-                <p style="font-size: 12px; color: #cbd5e1;">تکایە چاوەڕێ بکە...</p>
-                <button class="btn" onclick="playSound('click'); cancelQuizMatchmaking()" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
-            </div>
-
-            <div id="quizGameArea" class="card" style="display: none;">
-                <div class="target-letter-box" style="margin-bottom: 12px;">
-                    <div>
-                        <span style="font-size: 10px; display:block; color:#f3e8ff; text-align:right;">دۆخی یاری:</span>
-                        <span id="quizGameStatus" style="font-size: 14px; font-weight: bold; color: #fff;">یاری بەڕێوەیە...</span>
-                    </div>
-                    <div>
-                        <span style="font-size: 10px; display:block; color:#fde047; text-align:left;">کاتی ماوە:</span>
-                        <div class="timer-display" id="quizTimerDisplay">٠١:٠٠</div>
-                    </div>
-                </div>
-
-                <div class="score-board">
-                    <div class="score-box">
-                        <span id="quizP1Name">یاریزانی ١ (تۆ)</span>
-                        <bold id="quizP1Score">0</bold>
-                    </div>
-                    <div class="score-box">
-                        <span id="quizP2Name">یاریزانی ٢</span>
-                        <bold id="quizP2Score">0</bold>
-                    </div>
-                </div>
-
-                <div style="margin: 15px 0; text-align: center; min-height: 50px;">
-                    <h3 id="quizQuestionText" style="font-size: 15px; color: #fff;">پرسیار لێرە دەردەکەوێت...</h3>
-                </div>
-
-                <div id="quizOptionsContainer"></div>
-                <button class="btn" id="quizRestartBtn" onclick="playSound('click'); leaveQuizGame()" style="display: none; background: #16a34a; margin-top: 10px;">🔄 گەڕانەوە</button>
-            </div>
-
-            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveQuizGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
-        </div>
-
         <!-- Friends Screen -->
         <div id="friendsScreen" class="screen">
             <div class="brand-title">بەشی هاوڕێیان</div>
@@ -646,57 +506,6 @@
             </div>
 
             <button class="btn" style="margin-top: 10px;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
-        </div>
-
-        <!-- XO Menu & Game Screen -->
-        <div id="xoScreen" class="screen">
-            <div class="brand-title">یاری XO</div>
-            
-            <div id="xoModeSelect" class="card">
-                <h3>مۆدی یاری هەڵبژێرە:</h3>
-                <button class="btn" onclick="playSound('click'); startXoVsBot()" style="background: #2563eb;">🤖 یاری لەگەڵ کۆمپیوتەر</button>
-                <button class="btn" onclick="playSound('click'); startOnlineXo()" style="background: #16a34a; margin-top: 8px;">🌐 یاری ئۆنلاین (بەسترایەوە بە Firebase)</button>
-            </div>
-
-            <div id="xoLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
-                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزان...</h3>
-                <div class="spinner"></div>
-                <p style="font-size: 12px; color: #cbd5e1;">تکایە چاوەڕێ بکە تا یاریزانی دووەم بەشدار دەبێت...</p>
-                <button class="btn" onclick="playSound('click'); cancelMatchmaking('xo')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
-            </div>
-
-            <div id="xoGameArea" style="display: none;">
-                <div class="score-board">
-                    <div class="score-box">
-                        <span id="playerXTitle">یاریزانی X</span>
-                        <bold id="playerXName">تۆ</bold>
-                    </div>
-                    <div class="score-box">
-                        <span>دۆخ</span>
-                        <bold id="xoStatusText" style="color:var(--text-glow);">دەستپێک</bold>
-                    </div>
-                    <div class="score-box">
-                        <span id="playerOTitle">یاریزانی O</span>
-                        <bold id="playerOName">کۆمپیوتەر</bold>
-                    </div>
-                </div>
-
-                <div class="xo-board" id="xoBoard">
-                    <div class="xo-cell" onclick="handleXoCellClick(0)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(1)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(2)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(3)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(4)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(5)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(6)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(7)"></div>
-                    <div class="xo-cell" onclick="handleXoCellClick(8)"></div>
-                </div>
-
-                <button class="btn" id="xoResetBtn" onclick="playSound('click'); resetXoBoard()" style="margin-top: 8px; display: none; background: #16a34a;">🔄 دەستپێکردنەوە</button>
-            </div>
-
-            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveXoGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
         <!-- Word Game Menu & Screen -->
@@ -769,83 +578,6 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveWordGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
         </div>
 
-        <!-- Tug of War Menu, Shop & Game Screen -->
-        <div id="tugScreen" class="screen">
-            <div class="brand-title">ڕاکێشانی گوریس</div>
-
-            <div id="tugMenuArea" class="card">
-                <h3>مۆدی یاری گوریس هەڵبژێرە:</h3>
-                <button class="btn" onclick="playSound('click'); startTugVsBot()" style="background: #2563eb; margin-bottom: 6px;">🤖 دژ بە کۆمپیوتەر</button>
-                <button class="btn" onclick="playSound('click'); startOnlineTug()" style="background: #16a34a; margin-bottom: 6px;">🌐 یاری ئۆنلاین (بەستراو بە Firebase)</button>
-                <button class="btn" onclick="playSound('click'); openTugShop()" style="background: #f59e0b;">🛒 بەشی شوپینگ (کڕینی گوریسی تایبەت)</button>
-            </div>
-
-            <!-- Tug Shop Area -->
-            <div id="tugShopArea" class="card" style="display: none;">
-                <h3>🛒 شوپینگی گوریسی یاری</h3>
-                <p>گوریسی دڵخوازی خۆت بکڕە و لە یارییەکەدا بەکاری بهێنە!</p>
-                <div class="shop-grid">
-                    <div class="shop-item">
-                        <h4>🔴 گوریسی سوور</h4>
-                        <p>٥٠ خاڵ</p>
-                        <button class="btn" onclick="playSound('click'); buyTugItem('red', 50)" style="padding: 6px; font-size: 11px;">کڕین</button>
-                    </div>
-                    <div class="shop-item">
-                        <h4>🟡 گوریسی زەرد</h4>
-                        <p>٧٥ خاڵ</p>
-                        <button class="btn" onclick="playSound('click'); buyTugItem('yellow', 75)" style="padding: 6px; font-size: 11px;">کڕین</button>
-                    </div>
-                    <div class="shop-item">
-                        <h4>⭐ گوریسی ئاست (زێر)</h4>
-                        <p>١٥٠ خاڵ</p>
-                        <button class="btn" onclick="playSound('click'); buyTugItem('gold', 150)" style="padding: 6px; font-size: 11px;">کڕین</button>
-                    </div>
-                    <div class="shop-item">
-                        <h4>🔥 گوریسی ئاگرین</h4>
-                        <p>٢٥٠ خاڵ</p>
-                        <button class="btn" onclick="playSound('click'); buyTugItem('fire', 250)" style="padding: 6px; font-size: 11px;">کڕین</button>
-                    </div>
-                </div>
-                <button class="btn" onclick="playSound('click'); closeTugShop()" style="background: #ef4444; margin-top: 10px;">گەڕانەوە بۆ منۆی گوریس</button>
-            </div>
-
-            <div id="tugLobbyArea" class="card" style="display: none; text-align: center; padding: 15px;">
-                <h3 style="color: var(--text-glow); font-size: 16px;">گەڕان بۆ یاریزانی گوریس...</h3>
-                <div class="spinner"></div>
-                <p style="font-size: 12px; color: #cbd5e1;">چاوەڕێ بکە تا یاریزانێک دەچێتە ژوورەوە...</p>
-                <button class="btn" onclick="playSound('click'); cancelMatchmaking('tug')" style="background: #ef4444; margin-top: 10px;">پەشیمانبوونەوە</button>
-            </div>
-
-            <div id="tugGameArea" style="display: none;">
-                <div class="score-board">
-                    <div class="score-box">
-                        <span>یاریزانی ١ (تۆ)</span>
-                        <bold id="tugP1Clicks">٠</bold>
-                    </div>
-                    <div class="score-box">
-                        <span>کاتی ماوە</span>
-                        <bold id="tugTimerDisplay" style="color:#fde047;">١٠ چرکە</bold>
-                    </div>
-                    <div class="score-box">
-                        <span>یاریزانی ٢</span>
-                        <bold id="tugP2Clicks">٠</bold>
-                    </div>
-                </div>
-
-                <div class="tug-arena">
-                    <p style="font-size: 12px; color: var(--text-glow); margin: 0;">بە خێرایی کرتە لە دوگمەی خوارەوە بکە!</p>
-                    <div class="rope-track">
-                        <div class="rope-knot" id="ropeKnot"></div>
-                    </div>
-                    <div class="tap-btn-giant" onclick="playSound('click'); handleTugTap()">کرتە بکە! ⚡</div>
-                </div>
-
-                <button class="btn" id="tugResetBtn" onclick="playSound('click'); resetTugGame()" style="display: none; background: #16a34a;">🔄 یاری نوێ</button>
-            </div>
-
-            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); leaveTugGame()">گەڕانەوە بۆ شاشەی سەرەکی</button>
-        </div>
-
         <!-- Settings Screen -->
         <div id="settingsScreen" class="screen">
             <div class="brand-title">ڕێکخستنەکان</div>
@@ -892,7 +624,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, remove, update, onDisconnect, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDfrFkglZShCuZhCYwNQ8pEmKwNppWggBU",
@@ -911,43 +643,50 @@
         const provider = new GoogleAuthProvider();
 
         window.loginWithGoogle = function() {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    const user = result.user;
-                    let uid = user.uid;
-                    let username = user.displayName || user.email.split('@')[0];
-                    let avatar = user.photoURL || "";
-
-                    const userRef = ref(database, 'users/' + uid);
-                    get(userRef).then((snapshot) => {
-                        if (snapshot.exists()) {
-                            let data = snapshot.val();
-                            window.currentUser = data.username;
-                            localStorage.setItem("top_top_active_uid", uid);
-                            localStorage.setItem("top_top_active_user", window.currentUser);
-                        } else {
-                            let profileData = {
-                                username: username,
-                                email: user.email,
-                                avatar: avatar,
-                                score: 0
-                            };
-                            set(userRef, profileData);
-                            window.currentUser = username;
-                            localStorage.setItem("top_top_active_uid", uid);
-                            localStorage.setItem("top_top_active_user", username);
-                        }
-
-                        if (window.setOnlineStatus) window.setOnlineStatus(uid);
-                        switchScreen("hubScreen");
-                        loadUserData();
-                        if (window.loadLeaderboard) window.loadLeaderboard();
-                    });
-                }).catch((error) => {
-                    console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
-                    alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
-                });
+            signInWithPopup(auth, provider).catch((error) => {
+                console.error("هەڵە لە چوونەژوورەوە بە گوگڵ:", error);
+                alert("چوونەژوورەوە سەرکەوتوو نەبوو: " + error.message);
+            });
         };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                let uid = user.uid;
+                let username = user.displayName || user.email.split('@')[0];
+                let avatar = user.photoURL || "";
+
+                const userRef = ref(database, 'users/' + uid);
+                get(userRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        let data = snapshot.val();
+                        window.currentUser = data.username;
+                        localStorage.setItem("top_top_active_uid", uid);
+                        localStorage.setItem("top_top_active_user", window.currentUser);
+                    } else {
+                        let profileData = {
+                            username: username,
+                            email: user.email,
+                            avatar: avatar,
+                            score: 0
+                        };
+                        set(userRef, profileData);
+                        window.currentUser = username;
+                        localStorage.setItem("top_top_active_uid", uid);
+                        localStorage.setItem("top_top_active_user", username);
+                    }
+
+                    if (window.setOnlineStatus) window.setOnlineStatus(uid);
+                    switchScreen("hubScreen");
+                    loadUserData();
+                    if (window.loadLeaderboard) window.loadLeaderboard();
+                });
+            } else {
+                let savedUid = localStorage.getItem("top_top_active_uid");
+                if (!savedUid) {
+                    switchScreen("authScreen");
+                }
+            }
+        });
 
         window.db = database;
         window.dbRef = ref;
@@ -1265,516 +1004,6 @@
             }
         };
 
-        /* Online Quiz Engine */
-        let quizCurrentRoomId = null;
-        let quizMyRole = "";
-        let quizTimerInterval = null;
-
-        window.startOnlineQuizMatchmaking = function(username) {
-            const lobbyRef = ref(database, 'quiz_lobby');
-            get(lobbyRef).then((snapshot) => {
-                let lobbyData = snapshot.val();
-                let waitingRoomId = null;
-
-                if (lobbyData) {
-                    for (let id in lobbyData) {
-                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
-                            waitingRoomId = id;
-                            break;
-                        }
-                    }
-                }
-
-                if (waitingRoomId) {
-                    quizCurrentRoomId = waitingRoomId;
-                    quizMyRole = "player2";
-                    update(ref(database, 'quiz_lobby/' + quizCurrentRoomId), {
-                        player2: username,
-                        status: 'playing',
-                        startTime: Date.now()
-                    }).then(() => {
-                        listenToQuizRoom(quizCurrentRoomId, username);
-                        startQuizTimerLoop();
-                    });
-                } else {
-                    quizCurrentRoomId = "room_quiz_" + Date.now();
-                    quizMyRole = "player1";
-                    const newRoomRef = ref(database, 'quiz_lobby/' + quizCurrentRoomId);
-                    set(newRoomRef, {
-                        player1: username,
-                        player2: "",
-                        status: 'waiting',
-                        scores: { player1: 0, player2: 0 },
-                        currentQIndices: { player1: 0, player2: 0 },
-                        startTime: Date.now(),
-                        gameOver: false,
-                        winnerName: ""
-                    }).then(() => {
-                        onDisconnect(newRoomRef).remove();
-                        listenToQuizRoom(quizCurrentRoomId, username);
-                        startQuizTimerLoop();
-                    });
-                }
-            });
-        };
-
-        function startQuizTimerLoop() {
-            if (quizTimerInterval) clearInterval(quizTimerInterval);
-            
-            quizTimerInterval = setInterval(() => {
-                if (!quizCurrentRoomId) return;
-                const roomRef = ref(database, 'quiz_lobby/' + quizCurrentRoomId);
-                get(roomRef).then((snapshot) => {
-                    if (!snapshot.exists()) return;
-                    let room = snapshot.val();
-                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
-
-                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
-                    let timeLeft = 60 - elapsed;
-
-                    if (timeLeft <= 0) {
-                        timeLeft = 0;
-                        clearInterval(quizTimerInterval);
-
-                        if (!room.winnerName) {
-                            let p1Score = room.scores.player1 || 0;
-                            let p2Score = room.scores.player2 || 0;
-                            let wName = "";
-                            if (p1Score > p2Score) wName = room.player1 + " زۆرترین وەڵامی زانی و بردیەوە! 🎉";
-                            else if (p2Score > p1Score) wName = (room.player2 || "یاریزانی ٢") + " زۆرترین وەڵامی زانی و بردیەوە! 🎉";
-                            else wName = "یەکسان بوون لە زانینی وەڵامەکاندا! 🤝";
-                            
-                            playSound('victory');
-                            if (quizMyRole === 'player1') {
-                                update(roomRef, { gameOver: true, winnerName: wName });
-                            }
-                        }
-                    }
-
-                    let mins = Math.floor(timeLeft / 60);
-                    let secs = timeLeft % 60;
-                    let timerEl = document.getElementById("quizTimerDisplay");
-                    if (timerEl) {
-                        timerEl.innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
-                    }
-                });
-            }, 1000);
-        }
-
-        function listenToQuizRoom(roomId, username) {
-            const roomRef = ref(database, 'quiz_lobby/' + roomId);
-            onValue(roomRef, (snapshot) => {
-                const room = snapshot.val();
-                if (!room) return;
-
-                if (room.status === 'waiting') {
-                    document.getElementById("quizModeSelect").style.display = "none";
-                    document.getElementById("quizLobbyArea").style.display = "block";
-                    document.getElementById("quizGameArea").style.display = "none";
-                } else if (room.status === 'playing') {
-                    document.getElementById("quizModeSelect").style.display = "none";
-                    document.getElementById("quizLobbyArea").style.display = "none";
-                    document.getElementById("quizGameArea").style.display = "block";
-
-                    let p1Text = room.player1 + (quizMyRole === 'player1' ? " (تۆ)" : "");
-                    let p2Text = (room.player2 || "بەرامبەر") + (quizMyRole === 'player2' ? " (تۆ)" : "");
-
-                    document.getElementById("quizP1Name").innerText = p1Text;
-                    document.getElementById("quizP2Name").innerText = p2Text;
-
-                    let p1Score = room.scores.player1 || 0;
-                    let p2Score = room.scores.player2 || 0;
-                    document.getElementById("quizP1Score").innerText = p1Score;
-                    document.getElementById("quizP2Score").innerText = p2Score;
-
-                    if (room.gameOver) {
-                        document.getElementById("quizGameStatus").innerText = "کۆتایی هات!";
-                        document.getElementById("quizQuestionText").innerText = room.winnerName;
-                        document.getElementById("quizOptionsContainer").innerHTML = "";
-                        document.getElementById("quizRestartBtn").style.display = "block";
-                    } else {
-                        document.getElementById("quizGameStatus").innerText = "یاری بەڕێوەیە...";
-                        renderOnlineQuestion(room);
-                    }
-                }
-            });
-        }
-
-        function renderOnlineQuestion(room) {
-            let myQIndex = room.currentQIndices[quizMyRole] || 0;
-            let q = quizQuestions[myQIndex % quizQuestions.length];
-            
-            document.getElementById("quizQuestionText").innerText = q.q;
-            let optsContainer = document.getElementById("quizOptionsContainer");
-            optsContainer.innerHTML = "";
-            
-            q.opts.forEach((opt, idx) => {
-                optsContainer.innerHTML += `
-                    <button class="quiz-opt-btn" onclick="playSound('click'); submitOnlineQuizAnswer(${idx})">${opt}</button>
-                `;
-            });
-        }
-
-        window.submitOnlineQuizAnswer = function(selectedIdx) {
-            if (!quizCurrentRoomId) return;
-
-            const roomRef = ref(database, 'quiz_lobby/' + quizCurrentRoomId);
-            get(roomRef).then((snapshot) => {
-                if(!snapshot.exists()) return;
-                let room = snapshot.val();
-                if (room.gameOver) return;
-
-                let myQIndex = room.currentQIndices[quizMyRole] || 0;
-                let q = quizQuestions[myQIndex % quizQuestions.length];
-
-                if (selectedIdx === q.a) {
-                    room.scores[quizMyRole] = (room.scores[quizMyRole] || 0) + 10;
-                }
-
-                room.currentQIndices[quizMyRole] = myQIndex + 1;
-
-                update(roomRef, {
-                    scores: room.scores,
-                    currentQIndices: room.currentQIndices
-                });
-            });
-        };
-
-        window.cancelQuizMatchmaking = function() {
-            if (quizCurrentRoomId) {
-                remove(ref(database, 'quiz_lobby/' + quizCurrentRoomId));
-                quizCurrentRoomId = null;
-            }
-            document.getElementById("quizLobbyArea").style.display = "none";
-            document.getElementById("quizModeSelect").style.display = "block";
-        };
-
-        window.leaveQuizRoom = function() {
-            if (quizTimerInterval) clearInterval(quizTimerInterval);
-            if (quizCurrentRoomId) {
-                remove(ref(database, 'quiz_lobby/' + quizCurrentRoomId));
-                quizCurrentRoomId = null;
-            }
-        };
-
-        /* XO Online Engine */
-        let xoCurrentRoomId = null;
-        let xoMyRole = ""; 
-
-        window.startOnlineMatchmaking = function(username) {
-            const lobbyRef = ref(database, 'xo_lobby');
-            get(lobbyRef).then((snapshot) => {
-                let lobbyData = snapshot.val();
-                let waitingRoomId = null;
-
-                if (lobbyData) {
-                    for (let id in lobbyData) {
-                        if (lobbyData[id].status === 'waiting' && lobbyData[id].playerX !== username) {
-                            waitingRoomId = id;
-                            break;
-                        }
-                    }
-                }
-
-                if (waitingRoomId) {
-                    xoCurrentRoomId = waitingRoomId;
-                    xoMyRole = "O";
-                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
-                        playerO: username,
-                        status: 'playing'
-                    }).then(() => {
-                        listenToXoRoom(xoCurrentRoomId, username);
-                    });
-                } else {
-                    xoCurrentRoomId = "room_xo_" + Date.now();
-                    xoMyRole = "X";
-                    const newRoomRef = ref(database, 'xo_lobby/' + xoCurrentRoomId);
-                    set(newRoomRef, {
-                        playerX: username,
-                        playerO: "",
-                        status: 'waiting',
-                        turn: 'X',
-                        board: ["", "", "", "", "", "", "", "", ""],
-                        winner: "",
-                        restartX: false,
-                        restartO: false
-                    }).then(() => {
-                        onDisconnect(newRoomRef).remove();
-                        listenToXoRoom(xoCurrentRoomId, username);
-                    });
-                }
-            });
-        };
-
-        function listenToXoRoom(roomId, username) {
-            const roomRef = ref(database, 'xo_lobby/' + roomId);
-            onValue(roomRef, (snapshot) => {
-                const room = snapshot.val();
-                if (!room) return;
-
-                if (room.status === 'waiting') {
-                    document.getElementById("xoModeSelect").style.display = "none";
-                    document.getElementById("xoLobbyArea").style.display = "block";
-                    document.getElementById("xoGameArea").style.display = "none";
-                } else if (room.status === 'playing') {
-                    document.getElementById("xoModeSelect").style.display = "none";
-                    document.getElementById("xoLobbyArea").style.display = "none";
-                    document.getElementById("xoGameArea").style.display = "block";
-
-                    let xLabel = room.playerX + (xoMyRole === 'X' ? " (تۆ)" : "");
-                    let oLabel = (room.playerO || "بەرامبەر") + (xoMyRole === 'O' ? " (تۆ)" : "");
-                    
-                    if (xoMyRole === 'X') {
-                        document.getElementById("playerXName").innerHTML = `<span style="color:#facc15">${xLabel}</span>`;
-                        document.getElementById("playerOName").innerText = oLabel;
-                    } else {
-                        document.getElementById("playerXName").innerText = xLabel;
-                        document.getElementById("playerOName").innerHTML = `<span style="color:#facc15">${oLabel}</span>`;
-                    }
-
-                    window.xoState = room.board || ["", "", "", "", "", "", "", "", ""];
-                    window.xoTurn = room.turn;
-                    window.renderXoBoard();
-
-                    if (room.winner) {
-                        if (room.winner === 'draw') {
-                            document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
-                        } else {
-                            let winnerName = room.winner === 'X' ? room.playerX : room.playerO;
-                            document.getElementById("xoStatusText").innerText = `بردیەوە ${winnerName}! 🎉`;
-                            playSound('victory');
-                            if (room.winner === xoMyRole && !room.scoreAdded) {
-                                window.addScore(10);
-                                if (xoMyRole === 'X') {
-                                    update(ref(database, 'xo_lobby/' + xoCurrentRoomId), { scoreAdded: true });
-                                }
-                            }
-                        }
-                        window.xoGameActive = false;
-                        
-                        let resetBtn = document.getElementById("xoResetBtn");
-                        resetBtn.style.display = "block";
-                        
-                        let myRestartClicked = (xoMyRole === 'X' ? room.restartX : room.restartO);
-                        if (myRestartClicked) {
-                            resetBtn.innerText = "⏳ چاوەڕوانی یاریزانی بەرامبەر...";
-                            resetBtn.disabled = true;
-                        } else {
-                            resetBtn.innerText = "🔄 دەستپێکردنەوە";
-                            resetBtn.disabled = false;
-                        }
-
-                        if (room.restartX && room.restartO) {
-                            if (xoMyRole === 'X') {
-                                update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
-                                    board: ["", "", "", "", "", "", "", "", ""],
-                                    turn: 'X',
-                                    winner: "",
-                                    restartX: false,
-                                    restartO: false,
-                                    scoreAdded: false
-                                });
-                            }
-                        }
-                    } else {
-                        window.xoGameActive = true;
-                        document.getElementById("xoResetBtn").style.display = "none";
-                        if (room.turn === xoMyRole) {
-                            document.getElementById("xoStatusText").innerText = "سەرەی تۆیە! 🎯";
-                        } else {
-                            let turnName = room.turn === 'X' ? room.playerX : room.playerO;
-                            document.getElementById("xoStatusText").innerText = `سەرەی ${turnName}`;
-                        }
-                    }
-                }
-            });
-        }
-
-        window.sendOnlineXoMove = function(index) {
-            if (!xoCurrentRoomId) return;
-            if (window.xoTurn !== xoMyRole) {
-                alert("چاوەڕێ بکە، هێشتا سەرەی تۆ نییە!");
-                return;
-            }
-
-            let newBoard = [...window.xoState];
-            newBoard[index] = xoMyRole;
-            let nextTurn = xoMyRole === 'X' ? 'O' : 'X';
-            let winner = "";
-
-            if (window.checkXoWinnerLocal(newBoard, xoMyRole)) {
-                winner = xoMyRole;
-            } else if (!newBoard.includes("")) {
-                winner = "draw";
-            }
-
-            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), {
-                board: newBoard,
-                turn: nextTurn,
-                winner: winner
-            });
-        };
-
-        window.sendOnlineXoRestart = function() {
-            if (!xoCurrentRoomId) return;
-            let updates = {};
-            if (xoMyRole === 'X') updates.restartX = true;
-            else updates.restartO = true;
-            update(ref(database, 'xo_lobby/' + xoCurrentRoomId), updates);
-        };
-
-        window.leaveXoRoom = function() {
-            if (xoCurrentRoomId) {
-                remove(ref(database, 'xo_lobby/' + xoCurrentRoomId));
-                xoCurrentRoomId = null;
-            }
-        };
-
-        /* Tug of War Online Engine */
-        let tugCurrentRoomId = null;
-        let tugMyRole = "";
-
-        window.startOnlineTugMatchmaking = function(username) {
-            const lobbyRef = ref(database, 'tug_lobby');
-            get(lobbyRef).then((snapshot) => {
-                let lobbyData = snapshot.val();
-                let waitingRoomId = null;
-
-                if (lobbyData) {
-                    for (let id in lobbyData) {
-                        if (lobbyData[id].status === 'waiting' && lobbyData[id].player1 !== username) {
-                            waitingRoomId = id;
-                            break;
-                        }
-                    }
-                }
-
-                if (waitingRoomId) {
-                    tugCurrentRoomId = waitingRoomId;
-                    tugMyRole = "player2";
-                    update(ref(database, 'tug_lobby/' + tugCurrentRoomId), {
-                        player2: username,
-                        status: 'playing',
-                        startTime: Date.now()
-                    }).then(() => {
-                        listenToTugRoom(tugCurrentRoomId, username);
-                        startTugClientTimer();
-                    });
-                } else {
-                    tugCurrentRoomId = "room_tug_" + Date.now();
-                    tugMyRole = "player1";
-                    const newRoomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
-                    set(newRoomRef, {
-                        player1: username,
-                        player2: "",
-                        status: 'waiting',
-                        clicks: { player1: 0, player2: 0 },
-                        startTime: Date.now(),
-                        gameOver: false,
-                        winner: ""
-                    }).then(() => {
-                        onDisconnect(newRoomRef).remove();
-                        listenToTugRoom(tugCurrentRoomId, username);
-                        startTugClientTimer();
-                    });
-                }
-            });
-        };
-
-        let tugTimerInterval = null;
-        function startTugClientTimer() {
-            if (tugTimerInterval) clearInterval(tugTimerInterval);
-            tugTimerInterval = setInterval(() => {
-                if (!tugCurrentRoomId) return;
-                const roomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
-                get(roomRef).then((snapshot) => {
-                    if (!snapshot.exists()) return;
-                    let room = snapshot.val();
-                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
-
-                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
-                    let timeLeft = 10 - elapsed;
-
-                    if (timeLeft <= 0) {
-                        timeLeft = 0;
-                        clearInterval(tugTimerInterval);
-                        if (!room.winner && tugMyRole === 'player1') {
-                            let p1 = room.clicks.player1 || 0;
-                            let p2 = room.clicks.player2 || 0;
-                            let winnerName = p1 > p2 ? room.player1 : (p2 > p1 ? room.player2 : "draw");
-                            update(roomRef, { gameOver: true, winner: winnerName });
-                        }
-                    }
-
-                    let timerEl = document.getElementById("tugTimerDisplay");
-                    if (timerEl) timerEl.innerText = timeLeft + " چرکە";
-                });
-            }, 1000);
-        }
-
-        function listenToTugRoom(roomId, username) {
-            const roomRef = ref(database, 'tug_lobby/' + roomId);
-            onValue(roomRef, (snapshot) => {
-                const room = snapshot.val();
-                if (!room) return;
-
-                if (room.status === 'waiting') {
-                    document.getElementById("tugMenuArea").style.display = "none";
-                    document.getElementById("tugShopArea").style.display = "none";
-                    document.getElementById("tugLobbyArea").style.display = "block";
-                    document.getElementById("tugGameArea").style.display = "none";
-                } else if (room.status === 'playing') {
-                    document.getElementById("tugMenuArea").style.display = "none";
-                    document.getElementById("tugShopArea").style.display = "none";
-                    document.getElementById("tugLobbyArea").style.display = "none";
-                    document.getElementById("tugGameArea").style.display = "block";
-
-                    let p1Clicks = room.clicks.player1 || 0;
-                    let p2Clicks = room.clicks.player2 || 0;
-                    document.getElementById("tugP1Clicks").innerText = p1Clicks;
-                    document.getElementById("tugP2Clicks").innerText = p2Clicks;
-
-                    let diff = p1Clicks - p2Clicks;
-                    let percent = 50 + (diff * 3);
-                    if (percent < 5) percent = 5;
-                    if (percent > 95) percent = 95;
-                    document.getElementById("ropeKnot").style.left = percent + "%";
-
-                    if (room.gameOver) {
-                        if (room.winner === 'draw') {
-                            alert("یەکسان بوون!");
-                        } else {
-                            alert("بردیەوە: " + room.winner);
-                            playSound('victory');
-                            if (room.winner === username) window.addScore(15);
-                        }
-                        document.getElementById("tugResetBtn").style.display = "block";
-                    }
-                }
-            });
-        }
-
-        window.sendTugOnlineClick = function() {
-            if (!tugCurrentRoomId) return;
-            const roomRef = ref(database, 'tug_lobby/' + tugCurrentRoomId);
-            get(roomRef).then((snapshot) => {
-                if(!snapshot.exists()) return;
-                let room = snapshot.val();
-                if (room.gameOver) return;
-
-                room.clicks[tugMyRole] = (room.clicks[tugMyRole] || 0) + 1;
-                update(roomRef, { clicks: room.clicks });
-            });
-        };
-
-        window.leaveTugRoom = function() {
-            if (tugTimerInterval) clearInterval(tugTimerInterval);
-            if (tugCurrentRoomId) {
-                remove(ref(database, 'tug_lobby/' + tugCurrentRoomId));
-                tugCurrentRoomId = null;
-            }
-        };
-
         /* Word Game Online Engine */
         let wordCurrentRoomId = null;
         let wordMyRole = ""; 
@@ -1840,7 +1069,7 @@
             
             get(roomRef).then((snapshot) => {
                 if(snapshot.exists()) {
-                    alert("ئەم کۆدی ژوورە پێشتر هەیە، تکایە کۆدێکی تر بنووسە!");
+                    alert("ئەم کۆدی ژوورە پێشتر هەیە!");
                     return;
                 }
                 set(roomRef, {
@@ -1873,7 +1102,7 @@
                 }
                 let roomData = snapshot.val();
                 if(roomData.status !== 'waiting') {
-                    alert("ئەم ژوورە پڕ بووە یان دەستپێکردووە!");
+                    alert("ئەم ژوورە پڕ بووە!");
                     return;
                 }
                 wordCurrentRoomId = customCode;
@@ -2084,21 +1313,6 @@
         let currentUser = "";
         let profileTempAvatar = "";
 
-        // XO Local State
-        window.xoState = ["", "", "", "", "", "", "", "", ""];
-        window.xoTurn = "X";
-        let xoMode = "bot";
-        window.xoGameActive = true;
-
-        // Tug Local State
-        let tugMode = "bot";
-        let tugP1Count = 0;
-        let tugP2Count = 0;
-        let tugTimer = 10;
-        let tugActive = false;
-        let tugTimerIntervalLocal = null;
-
-        // Sound Engine (Web Audio API)
         function playSound(type) {
             let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
             if (soundMuted) return;
@@ -2136,37 +1350,6 @@
             } catch(e) {}
         }
         window.playSound = playSound;
-
-        // Quiz System Data
-        const quizQuestions = [
-            { q: "پایتەختی هەرێمی کوردستان کوێیە؟", opts: ["سلێمانی", "هەولێر", "دهۆک", "کەرکووک"], a: 1 },
-            { q: "چیا بەرزەکەی کوردستان ناوی چییە؟", opts: ["کۆڕەک", "هەڵگورد", "سەفین", "پیرەمەگرون"], a: 1 },
-            { q: "پیتەکانی زمانی کوردی بڕی چەندەن؟", opts: ["28", "34", "32", "30"], a: 1 },
-            { q: "گواستنەوەی ئۆکسیجن لە لەشدا ئەرکی کامەیانە؟", opts: ["خڕۆکەی سوور", "خڕۆکەی سپی", "پەڕەکانی خوێن", "پلازما"], a: 0 },
-            { q: "گەورەترین دەریاچەی جیهان کامەیە؟", opts: ["دەریاچەی قەزوێن", "دەریاچەی سوپەریۆر", "دەریاچەی ڤیکتۆریا", "دەریاچەی میشیگان"], a: 0 },
-            { q: "درێژترین ڕووباری جیهان کامەیە؟", opts: ["ئامازۆن", "نیل", "میستیسیپی", "یۆنگتسی"], a: 1 },
-            { q: "پایتەختی وڵاتی ژاپۆن کوێیە؟", opts: ["سێئول", "پەکین", "تۆکیۆ", "بانکۆک"], a: 2 },
-            { q: "کێ کیشوەری ئەمریکای دۆزییەوە؟", opts: ["کریستۆف کۆلۆمبۆس", "ماژلان", "مارکۆ پۆلۆ", "ڤاسکۆ دا گاما"], a: 0 },
-            { q: "خێراترین ئاژەڵی سەر زەوی کامەیە؟", opts: ["شێر", "چیتا", "ئاسک", "کەرکەدەن"], a: 1 },
-            { q: "هەسارەی سوور بە کام هەسارە دەوترێت؟", opts: ["زوهەل", "مەریخ", "موشتەری", "عوتارد"], a: 1 },
-            { q: "پایتەختی وڵاتی فەرەنسا کوێیە؟", opts: ["لەندەن", "بەرلین", "مەدرید", "پاریس"], a: 3 },
-            { q: "کیمیاویترین توخم لە خشتەی خولی چییە؟", opts: ["هایدرۆجن", "ئۆکسیجن", "کاربۆن", "نایترۆجن"], a: 0 },
-            { q: "شاعیری گەورەی کورد 'نالی' ناوەکەی چییە؟", opts: ["ئەحمەد", "مەلا خدر", "عەبدولڕەحمان", "مستەفا"], a: 1 },
-            { q: "نزیکترین هەسارە لە خۆرەوە کامەیە؟", opts: ["زهره", "عوتارد", "زەوی", "مەریخ"], a: 1 },
-            { q: "گەورەترین گیاندار لە جیهاندا کامەیە؟", opts: ["فیل", "نەهەنگی شین", "دێناسر", "سەگاوێس"], a: 1 },
-            { q: "ژمارەی ئێسکەکانی لەشی مرۆڤی پێگەیشتوو چەندە؟", opts: ["206", "300", "150", "250"], a: 0 },
-            { q: "نەورۆز کەوتۆتە کام وەرزەوە؟", opts: ["هاوین", "زستان", "بەهار", "پاییز"], a: 2 },
-            { q: "کێ تابلۆی مۆنالیزای کێشاوە؟", opts: ["ڤان کۆخ", "پیکاسۆ", "لیۆناردۆ داڤینچی", "میکلانجێلۆ"], a: 2 },
-            { q: "کام وڵات بە وڵاتی ئەهرامەکان ناسراوە؟", opts: ["عێراق", "میسر", "یۆنان", "مەغریب"], a: 1 },
-            { q: "سەرچاوەی سەرەکی ڕووناکی و گەرمی سەر زەوی چییە؟", opts: ["مانگ", "ئەستێرەکان", "خۆر", "ئاگر"], a: 2 }
-        ];
-
-        let quizMode = "bot";
-        let quizLocalTimer = 60;
-        let quizLocalTimerInterval = null;
-        let quizLocalScoreP1 = 0;
-        let quizLocalScoreP2 = 0;
-        let quizBotIndex = 0;
 
         window.onload = function() {
             loadSavedSettings();
@@ -2288,7 +1471,6 @@
                     avatarEl.innerHTML = currentUser.charAt(0).toUpperCase();
                 }
 
-                document.getElementById("profileScreenName").innerText = currentUser;
                 document.getElementById("profileScreenRank").innerText = getRankTitle(score);
                 document.getElementById("profileScreenLevel").innerText = level;
                 document.getElementById("profileScreenXp").innerText = score;
@@ -2341,7 +1523,6 @@
             });
         }
 
-        /* Daily Rewards System */
         function checkDailyRewardStatus() {
             let uid = localStorage.getItem("top_top_active_uid");
             if (!uid) return;
@@ -2378,7 +1559,10 @@
             }
         }
 
-        /* Puzzle Game Navigation & Logic */
+        function openGamesListModal() {
+            switchScreen("gamesListScreen");
+        }
+
         const kurdishPuzzleWordsList = [
             { word: "باران", scrambled: "ر ا ب ا ن" },
             { word: "هەولێر", scrambled: "ر ل هـ و ێ" },
@@ -2389,6 +1573,9 @@
             { word: "گۆرانی", scrambled: "ی ن ا r گ و" },
             { word: "ئازادی", scrambled: "ی د ا ز ئـ ى" }
         ];
+
+        let localPuzzleWord = "";
+        let puzzleMode = "bot";
 
         function openPuzzleMenu() {
             switchScreen("puzzleScreen");
@@ -2466,171 +1653,16 @@
             backToHub();
         }
 
-        /* Wheel of Fortune Logic */
-        function openWheelMenu() {
-            switchScreen("wheelScreen");
-            document.getElementById("wheelResultText").innerText = "";
-            let uid = localStorage.getItem("top_top_active_uid");
-            if (uid) {
-                let lastSpin = localStorage.getItem("wheel_spin_" + uid);
-                let now = Date.now();
-                let btn = document.getElementById("spinWheelBtn");
-                if (lastSpin && (now - lastSpin < 24 * 60 * 60 * 1000)) {
-                    btn.disabled = true;
-                    btn.innerText = "✅ چەرخەکە خولێنراوەتەوە بۆ ئەمڕۆ";
-                } else {
-                    btn.disabled = false;
-                    btn.innerText = "🎡 چەرخەکە بخوولێنەوە!";
-                }
-            }
+        function openFriendsScreen() {
+            switchScreen("friendsScreen");
+            if(window.loadFriendsList) window.loadFriendsList();
         }
 
-        let wheelDegrees = 0;
-        function spinFortuneWheel() {
-            let uid = localStorage.getItem("top_top_active_uid");
-            if (!uid) return;
-
-            let btn = document.getElementById("spinWheelBtn");
-            btn.disabled = true;
-
-            let extraDeg = Math.floor(Math.random() * 360) + 1440;
-            wheelDegrees += extraDeg;
-            let wheelEl = document.getElementById("fortuneWheel");
-            wheelEl.style.transform = `rotate(${wheelDegrees}deg)`;
-
-            setTimeout(() => {
-                let prizes = [10, 25, 50, 100, 200, 15];
-                let randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
-
-                localStorage.setItem("wheel_spin_" + uid, Date.now());
-                if (window.addScore) window.addScore(randomPrize);
-                playSound('victory');
-                document.getElementById("wheelResultText").innerText = `🎉 پیرۆزە! ${randomPrize} خاڵت لە چەرخی بەختەوەری بردەوە!`;
-            }, 3000);
+        function openChatScreen() {
+            switchScreen("chatScreen");
+            if(window.listenToChat) window.listenToChat();
         }
 
-        /* XO Navigation & Logic */
-        function openXoMenu() {
-            switchScreen("xoScreen");
-            document.getElementById("xoModeSelect").style.display = "block";
-            document.getElementById("xoLobbyArea").style.display = "none";
-            document.getElementById("xoGameArea").style.display = "none";
-        }
-
-        function startXoVsBot() {
-            xoMode = "bot";
-            document.getElementById("xoModeSelect").style.display = "none";
-            document.getElementById("xoLobbyArea").style.display = "none";
-            document.getElementById("xoGameArea").style.display = "block";
-            document.getElementById("playerXName").innerHTML = `<span style="color:#facc15">${currentUser} (تۆ)</span>`;
-            document.getElementById("playerOName").innerText = "کۆمپیوتەر";
-            resetXoBoard();
-        }
-
-        function startOnlineXo() {
-            xoMode = "online";
-            if (window.startOnlineMatchmaking) window.startOnlineMatchmaking(currentUser);
-        }
-
-        window.renderXoBoard = function() {
-            let cells = document.querySelectorAll(".xo-cell");
-            cells.forEach((cell, idx) => {
-                cell.innerText = window.xoState[idx];
-                cell.className = "xo-cell " + window.xoState[idx].toLowerCase();
-            });
-        };
-
-        window.checkXoWinnerLocal = function(board, player) {
-            const winConditions = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8],
-                [0, 3, 6], [1, 4, 7], [2, 5, 8],
-                [0, 4, 8], [2, 4, 6]
-            ];
-            return winConditions.some(condition => {
-                return condition.every(index => board[index] === player);
-            });
-        };
-
-        function resetXoBoard() {
-            if (xoMode === "online") {
-                if (window.sendOnlineXoRestart) window.sendOnlineXoRestart();
-                return;
-            }
-            window.xoState = ["", "", "", "", "", "", "", "", ""];
-            window.xoTurn = "X";
-            window.xoGameActive = true;
-            document.getElementById("xoStatusText").innerText = "سەرەی تۆیە (X)";
-            document.getElementById("xoResetBtn").style.display = "none";
-            window.renderXoBoard();
-        }
-
-        function handleXoCellClick(index) {
-            playSound('click');
-            if (!window.xoGameActive || window.xoState[index] !== "") return;
-
-            if (xoMode === "online") {
-                window.sendOnlineXoMove(index);
-            } else {
-                window.xoState[index] = window.xoTurn;
-                window.renderXoBoard();
-
-                if (window.checkXoWinnerLocal(window.xoState, window.xoTurn)) {
-                    document.getElementById("xoStatusText").innerText = `بردیەوە ${window.xoTurn}! 🎉`;
-                    playSound('victory');
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    if(window.xoTurn === "X" && window.addScore) window.addScore(10);
-                    return;
-                }
-
-                if (!window.xoState.includes("")) {
-                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    return;
-                }
-
-                window.xoTurn = "O";
-                document.getElementById("xoStatusText").innerText = "سەرەی کۆمپیوتەرە...";
-                setTimeout(botXoMove, 500);
-            }
-        }
-
-        function botXoMove() {
-            if (!window.xoGameActive || window.xoTurn !== "O") return;
-            let emptyIndices = [];
-            window.xoState.forEach((val, idx) => { if (val === "") emptyIndices.push(idx); });
-
-            if (emptyIndices.length > 0) {
-                let randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-                window.xoState[randomIndex] = "O";
-                window.renderXoBoard();
-
-                if (window.checkXoWinnerLocal(window.xoState, "O")) {
-                    document.getElementById("xoStatusText").innerText = "کۆمپیوتەر بردیەوە! 🤖";
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    return;
-                }
-
-                if (!window.xoState.includes("")) {
-                    document.getElementById("xoStatusText").innerText = "یەکسان بوون! 🤝";
-                    window.xoGameActive = false;
-                    document.getElementById("xoResetBtn").style.display = "block";
-                    return;
-                }
-
-                window.xoTurn = "X";
-                document.getElementById("xoStatusText").innerText = "سەرەی تۆیە (X)";
-            }
-        }
-
-        function leaveXoGame() {
-            if (xoMode === 'online' && window.leaveXoRoom) window.leaveXoRoom();
-            backToHub();
-        }
-
-        /* Word Game Local Triggers */
         function openWordGameMenu() {
             switchScreen("wordScreen");
             document.getElementById("wordModeSelect").style.display = "block";
@@ -2665,127 +1697,35 @@
             backToHub();
         }
 
-        /* Tug Game Local Logic */
-        function openTugMenu() {
-            switchScreen("tugScreen");
-            document.getElementById("tugMenuArea").style.display = "block";
-            document.getElementById("tugShopArea").style.display = "none";
-            document.getElementById("tugLobbyArea").style.display = "none";
-            document.getElementById("tugGameArea").style.display = "none";
+        function toggleSoundSetting() {
+            let isMuted = document.getElementById("soundToggle").checked;
+            localStorage.setItem("toptop_sound_muted", isMuted);
         }
 
-        function openTugShop() {
-            document.getElementById("tugMenuArea").style.display = "none";
-            document.getElementById("tugShopArea").style.display = "block";
+        function toggleMusicSetting() {
+            let isMuted = document.getElementById("musicToggle").checked;
+            localStorage.setItem("toptop_music_muted", isMuted);
         }
 
-        function closeTugShop() {
-            document.getElementById("tugShopArea").style.display = "none";
-            document.getElementById("tugMenuArea").style.display = "block";
+        function setAppTheme(themeName) {
+            document.body.setAttribute("data-theme", themeName);
+            localStorage.setItem("toptop_theme", themeName);
         }
 
-        function buyTugItem(item, price) {
-            let uid = localStorage.getItem("top_top_active_uid");
-            if (!uid) return;
+        function loadSavedSettings() {
+            let soundMuted = localStorage.getItem("toptop_sound_muted") === "true";
+            let musicMuted = localStorage.getItem("toptop_music_muted") === "true";
+            let savedTheme = localStorage.getItem("toptop_theme") || "purple";
 
-            const userRef = window.dbRef(window.db, 'users/' + uid);
-            window.dbGet(userRef).then((snapshot) => {
-                if(!snapshot.exists()) return;
-                let profile = snapshot.val();
-                let score = profile.score || 0;
-
-                if (score < price) {
-                    alert("خاڵی پێویستت نییە!");
-                    return;
-                }
-
-                window.addScore(-price);
-                alert("کڕینەکەت سەرکەوتوو بوو!");
-            });
+            document.getElementById("soundToggle").checked = soundMuted;
+            document.getElementById("musicToggle").checked = musicMuted;
+            document.body.setAttribute("data-theme", savedTheme);
         }
 
-        function startTugVsBot() {
-            tugMode = "bot";
-            document.getElementById("tugMenuArea").style.display = "none";
-            document.getElementById("tugGameArea").style.display = "block";
-            document.getElementById("tugResetBtn").style.display = "none";
-
-            tugP1Count = 0;
-            tugP2Count = 0;
-            tugTimer = 10;
-            tugActive = true;
-
-            document.getElementById("tugP1Clicks").innerText = "0";
-            document.getElementById("tugP2Clicks").innerText = "0";
-            document.getElementById("tugTimerDisplay").innerText = "١٠ چرکە";
-            document.getElementById("ropeKnot").style.left = "50%";
-
-            if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
-            tugTimerIntervalLocal = setInterval(() => {
-                tugTimer--;
-                document.getElementById("tugTimerDisplay").innerText = tugTimer + " چرکە";
-
-                if (Math.random() > 0.3) {
-                    tugP2Count++;
-                    document.getElementById("tugP2Clicks").innerText = tugP2Count;
-                    updateTugPosition();
-                }
-
-                if (tugTimer <= 0) {
-                    clearInterval(tugTimerIntervalLocal);
-                    tugActive = false;
-                    document.getElementById("tugResetBtn").style.display = "block";
-
-                    if (tugP1Count > tugP2Count) {
-                        playSound('victory');
-                        alert("پیرۆزە! بردتەوە! 🎉");
-                        if (window.addScore) window.addScore(15);
-                    } else if (tugP2Count > tugP1Count) {
-                        alert("کۆمپیوتەر بردیەوە! 🤖");
-                    } else {
-                        alert("یەکسان بوون!");
-                    }
-                }
-            }, 1000);
-        }
-
-        function handleTugTap() {
-            if (tugMode === "online") {
-                if (window.sendTugOnlineClick) window.sendTugOnlineClick();
-            } else {
-                if (!tugActive) return;
-                tugP1Count++;
-                document.getElementById("tugP1Clicks").innerText = tugP1Count;
-                updateTugPosition();
-            }
-        }
-
-        function updateTugPosition() {
-            let diff = tugP1Count - tugP2Count;
-            let percent = 50 + (diff * 3);
-            if (percent < 5) percent = 5;
-            if (percent > 95) percent = 95;
-            document.getElementById("ropeKnot").style.left = percent + "%";
-        }
-
-        function startOnlineTug() {
-            tugMode = "online";
-            if (window.startOnlineTugMatchmaking) window.startOnlineTugMatchmaking(currentUser);
-        }
-
-        function resetTugGame() {
-            if (tugMode === "bot") startTugVsBot();
-        }
-
-        function leaveTugGame() {
-            if (tugTimerIntervalLocal) clearInterval(tugTimerIntervalLocal);
-            if (tugMode === 'online' && window.leaveTugRoom) window.leaveTugRoom();
-            backToHub();
-        }
+        function openSettingsScreen() { loadUserData(); switchScreen("settingsScreen"); }
+        function backToHub() { loadUserData(); switchScreen("hubScreen"); if (window.loadLeaderboard) window.loadLeaderboard(); }
 
         function cancelMatchmaking(type) {
-            if (type === 'xo' && window.leaveXoRoom) window.leaveXoRoom();
-            if (type === 'tug' && window.leaveTugRoom) window.leaveTugRoom();
             if (type === 'word' && window.leaveWordRoomFirebase) window.leaveWordRoomFirebase();
             backToHub();
         }
