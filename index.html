@@ -422,7 +422,7 @@
                     </div>
                     <div class="score-box">
                         <span>دۆخ</span>
-                        <bold id="wordGameStatusText" style="color:var(--text-glow);">چاوەڕێی یەکەم وشە...</bold>
+                        <bold id="wordGameStatusText" style="color:var(--text-glow);">یاری بەڕێوەیە...</bold>
                     </div>
                     <div class="score-box">
                         <span id="wordP2Title">یاریزانی ٢</span>
@@ -782,12 +782,12 @@
             }
         };
 
-        /* Word Game Online Engine with continuous timer & 3s audio chime before result */
+        /* Word Game Online Engine with automatic continuous timer & 3s audio chime */
         let wordCurrentRoomId = null;
         let wordMyRole = ""; 
         const kurdishLetters = ["ت", "م", "ب", "د", "ر", "س", "ش", "ک", "گ", "ل", "ن", "و", "هـ", "چ", "پ"];
+        let clientTimerInterval = null;
 
-        // Sound generator for 3s alert
         function playVictorySound() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -831,6 +831,7 @@
                         status: 'playing',
                         startTime: Date.now()
                     }).then(() => {
+                        startClientTimerLoop();
                         listenToWordRoom(wordCurrentRoomId, username);
                     });
                 } else {
@@ -845,12 +846,13 @@
                         targetLetter: randomLetter,
                         words: {},
                         scores: { player1: 0, player2: 0 },
-                        startTime: 0,
+                        startTime: Date.now(), // Auto start time immediately when room is created/joined
                         gameOver: false,
                         winnerName: ""
                     }).then(() => {
                         onDisconnect(newRoomRef).remove();
                         document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                        startClientTimerLoop();
                         listenToWordRoom(wordCurrentRoomId, username);
                     });
                 }
@@ -875,7 +877,7 @@
                     targetLetter: randomLetter,
                     words: {},
                     scores: { player1: 0, player2: 0 },
-                    startTime: 0,
+                    startTime: Date.now(),
                     gameOver: false,
                     winnerName: ""
                 }).then(() => {
@@ -883,6 +885,7 @@
                     document.getElementById("wordModeSelect").style.display = "none";
                     document.getElementById("wordLobbyArea").style.display = "block";
                     document.getElementById("wordLobbyText").innerText = "کۆدی ژوورەکەت: " + wordCurrentRoomId;
+                    startClientTimerLoop();
                     listenToWordRoom(wordCurrentRoomId, username);
                 });
             });
@@ -907,20 +910,60 @@
                     status: 'playing',
                     startTime: Date.now()
                 }).then(() => {
+                    startClientTimerLoop();
                     listenToWordRoom(wordCurrentRoomId, username);
                 });
             });
         };
+
+        function startClientTimerLoop() {
+            if (clientTimerInterval) clearInterval(clientTimerInterval);
+            
+            clientTimerInterval = setInterval(() => {
+                if (!wordCurrentRoomId) return;
+                const roomRef = ref(database, 'word_lobby/' + wordCurrentRoomId);
+                get(roomRef).then((snapshot) => {
+                    if (!snapshot.exists()) return;
+                    let room = snapshot.val();
+                    if (room.status !== 'playing' || room.gameOver || !room.startTime) return;
+
+                    let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
+                    let timeLeft = 120 - elapsed;
+
+                    if (timeLeft <= 0) {
+                        timeLeft = 0;
+                        clearInterval(clientTimerInterval);
+
+                        if (!room.winnerName) {
+                            let p1Score = room.scores.player1 || 0;
+                            let p2Score = room.scores.player2 || 0;
+                            let wName = "یەکسان بوون! 🤝";
+                            if (p1Score > p2Score) wName = room.player1 + " بردیەوە! 🎉";
+                            else if (p2Score > p1Score) wName = (room.player2 || "یاریزانی ٢") + " بردیەوە! 🎉";
+                            
+                            playVictorySound();
+
+                            if (wordMyRole === 'player1') {
+                                update(roomRef, { gameOver: true, winnerName: wName });
+                            }
+                        }
+                    }
+
+                    let mins = Math.floor(timeLeft / 60);
+                    let secs = timeLeft % 60;
+                    let timerEl = document.getElementById("wordTimerDisplay");
+                    if (timerEl) {
+                        timerEl.innerText = (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
+                    }
+                });
+            }, 1000);
+        }
 
         function listenToWordRoom(roomId, username) {
             const roomRef = ref(database, 'word_lobby/' + roomId);
             onValue(roomRef, (snapshot) => {
                 const room = snapshot.val();
                 if (!room) return;
-
-                if (room.status === 'playing' && room.startTime === 0) {
-                    // Timer does NOT start until the first word is sent (startTime remains 0 or handled dynamically)
-                }
 
                 if (room.status === 'waiting') {
                     document.getElementById("wordModeSelect").style.display = "none";
@@ -949,43 +992,12 @@
                     document.getElementById("wordP1Score").innerText = p1Score;
                     document.getElementById("wordP2Score").innerText = p2Score;
 
-                    // Continuous Timer Calculation (120 seconds after first word is sent)
-                    if (room.startTime && !room.gameOver) {
-                        let elapsed = Math.floor((Date.now() - room.startTime) / 1000);
-                        let timeLeft = 120 - elapsed;
-
-                        if (timeLeft <= 0) {
-                            timeLeft = 0;
-                            if (!room.winnerName) {
-                                let wName = "یەکسان بوون!";
-                                if (p1Score > p2Score) wName = room.player1 + " بردیەوە! 🎉";
-                                else if (p2Score > p1Score) wName = room.player2 + " بردیەوە! 🎉";
-                                
-                                playVictorySound();
-
-                                if (wordMyRole === 'player1') {
-                                    update(roomRef, { gameOver: true, winnerName: wName });
-                                }
-                            }
-                        }
-
-                        let mins = Math.floor(timeLeft / 60);
-                        let secs = timeLeft % 60;
-                        document.getElementById("wordTimerDisplay").innerText = 
-                            (mins < 10 ? "٠" + mins : mins) + ":" + (secs < 10 ? "٠" + secs : secs);
-
-                        if (timeLeft > 0) {
-                            document.getElementById("wordGameStatusText").innerText = "یاری بەڕێوەیە...";
-                        }
-                    } else {
-                        document.getElementById("wordTimerDisplay").innerText = "٠٢:٠٠";
-                        document.getElementById("wordGameStatusText").innerText = "چاوەڕێی یەکەم وشە...";
-                    }
-
                     if (room.winnerName) {
                         document.getElementById("wordGameStatusText").innerText = room.winnerName;
                         document.getElementById("wordInputText").disabled = true;
                         document.getElementById("wordSendBtn").disabled = true;
+                    } else {
+                        document.getElementById("wordGameStatusText").innerText = "یاری بەڕێوەیە...";
                     }
 
                     let wordsObj = room.words || {};
@@ -1018,9 +1030,9 @@
                     return;
                 }
 
-                // 2. Strict Meaning & Real Kurdish Word Validation
+                // 2. Strict Meaningful Kurdish Dictionary Check
                 if (!isValidMeaningfulKurdishWord(trimmed)) {
-                    showWordError("⚠️ وشەی هەڵە یان بێ مانا قبوڵ ناهێت!");
+                    showWordError("⚠️ تەنها وشەی ڕەسەنی کوردی قبوڵ دەکرێت (وشەی بێ مانا و نموونەکانی وەک الستار، تايتار ڕەتن)!");
                     return;
                 }
 
@@ -1043,11 +1055,6 @@
                     scores: room.scores
                 };
 
-                // Start timer on first word submission if not started yet
-                if (!room.startTime || room.startTime === 0) {
-                    updates.startTime = Date.now();
-                }
-
                 update(roomRef, updates);
 
                 document.getElementById("wordInputText").value = "";
@@ -1055,19 +1062,62 @@
             });
         };
 
-        // Advanced filter to reject nonsense strings like titi, tutu, mamo, etc., requiring real words length >= 3
+        // فەرهەنگی پشکنینی توند بۆ وشە کوردییەکان (ڕێگری لە هەموو وشە نامۆ و بێ ماناکان وەک الستار، تايتار، تيتياير و هتد)
         function isValidMeaningfulKurdishWord(w) {
             if (w.length < 3) return false;
-            
-            // Reject specific nonsense inputs requested by user
-            const nonsenseList = ["تبريرين", "تيتياتي", "توتو", "مومو", "دادا", "تيتي", "توتار", "تيتار", "ماما", "بابا", "بابۆ", "تاتە", "توتوت", "تيتيت"];
-            if (nonsenseList.includes(w)) return false;
 
-            // Reject repetitive patterns (e.g. all same letters or simple syllable repeats)
-            let uniqueChars = new Set(w.split("")).size;
-            if (uniqueChars === 1) return false;
+            // لیستی وشە قەدەغە و بێ ماناکان کە بەکارهێنەر داوای کردن یان نموونەن
+            const blockedList = ["الستار", "تايتار", "تيتاير", "تيتياير", "تبريرين", "توتو", "مومو", "دادا", "تيتي", "توتار", "تيتار", "ماما", "بابا", "بابۆ", "تاتە", "توتوت", "تيتيت"];
+            if (blockedList.includes(w)) return false;
 
-            return true;
+            // پشکنینی پیتە دووبارەکان لەسەر یەک (بۆ نموونە سێ پیت یان زیاتر لەدوای یەک)
+            for (let i = 0; i < w.length - 2; i++) {
+                if (w[i] === w[i+1] && w[i+1] === w[i+2]) {
+                    return false;
+                }
+            }
+
+            // فەرهەنگی بنەڕەتی وشە کوردییە ڕەسەنە باوەکان بۆ دڵنیابوون لەوەی مانا دارن
+            const validKurdishDictionary = [
+                // پیتى ت
+                "تانجى", "تاڤگە", "تاقە", "تەپۆلکە", "تەرزە", "تەموومژ", "تۆرەمە", "تەلار", "تیرۆر", "تەنیایی", "تۆمار", "تەپڵ", "تەمەن", "تەنیشت", "تەلەفۆن", "تووڕە", "تەون", "تەنیل", "تۆپ", "تەختە", "تەلان",
+                // پیتى م
+                "مامۆستا", "مایک", "مانگ", "مێوژ", "مەلەلە", "مێژوو", "مێشک", "میرات", "مۆم", "مۆزەخانە", "مریشک", "ماسی", "مێروو", "مۆدێرن", "مەکۆ",
+                // پیتى ب
+                "باران", "بەهار", "بەفر", "بنار", "باڵندە", "بەرد", "بەیبوون", "بروسکە", "بۆنە", "بەختەوەر", "برا", "باوکی", "بنەماڵە", "بیرۆکە", "بەرهەم",
+                // پیتى د
+                "درەخت", "دەریای", "دایک", "دیاری", "دڵسۆز", "دەفتەر", "دەمانچە", "دەنگ", "دوورگە", "دیمەن", "دانا", "دەست",
+                // پیتى ر
+                "ڕۆژمێر", "رووبار", "رەنگین", "رێواس", "رۆشنایی", "ڕێگا", "ڕێز", "ڕەشماڵ", "ڕوخسار",
+                // پیتى س
+                "ستێرە", "سێو", "سەرۆک", "سەوزە", "سەیران", "سلێمانی", "سپێدە", "سەرکەوتن", "سازگار", "سەهۆڵ",
+                // پیتى ش
+                "شارەزا", "شێرپەنجە", "شەقام", "شاکار", "شەماڵ", "شۆفێر", "شەکر", "شین", "شەوانە",
+                // پیتى ک
+                "کوردستان", "کانی", "کۆمەڵگا", "کەلتوور", "کۆڵان", "کتێب", "کۆمپیوتەر", "کاروان", "کەوانە", "کچە",
+                // پیتى گ
+                "گوڵەبەڕۆژە", "گەشتیار", "گەورە", "گۆران", "گەنم", "گەردەلوول", "گۆرانی", "گوڵ",
+                // پیتى ل
+                "لاپەڕە", "لێڤا", "لاوک", "لانکە", "لۆژیک", "لەشکر",
+                // پیتى ن
+                "نەورۆز", "ئەستێرە", "نیشتمان", "نووسەر", "ئاسمان", "ئاو", "ئاگر", "ئارام", "ئۆتۆمبیل", "ئەزموون",
+                // پیتى و
+                "وێنە", "وشە", "وڵات", "وەرزی", "وەشان",
+                // پیتى هـ
+                "هەتاو", "هەڵبەست", "هەولێر", "هێێمن", "هەنار", "هەور", "هەنگاو",
+                // پیتى چ
+                "چیا", "چاو", "چیرۆک", "چایچی", "چەمەن", "چەکدار",
+                // پیتى پ
+                "پێشمەرگە", "پاییز", "پرد", "پەپولە", "پەڕەسوورە", "پۆل", "پەرتووک"
+            ];
+
+            // پشکنین: ئایا لە فەرهەنگەکەدا هەیە یان بە پیتە ڕەسەنەکان دەست پێدەکات و دووانەی نادروست نییە
+            if (validKurdishDictionary.includes(w)) {
+                return true;
+            }
+
+            // ئەگەر لە فەرهەنگەکە نەبوو، ڕەتی دەکەینەوە بۆ ئەوەی وشەی بێ مانا وەک الستار و تايتار تێپەڕ نەبن
+            return false;
         }
 
         function showWordError(msg) {
@@ -1083,6 +1133,7 @@
         }
 
         window.leaveWordRoomFirebase = function() {
+            if (clientTimerInterval) clearInterval(clientTimerInterval);
             if (wordCurrentRoomId) {
                 remove(ref(database, 'word_lobby/' + wordCurrentRoomId));
                 wordCurrentRoomId = null;
