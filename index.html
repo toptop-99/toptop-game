@@ -372,7 +372,7 @@
             <!-- Story Section Hub Card -->
             <div class="card" style="text-align: center; padding: 12px; border-color: #ef4444;">
                 <h3 style="color: #f87171; font-size: 13px;">🌙 بەشی چیڕۆک</h3>
-                <p style="font-size: 11px; margin-bottom: 6px;">چیڕۆکی کارپێکەری ترسناک و سەرکێشی</p>
+                <p style="font-size: 11px; margin-bottom: 6px;">چیڕۆکی درێژ و پڕ لە نهێنی و سەرکێشی</p>
                 <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a); font-size: 13px; padding: 10px; margin-top:0;" onclick="playSound('click'); openStoriesListScreen()">🌙 چیڕۆکەکان</button>
             </div>
 
@@ -419,11 +419,11 @@
         <div id="storiesListScreen" class="screen">
             <div class="brand-title" style="color: #ef4444;">بەشی چیڕۆکەکان</div>
             <div class="card">
-                <h3 style="color: #f87171;">چیڕۆکێک هەڵبژێرە بۆ خوندنەوە:</h3>
+                <h3 style="color: #f87171;">چیڕۆکێکی درێژ هەڵبژێرە:</h3>
                 <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
                     <div class="game-card-item" style="padding: 12px; text-align: right; background: linear-gradient(135deg, #7f1d1d, #2d0606);" onclick="playSound('click'); openStoryScreen('scary_night')">
-                        <div class="game-card-title" style="background: none; font-size: 14px;">🌙 شەوی ترسناک و تاریکی دۆزەخ</div>
-                        <p style="font-size: 11px; color: #fca5a5; margin: 4px 0 0 0;">چیڕۆکێکی پڕ لە ڕووداوی سەرنجڕاکێش، نهێنی و بڕیاری چارەنووسساز...</p>
+                        <div class="game-card-title" style="background: none; font-size: 14px;">🌙 گەشتی تاریکی و ماڵی داپیرە (چیڕۆکی درێژ)</div>
+                        <p style="font-size: 11px; color: #fca5a5; margin: 4px 0 0 0;">گەشتێکی پڕ لە وێستگە، ترس، لێدوان و هەڵبژاردنی قورس...</p>
                     </div>
                 </div>
             </div>
@@ -673,14 +673,14 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
-        <!-- Story Screen (Extended Long Interactive Story) -->
+        <!-- Story Screen (Extremely Long Multi-Stage Story Engine) -->
         <div id="storyScreen" class="screen">
             <div class="brand-title" style="color: #ef4444;" id="storyScreenTitle">شەوی ترسناک و تاریکی دۆزەخ</div>
             <div class="card" style="padding: 15px;">
                 <!-- Step 1: Input Name Area -->
                 <div id="storyNameBox" style="text-align: center;">
-                    <h3 style="color: #f87171; margin-bottom: 8px;">🌙 دەستپێکردنی چیڕۆک</h3>
-                    <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ دەستپێکردنی ئەم گەشتە پڕ لە نهێنییە:</p>
+                    <h3 style="color: #f87171; margin-bottom: 8px;">🌙 دەستپێکردنی گەشتی مەزن</h3>
+                    <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ تێکەڵبوون لەگەڵ ئەم چیڕۆکە درێژەدا:</p>
                     <input type="text" id="storyPlayerNameInput" placeholder="ناوی خۆت لێرە بنووسە..." style="margin-bottom: 8px;">
                     <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); startInteractiveStory()">دەستپێکردنی گەشت</button>
                 </div>
@@ -1825,7 +1825,7 @@
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        /* Extended Interactive Story Engine with Multiple Long Pathways */
+        /* Highly Extended Long Interactive Story Engine */
         let activeStoryPlayerName = "";
         let currentStoryId = "";
 
@@ -1867,11 +1867,23 @@
             storyData.choices.forEach(ch => {
                 let btn = document.createElement("button");
                 btn.className = "btn";
-                btn.style.background = "linear-gradient(135deg, #7f1d1d, #450a0a)";
+                if (ch.isExit) {
+                    btn.style.background = "linear-gradient(135deg, #2563eb, #1d4ed8)";
+                } else if (ch.isRestart) {
+                    btn.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
+                } else {
+                    btn.style.background = "linear-gradient(135deg, #7f1d1d, #450a0a)";
+                }
                 btn.innerText = ch.text;
                 btn.onclick = function() {
                     playSound('click');
-                    loadStoryStep(ch.next);
+                    if (ch.action === 'restart') {
+                        openStoryScreen(currentStoryId);
+                    } else if (ch.action === 'exit') {
+                        openStoriesListScreen();
+                    } else {
+                        loadStoryStep(ch.next);
+                    }
                 };
                 cEl.appendChild(btn);
             });
@@ -1881,7 +1893,7 @@
             if (storyId === 'scary_night') {
                 const nodes = {
                     'step_1': {
-                        text: `شەوێکی سارد و بەڕووبار بارانی درەنگانی شەو بوو. ${name} دەسویچی کۆنی هەڵکرد و بە تەنها بەرەو ماڵی داپیرەی بەڕێکەوت کە لە کۆتایی کۆڵانە تاریکەکەدا بوو. لە پڕدا، لەسەر دیواری خانووە کۆنەکە سێبەرێکی گەورە و ترسناک جووڵا!`,
+                        text: `شەوێکی سارد و بەڕووبار بارانی درەنگانی شەو بوو. ${name} دەسویچی کۆنی هەڵکرد و بە تەنها بەرەو ماڵی داپیرەی بەڕێکەوت کە لە کۆتایی کۆڵانە تاریک و تەمومژاوییەکەدا بوو. لە پڕدا، لەسەر دیواری خانووە کۆنەکە سێبەرێکی گەورە و ترسناک جووڵا و دەنگێکی نامۆ لە دارستانە نزیکەکە هات!`,
                         choices: [
                             { text: "بەڕێوە پێشەوە و سەیری ئەوە بکە چییە", next: 'step_forward' },
                             { text: "خۆت بشارەوە لە پشت پاشماوەی دارەکانەوە", next: 'step_hide' }
@@ -1891,51 +1903,70 @@
                         text: `${name} هەنگاوی نایە پێشەوە و بە ئازایەتییەوە ڕووبەڕووی بووەوە. دەرکەوت تەنها سەگێکی ڕەشی زۆر گەورە بوو کە برسی بوو! ${name} پارچە نانێکی لە گیرفانی دەرکرد و پێیدا. سەگەکە هێمن بووەوە و تا نزیک ماڵی داپیرە ڕێگەی لەگەڵدا بڕیت. ئێستا گەیشتوویتەتە دەرگای ماڵی داپیرە، بەڵام دەرگاکە نیوەکراوەیە و دەنگی گریان لە ژووری ناوەوە دێت!`,
                         choices: [
                             { text: "بچۆ ژوورەوە و بپرسە کێیە؟", next: 'step_enter_house' },
-                            { text: "بگەڕێوە دواوە و هەڵبزێرە بۆ ماڵی دراوسێکان", next: 'step_neighbor' }
+                            { text: "بڕۆ بۆ باخچەی دواوە و پەنجەرەکە بپشکنە", next: 'step_backyard' }
                         ]
                     },
                     'step_hide': {
-                        text: `${name} بە خێرایی خۆی شاردەوە لە پشت دارەکانەوە. سەیرت کرد سێبەرەکە گۆڕا بۆ بوونەوەرێکی نامۆ و بێدەنگ کە ڕووناکی لە چاوی دەردەچوو! بوونەوەرەکە بە دوای تۆدا دەگەڕێت و زۆر نزیک بووەوە...`,
+                        text: `${name} بە خێرایی خۆی شاردەوە لە پشت دارەکانەوە. سەیرت کرد سێبەرەکە گۆڕا بۆ بوونەوەرێکی نامۆ و بێدەنگ کە ڕووناکی لە چاوی دەردەچوو! بوونەوەرەکە بە دوای تۆدا دەگەڕێت و زۆر نزیک بووەوە، پاشان نامەیەک کەوتە خوارەوە کە نەخشەی نهێنی شارۆچکەکەی لەسەر بوو...`,
                         choices: [
-                            { text: "بە خێرایی ڕاربکە بەرەو کۆڵانی سەرەکی", next: 'step_run_street' },
-                            { text: "بێدەنگ بمێنەوە و هیوای ڕزگاربوون بخوازە", next: 'step_caught' }
+                            { text: "نامەکە هەڵگرە و بە ڕاکردن بڕۆ بۆ کۆڵانی سەرەکی", next: 'step_run_street' },
+                            { text: "بێدەنگ بمێنەوە و سەیری نەخشەکە بکە لەو تاریکییەدا", next: 'step_map_puzzle' }
                         ]
                     },
                     'step_enter_house': {
-                        text: `${name} دەرگاکەی پاڵنأ و چوو ژوورەوە. لە پڕدا دەرگاکە لە دواوەت بە توندی داخرا! داپیرەت بە پێکەنینێکی سەیرەوە لە تاریکییەوە دەرکەوت و پێی گوتت: 'بەخێر هاتیت بۆ تەڵەکەم، ${name}!' (کۆتایی نهێنی ترسناک 😱)`,
+                        text: `${name} دەرگاکەی پاڵنأ و چوو ژوورەوە. لە پڕدا دەرگاکە لە دواوەت بە توندی داخرا! داپیرەت بە پێکەنینێکی سەیرەوە لە تاریکییەوە دەرکەوت و ڕووناکی مۆمەکەی کوژاندەوە. کاتێک چراکەت هەڵکرد، دیار نەبوو داپیرە لە کوێیە، بەڵام سێ پەیكەری کۆن لە ژوورەکەدا دەبینرێن کە دەست بۆ لای ڕاست درێژ دەکەن!`,
                         choices: [
-                            { text: "🔄 دەستپێکردنەوەی چیڕۆک", next: 'step_1' }
+                            { text: "پەیکەری یەکەم بجووڵێنە", next: 'step_statue_1' },
+                            { text: "پەیکەری دووەم بجووڵێنە", next: 'step_statue_2' }
                         ]
                     },
-                    'step_neighbor': {
-                        text: `${name} ڕایکرد بۆ ماڵی دراوسێ، بەڵام ماڵەکە چۆڵ و تاریک بوو! لەوێ کلیلكێکی کۆنت دۆزییەوە کە دەرگای نهێنێی ژێرزەمینی ماڵی داپیرەی دەکرایەوه‌...`,
+                    'step_backyard': {
+                        text: `${name} چوو بۆ باخچەی دواوە و لە ڕێگەی پەنجەرەکەوە سەیرت کرد؛ سندوقێکی کۆن لەژێر زەویدا دەرکەوتووە کە کلیلی زێڕینی تێدایە! بەڵام چەند چەندەری کێوی دەورەیان دایت...`,
                         choices: [
-                            { text: "بگەڕێوە و ژێرزەمینەکە پشکنە", next: 'step_basement' },
-                            { text: "بگەڕێوە ماڵەوە بۆ لاى دایک و باوکت", next: 'step_home_safe' }
+                            { text: "شەڕ بکە بۆ گەیشتن بە سندوقەکە", next: 'step_fight_wolves' },
+                            { text: "هەڵبزێرە بۆ سەر دارە بەرزەکە", next: 'step_climb_tree' }
                         ]
                     },
                     'step_run_street': {
-                        text: `${name} بە ڕاکردن خۆی گەیاندە کۆڵانی سەرەکی و پۆلیسێکی بینی. پۆلیسەکە یارمەتی دای و بە سەلامەتی گەڕایەوە ماڵەوە! (کۆتایی سەرکەوتووی پارێزراو 🎉)`,
+                        text: `${name} بە ڕاکردن خۆی گەیاندە کۆڵانی سەرەکی و پاسەوانێکی بینی. پاسەوانەکە یارمەتی دای و بە سەلامەتی گەڕایەوە ماڵەوە و نەخشەکەت پاراست! (کۆتایی سەرکەوتووی پاشەکەوتکراو 🎉)`,
                         choices: [
-                            { text: "🔄 دووبارە دەستپێکردنەوە", next: 'step_1' }
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     },
-                    'step_caught': {
-                        text: `بوونەوەرە نامۆکە تۆی دۆزییەوە و لە تاریکییում ون بوویت... (کۆتایی دۆڕان ❌)`,
+                    'step_map_puzzle': {
+                        text: `${name} نەخشەکەی خوێندەوە و ڕێگای نهێنی دۆزییەوە کە دەچێتە ناو ئەشکەوتی خەزێنەکان. گەیشتیتە دەمەزێرەبی ئەشکەوتەکە و گەنجینەی مەزنت دەستکەوت! (کۆتایی سەرکەوتووی ئەستێرەیی 🌟)`,
                         choices: [
-                            { text: "🔄 دووبارە هەوڵدانەوە", next: 'step_1' }
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     },
-                    'step_basement': {
-                        text: `${name} چوو بۆ ژێرزەمینەکە و گەنجینەیەکی گەورەی پڕ لە مێژوو و زێڕی دۆزییەوە! بوویتە پاڵهَوانی شارۆچکەکە. (کۆتایی ئەستێرەیی بردنەوە 🌟)`,
+                    'step_statue_1': {
+                        text: `پەیکەری یەکەم هەڵە بوو! تەڵەیەک کرایەوە و '${name}' کەوتە ناو چاڵێکی قوڵەوە... (کۆتایی دۆڕان ❌)`,
                         choices: [
-                            { text: "🔄 دەستپێکردنەوەی چیڕۆک", next: 'step_1' }
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     },
-                    'step_home_safe': {
-                        text: `${name} بە سەلامەتی گەیشتەوە ماڵەوە و خەوێکی قوڵی کرد. (کۆتایی ئاسایی)`,
+                    'step_statue_2': {
+                        text: `پیرۆزە! پەیکەری ڕاستت هەڵبژارد. نهێنی خانووەکە کەشف بوو و داپیرەت بە سەلامەتی لە ژووری نهێنی دەرچوو و سوپاسی کردی! (کۆتایی بردنەوەی گەورە ⭐)`,
                         choices: [
-                            { text: "🔄 دەستپێکردنەوەی چیڕۆک", next: 'step_1' }
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
+                        ]
+                    },
+                    'step_fight_wolves': {
+                        text: `شەڕکردن لەگەڵ گورگەکان سەخت بوو و ناچار بوویت پاشەکشە بکەیت... (کۆتایی دۆڕان ❌)`,
+                        choices: [
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
+                        ]
+                    },
+                    'step_climb_tree': {
+                        text: `${name} سەرکەوت سەر دارەکە و چاوەڕێ کرد تا گورگەکان ڕۆیشتن. پاشان سندوقەکەت هەڵگرت و دەرگای ژێرزەمینەت کردەوە... (کۆتایی سەرکەوتووی ژیرانە 🏆)`,
+                        choices: [
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     }
                 };
