@@ -198,74 +198,6 @@
             background: rgba(0,0,0,0.4);
         }
 
-        /* 3D Avatar Grid Styling */
-        .avatar-3d-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin: 12px 0;
-        }
-        .avatar-3d-card {
-            background: linear-gradient(145deg, #2e1065, #1e0f33);
-            border: 2px solid var(--border-color);
-            border-radius: 14px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 2px 5px rgba(192,132,252,0.3);
-            transform: perspective(500px) rotateX(5deg);
-        }
-        .avatar-3d-card:hover {
-            transform: perspective(500px) rotateX(0deg) scale(1.05);
-            border-color: var(--text-glow);
-        }
-        .avatar-3d-card.selected {
-            border-color: #22c55e;
-            background: linear-gradient(145deg, #14532d, #064e3b);
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
-        }
-        .avatar-3d-icon {
-            font-size: 32px;
-            margin-bottom: 4px;
-            filter: drop-shadow(0 5px 8px rgba(0,0,0,0.6));
-        }
-        .avatar-3d-name {
-            font-size: 11px;
-            font-weight: bold;
-            color: #f8fafc;
-        }
-
-        /* Escape Room 3D Scene */
-        .escape-room-scene {
-            background: linear-gradient(180deg, #09050f, #160a24);
-            border: 2px solid #7c2d12;
-            border-radius: 16px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 25px rgba(127,29,29,0.3);
-            position: relative;
-        }
-        .escape-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(127, 29, 29, 0.4);
-            padding: 6px 12px;
-            border-radius: 10px;
-            border: 1px solid #ef4444;
-            margin-bottom: 10px;
-            font-size: 11px;
-        }
-        .escape-avatar-badge {
-            background: rgba(0,0,0,0.5);
-            padding: 4px 8px;
-            border-radius: 8px;
-            border: 1px solid var(--text-glow);
-            font-weight: bold;
-            color: #facc15;
-        }
-
         .puzzle-board { text-align: center; padding: 5px; }
         .scrambled-letters { display: flex; justify-content: center; gap: 6px; margin: 15px 0; flex-wrap: wrap; }
         .letter-chip {
@@ -431,17 +363,17 @@
             </div>
 
             <!-- Play Button Card -->
-            <div class="card" style="text-align: center; padding: 12px;">
+            <div class="card" style="text-align: center; padding: 15px;">
                 <h3>🎮 بەشی یارییەکان</h3>
                 <p>بۆ دەستپێکردنی یاریکردن کرتە لێرە بکە</p>
-                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); font-size: 14px; padding: 10px;" onclick="playSound('click'); openGamesListModal()">🎮 یاری کردن</button>
+                <button class="btn" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); font-size: 15px; padding: 12px;" onclick="playSound('click'); openGamesListModal()">🎮 یاری کردن</button>
             </div>
 
-            <!-- Escape Room Hub Button Card -->
+            <!-- Story Section Hub Card -->
             <div class="card" style="text-align: center; padding: 12px; border-color: #ef4444;">
-                <h3 style="color: #f87171; font-size: 13px;">🚪 ژووری هەڵاتن (Escape Room) و ئافاتاری 3D</h3>
-                <p style="font-size: 11px; margin-bottom: 6px;">هەڵبژاردنی کارەکتەری سێ ڕەهەندی و چارەسەرکردنی مەتەڵە قورسەکان</p>
-                <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a); font-size: 13px; padding: 10px; margin-top:0;" onclick="playSound('click'); openEscapeRoomIntro('escape_room_1')">🚪 دەستپێکردنی ژووری هەڵاتن</button>
+                <h3 style="color: #f87171; font-size: 13px;">🌙 بەشی چیڕۆک</h3>
+                <p style="font-size: 11px; margin-bottom: 6px;">چیڕۆکی درێژ و پڕ لە نهێنی و سەرکێشی</p>
+                <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a); font-size: 13px; padding: 10px; margin-top:0;" onclick="playSound('click'); openStoriesListScreen()">🌙 چیڕۆکەکان</button>
             </div>
 
             <div class="card" style="padding: 8px 10px;">
@@ -477,6 +409,21 @@
                     <div class="game-card-item" onclick="playSound('click'); openWordGameMenu()">
                         <img src="https://i.postimg.cc/52CVXVXk/IMG-1019.png" alt="وشە باران" class="game-card-img">
                         <div class="game-card-title">وشە باران</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+        </div>
+
+        <!-- Stories List Screen -->
+        <div id="storiesListScreen" class="screen">
+            <div class="brand-title" style="color: #ef4444;">بەشی چیڕۆکەکان</div>
+            <div class="card">
+                <h3 style="color: #f87171;">چیڕۆکێکی درێژ هەڵبژێرە:</h3>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                    <div class="game-card-item" style="padding: 12px; text-align: right; background: linear-gradient(135deg, #7f1d1d, #2d0606);" onclick="playSound('click'); openStoryScreen('scary_night')">
+                        <div class="game-card-title" style="background: none; font-size: 14px;">🌙 گەشتی تاریکی و ماڵی داپیرە (چیڕۆکی درێژ)</div>
+                        <p style="font-size: 11px; color: #fca5a5; margin: 4px 0 0 0;">گەشتێکی پڕ لە وێستگە، ترس، لێدوان و هەڵبژاردنی قورس...</p>
                     </div>
                 </div>
             </div>
@@ -726,49 +673,23 @@
             <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە</button>
         </div>
 
-        <!-- Escape Room & 3D Avatar Separate Screen -->
-        <div id="escapeScreen" class="screen">
-            <div class="brand-title" style="color: #ef4444;" id="escapeScreenTitle">ژووری هەڵاتنی فیکری (Escape Room)</div>
-            
-            <!-- Step 1: 3D Avatar Selection -->
-            <div id="escapeAvatarSelectBox" class="card" style="text-align: center; padding: 15px;">
-                <h3 style="color: #f87171; margin-bottom: 6px;">🛡️ کارەکتەری 3D خۆت هەڵبژێرە</h3>
-                <p style="font-size: 11px; color: #e9d5ff; margin-bottom: 10px;">پێش چوونە ژوورەوە، قارەمانی گەشتەکە دیاری بکە:</p>
-                
-                <div class="avatar-3d-grid">
-                    <div class="avatar-3d-card" id="av_knight" onclick="select3DAvatar('knight', '🛡️ شازادەی جنگوەر')">
-                        <div class="avatar-3d-icon">🛡️</div>
-                        <div class="avatar-3d-name">شازادەی جنگوەر</div>
-                    </div>
-                    <div class="avatar-3d-card" id="av_mage" onclick="select3DAvatar('mage', '🔮 سیحربازی تاریکی')">
-                        <div class="avatar-3d-icon">🔮</div>
-                        <div class="avatar-3d-name">سیحربازی تاریکی</div>
-                    </div>
-                    <div class="avatar-3d-card" id="av_ninja" onclick="select3DAvatar('ninja', '🥷 نینجای خێرا')">
-                        <div class="avatar-3d-icon">🥷</div>
-                        <div class="avatar-3d-name">نینجای خێرا</div>
-                    </div>
+        <!-- Story Screen (Persistent & Robust State Management) -->
+        <div id="storyScreen" class="screen">
+            <div class="brand-title" style="color: #ef4444;" id="storyScreenTitle">شەوی ترسناک و تاریکی دۆزەخ</div>
+            <div class="card" style="padding: 15px;">
+                <div id="storyNameBox" style="text-align: center;">
+                    <h3 style="color: #f87171; margin-bottom: 8px;">🌙 دەستپێکردنی گەشتی مەزن</h3>
+                    <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ تێکەڵبوون لەگەڵ ئەم چیڕۆکە درێژەدا:</p>
+                    <input type="text" id="storyPlayerNameInput" placeholder="ناوی خۆت لێرە بنووسە..." style="margin-bottom: 8px;" onkeypress="if(event.key==='Enter') startInteractiveStory()">
+                    <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); startInteractiveStory()">دەستپێکردنی گەشت</button>
                 </div>
 
-                <div class="form-group" style="margin-top: 10px; text-align: right;">
-                    <label>ناوی یاریزان لە ناو ژوورەکەدا</label>
-                    <input type="text" id="escapePlayerNameInput" placeholder="ناوی خۆت بنووسە..." onkeypress="if(event.key==='Enter') confirm3DAvatarAndStart()">
+                <div id="storyPlayArea" style="display: none;">
+                    <p id="storyText" style="font-size: 13px; line-height: 1.7; color: #fff; margin-bottom: 12px;"></p>
+                    <div id="storyChoices" style="display: flex; flex-direction: column; gap: 8px;"></div>
                 </div>
-                <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); confirm3DAvatarAndStart()">چوونە ژووری مەتەڵ 🚪</button>
             </div>
-
-            <!-- Step 2: 3D Escape Room Play Area -->
-            <div id="escapeRoomPlayArea" style="display: none;" class="escape-room-scene">
-                <div class="escape-header">
-                    <div class="escape-avatar-badge" id="escapeChosenAvatarBadge">🛡️ شازادە</div>
-                    <div><b id="escapePlayerNameDisplay" style="color: #facc15;"></b> لە ژووری داخراودا</div>
-                </div>
-
-                <p id="escapeText" style="font-size: 13px; line-height: 1.7; color: #fff; margin-bottom: 12px; text-align: right; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px;"></p>
-                <div id="escapeChoices" style="display: flex; flex-direction: column; gap: 8px;"></div>
-            </div>
-
-            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); backToHub()">گەڕانەوە بۆ شاشەی سەرەکی</button>
+            <button class="btn" style="margin-top: auto;" onclick="playSound('click'); openStoriesListScreen()">گەڕانەوە بۆ لیستی چیڕۆکەکان</button>
         </div>
     </div>
 
@@ -829,7 +750,7 @@
 
                     if (window.setOnlineStatus) window.setOnlineStatus(uid);
                     
-                    if (!localStorage.getItem("toptop_active_escape")) {
+                    if (!localStorage.getItem("toptop_active_story")) {
                         switchScreen("hubScreen");
                     }
                     loadUserData();
@@ -1515,21 +1436,17 @@
                 currentUser = savedUser || "";
                 loadUserData();
                 
-                let activeEscape = localStorage.getItem("toptop_active_escape");
-                let activeStep = localStorage.getItem("toptop_escape_step");
-                let activeName = localStorage.getItem("toptop_escape_name");
-                let activeAvatar = localStorage.getItem("toptop_escape_avatar");
+                let activeStory = localStorage.getItem("toptop_active_story");
+                let activeStep = localStorage.getItem("toptop_story_step");
+                let activeName = localStorage.getItem("toptop_story_name");
 
-                if (activeEscape && activeStep && activeName) {
-                    escapeRoomId = activeEscape;
-                    escapePlayerName = activeName;
-                    chosen3DAvatarText = activeAvatar || "🛡️ شازادە";
-                    switchScreen("escapeScreen");
-                    document.getElementById("escapeAvatarSelectBox").style.display = "none";
-                    document.getElementById("escapeRoomPlayArea").style.display = "block";
-                    document.getElementById("escapeChosenAvatarBadge").innerText = chosen3DAvatarText;
-                    document.getElementById("escapePlayerNameDisplay").innerText = escapePlayerName;
-                    loadEscapeStep(activeStep, true);
+                if (activeStory && activeStep && activeName) {
+                    currentStoryId = activeStory;
+                    activeStoryPlayerName = activeName;
+                    switchScreen("storyScreen");
+                    document.getElementById("storyNameBox").style.display = "none";
+                    document.getElementById("storyPlayArea").style.display = "block";
+                    loadStoryStep(activeStep, true);
                 } else {
                     switchScreen("hubScreen");
                 }
@@ -1609,10 +1526,9 @@
             if (uid && window.setOfflineStatus) window.setOfflineStatus(uid);
             localStorage.removeItem("top_top_active_uid");
             localStorage.removeItem("top_top_active_user");
-            localStorage.removeItem("toptop_active_escape");
-            localStorage.removeItem("toptop_escape_step");
-            localStorage.removeItem("toptop_escape_name");
-            localStorage.removeItem("toptop_escape_avatar");
+            localStorage.removeItem("toptop_active_story");
+            localStorage.removeItem("toptop_story_step");
+            localStorage.removeItem("toptop_story_name");
             currentUser = "";
             switchScreen("authScreen");
         }
@@ -1896,10 +1812,9 @@
         }
 
         function backToHub() {
-            localStorage.removeItem("toptop_active_escape");
-            localStorage.removeItem("toptop_escape_step");
-            localStorage.removeItem("toptop_escape_name");
-            localStorage.removeItem("toptop_escape_avatar");
+            localStorage.removeItem("toptop_active_story");
+            localStorage.removeItem("toptop_story_step");
+            localStorage.removeItem("toptop_story_name");
             switchScreen("hubScreen");
             if (window.loadLeaderboard) window.loadLeaderboard();
         }
@@ -1933,66 +1848,57 @@
             document.body.setAttribute("data-theme", savedTheme);
         }
 
-        /* 3D Avatar & Escape Room Independent Engine */
-        let escapePlayerName = "";
-        let escapeRoomId = "";
-        let selected3DAvatarKey = "knight";
-        let chosen3DAvatarText = "🛡️ شازادەی جنگوەر";
+        /* Perfectly Fixed Long Interactive Story Engine */
+        let activeStoryPlayerName = "";
+        let currentStoryId = "";
 
-        function openEscapeRoomIntro(roomId) {
-            escapeRoomId = roomId;
-            localStorage.setItem("toptop_active_escape", roomId);
-            switchScreen("escapeScreen");
-            document.getElementById("escapePlayerNameInput").value = "";
-            document.getElementById("escapeAvatarSelectBox").style.display = "block";
-            document.getElementById("escapeRoomPlayArea").style.display = "none";
-            select3DAvatar('knight', '🛡️ شازادەی جنگوەر');
+        function openStoriesListScreen() {
+            localStorage.removeItem("toptop_active_story");
+            localStorage.removeItem("toptop_story_step");
+            localStorage.removeItem("toptop_story_name");
+            switchScreen("storiesListScreen");
         }
 
-        function select3DAvatar(key, title) {
-            selected3DAvatarKey = key;
-            chosen3DAvatarText = title;
-            document.querySelectorAll(".avatar-3d-card").forEach(c => c.classList.remove("selected"));
-            document.getElementById("av_" + key).classList.add("selected");
-            playSound('click');
+        function openStoryScreen(storyId) {
+            currentStoryId = storyId;
+            localStorage.setItem("toptop_active_story", storyId);
+            switchScreen("storyScreen");
+            document.getElementById("storyPlayerNameInput").value = "";
+            document.getElementById("storyNameBox").style.display = "block";
+            document.getElementById("storyPlayArea").style.display = "none";
         }
 
-        function confirm3DAvatarAndStart() {
-            let nameInput = document.getElementById("escapePlayerNameInput").value.trim();
+        function startInteractiveStory() {
+            let nameInput = document.getElementById("storyPlayerNameInput").value.trim();
             if (!nameInput) {
-                alert("تکایە ناوی خۆت بنووسە بۆ دەستپێکردنی ژوورەکە!");
+                alert("تکایە ناوی خۆت بنووسە بۆ دەستپێکردنی چیڕۆکەکە!");
                 return;
             }
-            escapePlayerName = nameInput;
-            localStorage.setItem("toptop_escape_name", escapePlayerName);
-            localStorage.setItem("toptop_escape_avatar", chosen3DAvatarText);
+            activeStoryPlayerName = nameInput;
+            localStorage.setItem("toptop_story_name", activeStoryPlayerName);
 
-            document.getElementById("escapeAvatarSelectBox").style.display = "none";
-            document.getElementById("escapeRoomPlayArea").style.display = "block";
-            document.getElementById("escapeChosenAvatarBadge").innerText = chosen3DAvatarText;
-            document.getElementById("escapePlayerNameDisplay").innerText = escapePlayerName;
+            document.getElementById("storyNameBox").style.display = "none";
+            document.getElementById("storyPlayArea").style.display = "block";
 
-            loadEscapeStep('step_1');
+            loadStoryStep('step_1');
         }
 
-        function loadEscapeStep(stepKey, isRestoring = false) {
+        function loadStoryStep(stepKey, isRestoring = false) {
             if (!isRestoring) {
-                localStorage.setItem("toptop_escape_step", stepKey);
+                localStorage.setItem("toptop_story_step", stepKey);
             } else {
-                let savedName = localStorage.getItem("toptop_escape_name");
-                let savedAvatar = localStorage.getItem("toptop_escape_avatar");
-                if (savedName) escapePlayerName = savedName;
-                if (savedAvatar) chosen3DAvatarText = savedAvatar;
+                let savedName = localStorage.getItem("toptop_story_name");
+                if (savedName) activeStoryPlayerName = savedName;
             }
 
-            let tEl = document.getElementById("escapeText");
-            let cEl = document.getElementById("escapeChoices");
+            let tEl = document.getElementById("storyText");
+            let cEl = document.getElementById("storyChoices");
             cEl.innerHTML = "";
 
-            let roomData = getEscapeRoomNodeData(escapeRoomId, stepKey, escapePlayerName);
-            tEl.innerText = roomData.text;
+            let storyData = getStoryNodeData(currentStoryId, stepKey, activeStoryPlayerName);
+            tEl.innerText = storyData.text;
 
-            roomData.choices.forEach(ch => {
+            storyData.choices.forEach(ch => {
                 let btn = document.createElement("button");
                 btn.className = "btn";
                 if (ch.isExit) {
@@ -2006,78 +1912,105 @@
                 btn.onclick = function() {
                     playSound('click');
                     if (ch.action === 'restart') {
-                        localStorage.removeItem("toptop_escape_step");
-                        openEscapeRoomIntro(escapeRoomId);
+                        localStorage.removeItem("toptop_story_step");
+                        openStoryScreen(currentStoryId);
                     } else if (ch.action === 'exit') {
-                        localStorage.removeItem("toptop_active_escape");
-                        localStorage.removeItem("toptop_escape_step");
-                        localStorage.removeItem("toptop_escape_name");
-                        localStorage.removeItem("toptop_escape_avatar");
-                        backToHub();
+                        localStorage.removeItem("toptop_active_story");
+                        localStorage.removeItem("toptop_story_step");
+                        localStorage.removeItem("toptop_story_name");
+                        openStoriesListScreen();
                     } else {
-                        loadEscapeStep(ch.next);
+                        loadStoryStep(ch.next);
                     }
                 };
                 cEl.appendChild(btn);
             });
         }
 
-        function getEscapeRoomNodeData(roomId, key, name) {
-            if (roomId === 'escape_room_1') {
+        function getStoryNodeData(storyId, key, name) {
+            if (storyId === 'scary_night') {
                 const nodes = {
                     'step_1': {
-                        text: `قارەمان "${name}" لە ژوورێکی تاریک، سارد و داخراودا بە هۆشی خۆی دێتەوە. تەنها سێ مۆمی کاڵ و دەرگایەکی گەورەی ئاسنین کە بە قفڵی قورس داخراوە لێرە هەن. لەسەر مێزەکەی پێشوش نووسراوە: "کلیلەکە لە ژێر تاقیکردنەوەی لۆژیکدایە".`,
+                        text: `شەوێکی سارد و بەڕووبار بارانی درەنگانی شەو بوو. ${name} دەسویچی کۆنی هەڵکرد و بە تەنها بەرەو ماڵی داپیرەی بەڕێکەوت کە لە کۆتایی کۆڵانە تاریک و تەمومژاوییەکەدا بوو. لە پڕدا، لەسەر دیواری خانووە کۆنەکە سێبەرێکی گەورە و ترسناک جووڵا و دەنگێکی نامۆ لە دارستانە نزیکەکە هات!`,
                         choices: [
-                            { text: "سەیری مێزەکە بکە و قفڵی یەکەم حل بکە", next: 'step_lock_1' },
-                            { text: "ڕاستەوخۆ دەست بدهە بە دەستەکی دەرگاکە", next: 'step_door_trap' }
+                            { text: "بەڕێوە پێشەوە و سەیری ئەوە بکە چییە", next: 'step_forward' },
+                            { text: "خۆت بشارەوە لە پشت پاشماوەی دارەکانەوە", next: 'step_hide' }
                         ]
                     },
-                    'step_lock_1': {
-                        text: `لە سەر مێزەکە مەتەڵێک هەیە: "من ژیانم نییە بەڵام هەناسە دەدەم، قاچم نییە بەڵام دەڕۆم، من چیم؟"`,
+                    'step_forward': {
+                        text: `${name} هەنگاوی نایە پێشەوە و بە ئازایەتییەوە ڕووبەڕووی بووەوە. دەرکەوت تەنها سەگێکی ڕەشی زۆر گەورە بوو کە برسی بوو! ${name} پارچە نانێکی لە گیرفانی دەرکرد و پێیدا. سەگەکە هێمن بووەوە و تا نزیک ماڵی داپیرە ڕێگەی لەگەڵدا بڕیت. ئێستا گەیشتوویتەتە دەرگای ماڵی داپیرە، بەڵام دەرگاکە نیوەکراوەیە و دەنگی گریان لە ژووری ناوەوە دێت!`,
                         choices: [
-                            { text: "وەڵام: با (یاخود بایە)", next: 'step_lock_2' },
-                            { text: "وەڵام: ئاو", next: 'step_fail_water' }
+                            { text: "بچۆ ژوورەوە و بپرسە کێیە؟", next: 'step_enter_house' },
+                            { text: "بڕۆ بۆ باخچەی دواوە و پەنجەرەکە بپشکنە", next: 'step_backyard' }
                         ]
                     },
-                    'step_door_trap': {
-                        text: `هەڵە! دەستەکی دەرگاکە ژەهراوی بوو و "${name}" بێهۆش بوو... (کۆتایی دۆڕان ❌)`,
+                    'step_hide': {
+                        text: `${name} بە خێرایی خۆی شاردەوە لە پشت دارەکانەوە. سەیرت کرد سێبەرەکە گۆڕا بۆ بوونەوەرێکی نامۆ و بێدەنگ کە ڕووناکی لە چاوی دەردەچوو! بوونەوەرەکە بە دوای تۆدا دەگەڕێت و زۆر نزیک بووەوە، پاشان نامەیەک کەوتە خوارەوە کە نەخشەی نهێنی شارۆچکەکەی لەسەر بوو...`,
+                        choices: [
+                            { text: "نامەکە هەڵگرە و بە ڕاکردن بڕۆ بۆ کۆڵانی سەرەکی", next: 'step_run_street' },
+                            { text: "بێدەنگ بمێنەوە و سەیری نەخشەکە بکە لەو تاریکییەدا", next: 'step_map_puzzle' }
+                        ]
+                    },
+                    'step_enter_house': {
+                        text: `${name} دەرگاکەی پاڵنأ و چوو ژوورەوە. لە پڕدا دەرگاکە لە دواوەت بە توندی داخرا! داپیرەت بە پێکەنینێکی سەیرەوە لە تاریکییەوە دەرکەوت و ڕووناکی مۆمەکەی کوژاندەوە. کاتێک چراکەت هەڵکرد، دیار نەبوو داپیرە لە کوێیە، بەڵام سێ پەیكەری کۆن لە ژوورەکەدا دەبینرێن کە دەست بۆ لای ڕاست درێژ دەکەن!`,
+                        choices: [
+                            { text: "پەیکەری یەکەم بجووڵێنە", next: 'step_statue_1' },
+                            { text: "پەیکەری دووەم بجووڵێنە", next: 'step_statue_2' }
+                        ]
+                    },
+                    'step_backyard': {
+                        text: `${name} چوو بۆ باخچەی دواوە و لە ڕێگەی پەنجەرەکەوە سەیرت کرد؛ سندوقێکی کۆن لەژێر زەویدا دەرکەوتووە کە کلیلی زێڕینی تێدایە! بەڵام چەند چەندەری کێوی دەورەیان دایت...`,
+                        choices: [
+                            { text: "شەڕ بکە بۆ گەیشتن بە سندوقەکە", next: 'step_fight_wolves' },
+                            { text: "هەڵبزێرە بۆ سەر دارە بەرزەکە", next: 'step_climb_tree' }
+                        ]
+                    },
+                    'step_run_street': {
+                        text: `${name} بە ڕاکردن خۆی گەیاندە کۆڵانی سەرەکی و پاسەوانێکی بینی. پاسەوانەکە یارمەتی دای و بە سەلامەتی گەڕایەوە ماڵەوە و نەخشەکەت پاراست! (کۆتایی سەرکەوتووی پاشەکەوتکراو 🎉)`,
                         choices: [
                             { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
-                            { text: "🚪 گەڕانەوە بۆ شاشەی سەرەکی", action: 'exit', isExit: true }
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     },
-                    'step_fail_water': {
-                        text: `وەڵامەکە هەڵە بوو! مۆمەکە کوژایەوە و تەڵەی ژوورەکە کارا بوو... (کۆتایی دۆڕان ❌)`,
+                    'step_map_puzzle': {
+                        text: `${name} نەخشەکەی خوێندەوە و ڕێگای نهێنی دۆزییەوە کە دەچێتە ناو ئەشکەوتی خەزێنەکان. گەیشتیتە دەمەزێرەبی ئەشکەوتەکە و گەنجینەی مەزنت دەستکەوت! (کۆتایی سەرکەوتووی ئەستێرەیی 🌟)`,
                         choices: [
                             { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
-                            { text: "🚪 گەڕانەوە بۆ شاشەی سەرەکی", action: 'exit', isExit: true }
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     },
-                    'step_lock_2': {
-                        text: `پیرۆزە! قفڵی یەکەم کرایەوە. ئێستا سندوقێکی کانزایی لە گۆشەی ژوورەکە دەردەکەوێت کە کۆدی نهێنی 3 ژمارەیی دەوێت. لەسەر دیوارەکە نوسراوە: (٢ + ٤ × ٣ - ٢ = ؟)`,
-                        choices: [
-                            { text: "وەڵام: ١٢", next: 'step_escape_success' },
-                            { text: "وەڵام: ١٦", next: 'step_fail_math' }
-                        ]
-                    },
-                    'step_fail_math': {
-                        text: `حسابەکە هەڵە بوو! سندوقەکە تەقییەوە... (کۆتایی دۆڕان ❌)`,
+                    'step_statue_1': {
+                        text: `پەیکەری یەکەم هەڵە بوو! تەڵەیەک کرایەوە و '${name}' کەوتە ناو چاڵێکی قوڵەوە... (کۆتایی دۆڕان ❌)`,
                         choices: [
                             { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
-                            { text: "🚪 گەڕانەوە بۆ شاشەی سەرەکی", action: 'exit', isExit: true }
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     },
-                    'step_escape_success': {
-                        text: `شاهکارە! "${name}" بە سەرکەوتوویی کۆدی ڕاستی دۆزییەوە. سندوقەکە کرایەوە و کلیلی زێڕینی دەرگای سەرەکی کەوتە ناو دەستت. دەرگاکە کرایەوە و لەو تاریکییە ترسناکە ڕزگارت بوو! (سەرکەوتنی گەورەی ژووری هەڵاتن ⭐🏆)`,
+                    'step_statue_2': {
+                        text: `پیرۆزە! پەیکەری ڕاستت هەڵبژارد. نهێنی خانووەکە کەشف بوو و داپیرەت بە سەلامەتی لە ژووری نهێنی دەرچوو و سوپاسی کردی! (کۆتایی بردنەوەی گەورە ⭐)`,
                         choices: [
                             { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
-                            { text: "🚪 گەڕانەوە بۆ شاشەی سەرەکی", action: 'exit', isExit: true }
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
+                        ]
+                    },
+                    'step_fight_wolves': {
+                        text: `شەڕکردن لەگەڵ گورگەکان سەخت بوو و ناچار بوویت پاشەکشە بکەیت... (کۆتایی دۆڕان ❌)`,
+                        choices: [
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
+                        ]
+                    },
+                    'step_climb_tree': {
+                        text: `${name} سەرکەوت سەر دارەکە و چاوەڕێ کرد تا گورگەکان ڕۆیشتن. پاشان سندوقەکەت هەڵگرت و دەرگای ژێرزەمینەت کردەوە... (کۆتایی سەرکەوتووی ژیرانە 🏆)`,
+                        choices: [
+                            { text: "🔄 دووبارە دەستپێکردنەوە", action: 'restart' },
+                            { text: "🚪 گەڕانەوە بۆ لیستی چیڕۆکەکان", action: 'exit', isExit: true }
                         ]
                     }
                 };
                 return nodes[key] || nodes['step_1'];
             }
-            return { text: "ژوور نەدۆزرایەوە", choices: [] };
+            return { text: "چیڕۆک نەدۆزرایەوە", choices: [] };
         }
     </script>
 </body>
