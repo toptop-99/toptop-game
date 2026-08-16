@@ -677,6 +677,7 @@
         <div id="storyScreen" class="screen">
             <div class="brand-title" style="color: #ef4444;" id="storyScreenTitle">شەوی ترسناک و تاریکی دۆزەخ</div>
             <div class="card" style="padding: 15px;">
+                <!-- Step 1: Input Name Area -->
                 <div id="storyNameBox" style="text-align: center;">
                     <h3 style="color: #f87171; margin-bottom: 8px;">🌙 دەستپێکردنی گەشتی مەزن</h3>
                     <p style="font-size: 11px; margin-bottom: 10px;">تکایە ناوی خۆت بنووسە بۆ تێکەڵبوون لەگەڵ ئەم چیڕۆکە درێژەدا:</p>
@@ -684,6 +685,7 @@
                     <button class="btn" style="background: linear-gradient(135deg, #7f1d1d, #450a0a);" onclick="playSound('click'); startInteractiveStory()">دەستپێکردنی گەشت</button>
                 </div>
 
+                <!-- Step 2: Story Playing Area -->
                 <div id="storyPlayArea" style="display: none;">
                     <p id="storyText" style="font-size: 13px; line-height: 1.7; color: #fff; margin-bottom: 12px;"></p>
                     <div id="storyChoices" style="display: flex; flex-direction: column; gap: 8px;"></div>
@@ -750,6 +752,7 @@
 
                     if (window.setOnlineStatus) window.setOnlineStatus(uid);
                     
+                    // Do not override screen if user is currently navigating in story
                     if (!localStorage.getItem("toptop_active_story")) {
                         switchScreen("hubScreen");
                     }
@@ -1436,6 +1439,7 @@
                 currentUser = savedUser || "";
                 loadUserData();
                 
+                // Check if user was actively reading a story before refresh
                 let activeStory = localStorage.getItem("toptop_active_story");
                 let activeStep = localStorage.getItem("toptop_story_step");
                 let activeName = localStorage.getItem("toptop_story_name");
@@ -1896,6 +1900,7 @@
             cEl.innerHTML = "";
 
             let storyData = getStoryNodeData(currentStoryId, stepKey, activeStoryPlayerName);
+            
             tEl.innerText = storyData.text;
 
             storyData.choices.forEach(ch => {
@@ -2013,5 +2018,3 @@
             return { text: "چیڕۆک نەدۆزرایەوە", choices: [] };
         }
     </script>
-</body>
-</html>
